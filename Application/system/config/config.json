@@ -1,0 +1,21 @@
+{
+    "session_name": "userdata",
+    "site_name": "BFrame",
+    "view": "default",
+    "dashboard_url": "admin",
+    "currency": "TZS",
+    "currency_symbol": "Tsh",
+    "locale": "sw-TZ",
+    "plugins": [],
+    "gateways": {
+        "payment": "pesapal",
+        "sms": "nextsms"
+    },
+    "database": {
+        "db_driver": "mysql",
+        "hostname": "localhost",
+        "db_name": "banncot_bframe",
+        "db_user": "root",
+        "db_password": "root"
+    }
+}
