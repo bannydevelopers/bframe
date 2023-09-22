@@ -98,6 +98,9 @@ class system{
 	public static function register_nav($position, $content){
 		return self::register_entity('navigation', $position, $content);
 	}
+	public static function get_navigation($reference){
+		return self::get_nav($reference);
+	}
 	public static function get_nav($reference){
 		$host = str_replace('.', '_', $_SERVER['HTTP_HOST']);
 		$cache_nav = realpath(__DIR__.'/../../').'/storage/cache/nav/';
@@ -106,10 +109,7 @@ class system{
         $filemtime = is_readable($filem) ? filemtime($filem) : 0;
 		$expiry = ( time() - $filemtime ) / ( 60 * 60 * 24 ); // a day from seconds
 		if($expiry > 1) return self::create_nav($reference); // cache older than a day is obselete
-		return 'xxx';//file_get_contents("{$cache_nav}/{$host}_nav_{$reference}.html");
-	}
-	public static function get_navigation($reference){
-		return self::get_nav($reference);
+		return file_get_contents("{$cache_nav}/{$host}_nav_{$reference}.html");
 	}
 	public static function create_nav($reference){
 		$db = db::initialize(storage::initialize()->system_config->database);
@@ -119,7 +119,6 @@ class system{
 					->order_by('page_order','asc')
 					->fetchAll();
 
-        
 		$navs = self::create_array_tree($pages);
 		//var_dump('<pre>',$navs);
 		$host = str_replace('.','_',$_SERVER['HTTP_HOST']);
@@ -127,7 +126,8 @@ class system{
 		if(!is_readable($cache_nav)) mkdir($cache_nav, 0777, true);
 		$nav_list = self::array_to_list($navs);
         //return $cache_nav;
-		return file_put_contents("$cache_nav/{$host}_nav_$reference.html", $nav_list);
+		file_put_contents("$cache_nav/{$host}_nav_$reference.html", $nav_list);
+        return $nav_list;
 		return is_readable("$cache_nav/{$host}_nav_$reference.html") ? $nav_list : '';
 	}
 	public static function create_array_tree(array $elements, $parentId = 0) {
