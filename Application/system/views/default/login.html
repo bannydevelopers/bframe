@@ -1,278 +1,191 @@
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <base href="<?=$base?>"/>
-        <meta charset="utf-8">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:image" content="app/storage/uploads/images/logo.png" />
-        <link rel="shortcut icon" type="image/png" href="wcms/incs/userfiles/ckeimages/logo.png">
-        <meta property="og:url" content="https://<?=$_SERVER['HTTP_HOST']?>" />
-        <title>Login to continue</title>
-        <style>
-            @font-face {
-                font-family: 'FontAwesome';
-                src: url('vendor/components/font-awesome/webfonts/fa-solid-900.eot'),
-                    url('vendor/components/font-awesome/webfonts/fa-solid-900.eot?#iefix') format('embedded-opentype'),
-                    url('vendor/components/font-awesome/webfonts/fa-solid-900.svg#FontAwesome5Free-Solid') format('svg'),
-                    url('vendor/components/font-awesome/webfonts/fa-solid-900.ttf') format('truetype'),
-                    url('vendor/components/font-awesome/webfonts/fa-solid-900.woff') format('woff'),
-                    url('vendor/components/font-awesome/webfonts/fa-solid-900.woff2') format('woff2');
-                font-weight: normal;
-                font-style: normal;
-                font-display: swap;
-            }
-            [data-icon]:before {
-                font-family: FontAwesome;
-                -webkit-text-rendering: optimizeLegibility;
-                -moz-text-rendering: optimizeLegibility;
-                -ms-text-rendering: optimizeLegibility;
-                -o-text-rendering: optimizeLegibility;
-                text-rendering: optimizeLegibility;
-                -webkit-font-smoothing: antialiased;
-                -moz-font-smoothing: antialiased;
-                -ms-font-smoothing: antialiased;
-                -o-font-smoothing: antialiased;
-                /*font-smoothing: antialiased;*/
-                content:attr(data-icon);
-                margin-right:0.3em;
-                font-size:90%;
-            }
-            :root{
-                --green: #25996C;
-                --white: #ffffff;
-                --yellow: #FFDD44;
-                --light: #F6F8FC;
-                --grey:#EAF1FB;
-                --blue: #2D4A8A;
-                --primary-bg: #EE008D;
-                --primary-txt: #ffffff;
-            }
-
-                /* Styles, not important */
-            *, *:before, *:after {
-                position: relative;
-                box-sizing: border-box;
-                line-height: 1em;
-            }
-
-            html {
-                position: relative;
-                height: 100%;
-            }
-            body{
-                font-family: 'custom', Arial, Helvetica, sans-serif;
-                background-color: var(--blue);
-                color: var(--primary-txt);
-                margin: auto;
-                box-sizing: border-box;
-                padding: 1em;
-                margin: 0;
-            }
-            h1,h2,h3,h4,h5,h6{
-                margin: 0;
-            }
-            a, span, b,small,i,em{
-                display: inline-block;
-            }
-            a{
-                border-bottom: 1px solid;
-            }
-            h2 {
-                font-weight: normal;
-            }
-            img{
-                vertical-align: middle;
-                max-width: 100%;
-            }
-            a,a:visited{
-                color: #551A8B;
-                cursor: pointer;
-            }
-            label{
-                display: block;
-                padding: 12px 0;
-                padding-top: 1.3em;
-                font-weight: bold;
-            }
-            input,select,textarea{
-                padding: 10px;
-                border: none;
-                background: transparent;
-                width: 96%;
-                font-size: 102%;
-                box-shadow: 0 0 1px #aaa;
-            }
-            input:focus,select:focus,textarea:focus{
-                outline: none;
-                box-shadow: 0 0 4px #aaa;
-            }
-            input[type=button],input[type=submit],input[type=reset],button{
-                cursor: pointer;
-                border: none;
-                box-shadow: 0 0 3px #aaa;
-                padding: 12px 18px;
-                margin: 3px;
-             }
-             input[type=button],input[type=submit],input[type=reset],button,input[type=checkbox]{
-                 display: inline-block;
-                 width: auto;
-             }
-             input[type=checkbox] ~ label,input[type=radio] ~ label{
-                 display: inline-block;
-             }
-             em{
-                font-family: 'Times New Roman', Times, serif;
-             }
-            .center{
-                text-align: center;
-            }
-            .content{
-                padding: 16px;
-            }
-            .content-small{
-                padding: 8px;
-            }
-            .white{
-                background-color: var(--white);
-                color: var(--primary-bg);
-            }
-            .grey{
-                background-color: var(--grey);
-            }
-            .green{
-                background-color: var(--green);
-                color: var(--white);
-            }
-            .flex > *, .vertical-flex > *{
-                flex-grow: 1;
-                flex-basis: 100%;
-            }
-            .flex > .shrink, .vertical-flex > .shrink{
-                flex-grow: 0;
-                flex-shrink: 1;
-            }
-            .plain-btn{
-                border: none;
-                background: transparent;
-                box-shadow: none;
-            }
-            .xl{
-                font-size: 120%;
-            }
-            .xxl{
-                font-size: 120%;
-            }
-            .rounded{
-                border-radius: 8px;
-            }
-            .mobile-hidden{
-                display: none;
-            }
-            .uppercase{
-                text-transform: uppercase;
-            }
-            .tri-pri{
-                background-color: var(--primary-bg);
-                color: var(--primary-txt);
-                border-radius: 6px 6px 2em 2em;
-
-            }
-            .mySwal label{
-                text-align: left;
-                display: block;
-            }
-            @media screen and (min-width:800px) {  
-                body{
-                    padding-top: 1.5em;
-                }
-                .rotate{
-                    transform-origin: center;
-                    transform: rotate(-90deg) translateX(-6em);
-                }
-                .xxl{
-                    font-size: 200%;
-                }
-                .mobile-hidden{
-                    display: inherit;
-                }
-                .flex{
-                    display: flex;
-                }
-                .vertical-flex{
-                    display: flex;
-                    flex-direction: column;
-                }
-            }
-            @media print{
-                .no-print{
-                    display: none;
-                }
-            }
-        </style>
-        <script src="vendor/components/sweetalert/sweetalert2@11.js"></script>
-    </head>
-    <body>
-        <div style="max-width: 360px;margin: auto;">
-            <h1 class="content center">
-                <img src="Application/storage/uploads/images/logo.png" width="80" style="border-radius: 4em;background: #fff;padding: 10px;" />
-            </h1>
-            <div class="flex white" style="box-shadow: 0 0 6px #999;border-radius: 8px;">
-                <!--div class="content grey center xxl">
-                   <span class="rotate uppercase" style="white-space: nowrap;">Welcome aboard</span>
-                </div-->
-                <div style="padding: 4px;">
-                    <!--h3 style="padding: 1em 0;text-align: center;">Login to continue</h3-->
-                    <h1 class="uppercase content center tri-pri">
-                        <?=$registry->site_name?>
-                    </h1>
-                    <div class="center contentx"><?$msg?>&nbsp;</div>
-                    <form method="post" class="content" autocomplete="off">
-                        <div class="content">
-                            <label for="login">Login</label>
-                            <input type="text" id="login" name="login" placeholder="E-mail or phone number" />
-                            <label for="passcode">Password</label>
-                            <input type="password" id="passcode" name="passcode" placeholder="Password of your account" />
-                        </div>
-                        <div class="content">
-                            <em>Forgot password? <a onclick="recover_pass()">Recover</a></em>
-                        </div>
-                        <div class="content" style="text-align: right;">
-                            <em>Don't have account? <a onclick="sign_up()">Sign up</a></em>
-                        </div>
-                        <div style="text-align: right;padding-top: 1em;">
-                            <input type="submit" value="Login" class="green rounded" />
-                        </div>
-                        
-                    </form>
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Sign In</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="Application/system/views/default/assets/plugins/bootstrap-5.3.2-dist/bootstrap-5.3.2-dist/css/bootstrap.min.css">
+  <style>
+    .heading-section {
+      font-size: 28px;
+      color: #000; }
+    .wrap {
+      width: 100%;
+      overflow: hidden;
+      background: #fff;
+      border-radius: 5px;
+      -webkit-box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
+      -moz-box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
+      box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24); }
+    .wrap .img {
+      height: 200px; }
+    .login-wrap {
+      position: relative; }
+    .login-wrap h3 {
+      font-weight: 300; }
+    .social-media {
+      position: relative;
+      width: 100%; }
+    .social-media .social-icon {
+      display: block;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 16px;
+      margin-right: 5px;
+      border-radius: 50%; }
+    .social-media .social-icon span {
+      color: #999999; }
+    .social-media .social-icon:hover, .social-media .social-icon:focus {
+      background: #007bff; }
+    .social-media .social-icon:hover span, .social-media .social-icon:focus span {
+      color: #fff; }
+    .checkbox-wrap {
+      display: block;
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; }
+      
+    /* Hide the browser's default checkbox */
+    .checkbox-wrap input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0; }
+      
+    /* Create a custom checkbox */
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0; }
+    
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+      content: "\f0c8";
+      font-family: "FontAwesome";
+      position: absolute;
+      color: rgba(0, 0, 0, 0.1);
+      font-size: 20px;
+      margin-top: -4px;
+      -webkit-transition: 0.3s;
+      -o-transition: 0.3s;
+      transition: 0.3s; }
+      @media (prefers-reduced-motion: reduce) {
+        .checkmark:after {
+          -webkit-transition: none;
+          -o-transition: none;
+          transition: none; } }
+      
+    /* Show the checkmark when checked */
+    .checkbox-wrap input:checked ~ .checkmark:after {
+      display: block;
+      content: "\f14a";
+      font-family: "FontAwesome";
+      color: rgba(0, 0, 0, 0.2); }
+      
+    /* Style the checkmark/indicator */
+    .checkbox-primary {
+      color: #007bff; }
+    .checkbox-primary input:checked ~ .checkmark:after {
+      color: #007bff; }
+    .icon-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      padding-top: 40px;
+      font-size: 30px;
+      margin: 0 auto;
+      margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+	<section class="my-md-5 py-5">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-2">
+					<h2 class="heading-section py-md-5"><?=$registry->site_name?></h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-7 col-lg-5">
+					<div class="wrap">
+            <div class="icon-logo d-flex align-items-center justify-content-center">
+							<img width="120px" src="Application/system/views/default/assets/img/hero-img.png" alt="">
+						</div>
+						<div class="login-wrap p-4 p-md-5">
+              <div class="d-flex">
+                <div class="w-100">
+                    <h3 class="mb-4">Sign In</h3>
                 </div>
-            </div>
-        </div>
-        <template>
-            <form method="post">
-                
-            </form>
-        </template>
-        <script>
-            function recover_pass(){
-                let html = '<form method="post" class="content">'
-                         + '<label>E-mail or Phone number</label>'
-                         + '<input type="text" name="recover_password" placeholder="Either phone or e-mail">'
-                         + '</form>';
-                Swal.fire({
-                    title: 'Password recovery',
-                    html: html,
-                    customClass: 'mySwal'
-                });
+								<!-- <div class="w-100">
+									<p class="social-media d-flex justify-content-end">
+										<a href="#" class="social-icon d-flex align-items-center justify-content-center text-decoration-none"><span class="fa fa-facebook"></span></a>
+										<a href="#" class="social-icon d-flex align-items-center justify-content-center text-decoration-none"><span class="fa fa-twitter"></span></a>
+									</p>
+								</div> -->
+              </div>
+							<form action="#" class="signin-form">
+			      		<div class="form-group my-3">
+			      			<label class="form-control-placeholder" for="username">Username</label>
+			      			<input type="text" class="form-control" required>
+			      		</div>
+		            <div class="form-group mb-3" style="position: relative;">
+                  <label class="form-control-placeholder" for="password">Password</label>
+                  <input id="password-field" type="password" class="form-control" required>
+                  <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password" style="position: absolute; top: 34px; right:10px"></span>
+		            </div>
+		            <div class="form-group mb-3">
+		            	<button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
+		            </div>
+		            <div class="form-group d-md-flex w-100 mb-3">
+		            	<div class="w-50 text-left mb-3">
+			            	<label class="checkbox-wrap checkbox-primary mb-0">Remember Me
+                      <input type="checkbox" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="w-50 text-md-end">
+                    <a href="#" class="text-decoration-none" style="font-weight: 500;">Forgot Password</a>
+                  </div>
+		            </div>
+		          </form>
+		          <!-- <p class="text-center">Not a member? <a data-toggle="tab" href="#signup" class="fw-bold">Sign Up</a></p> -->
+		        </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        (function($) {
+          "use strict";
+            
+          $(".toggle-password").click(function() {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+              input.attr("type", "text");
+            } else {
+              input.attr("type", "password");
             }
-            function sign_up(){
-                Swal.fire({
-                    title: 'Feature not supported!',
-                    html: 'Contact your ICT personnel for help',
-                    icon: 'info'
-                });
-            }
-        </script>
-    </body>
+          });
+          
+        })(jQuery);
+    </script>
+
+	</body>
 </html>
+

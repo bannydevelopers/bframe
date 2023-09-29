@@ -63,3 +63,10 @@
     
 })(jQuery);
 
+const links = document.querySelectorAll('#nav_links>a');
+for (const link of links) {
+    //serviceId = link.href + "?#service";
+    if (window.location.href === link.href || window.location.href === link.href + 'index.html') {
+      link.classList.add("active");
+    }
+}
