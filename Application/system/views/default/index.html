@@ -2,15 +2,81 @@
 <html lang="en">
 
 <head>
-    <?php include 'components/head.html' ?>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="author" content="Jasper Rupia Katunzi">
     <meta name="keywords" content="Banny, Company Tanzania, Banny Tanzania, Tanzania Limited">
     <meta name="description" content="Banny Company homepage for the company website, the company operate in tanzania">
     <title>Banny Co LTD</title>
+
+    <!-- Favicon -->
+    <link href="assets/img/favicon.png" rel="shortcut icon" type="image/x-icon">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Ubuntu:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="Application/system/views/default/assets/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="Application/system/views/default/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <!-- <link href="assets/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="Application/system/views/default/assets/plugins/bootstrap-5.3.2-dist/bootstrap-5.3.2-dist/css/bootstrap.min.css">
+
+    <!-- Template Stylesheet -->
+    <link href="Application/system/views/default/assets/css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <?php include 'components/spinner.html'?>
-    <?php include 'components/nav.html'?>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark p-0">
+                <a href="/" class="navbar-brand">
+                    <h1 class="text-white">Banny Company Ltd<!--<span class="text-dark">.</span>--></h1>
+                </a>
+                <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto" id="nav_links">
+                        <a href="/" class="nav-item nav-link">Home</a>
+                        <a href="about.html" class="nav-item nav-link">About</a>
+                        <a href="services.html" class="nav-item nav-link">Services</a>
+                        <a href="projects.html" class="nav-item nav-link">Projects</a>
+                        <a href="blog.html" class="nav-item nav-link">Blog</a>
+                        <!-- <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu bg-light mt-2">
+                                <a href="" class="dropdown-item">Features</a>
+                                <a href="" class="dropdown-item">Our Team</a>
+                                <a href="" class="dropdown-item">FAQs</a>
+                                <a href="" class="dropdown-item">Testimonial</a>
+                            </div>
+                        </div> -->
+                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    </div>
+                    <!-- <button type="button" class="btn text-white p-0 d-none d-lg-block" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button> -->
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
 
     <!-- Hero Start -->
     <div class="container-fluid pt-5 bg-primary hero-header mb-5">
@@ -21,10 +87,10 @@
                     <h1 class="display-4 text-white mb-4 animated slideInRight">IT Solutions for Your Business</h1>
                     <p class="text-white mb-4 animated slideInRight">Technology bridges gaps, drives innovation, connects communities, and empowers individuals, fostering opportunities for global growth and advancement.</p>
                     <a target="_blank" href="assets/docs/Banny Company Profile.pdf" class="btn btn-light py-sm-3 px-xs-5 rounded-pill me-3 mb-1 mb-sm-0 animated slideInRight"><i class="fas fa-download"></i> Company Profile</a>
-                    <a href="contact.php" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">Contact Us</a>
+                    <a href="contact.html" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">Contact Us</a>
                 </div>
                 <div class="col-lg-6 align-self-end text-center pb-5 py-auto">
-                    <img width="200" class="img-fluid mb-5 d-none d-md-inline" src="assets/img/hero-img.png" alt="">
+                    <img width="200" class="img-fluid mb-5 d-none d-md-inline" src="Application/system/views/default/assets/img/hero-img.png" alt="">
                 </div>
             </div>
         </div>
@@ -38,7 +104,7 @@
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                     <div class="about-img">
-                        <img class="img-fluid" src="assets/img/about-img.jpg">
+                        <img class="img-fluid" src="Application/system/views/default/assets/img/about-img.jpg">
                     </div>
                 </div>
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
@@ -61,7 +127,7 @@
                         </div>
                     </div>
                     <div class="d-flex align-items-center mt-4">
-                        <a class="btn btn-primary rounded-pill px-4 me-2 me-md-3" href="about.php">Read More</a>
+                        <a class="btn btn-primary rounded-pill px-4 me-2 me-md-3" href="about.html">Read More</a>
                         <a class="btn btn-outline-primary btn-square me-2 me-md-3" target="_blank" href="https://www.facebook.com/bannycomputersltd" style="min-width: 35px;"><i class="fab fa-facebook-f"></i></a>
                         <a class="btn btn-outline-primary btn-square me-2 me-md-3" target="_blank" href="https://wa.me/+255717699320" style="min-width: 35px;"><i class="fab fa-whatsapp"></i></a>
                         <a class="btn btn-outline-primary btn-square me-2 me-md-3" target="_blank" href="https://www.instagram.com/banny_computers/" style="min-width: 35px;"><i class="fab fa-instagram"></i></a>
@@ -84,7 +150,7 @@
                     <p class="mb-4">
                         We sell all networking devices and materials as well as installation of the whole network infrastructure to our clients at any size. We advice our customers on best devices or materials as appropriate. We also provide network installation for homes and offices using both wired and wireless technology. We can set up sharing and security depending on the need.
                     </p>
-                    <a class="btn btn-primary rounded-pill px-4" href="services.php">Read More</a>
+                    <a class="btn btn-primary rounded-pill px-4" href="services.html">Read More</a>
                 </div>
                 <div class="col-lg-7">
                     <div class="row g-4">
@@ -202,7 +268,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 text-center text-lg-end wow fadeIn pb-3 pt-lg-5" data-wow-delay="0.5s">
-                    <img class="img-fluid mt-lg-5 d-none d-md-inline" src="assets/img/feature.png" alt="">
+                    <img class="img-fluid mt-lg-5 d-none d-md-inline" src="Application/system/views/default/assets/img/feature.png" alt="">
                 </div>
             </div>
         </div>
@@ -220,7 +286,7 @@
             <div class="row g-4">
                 <div class="col-lg-4 wow fadeIn" data-wow-delay="0.3s">
                     <div class="case-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="assets/img/project-1.jpg" alt="">
+                        <img class="img-fluid" src="Application/system/views/default/assets/img/project-1.jpg" alt="">
                         <a class="case-overlay text-decoration-none" href="">
                             <small>Software Development</small>
                             <h5 class="lh-base text-white mb-3">
@@ -232,7 +298,7 @@
                 </div>
                 <div class="col-lg-4 wow fadeIn" data-wow-delay="0.5s">
                     <div class="case-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="assets/img/project-2.jpg" alt="">
+                        <img class="img-fluid" src="Application/system/views/default/assets/img/project-2.jpg" alt="">
                         <a class="case-overlay text-decoration-none" href="">
                             <small>Networking</small>
                             <h5 class="lh-base text-white mb-3">
@@ -244,7 +310,7 @@
                 </div>
                 <div class="col-lg-4 wow fadeIn" data-wow-delay="0.7s">
                     <div class="case-item position-relative overflow-hidden rounded mb-2">
-                        <img class="img-fluid" src="assets/img/project-3.jpg" alt="">
+                        <img class="img-fluid" src="Application/system/views/default/assets/img/project-3.jpg" alt="">
                         <a class="case-overlay text-decoration-none" href="">
                             <small>IT Consultaion</small>
                             <h5 class="lh-base text-white mb-3">
@@ -493,7 +559,7 @@
                     <p class="mb-4">
                         Dedicated IT team transforming challenges into innovative solutions. With unparalleled expertise, they seamlessly integrate technology, ensuring businesses thrive in a rapidly-evolving digital landscape. Excellence in every endeavor.
                     </p>
-                    <a class="btn btn-primary rounded-pill px-4" href="team.php">See More</a>
+                    <a class="btn btn-primary rounded-pill px-4" href="team.html">See More</a>
                 </div>
                 <div class="col-lg-7">
                     <div class="row g-4">
@@ -501,7 +567,7 @@
                             <div class="row g-4">
                                 <div class="col-12 wow fadeIn" data-wow-delay="0.1s">
                                     <div class="team-item bg-white text-center rounded p-4 pt-0">
-                                        <img class="img-fluid rounded-circle p-4" src="assets/img/team-1.jpg" alt="">
+                                        <img class="img-fluid rounded-circle p-4" src="Application/system/views/default/assets/img/team-1.jpg" alt="">
                                         <h5 class="mb-0">Shaban Abass Mtunda</h5>
                                         <small>Managing director</small>
                                         <div class="d-flex justify-content-center mt-3">
@@ -515,7 +581,7 @@
                                 <div class="col-12 wow fadeIn" data-wow-delay="0.5s">
                                     <div class="col-12 wow fadeIn" data-wow-delay="0.3s">
                                         <div class="team-item bg-white text-center rounded p-4 pt-0">
-                                            <img class="img-fluid rounded-circle p-4" src="assets/img/team-2.jpg" alt="">
+                                            <img class="img-fluid rounded-circle p-4" src="Application/system/views/default/assets/img/team-2.jpg" alt="">
                                             <h5 class="mb-0">Wilfred Mushi</h5>
                                             <small>ICT Officer</small>
                                             <div class="d-flex justify-content-center mt-3">
@@ -532,7 +598,7 @@
                         <div class="col-md-6 pt-md-4">
                             <div class="row g-4">
                                 <div class="team-item bg-white text-center rounded p-4 pt-0">
-                                    <img class="img-fluid rounded-circle p-4" src="assets/img/team-3.jpg" alt="">
+                                    <img class="img-fluid rounded-circle p-4" src="Application/system/views/default/assets/img/team-3.jpg" alt="">
                                     <h5 class="mb-0">Baraka Mghumba</h5>
                                     <small>Technical manager</small>
                                     <div class="d-flex justify-content-center mt-3">
@@ -544,7 +610,7 @@
                                 </div>
                                 <div class="col-12 wow fadeIn" data-wow-delay="0.7s">
                                     <div class="team-item bg-white text-center rounded p-4 pt-0">
-                                        <img class="img-fluid rounded-circle p-4" src="assets/img/team-4.jpg" alt="">
+                                        <img class="img-fluid rounded-circle p-4" src="Application/system/views/default/assets/img/team-4.jpg" alt="">
                                         <h5 class="mb-0">Abigail Mnzava</h5>
                                         <small>ICT Officer</small>
                                         <div class="d-flex justify-content-center mt-3">
@@ -571,28 +637,28 @@
             <div class="row">
                 <div class="logo-content d-flex flex-wrap justify-content-between">
                     <!-- <a target="_blank" href="https://magereza.go.tz/" class="mb-5 mx-2">
-                        <img style="max-width: 140px" src="assets/img/clients/magereza.jpeg" alt="Jeshi la magereza" class="logo-image img-fluid">
+                        <img style="max-width: 140px" src="Application/system/views/default/assets/img/clients/magereza.jpeg" alt="Jeshi la magereza" class="logo-image img-fluid">
                     </a> -->
                     <!-- <a target="_blank" href="https://kilindidc.go.tz/" class="mb-5 mx-2">
-                        <img style="max-width: 140px" src="assets/img/clients/kilindi.jpeg" alt="Kilindi" class="logo-image img-fluid">
+                        <img style="max-width: 140px" src="Application/system/views/default/assets/img/clients/kilindi.jpeg" alt="Kilindi" class="logo-image img-fluid">
                     </a> -->
                     <a target="_blank" href="https://www.brela.go.tz/" class="mb-5 mx-2">
-                        <img style="max-width: 140px" src="assets/img/clients/brela.png" alt="Brela" class="logo-image img-fluid mt-5">
+                        <img style="max-width: 140px" src="Application/system/views/default/assets/img/clients/brela.png" alt="Brela" class="logo-image img-fluid mt-5">
                     </a>
                     <a target="_blank" href="https://www.udsm.ac.tz/" class="mb-5 mx-2">
-                        <img style="max-width: 150px" src="assets/img/clients/udsm.png" alt="UDSM" class="logo-image img-fluid">
+                        <img style="max-width: 150px" src="Application/system/views/default/assets/img/clients/udsm.png" alt="UDSM" class="logo-image img-fluid">
                     </a>
                     <a target="_blank" href="https://www.nishati.go.tz/" class="mb-5 mx-2">
-                        <img style="max-width: 150px" src="assets/img/clients/ministry.jpg" alt="Ministry of energy" class="logo-image img-fluid mt-3">
+                        <img style="max-width: 150px" src="Application/system/views/default/assets/img/clients/ministry.jpg" alt="Ministry of energy" class="logo-image img-fluid mt-3">
                     </a>
                     <a target="_blank" href="https://www.out.ac.tz/" class="mb-5 mx-2">
-                        <img style="max-width: 130px" src="assets/img/clients/open.png" alt="Open university" class="logo-image img-fluid mt-3 ml-3">
+                        <img style="max-width: 130px" src="Application/system/views/default/assets/img/clients/open.png" alt="Open university" class="logo-image img-fluid mt-3 ml-3">
                     </a>
-                    <a target="_blank" href="https://www.ports.go.tz/index.php/en/" class="mb-5 mx-2">
-                        <img style="max-width: 150px" src="assets/img/clients/tpa.png" alt="TPA" class="logo-image img-fluid mt-5">
+                    <a target="_blank" href="https://www.ports.go.tz/index.html/en/" class="mb-5 mx-2">
+                        <img style="max-width: 150px" src="Application/system/views/default/assets/img/clients/tpa.png" alt="TPA" class="logo-image img-fluid mt-5">
                     </a>
                     <a target="_blank" href="https://www.maktech.co.tz/" class="mb-5 mx-2">
-                        <img style="max-width: 150px" src="assets/img/clients/maktech.jpg" alt="Maktech" class="logo-image img-fluid">
+                        <img style="max-width: 150px" src="Application/system/views/default/assets/img/clients/maktech.jpg" alt="Maktech" class="logo-image img-fluid">
                     </a>
                 </div>
             </div>
@@ -609,7 +675,7 @@
                     <p class="mb-4">
                         It's heartening to hear such positive feedback. Our team constantly strives for excellence, and your words reaffirm our dedication. Thank you for trusting us with your IT needs. We look forward to our continued collaboration
                     </p>
-                    <a class="btn btn-primary rounded-pill px-4" href="404.php">Read More</a>
+                    <a class="btn btn-primary rounded-pill px-4" href="404.html">Read More</a>
                 </div>
                 <div class="col-lg-7 wow fadeIn" data-wow-delay="0.5s">
                     <div class="owl-carousel testimonial-carousel border-start border-primary">
@@ -619,7 +685,7 @@
                                 Working with Banny Company transformed our digital landscape. Their expertise in IT solutions is unmatched. From initial consultation to the project's completion, their team displayed exceptional professionalism and commitment. Our systems have never been more efficient. Highly recommended for anyone seeking top-tier IT services!
                             </p>
                             <div class="d-flex align-items-center">
-                                <img class="img-fluid flex-shrink-0 rounded-circle" src="assets/img/no-profile.jpg"
+                                <img class="img-fluid flex-shrink-0 rounded-circle" src="Application/system/views/default/assets/img/no-profile.jpg"
                                     style="width: 60px; height: 60px;">
                                 <div class="ps-3">
                                     <h5 class="mb-1">Juma Msoweto</h5>
@@ -633,7 +699,7 @@
                                 Our collaboration with Banny has been enriching, and we've experienced remarkable improvements in our workflow processes. Every challenge was met with a proactive response, turning complexities into streamlined solutions.
                             </p>
                             <div class="d-flex align-items-center">
-                                <img class="img-fluid flex-shrink-0 rounded-circle" src="assets/img/no-profile.jpg"
+                                <img class="img-fluid flex-shrink-0 rounded-circle" src="Application/system/views/default/assets/img/no-profile.jpg"
                                     style="width: 60px; height: 60px;">
                                 <div class="ps-3">
                                     <h5 class="mb-1">Shany Saktai</h5>
@@ -647,7 +713,7 @@
                                 Choosing Banny for our IT solutions was a game-changer! Their expertise and innovative approaches have significantly enhanced our operations. The team's commitment to delivering high-quality solutions and their exceptional customer service exceeded our expectations. 
                             </p>
                             <div class="d-flex align-items-center">
-                                <img class="img-fluid flex-shrink-0 rounded-circle" src="assets/img/testimonial-1.jpg"
+                                <img class="img-fluid flex-shrink-0 rounded-circle" src="Application/system/views/default/assets/img/testimonial-1.jpg"
                                     style="width: 60px; height: 60px;">
                                 <div class="ps-3">
                                     <h5 class="mb-1">Emanuel John</h5>
@@ -662,10 +728,119 @@
     </div>
     <!-- Testimonial End -->
 
-    <?php include 'components/search_modal.html'?>
-    <?php include 'components/newsletter.html'?>
-    <?php include 'components/footer.html'?>
-    <?php include 'components/backToTop.html'?>
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-light p-3"
+                            placeholder="Type search keyword">
+                        <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+
+    <!-- Newsletter Start -->
+    <div class="container-fluid bg-primary newsletter">
+        <div class="container-fluid">
+            <div class="row g-5 align-items-center">
+                <div class="position-relative col-md-5 ps-0 text-start wow fadeIn" data-wow-delay="0.3s">
+                    <img class="img-fluid d-none d-md-inline" src="assets/img/newsletter.png" alt="">
+                    <img class="img-fluid d-md-none" src="assets/img/finger-pointing-downward.png" alt="" style="max-width: 300px; position: absolute; top: -48px; right: 0;">
+                </div>
+                <div class="col-md-7 py-5 newsletter-text wow fadeIn" data-wow-delay="0.5s">
+                    <form action="">
+                        <div class="btn btn-sm border rounded-pill text-white px-3 mb-3">Newsletter</div>
+                        <h1 class="text-white mb-4">Let's subscribe the newsletter</h1>
+                        <div class="position-relative w-100 mt-3 mb-2">
+                            <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="email"
+                                placeholder="Enter Your Email" name="newslater_email" style="height: 48px;" required>
+                            <button type="submit" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i
+                                    class="fa fa-paper-plane text-primary fs-4"></i></button>
+                        </div>
+                        <small class="text-white-50">Be the first to get latest updated information</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Newsletter End -->
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 footer pt-5">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
+                    <a href="/l" class="d-inline-block mb-3 text-decoration-none">
+                        <h1 class="text-white"><img class="d-lg-none" src="assets/img/favicon.png" alt=""> Banny Co LTD<span class="text-primary">.</span></h1>
+                    </a>
+                    <p class="mb-0">
+                        Banny Company excels in IT solutions, blending innovation with expertise to empower businesses, ensuring reliability, growth, and unmatched technical support.
+                    </p>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
+                    <h5 class="text-white mb-4">Get In Touch</h5>
+                    <p><a class="text-decoration-none" href="" style="color: #838c99 !important;"><i class="fa fa-map-marker-alt me-3"></i>NHC House, Samora Ave</a></p>
+                    <p><i class="me-3"></i><i class="me-3"></i>13th room, Mezzanine Floor </p>
+                    <p><i class="me-3"></i><i class="me-3"></i>P.O.Box 22429</p>
+                    <p><a class="text-decoration-none" href="tel:+255755049955" style="color: #838c99 !important;"><i class="fa fa-phone-alt me-3"></i>+255 755 049 955</a></p>
+                    <p><a class="text-decoration-none" href="mailto:info@banny.co.tz" style="color: #838c99 !important;"><i class="fa fa-envelope me-3"></i>info@banny.co.tz</a></p>
+                    <p><a class="text-decoration-none" href="mailto:sales@banny.co.tz" style="color: #838c99 !important;"><i class="fa fa-envelope me-3"></i>sales@banny.co.tz</a></p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" target="_blank" href="https://wa.me/+255717699320"><i class="fab fa-whatsapp"></i></a>
+                        <a class="btn btn-outline-light btn-social" target="_blank" href="https://www.facebook.com/bannycomputersltd"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" target="_blank" href="https://www.instagram.com/banny_computers/"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-light btn-social" target="_blank" href="https://tz.linkedin.com/company/banny-company-tanzania"><i class="fab fa-linkedin-in"></i></a>
+                        <!-- <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a> -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
+                    <h5 class="text-white mb-4">Popular Link</h5>
+                    <a class="btn btn-link text-decoration-none" href="about.html">About Us</a>
+                    <a class="btn btn-link text-decoration-none" href="contact.html">Contact Us</a>
+                    <a class="btn btn-link text-decoration-none" href="">Privacy Policy</a>
+                    <a class="btn btn-link text-decoration-none" href="">Terms & Condition</a>
+                    <a class="btn btn-link text-decoration-none" href="">Career</a>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
+                    <h5 class="text-white mb-4">Our Services</h5>
+                    <a class="btn btn-link text-decoration-none" href="">Access control</a>
+                    <a class="btn btn-link text-decoration-none" href="">Camera installation</a>
+                    <a class="btn btn-link text-decoration-none" href="">Software development</a>
+                    <a class="btn btn-link text-decoration-none" href="">Firewall installation</a>
+                    <a class="btn btn-link text-decoration-none" href="">Fire alram installation</a>
+                </div>
+            </div>
+        </div>
+        <div class="container wow fadeIn" data-wow-delay="0.1s">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; 2023 <a class="border-bottom" href="#">Banny Co LTD</a>, All Right Reserved. <span>Developed by <a class="border-bottom" target="_blank" href="https://jasperrupia.com">Katunzi JR</a></span>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="/">Home</a>
+                            <a href="#">Cookies</a>
+                            <a href="">Help</a>
+                            <a href="faq.html">FAQs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top pt-2"><i class="bi bi-arrow-up"></i></a>
     <?php include 'components/scripts.html'?>
 </body>
 
