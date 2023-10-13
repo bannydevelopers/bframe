@@ -1,0 +1,35 @@
+<h1 class="flex" style="display: flex;">
+    <span>Alert messages</span>
+    <button onclick="reset_updates()" class="shrink">Reset updates</button>
+</h1>
+<form method="post">
+    <div class="flex cards">
+        <?php foreach($cd as $k=>$v){?>
+        <div class="content">
+            <label><?=str_replace('_',' ', ucwords($k))?></label>
+            <textarea name="<?=$k?>"><?=$v?></textarea>
+        </div>
+        <?php }?>
+    </div>
+    <hr>
+    <div style="text-align: right;"><button type="submit">Save changes</button></div>
+</form>
+<script>
+    function reset_updates(){
+        let fd = new FormData();
+        fd.append('reset_updates',1);
+        ajax(
+            req_uri,
+            response=>{
+                Swal.fire({
+                    html:response,
+                    icon:'success'
+                })
+            },
+            error=>{
+                console.log(error());
+            },
+            fd
+        )
+    }
+</script>

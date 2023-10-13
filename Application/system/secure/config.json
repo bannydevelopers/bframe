@@ -1,0 +1,38 @@
+{
+    "session_name": "userdata",
+    "site_name": "CMIS v2",
+    "theme": "HansHotel",
+    "dashboard_url": "admin",
+    "currency": "TZS",
+    "currency_symbol": "TSH",
+    "locale": "sw-TZ",
+    "plugins": [
+        "Accounts",
+        "Communications",
+        "Newsletter",
+        "Inventory",
+        "Human_resources",
+        "Front_desk",
+        "Forms"
+    ],
+    "gateways": {
+        "payment": "pesapal",
+        "sms": "nextsms",
+        "control_number": ""
+    },
+    "pesapal": {
+        "consumer_key": "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW",
+        "consumer_secret": "osGQ364R49cXKeOYSpaOnT++rHs="
+    },
+    "nextsms": {
+        "sender": "NEXTSMS",
+        "token": "YmFubnk6QmFzZWFAQkNM"
+    },
+    "db_configs": {
+        "dbdriver": "mysql",
+        "hostname": "localhost",
+        "db_name": "banncot_bframe_cms",
+        "username": "root",
+        "password": "root"
+    }
+}

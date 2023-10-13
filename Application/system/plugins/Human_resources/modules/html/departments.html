@@ -1,0 +1,221 @@
+<div class="flex">
+    <h1 class="content-small no-pad-top">Departments</h1>
+    <div class="shrink">
+        <button onclick="add_form('department')" value="add">Add department</button>
+    </div>
+</div>
+<hr>
+<?php foreach($d_tree as $key=>$depts){?>
+<h3 class="content grey round"><?=$key?></h3>
+<div class="flex cards">
+    <?php foreach($depts as $k=>$d){?>
+    <div>
+        <h3 class="grey" style="text-align: left;"><?=$d['dept_name']?></h3>
+        <div class="content"><em><?=$d['dept_desc']?></em></div>
+        <div class="content-small no-pad-top" style="text-align: right;">
+            <button class="round" onclick="view_department(`<?=$d['dept_id']?>`)" data-icon="&#xf06e;"></button>
+            <button class="round" onclick="edit_department(`<?=$d['dept_id']?>`)" data-json='<?=stripslashes(json_encode($d))?>' data-icon="&#xf044;"></button>
+            <button class="round" onclick="delete_department(`<?=$d['dept_id']?>`,`<?=$d['dept_name']?>`)" data-icon="&#xf2ed;"></button>
+        </div>
+    </div>
+    <?php }?>
+</div>
+<?php }?>
+<!--div>
+    <pre>
+        <?php var_dump($c_tree)?>
+    </pre>
+</div-->
+<div style="display: none;" id="dept_form">
+    <form method="post">
+        <label>Department name</label>
+        <input type="text" name="dept_name" placeholder="department name..." required>
+        <label>Faculty</label>
+        <select name="dept_faculty" required>
+            <option value="">Choose faculty...</option>
+            <?php foreach($faculties as $f){?>
+            <option value="<?=$f['faculty_id']?>"><?=$f['faculty_name']?></option>
+            <?php }?>
+        </select>
+        <label>department description</label>
+        <textarea name="dept_desc" rows="6" placeholder="department description..."></textarea>
+        <div class="content" style="text-align: right;">
+            <button type="submit">Save department</button>
+        </div>
+    </form>
+</div>
+<style>
+    .mySwalForm{
+        min-width: 80%;
+    }
+    .mySwalForm label, .mySwalSmallForm label{
+        display: block;
+        text-align: left;
+        padding-left: 1em;
+    }
+    .mySwalSmallForm label{
+        padding-left: 0.6em;
+    }
+    .no-pad-top{
+        padding-top: 0;
+    }
+    .round{
+        border-radius: 5em;
+    }
+    .cards > *{
+        min-width: 47%;
+    }
+    button{
+        text-transform: uppercase;
+    }
+    .mySwal label{
+        display: block;
+        text-align: left;
+        padding-left: .5em;
+        font-weight: bolder;
+    }
+</style>
+<script>
+    function add_form(name){
+        let main_evt = window.event;
+        main_evt.preventDefault();
+        if(main_evt.target.value == 'add'){
+            let wide = main_evt.target.getAttribute('data-form-width');
+            let customClass = (wide == 'wide') ? 'mySwalForm' : 'mySwalSmallForm';
+            request_service(
+                `add_${name}`,
+                response => {
+                    if(response != ''){
+                        Swal.fire({
+                            html:response,
+                            showConfirmButton:false,
+                            customClass: customClass
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            html:'Service not available',
+                            icon:'info'
+                        });
+                    }
+                    let form = document.querySelector(`.${customClass} form`);
+                    if(form != null){
+                        form.addEventListener(
+                            'submit',
+                            evt=>{
+                                evt.preventDefault();
+                                let fd = new FormData(form);
+                                request_service(
+                                    `add_${name}`,
+                                    response => {console.log(response);
+                                        res_json = JSON.parse(response);
+                                        if(res_json){
+                                            Swal.fire({
+                                                title:res_json.message,
+                                                icon: res_json.status
+                                            });
+                                        }
+                                    },
+                                    fd
+                                );
+                            }
+                        );
+                    }
+                }
+            );
+        }
+        else return true;
+    }
+    function view_department(id){
+        var cancelled = false;
+        Swal.fire({
+            title:`Loading, please wait...`,
+            icon:'info',
+            showCancelButton:true,
+            showConfirmButton:false
+        })
+        .then(res=>{
+            cancelled = true;
+        });
+        Swal.showLoading();
+        setTimeout(()=>{
+            if(!cancelled){
+                Swal.fire({
+                    title:'No enough data to show',
+                    icon:'info',
+                    showCancelButton:false,
+                    showConfirmButton:true
+                });
+            }
+        },2000);
+    }
+    function delete_department(id, name){
+        Swal.fire({
+            title:`Sure, delete '${name}?'`,
+            icon:'question',
+            showCancelButton:true
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fd = new FormData();
+                fd.append('dept_id', id);
+                fd.append('delete_department', 'ajax'),
+                ajax(
+                    req_uri,
+                    response=>{
+                        if(response == 'ok')
+                        {
+                            Swal.fire({
+                                title:'Deleting succeeded!',
+                                icon:'success'
+                            })
+                            .then(prompt=>{
+                                window.location.reload();
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title:response,
+                                icon:'error'
+                            });
+                        }
+                    },
+                    error=>{
+                        Swal.fire({
+                            title:error,
+                            icon:'error'
+                        });
+                    },
+                    fd
+                );
+            }
+            else{
+                Swal.fire({
+                    title:'Deleting cancelled!',
+                    icon:'success'
+                });
+            }
+        });
+    }
+    function edit_department(id){
+        let targ = window.event.target,
+            form_html = document.getElementById('dept_form').children[0].innerHTML,
+            _json = JSON.parse(targ.getAttribute('data-json'));
+        let tmp = document.createElement('form');
+        tmp.setAttribute('method', 'POST');
+        tmp.innerHTML = form_html;
+        tmp.querySelector('[name=dept_name]').setAttribute('value',_json.dept_name);
+        tmp.querySelector('[name=dept_desc]').innerText = _json.dept_desc;
+        let opts = tmp.querySelector('[name=dept_faculty]').children;
+        for(var i = 1; i < opts.length; ++i){
+            if(opts[i].value == _json.dept_faculty) opts[i].setAttribute('selected', true);
+        }
+        tmp.insertAdjacentHTML('beforeEnd',`<input type="hidden" name="dept_id" value="${id}"></form>`);
+        Swal.fire({
+            title:"Edit department<hr>",
+            html:tmp.outerHTML,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+    }
+</script>

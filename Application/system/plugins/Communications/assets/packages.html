@@ -1,0 +1,25 @@
+<div class="content-small" style="text-align: right;">
+    <a href="<?=$myURL?>/packages/add">
+        <button class="xl capitals plain-btn" data-icon="&#xf055;">Add package</button>
+    </a>
+</div>
+<div class="flex cards">
+    <?=$body?>
+</div>
+<script>
+    const delete_package = pid=>{
+        Swal.fire({
+            title:"Sure? No UNDO then!",
+            icon:"question",
+            html:"Loading... "+pid
+        })
+        .then(val=>{
+            if(val.isConfirmed){
+                Swal.fire({
+                    title:"You got balls, kid!",
+                    icon:"success"
+                });
+            }
+        });
+    }
+</script>

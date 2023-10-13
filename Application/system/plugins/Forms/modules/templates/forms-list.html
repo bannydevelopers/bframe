@@ -1,0 +1,82 @@
+<h1 class="content-small">Forms</h1>
+<div class="flex">
+  <div>
+    <div class="flex cards">
+      <?php foreach($pages as $p){?>
+        <div class="rounded">
+          <div class="content grey"><b data-icon="<?=$p['page_icon']?>"></b><?=$p['page_name']?></div>
+          <div class="content-small">
+            <small><?=$p['page_title']?></small>
+          </div>
+          <div class="content-small" style="text-align: right;">
+            <!--span class="rounded content-small box-shadow" data-icon="<?=(intval($p['page_special'])<2)?'&#xf06e;':'&#xf070;'?>"></span-->
+            <a href="<?=$my_url?>/<?=$p['page_id']?>" class="rounded content-small box-shadow" data-icon="&#xf044;"></a>
+            <a href="javascript:delete_page(`<?=$p['page_id']?>`)" class="rounded content-small box-shadow" data-icon="&#xf2ed;"></a>
+          </div>
+        </div>
+      <?php }?>
+      <div class=" rounded center content grey">
+        <a href="<?=$my_url?>/add" data-icon="&#xf055;" class="large-txt-3x content"></a><br>
+        <a href="<?=$my_url?>/add" style="font-size: 1.5em;">Create new page</a>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .large-txt-3x{
+    font-size: 3.3em;
+  }
+  .center{
+    text-align: center;
+  }
+</style>
+<script>
+  function delete_page(pageid){
+    Swal.fire({
+      title: 'Sure, delete this page?',
+      icon: 'question',
+      showCancelButton: true
+    })
+    .then(prompt=>{
+      if(prompt.isConfirmed){
+                let fd = new FormData();
+                fd.append('delete_page', pageid);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        let jsonx;
+                        try{
+                            jsonx = JSON.parse(response);
+                        }
+                        catch (e){
+                            jsonx = false;
+                        }
+                        if(jsonx){
+                            Swal.fire({
+                                title: jsonx.message,
+                                icon:jsonx.status
+                            })
+                            .then(resp=>{
+                                window.location.reload();
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'Malformed response received!',
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error=>{
+                        console.log(error);
+                        Swal.fire({
+                            html:error,
+                            icon:"error"
+                        });
+                    },
+                    fd
+                );
+            }
+    });
+  }
+</script>

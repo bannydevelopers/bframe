@@ -1,0 +1,106 @@
+<div class="white" style="box-shadow: 0 0 6px #999;">
+    <form method="post" class="tabset">
+        <!-- Tab 1 -->
+        <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
+        <label for="tab1">Page body</label>
+        <!-- Tab 2 -->
+        <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
+        <label for="tab2">Page meta</label>
+        <!-- Tab 3 -->
+        <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
+        <label for="tab3">Page extras</label>
+        <span style="float: right;padding: 4px;margin: -4px 6px;">
+            <button type="submit" data-icon="&#xf0c7;" class="plain-btn xl">SAVE</button>
+        </span>
+        <br clear="both"/>
+        <div class="tab-panels">
+            <section id="marzen" class="tab-panel content page-main">
+                <div style="flex-basis: 100%;">
+                    <textarea name="page_content" id="page_content" class="tinymce"><?=htmlspecialchars($page['page_content'])?></textarea>
+                </div>
+            </section>
+            <section id="rauchbier" class="tab-panel page-main">
+                <div class="flex" style="flex-basis: 100%;">
+                    <div class="content" style="flex-basis: 100%;">
+                        <input type="hidden" name="page_id" value="<?=$page['page_id']?>" />
+                        <p>
+                            <label for="page_name">Page name</label>
+                            <input type="text" name="page_name" id="page_name" value="<?=$page['page_name']?>" placeholder="Aplha-numeric text" />
+                        </p>
+                        <p>
+                            <label for="page_title">Page title</label>
+                            <input type="text" name="page_title" id="page_title" value="<?=$page['page_title']?>" placeholder="Aplha-numeric text" />
+                        </p>
+                        <p>
+                            <label for="page_type">Page type</label>
+                            <select name="page_type" id="page_type">
+                                <option value="0">Default</option>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="page_parent">Page parent</label>
+                            <select name="page_parent" id="page_parent">
+                                <option value="0">No parent</option>
+                                <?php foreach($pages as $p){?>
+                                <option value="<?=$p['page_id']?>"<?=($page['page_parent'] == $p['page_id'] ? ' selected' : '')?>><?=$p['page_name']?></option>
+                                <?php }?>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="page_author">Page author</label>
+                            <input type="text" id="page_author" value="<?=$page['full_name']?>" readonly />
+                        </p>
+                    </div>
+                    <div class="content" style="flex-basis: 100%;">
+                        <div class="flex">
+                            <p>
+                                <label for="page_icon" data-icon="<?=$page['page_icon']?>">Page icon</label>
+                                <input type="text" name="page_icon" value="<?=$page['page_icon']?>">
+                            </p>&nbsp;
+                            <p>
+                                <label for="page_order">Page order</label>
+                                <input type="text" name="page_order" value="<?=$page['page_order']?>">
+                            </p>&nbsp;
+                            <p>
+                                <label for="create_date">Create date</label>
+                                <input type="text" value="<?=date('M d, Y @ H:i', strtotime($page['create_date']))?>" readonly>
+                            </p>
+                        </div>
+                        <div>
+                            <label for="page_special">Page special</label>
+                            <div style="display: flex;margin-top: -1em;">
+                                <label for="page_special1" style="flex-grow: 1;">
+                                    <input type="checkbox" name="page_special[home]" value="1" id="page_special1"<?=($page['page_special']==1 or $page['page_special'] == 3) ? ' checked':''?>>
+                                    Home page
+                                </label>
+                                <label for="page_special2" style="flex-grow: 1;">
+                                    <input type="checkbox" name="page_special[hidden]" value="2" id="page_special2"<?=($page['page_special']==2 or $page['page_special'] == 3) ? ' checked':''?>>
+                                    Hidden from navigation
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="page_keywords">Page keywords</label>
+                            <textarea name="page_keywords" id="page_keywords"></textarea>
+                        </div>
+                        <div>
+                            <label for="page_desc">Page description</label>
+                            <textarea name="page_desc" id="page_desc"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="dunkles" class="tab-panel page-main">
+                <div class="flex" style="flex-basis: 100%;flex-wrap: wrap;min-height: 60vh;">
+                    <?php foreach($page['page_extras'] as $k=>$v){?>
+                    <p>
+                        <label for="<?=$k?>"><?=str_replace('_', '', ucwords($k))?></label>
+                        <input type="text" name="<?=$k?>" id="<?=$k?>" value="<?=$v?>" />
+                    </p>
+                    <?php }?>
+                </div>
+            </section>
+        </div>
+        
+    </form>
+</div>

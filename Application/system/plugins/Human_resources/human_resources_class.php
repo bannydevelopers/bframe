@@ -1,0 +1,146 @@
+<?php
+class human_resources{
+    public $name = 'eTours';
+    public $version = 1.0;
+    public $desc = 'Plugin dedicated for complete tours management as a drop in';
+
+    private static $instance = null;
+    
+    public function __construct(){
+        // Not applicable, may throw exception in future releases
+    }
+
+    public static function init(){
+        // Hook to the system
+        system::add_event_listener('exec_end', 'human_resources::load_page', $_SERVER['REQUEST_URI']);
+        // Hook to admin dashboard
+        system::add_event_listener('admin_plugin_load', 'human_resources::load_admin_dashboard');
+        // Respond to service requests
+        system::add_event_listener('add_staff', 'human_resources::service_add_staff');
+        system::add_event_listener('add_designation', 'human_resources::service_add_designation');
+        system::add_event_listener('add_department', 'human_resources::service_add_department');
+    }
+    public static function load_admin_dashboard($args){
+        $registry = storage::init();
+        if(str_replace('-', '_', strtolower($args[0])) == __CLASS__) {
+            $myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";
+            $_this = new static();
+            $user = user::init()->get_session_user();
+            $return = ['title'=>"Module '{$args[1]}' not found",'body'=>'Request not supported'];
+            if(is_readable(__DIR__."/modules/{$args[1]}.php")) {
+                include __DIR__."/modules/{$args[1]}.php";
+            }
+            return $return;
+        }
+    }
+    public static function load_page($request){
+        $registry = storage::init();
+        return;
+    }
+    /*protected function find_bbcode($content){
+        $html = htmlspecialchars_decode(stripslashes($content));
+		preg_match_all('/(\{\$)(.*?)(\})/i', $html, $pg_matches);
+		if(isset($pg_matches[2])){
+			$searches = $replacement = [];
+			foreach($pg_matches[2] as $k=>$v){
+				$searches[] = $pg_matches[0][$k];
+                $replacement[] = $v;
+			}
+		}
+		$html = str_replace($searches, $replacement, $html);
+        return $html;
+    }*/
+    public static function service_add_staff($data){
+        if(user::init()->user_can('add_staff')){
+            $registry = storage::init();
+            $db = db::get_connection($registry->system_config->db_configs);
+
+            if(isset($_POST['full_name']) && isset($_POST['employment_date'])){
+                return json_encode(['status'=>'info', 'message'=>json_encode($_POST)]);
+                //user_id, full_name, email, phone, passcode, status, roles, registration_no, employment_date
+                //designation, department, branch, bank, bank_account
+                $data = [
+                    'designation_name'=>addslashes( $_POST['designation_name'] ),
+                    'designation_description'=>addslashes( $_POST['designation_description'] ),
+                    'created_by'=>user::init()->get_session_user('user_id'),
+                    'create_date'=>date('Y-m-d')
+                ];
+                $db->insert('staff', $data);
+                if(!$db->error()) return json_encode(['status'=>'success', 'message'=>'Designation added successful']);
+                else return json_encode(['status'=>'error', 'message'=>$db->error()['message']]);
+            }
+            ob_start();
+            $designations = $db->select('designations')->fetchAll();
+            $departments = $db->select('departments')->fetchAll();
+            $branches = $db->select('branches')->fetchAll();
+            $banks = $db->select('banks')->fetchAll();
+            $roles = $db->select('roles')->fetchAll();
+
+            include __DIR__.'/modules/html/add_staff.html';
+            return ob_get_clean();
+        }
+        else return 'Access denied, no enough permission!';
+    }
+    public static function service_add_designation($data){
+        $registry = storage::init();
+        $db = db::get_connection($registry->system_config->db_configs);
+
+        if(isset($_POST['designation_name'])){
+
+            $data = [
+                'designation_name'=>addslashes( $_POST['designation_name'] ),
+                'designation_description'=>addslashes( $_POST['designation_description'] ),
+                'created_by'=>user::init()->get_session_user('user_id'),
+                'create_date'=>date('Y-m-d')
+            ];
+            $db->insert('designations', $data);
+            if(!$db->error()) return json_encode(['status'=>'success', 'message'=>'Designation added successful']);
+            else return json_encode(['status'=>'error', 'message'=>$db->error()['message']]);
+        }
+        ob_start();
+        $designations = $db->select('designations')->fetchAll();
+        include __DIR__.'/modules/html/add_designation.html';
+        return ob_get_clean();
+    }
+    public static function service_add_department($data){
+        $registry = storage::init();
+        $db = db::get_connection($registry->system_config->db_configs);
+
+        if(isset($_POST['dept_name'])){
+            self::save_department();
+            if($db->error()) {
+                die(json_encode(['message'=>$db->error()['message'],'status'=>'error']));
+            }
+            else {
+                die(json_encode(['message'=>'Department added successful', 'status'=>'success']));
+            }
+        }
+        else{
+            ob_start();
+            $departments = $db->select('departments')->fetchAll();
+            $faculties = $db->select('faculties')->fetchAll();
+            include __DIR__.'/modules/html/add_department.html';
+            return ob_get_clean();
+        }
+    }
+    public static function save_department(){
+        if(!isset($_POST['dept_name'])) return 0;
+        
+        $registry = storage::init();
+        $db = db::get_connection($registry->system_config->db_configs);
+
+        $fd = [
+            'dept_name'=>addslashes($_POST['dept_name']),
+            'dept_faculty'=>addslashes($_POST['dept_faculty']),
+            'dept_desc'=>addslashes($_POST['dept_desc'])
+        ];
+        if(isset($_POST['dept_id']) && intval($_POST['dept_id'])) {
+            $k = intval($_POST['dept_id']);
+            $db->update('departments', $fd)->where("dept_id={$k}")->commit();
+        }
+        else{
+            $k = $db->insert('departments', $fd);
+        }
+        return $k;
+    }
+}

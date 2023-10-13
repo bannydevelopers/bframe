@@ -1,0 +1,53 @@
+{
+    "name":"Inventory",
+    "description":"Simple yet powerful, modern online manager for Human resources tasks.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Inventory",
+                "alias":"Inventory",
+                "href":"#Inventory", 
+                "icon":"f468",
+                "permission":"",
+                "children":[
+                    {
+                        "name":"Items",
+                        "href":"/plugin/Inventory/items",
+                        "icon":"f594",
+                        "permission":""
+                    },
+                    {
+                        "name":"Stock",
+                        "href":"/plugin/Inventory/stock",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Item issues",
+                        "href":"/plugin/Inventory/item-issues",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Suppliers",
+                        "href":"/plugin/Inventory/suppliers",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Categories",
+                        "href":"/plugin/Inventory/categories",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Stores",
+                        "href":"/plugin/Inventory/stores",
+                        "icon":"",
+                        "permission":""
+                    }
+                ]
+            }
+        ]
+    }
+}

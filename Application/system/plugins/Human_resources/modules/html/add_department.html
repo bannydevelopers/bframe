@@ -1,0 +1,17 @@
+<form method="post">
+    <h1 class="content-small">New department</h1><hr>
+    <label>Department name</label>
+    <input type="text" name="dept_name" placeholder="department name..." required>
+    <label>Faculty</label>
+    <select name="dept_faculty" required>
+        <option value="">Choose faculty...</option>
+        <?php foreach($faculties as $f){?>
+        <option value="<?=$f['faculty_id']?>"><?=$f['faculty_name']?></option>
+        <?php }?>
+    </select>
+    <label>department description</label>
+    <textarea name="dept_desc" rows="6" placeholder="department description..."></textarea>
+    <div class="content" style="text-align: right;">
+        <button type="submit">Save department</button>
+    </div>
+</form>

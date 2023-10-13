@@ -1,0 +1,172 @@
+<div class="white" style="box-shadow: 0 0 6px #999;">
+    <form method="post" enctype="multipart/form-data" class="tabset">
+        <!-- Tab 1 -->
+        <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
+        <label for="tab1">Package details</label>
+        <!-- Tab 2 -->
+        <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
+        <label for="tab3">Package meta</label>
+        <!-- Tab 3 -->
+        <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
+        <label for="tab2">Preview photos</label>
+        <span style="float: right;padding: 4px;margin: -4px 6px;">
+            <button type="submit" data-icon="&#xf0c7;" class="plain-btn xl">SAVE</button>
+        </span>
+        <br clear="both"/>
+        <div class="tab-panels">
+            <section id="marzen" class="tab-panel page-main">
+                <input type="hidden" name="page_id" value="<?=$page['page_id']?>">
+                <textarea name="page_content" id="page_content" class="tinymce" style="flex-basis: 100%;"><?=$page['page_content']?></textarea>
+            </section>
+            <section id="rauchbier" class="tab-panel page-main">
+                <div class="flex" style="flex-basis: 100%;">
+                    <div class="content" style="flex-basis: 100%;padding-top: 0;">
+                        <!--div>
+                            <label for="budget">Package budgets</label>
+                            <div style="margin-top: -0.7em;">
+                                <label for="economy" style="flex-grow: 1;">
+                                    <input type="checkbox" name="page_extras[budget][]" value="economy" id="economy">
+                                    Economy
+                                </label>
+                                <label for="luxury" style="flex-grow: 1;">
+                                    <input type="checkbox" name="page_extras[budget][]" value="luxury" id="luxury">
+                                    Luxury
+                                </label>
+                                <label for="executive" style="flex-grow: 1;">
+                                    <input type="checkbox" name="page_extras[budget][]" value="executive" id="executive">
+                                    Executive
+                                </label>
+                            </div>
+                        </div-->
+
+                        <p>
+                            <label for="page_title">Package name</label>
+                            <input type="text" name="page_title" id="page_title" value="<?=$page['page_title']?>" placeholder="Aplha-numeric text" />
+                        </p>
+                        <p>
+                            <label for="page_name">Package address(URL)</label>
+                            <input type="text" name="page_name" id="page_name" value="<?=$page['page_name']?>" placeholder="Aplha-numeric text" />
+                        </p>
+                        <input name="page_type" id="page_type" value="etours::etours_package" type="hidden">
+                        <div class="flex">
+                            <p style="flex-grow: 1;">
+                                <label for="price">Package price</label>
+                                <input type="number" min="0" name="page_extras[price]" id="price" value="<?=@$page['page_extras']['price']?>" />
+                            </p>
+                            <p style="flex-grow: 1;">
+                                <label for="kido_discount">Children discount percent</label>
+                                <input type="number" min="0" max="100" name="page_extras['kido_discount']" id="kido_discount" value="<?=@$page['page_extras']['kido_discount']?>" />
+                            </p>
+                        </div>
+                        <div class="flex">
+                            <p>
+                                <label for="page_icon" data-icon="<?=$page['page_icon']?>">Package icon</label>
+                                <input type="text" name="page_icon" value="<?=html_entity_decode($page['page_icon'], ENT_SUBSTITUTE)?>" onchange="this.previousElementSibling.setAttribute('data-icon', this.value)">
+                            </p>&nbsp;
+                            <p>
+                                <label for="page_order">Listing order</label>
+                                <input type="number" name="page_order" value="<?=intval($page['page_order'])?>" min="0">
+                            </p>&nbsp;
+                        </div>
+                    </div>
+                    <div class="content" style="flex-basis: 100%;padding-top: 0;">
+                        <p>
+                            <label for="page_icon">Parent page</label>
+                            <select name="page_parent" id="page_parent" required>
+                                <option value="">Choose...</option>
+                                <?php foreach($pages as $pg){?>
+                                <option value="<?=$pg['page_id']?>"<?=($page['page_parent'] == $pg['page_id'] ? ' selected' : '')?>><?=$pg['page_name']?></option>
+                                <?php }?>
+                            </select>
+                        </p>
+                        <input type="hidden" name="page_special[home]" value="0">
+                        <input type="hidden" name="page_special[hidden]" value="2">
+                        <div class="flex">
+                            <div>
+                                <label for="page_desc">Package intro</label>
+                                <textarea name="page_desc" id="page_desc" rows="6"></textarea>
+                            </div>
+                            <div>
+                                <label for="page_keywords">SEO keywords</label>
+                                <textarea name="page_keywords" id="page_keywords" rows="6"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="create_date">Create date</label>
+                            <input type="text" value="<?=date('M d, Y @ H:i', strtotime($page['create_date']))?>" readonly>
+                        </div>
+                        <div class="flex">
+                            <div>
+                                <label for="page_author">Package author</label>
+                                <input type="text" id="page_author" value="<?=$page['full_name']?>" readonly />
+                            </div>
+                            <div>
+                                <label for="package_category">Package category</label>
+                                <select name="page_extras[package_category]" required>
+                                    <option value="">Choose...</option>
+                                    <?php foreach($cats as $cat){?>
+                                    <option value="<?=$cat['cat_id']?>"<?=@$page['page_extras']['package_category']==$cat['cat_id']?' selected':''?>><?=$cat['cat_name']?></option>
+                                    <?php }?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="dunkles" class="tab-panel page-main">
+                <div class="content">
+                    <p>
+                        <label>Browse photos</label>
+                        <input type="file" name="preview_photos[]" accept=".jpg,.jpeg,.png,.bmp" onchange="update_preview()" multiple>
+                    </p>
+                    <div class="flex cards cards-4">
+                        <?php foreach($page['photos'] as $pic){?>
+                            <span>
+                                <img src="<?=$src?>/<?=$pic?>" width="100%">
+                                <a data-icon="&#xf2ed;" onclick="delete_photo()"></a>
+                            </span>
+                        <?php }?>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+    </form>
+</div>
+<style>
+    #dunkles .cards-4 > span{
+        position: relative;
+    }
+    #dunkles .cards-4 > span > a{
+        position: absolute;
+        right: 2px;
+        top: 2px;
+        padding: 4px;
+        padding-right: 0;
+        background-color: red;
+        border-radius: 6px;
+        color: #fff;
+    }
+</style>
+<script>
+    const update_preview = ()=>{
+        let targetElem = window.event.target, src;
+        for(var i = 0; i < targetElem.files.length; ++i){
+            src = window.URL.createObjectURL(targetElem.files[i]);
+            let htms = '<span><img src="'+src+'" width="100%"><a data-icon="&#xf00d;" onclick="remove_photo()"></a></span>';
+            targetElem.parentNode.nextElementSibling.insertAdjacentHTML('afterBegin', htms);
+        }
+    };
+    const delete_photo = ()=>{
+        Swal.fire({
+            title: "Sure? No UNDO then!",
+            icon:"question"
+        });
+    }
+    const remove_photo = ()=>{
+        Swal.fire({
+            title: "For now, just refresh the page to reselect others",
+            icon:"error"
+        });
+    }
+</script>

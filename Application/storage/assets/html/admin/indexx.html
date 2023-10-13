@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="<?=storage::get_instance()->install_dir?>">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <style>
+    /* Reset */
+    html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  b, u, i, center,
+  dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, canvas, details, embed, 
+  figure, figcaption, footer, header, hgroup, 
+  menu, nav, output, ruby, section, summary,
+  time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+  /* HTML5 display-role reset for older browsers */
+  article, aside, details, figcaption, figure, 
+  footer, header, hgroup, menu, nav, section {
+    display: block;
+  }
+  body {
+    line-height: 1;
+  }
+  ol, ul {
+    list-style: none;
+  }
+  blockquote, q {
+    quotes: none;
+  }
+  blockquote:before, blockquote:after,
+  q:before, q:after {
+    content: '';
+    content: none;
+  }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  a,b,span,sup,sub,small,big,img,strong,em{
+    display: inline-block;
+  }
+  </style>
+  <style>
+    :root{
+      --black:#343A40;
+      --light-grey:#A2A7AF;
+      --white:#ffffff;
+    }
+    body{
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 1.2em !important;
+      line-height: 1.2;
+    }
+    @font-face {
+        font-family: 'FontAwesome';
+        src: url('app/storage/assets/fonts/fa-solid-900.woff') format('woff');
+        font-display: swap;
+    }
+    a,a:visited{
+      text-decoration: none;
+      cursor: pointer;
+    }
+    a:hover{
+      font-weight: bold;
+      transition: all .3s;
+    }
+    em{
+      font-family: 'Times New Roman', Times, serif;
+      font-style: italic;
+    }
+    img{
+      max-width: 100%;
+    }
+    [data-icon]::before {
+        font-family: FontAwesome;
+        -webkit-text-rendering: optimizeLegibility;
+        -moz-text-rendering: optimizeLegibility;
+        -ms-text-rendering: optimizeLegibility;
+        -o-text-rendering: optimizeLegibility;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: antialiased;
+        -ms-font-smoothing: antialiased;
+        -o-font-smoothing: antialiased;
+        /*font-smoothing: antialiased;*/
+        content:attr(data-icon);
+        margin-right:0.3em;
+        font-size:80%;
+        font-style: normal;
+    }
+    .black{
+      background-color: var(--black);
+      color: var(--light-grey);
+    }
+    .black a{
+      color: #abcbff;
+    }
+    .white{
+      background-color: var(--white);
+      color: var(--black);
+    }
+    .white a{
+      color: #025d6d;
+    }
+    #main{
+      background-color: #F4F6F9;
+      color: #212529;
+    }
+    .pad-min{
+      padding: 9px;
+    }
+    .content{
+      padding: 18px;
+    }
+    .border-bottom{
+      border-bottom: 1px solid #ecf6ff;
+    }
+    .border-bottom-white{
+      border-bottom: 1px solid #DEE2E6;
+    }
+    label{
+      display: block;
+    }
+    input,button,.btn{
+      padding: .6em;
+      display: inline-block;
+    }
+    input{
+      border: none;
+    }
+    input:focus{
+      outline: none;
+      box-shadow: 0 0 3px inset #0f864b;
+    }
+    button,.btn {
+      display: inline-block;
+      font-weight: 400;
+      color: #212529;
+      text-align: center;
+      border: 1px solid transparent;
+      padding: .375rem .75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      border-radius: .25rem;
+      color: #fff;
+      background-color: #007bff;
+    }
+    .green {background-color: #4CAF50;} /* Green */
+    .blue {background-color: #008CBA;} /* Blue */
+    .red {background-color: #f44336;} /* Red */
+    .grey {background-color: #e7e7e7; color: black;} /* Black */
+    .black {background-color: #555555;} /* Gray */
+    .pale {background:linear-gradient(90deg, #e7e7e7 97.5%, #e0e0e0 99%) ; color: black;} /* Black */
+    .search-form{
+      border: 1px solid var(--light-grey);
+      border-radius: 4px;
+      display: flex;
+    }
+    .search-form > input{
+      flex-grow: 1;
+    }
+    .search-form > a{
+      flex-shrink: 1;
+    }
+    #toggler-bars{
+      margin-right: -1.3em;
+      opacity: 0;
+    }
+    label[for=toggler-bars]{
+      display: inline-block;
+      transform: scale(1.5);
+      cursor: pointer;
+    }
+    .wrap > .flex > .widget{
+      position: absolute;
+      left: -90vw;
+      min-width: 89vw;
+      transition: all .4s;
+      height: 100vh;
+      z-index: 9;
+    }
+    .wrap > .flex > .drawer-collapse{
+      left: 0;
+      transition: all .4s;
+    }
+    #nav-revert{
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      font-size: 1.6em;
+      padding: .3em;
+    }
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      border: 1px solid #ddd;
+      background-color: #fff;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+    th:first-child, td:first-child {
+      border-right: 1px solid #ddd;
+    }
+    th{
+      background: #ddd;
+    }
+    tr:nth-child(even){
+      background-color: #f2f2f2
+    }
+    td{
+      font-size: 80%;
+    }
+    #main-nav > li > ul > li{
+      border-bottom: 1px solid #fafafa;
+    }
+    .msg,.error{
+      padding: 1em;
+      border-radius: 4px;
+      margin: .3em;
+      font-size: 85%;
+    }
+    .msg{
+      background-color: #a9d5ba;
+      color: #08703e;
+      border: 1px solid #08703e;
+    }
+    .error{
+      background-color: #d3bcc4;
+      color: #950371;
+      border: 1px solid #950371;
+    }
+    #main-nav > li > [type=checkbox]{
+      display: none;
+    }
+    @media all and (min-width:900px) {
+      #main-nav > li >ul{
+        padding-left: 1em;
+        display: none;
+      }
+      #main-nav > li > [type=checkbox]{
+        display: block;
+        max-width: 0px;
+        padding: 6px;
+        float: right;
+      }
+      #main-nav > li > [type=checkbox]:checked ~ ul{
+        display: block;
+      }
+      #nav-revert{
+        display: none;
+      }
+      .flex{
+        display: flex;
+      }
+      .flex > *{
+        flex-grow: 1;
+      }
+      .shrink{
+        flex-grow: 0;
+      }
+      .wrap > .flex > .widget{
+        position: relative;
+        left: 0;
+        min-width: 260px;
+        width: 260px;
+        transition: all .4s;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      #main{
+        height: 100vh;
+        overflow: hidden;
+        overflow-y: auto;
+      }
+      .wrap > .flex > .drawer-collapse{
+        min-width: 60px;
+        max-width: 60px;
+        width: 60px;
+        transition: all .4s;
+      }
+      .wrap > .flex > .drawer-collapse:hover{
+        min-width: 260px;
+        max-width: 260px;
+        width: 260px;
+        transition: all .4s;
+      }
+      .drawer-collapse img{
+        width: 35px;
+        height: auto;
+        border-radius: 4em;
+      }
+      .widget [data-icon]{
+        padding: 6px 0;
+        transition: all .4s;
+      }
+      .widget [data-icon]::before{
+        font-size: 100%;
+      }
+      .drawer-collapse [data-icon]::before{
+        font-size: 1.4em;
+        background-color: #fff;
+        border:1px solid #aaa;
+        border-radius: 50%;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        padding: 6px;
+        margin: .0em .26em 0 -0.3em;
+        transition: all .4s;
+      }
+      .drawer-collapse li > ul  [data-icon]::before{
+        font-size: 110%;
+        background-color: unset;
+        border-radius: 0;
+        border: none;
+        width: unset;
+        height: auto;
+        padding: 0 6px;
+        margin: auto;
+      }
+      .drawer-collapse img ~ *{
+        display: none;
+      }
+      .drawer-collapse:hover img{
+        width: auto;
+        max-height: 60px;
+        border-radius: unset;
+      }
+      .drawer-collapse:hover img ~ *{
+        display: inline-block;
+      }
+    }
+  </style>
+  <script src="vendor/components/sweetalert/sweetalert2@11.js"></script>
+  <script>
+    function setCookie(cname, cvalue, exdays){
+      const d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 *1000));
+      let expires = "expires="+d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function getCookie(cname){
+      let name = cname + "=";
+      let ca = document.cookie.split(';');
+      for(let i = 0; i < ca.length; i++){
+        let c = ca[i];
+        while(c.charAt(0) == ''){
+          c = c.substring(1);
+        }
+        if(c.indexOf(name) == 0){
+          return c.substring(name.length, c.length);
+        }
+      }
+      return '';
+    }
+    function removeMe(elem){
+      elem.parentNode.removeChild(elem);
+    }
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="flex">
+      <div class="shrink pale widget">
+        <a id="nav-revert" onclick="document.querySelector('#main').previousElementSibling.classList.remove('drawer-collapse')" data-icon="&#xf0c9;"></a>
+        <div class="border-bottom">
+          <img src="app/storage/uploads/images/logo.png" height="60" style="vertical-align: middle;padding-left: .6em;">
+          <span class="content">BANNY CO. LTD</span>
+        </div>
+        <div class="pad-min border-bottom">
+          <span style="max-height:60px">
+            <img src="app/storage/uploads/avatar/J0099166.jpg" height="60" style="vertical-align: baseline;">
+          </span>
+          <span style="line-height: 1.45;font-size: 85%;padding-left: 1em;">
+            <a href="<?=storage::get_instance()->install_dir?>admin/profile">Sukari Mauki</a><br />
+            <em>(Root Admin)</em><br />
+            <a href="<?=storage::get_instance()->install_dir?>admin/logout">Sign out</a>
+          </span>
+        </div>
+        <div class="content">
+            <!-- nav -->
+            <ul id="main-nav">
+              <?php foreach($nav as $a){?>
+              <li>
+                <a href="<?=storage::get_instance()->install_dir?>admin<?=$a['href']?>" data-icon="&#x<?=$a['icon']?>;">
+                  <?=$a['name']?>
+                </a>
+                <?php if(isset($a['children'])){?>
+                <input type="checkbox" data-icon="&#xf015;">
+                  <ul>
+                  <?php foreach($a['children'] as $k=>$v){?>
+                    <li>
+                      <a href="<?=storage::get_instance()->install_dir?>admin<?=$v?>" data-icon="&#xf0da;""><?=$k?></a>
+                    </li>
+                  <?php }?>
+                  </ul>
+                <?php }?>
+              </li>
+              <?php }?>
+            </ul>
+            <!-- nav -->
+        </div>
+      </div>
+      <div id="main">
+        <div class="flex border-bottom-white white content">
+          <div class="shrink" style="padding-right: 1em;">
+            <input type="checkbox" id="toggler-bars">
+            <label for="toggler-bars" data-icon="&#xf0c9;"></label>
+          </div>
+          <div class="" style="text-transform: uppercase;">
+            <span><?=$title?></span>
+          </div>
+          <div style="margin-right: 2em;">
+            <form method="post" class="search-form">
+              <input required type="search" name="q" placeholder="Filter..." style="border-right: 1px solid var(--light-grey);">
+              <a onclick="alert('Searching, please wait!')" data-icon="&#xf002;" style="padding:.1em .6em;cursor: pointer;"></a>
+            </form>
+          </div>
+        </div>
+          <div style="text-align: right;font-size: 90%;padding: .3em 1em;"><em data-icon="&#xf015;"> &raquo; <?=implode(' &raquo; ', $address)?></em></div>
+        <div class="content">
+          <div><?=$page_content?></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--I hate waiting for something I already have, sorry!-->
+  <!--link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"-->
+  <!-- <start: <?=EXEC_START?>, end: <?=microtime(true)?>, exec time: <?=(microtime(true) - EXEC_START)?>(microseconds)-->
+<script>
+  /* Nav collapse state management */
+  const toggler = document.getElementById('toggler-bars');
+  toggler.addEventListener('change', evt=>{
+    document.querySelector('#main').previousElementSibling.classList.toggle('drawer-collapse');
+    let tbs = evt.target.checked ? 1 : 0;
+    localStorage.setItem("tbs", tbs);
+  });
+  let tbar = localStorage.getItem("tbs");
+  if(tbar && tbar == 1) {
+    toggler.setAttribute('checked', true);
+    document.querySelector('#main').previousElementSibling.classList.toggle('drawer-collapse');
+  }
+  /* message handling */
+  const msg = document.querySelector('.msg');
+  if(msg) msg.addEventListener('click', evt=>{
+    removeMe(evt.target);
+  });
+  const error = document.querySelector('.error')
+  if(error) error.addEventListener('click', evt=>{
+    removeMe(evt.target);
+  });
+</script>
+</body>
+</html>

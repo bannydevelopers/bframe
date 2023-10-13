@@ -1,0 +1,23 @@
+<div>
+    <div class="light content-small flex" style="display: flex;">
+        <div style="flex-basis: 100%;">
+            <b class="content"><?=$widget['widget_name']?></b>
+        </div>
+        <div style="flex-basis: auto;">
+            <a onclick="add_snippet(`<?=$widget['widget_id']?>`)" class="btn round" data-icon="&#xf055;" style="white-space: nowrap;">Add snippet</a>
+        </div>
+    </div>
+    <div class="flex cards">
+        <?php foreach($wid as $k=>$w){?>
+            <div>
+                <div class="grey content small-txt"><?=$w->name?></div>
+                <div class="content flex" data-wid-id='<?=$widget['widget_id']?>' data-json='<?=json_encode($w)?>' style="text-align: right;font-size: 1.2em;">
+                    <input onchange="update_status(`<?=$k?>`)" type="checkbox"<?=($w->status == 'active') ? ' checked' : ''?> data-check="&#xf205;" data-unchecked="&#xf204;">
+                    <a onclick="delete_widget_content(`<?=$k?>`)" data-icon="&#xf2ed;"></a>
+                    <a onclick="show_visibility(`<?=$k?>`)" data-icon="&#xf06e;"></a>
+                    <a onclick="edit_widget_content(`<?=$k?>`)" data-icon="&#xf044;"></a>
+                </div>
+            </div>
+        <?php }?>
+    </div>
+</div>

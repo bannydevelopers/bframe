@@ -1,0 +1,20 @@
+<div class="white">
+    <img src="<?=$src?>/<?=$pack['photos'][0]?>" width="100%">
+    <div style="position: relative;">
+        <div class="overlay">
+            <div class="content-small">
+                <?=$pack['page_desc']?>
+            </div>
+            <div class="content-small flex">
+                <span class="tag">
+                <?=@$pack['page_extras']['price']?$conf->currency.' '.number_format($pack['page_extras']['price']):'<b>Negotiatable</b>'?>
+                </span>
+                <a class="shrink nowrap" data-icon="&#xf044;" href="<?=$myURL?>/packages/edit/<?=$pack['page_id']?>">Edit</a>
+                <a class="shrink nowrap" data-icon="&#xf2ed;" onclick="delete_package(<?=$pack['page_id']?>)" style="margin-left: 1em;">Delete</a>
+            </div>
+        </div>
+    </div>
+    <div class="content w3-teal flex flex-forever">
+      <b><?=$pack['page_name']?></b>
+    </div>
+  </div>
