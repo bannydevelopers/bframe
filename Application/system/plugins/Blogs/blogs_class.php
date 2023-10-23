@@ -1,8 +1,5 @@
 <?php
-class Communications{
-    public $name = 'Communications';
-    public $version = 1.0;
-    public $desc = 'Plugin dedicated for complete tours management as a drop in';
+class Blogs{
 
     private static $instance = null;
     
@@ -12,9 +9,9 @@ class Communications{
 
     public static function init(){
         // Hook to the system
-        system::add_event_listener('exec_end', 'etours::load_page', $_SERVER['REQUEST_URI']);
+        system::add_event_listener('exec_end', 'blogs::load_page', $_SERVER['REQUEST_URI']);
         // Hook to admin dashboard
-        system::add_event_listener('admin_plugin_load', 'etours::load_admin_dashboard');
+        system::add_event_listener('admin_plugin_load', 'blogs::load_admin_dashboard');
     }
     public static function load_admin_dashboard($args){
         $registry = storage::init();
@@ -45,7 +42,7 @@ class Communications{
                 if(!isset($registry->request[4])){
                     $packages = $db->select('pages','pages.*,user_accounts.full_name')
                                 ->join('user_accounts', 'user_id=page_author','LEFT')
-                                ->where(['page_type'=>'etours::etours_package'])
+                                ->where(['page_type'=>'blogs::blogs_package'])
                                 ->fetchAll();
 
                     ob_start();
@@ -101,7 +98,7 @@ class Communications{
                         }
                         else print_r($db->error());
                     }
-                    $cats = $db->select('etours_package_categories')->fetchAll();
+                    $cats = $db->select('blogs_package_categories')->fetchAll();
                     if($registry->request[4] == 'edit'){
                         if(!isset($registry->request[4]) or !intval($registry->request[5])){
                             $body = '<p>Messing with URL never had <b>happily ever after</b>, believe me!</p>';
@@ -109,7 +106,7 @@ class Communications{
                         else{
                             $page =  $db->select('pages','pages.*,user_accounts.full_name')
                                         ->join('user_accounts', 'page_author=user_id', 'LEFT')
-                                        ->where(['page_type'=>'etours::etours_package', 'page_id'=>$registry->request[5]])
+                                        ->where(['page_type'=>'blogs::blogs_package', 'page_id'=>$registry->request[5]])
                                         ->fetch();
                                         
                             if($page['page_extras']) $page['page_extras'] = json_decode($page['page_extras'], true);
@@ -134,7 +131,7 @@ class Communications{
                             'page_extras'=>[],
                             'page_title'=>'', 
                             'page_name'=>'', 
-                            'page_type'=>'etours::etours_package', 
+                            'page_type'=>'blogs::blogs_package', 
                             'page_parent'=>'0', 
                             'page_content'=>'', 
                             'page_icon'=>'&#xf24d;', 
@@ -186,7 +183,7 @@ class Communications{
         $obj = new static();
         $bbcodes = template::find_bbcode($page['page_content']);
         if(is_array($bbcodes)){
-            $supported = ['etours_packages'];
+            $supported = ['blogs_packages'];
             $searches = $replacement = [];
             foreach($bbcodes as $bbc){
                 $bparts = explode('/', trim($bbc,' {$}'));
@@ -200,12 +197,12 @@ class Communications{
             storage::init()->page = $page;
         }
         
-        if($page['page_type'] == 'etours::etours_package'){
+        if($page['page_type'] == 'blogs::blogs_package'){
             if(isset($_POST['fullname']) && isset($_POST['requests'])){
                 // Gabbage collection
                 $interval = time() - (1*60*60*3); // 3 hours
                 $now = date('Y-m-d H:i:s', $interval);
-                $db->delete('etours_orders')->where(['order_status'=>'pending'])->and("order_date < '{$now}'")->commit();
+                $db->delete('blogs_orders')->where(['order_status'=>'pending'])->and("order_date < '{$now}'")->commit();
                 // Order details
                 $price = intval($page['page_extras']['price']);
                 $adults_price = intval($_POST['adults']) * $price;
@@ -226,7 +223,7 @@ class Communications{
                     'order_reference'=>$page['page_id']
                 ];
                 
-                $k = $db->insert('etours_orders', $order_data);
+                $k = $db->insert('blogs_orders', $order_data);
                 
                 $name = explode(' ',$_POST['fullname']);
                 $fn = $name[0];
@@ -286,7 +283,7 @@ class Communications{
             exit;
         }
     }
-    protected function etours_packages($args){
+    protected function blogs_packages($args){
         $registry = storage::init();
         unset($args[0]);
         $supported = ['cards','list'];
@@ -298,7 +295,7 @@ class Communications{
         $db = db::get_connection($conf->db_configs);
         $parent = storage::init()->page ? storage::init()->page['page_id'] : 0;
         $packages = $db->select('pages','*')
-                       ->where(['page_type'=>'etours::etours_package','page_parent'=>$parent])
+                       ->where(['page_type'=>'blogs::blogs_package','page_parent'=>$parent])
                        //->limit($count)
                        ->fetchAll();
         
@@ -344,7 +341,7 @@ class Communications{
         $package = ob_get_clean();
         return $package;
     }
-    public static function etours_package($args){
+    public static function blogs_package($args){
         $obj = new admin();
         
         extract($args);

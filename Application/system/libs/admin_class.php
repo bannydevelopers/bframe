@@ -450,15 +450,17 @@ class admin{
                 else{
                     //storage::init()->system_config->plugins[] = $v;
                     // update permissions
-                    $mod_conf = json_decode(file_get_contents(realpath(__DIR__."/../plugins/{$v}").'/config.json'));
-                    if(isset($mod_conf->admin->permissions)){
+                    $perms_file = realpath(__DIR__."/../plugins/{$v}").'/permissions.json';
+                    if(is_readable($perms_file)){
+                        $perms = json_decode(file_get_contents($perms_file));
                         // To do: Revise using multi insert method
                         $qry = [];
-                        $whr = implode("','", $mod_conf->admin->permissions);
+                        $whr = implode("','", $perms);
                         $existing = $db->select('permissions', 'permission_name')->where("permission_name IN ('{$whr}')")->fetchAll();
-                        foreach($mod_conf->admin->permissions as $c) {
+                        foreach($perms as $c) {
                             if(array_search($c, array_column($existing, 'permission_name')) !== false) continue;
-                            $qry[] = "('{$c}','{$v}')";
+                            $vx = str_replace('_', ' ', $v);
+                            $qry[] = "('{$c}','{$vx}')";
                         }
                         if(count($qry) > 0){
                             // update the missisions only
@@ -476,6 +478,7 @@ class admin{
 
             $plugin_cards = ['active'=>'', 'inactive'=>''];
             foreach($plugins as $k=>$v){
+                if(!is_readable("{$plugins_dir}/{$v}/config.json")) continue;
                 $icon = in_array($v, $active) ? '&#xf205;' : '&#xf204;';
                 $info = json_decode(file_get_contents("{$plugins_dir}/{$v}/config.json"));
                 ob_start();
