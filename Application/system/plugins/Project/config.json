@@ -1,0 +1,35 @@
+{
+    "name":"Project",
+    "description":"Projects customer management, stock, invoicing, purchase orders, products, suppliers, and robust reporting.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Project",
+                "alias":"Project",
+                "href":"#Project", 
+                "icon":"f508",
+                "permission":"view_project",
+                "children":[
+                    {
+                        "name":"projects",
+                        "href":"/plugin/Project/projects",
+                        "icon":"f594",
+                        "permission":"view_projects"
+                    },
+                    {
+                        "name":"Resources",
+                        "href":"/plugin/Project/resources",
+                        "icon":"",
+                        "permission":"view_resources"
+                    },
+                    {
+                        "name":"Activities",
+                        "href":"/plugin/Project/activities",
+                        "icon":"",
+                        "permission":"view_activities"
+                    }
+                ]
+            }
+        ]
+    }
+}

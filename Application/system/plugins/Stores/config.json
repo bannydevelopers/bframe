@@ -1,0 +1,30 @@
+{
+    "name":"Store",
+    "description":"Stores customer management, stock, invoicing, purchase orders, products, suppliers, and robust reporting.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Store",
+                "alias":"Store",
+                "href":"#Store", 
+                "icon":"f508",
+                "permission":"view_store",
+                "children":[
+                    {
+                        "name":"Tools",
+                        "href":"/plugin/Stores/tools",
+                        "icon":"f594",
+                        "permission":"view_tools"
+                    },
+                    {
+                        "name":"Stores",
+                        "href":"/plugin/Stores/stores",
+                        "icon":"",
+                        "permission":"view_stores"
+                    }
+                
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,11 @@
+[
+    "view_store",
+    "add_tools",
+    "edit_tools",
+    "view_tools",
+    "delete_tools",
+    "add_stores",
+    "edit_stores",
+    "view_stores",
+    "delete_stores"
+]

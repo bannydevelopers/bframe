@@ -8,7 +8,13 @@
     "locale": "sw-TZ",
     "plugins": [
         "Human_resources",
+        "Sales",
+        "Stores",
+        "Project",
+        "Accounts",
+        "Inventory",
         "Blogs",
+        "Front_desk",
         "Forms"
     ],
     "gateways": {

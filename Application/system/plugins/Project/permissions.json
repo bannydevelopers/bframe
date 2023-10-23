@@ -1,0 +1,15 @@
+[
+    "view_project",
+    "add_projects",
+    "edit_projects",
+    "view_projects",
+    "delete_projects",
+    "add_resources",
+    "edit_resources",
+    "view_resources",
+    "delete_resources",
+    "add_activities",
+    "edit_activities",
+    "view_activities",
+    "delete_activities"
+]
