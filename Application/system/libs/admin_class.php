@@ -183,6 +183,7 @@ class admin{
         if(isset($_POST['delete_page'])){
             $db->delete('pages')->where(['page_id'=>intval($_POST['delete_page'])])->commit();
             if(!$db->error()){
+                system::cache_clear();
                 die(json_encode([
                     'message'=>'Page deleted successful!',
                     'status'=>'success'

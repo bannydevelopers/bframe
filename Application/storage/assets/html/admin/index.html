@@ -793,14 +793,6 @@
                                 <?=trim($title) ? "<h1 class='content-small'>{$title}</h1>":''?>
                                 <div class="content-small" style="max-height: 76vh;overflow-y: auto;"><?=$page_content?></div>
                             </div>
-                            <div class="shrink icon-only" style="color: #4379ed;">
-                                <span class="plain-btn xl content" data-icon="&#xf073;"></span><br>
-                                <span class="plain-btn xl content" data-icon="&#xf133;"></span><br>
-                                <span class="plain-btn xl content" data-icon="&#xf002;"></span><br>
-                                <span class="plain-btn xl content" data-icon="&#xf008;"></span><br>
-                                <span class="plain-btn xl content" data-icon="&#xf009;"></span><br>
-                                <span class="plain-btn xl content" data-icon="&#xf015;"></span><br>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -817,7 +809,7 @@
             });
             let tbar = localStorage.getItem("tbs");
             if(tbar && tbar == 1) {
-                document.querySelector('.side-nav').classList.add('visible');
+                //document.querySelector('.side-nav').classList.add('visible');
             }
             /* message handling */
             const removeMe = targetElem=>{

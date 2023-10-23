@@ -7,12 +7,6 @@
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
-        "Accounts",
-        "Communications",
-        "Newsletter",
-        "Inventory",
-        "Human_resources",
-        "Front_desk",
         "Forms"
     ],
     "gateways": {
@@ -31,7 +25,7 @@
     "db_configs": {
         "dbdriver": "mysql",
         "hostname": "localhost",
-        "db_name": "banncot_bframe_cms",
+        "db_name": "bannycot_bframe_cms",
         "username": "root",
         "password": "root"
     }
