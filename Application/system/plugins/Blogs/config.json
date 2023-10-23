@@ -1,36 +1,36 @@
 {
-    "name":"Communications",
+    "name":"Blogs",
     "description":"Simple yet powerful, modern online manager for Human resources tasks.",
     "admin":{
         "navigation":[
             {
-                "name":"Communications",
-                "alias":"Communications",
-                "href":"#Communications", 
+                "name":"Blogs",
+                "alias":"Blogs",
+                "href":"#Blogs", 
                 "icon":"f4ad",
                 "permission":"",
                 "children":[
                     {
                         "name":"News updates",
-                        "href":"/plugin/Communications/news-updates",
+                        "href":"/plugin/Blogs/news-updates",
                         "icon":"f594",
                         "permission":""
                     },
                     {
                         "name":"Notices",
-                        "href":"/plugin/Communications/notices",
+                        "href":"/plugin/Blogs/notices",
                         "icon":"",
                         "permission":""
                     },
                     {
                         "name":"Broadcasts",
-                        "href":"/plugin/Communications/broadcasts",
+                        "href":"/plugin/Blogs/broadcasts",
                         "icon":"",
                         "permission":""
                     },
                     {
                         "name":"Events",
-                        "href":"/plugin/Communications/events",
+                        "href":"/plugin/Blogs/events",
                         "icon":"",
                         "permission":""
                     }

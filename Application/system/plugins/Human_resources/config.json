@@ -8,7 +8,7 @@
                 "alias":"Human-resources",
                 "href":"#Human_resources", 
                 "icon":"f508",
-                "permission":"view_hr",
+                "permission":"view_human_resources",
                 "children":[
                     {
                         "name":"Staff",
@@ -47,28 +47,16 @@
                         "permission":"view_designations"
                     },
                     {
-                        "name":"Faculties",
-                        "href":"/plugin/Human-resources/faculties",
-                        "icon":"f594",
-                        "permission":"view_faculties"
-                    },
-                    {
                         "name":"Departments",
                         "href":"/plugin/Human-resources/departments",
                         "icon":"",
                         "permission":"view_departments"
                     },
                     {
-                        "name":"Contracts",
-                        "href":"/plugin/Human-resources/contracts",
-                        "icon":"",
-                        "permission":"view_contracts"
-                    },
-                    {
                         "name":"Configuration",
                         "href":"/plugin/Human-resources/Configuration",
                         "icon":"",
-                        "permission":"view_configuration"
+                        "permission":"view_hr_configuration"
                     }
                 ]
             }
