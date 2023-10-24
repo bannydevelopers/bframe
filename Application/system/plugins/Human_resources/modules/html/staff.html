@@ -50,7 +50,9 @@
                     <?=$st['dept_name']?>
                 </td>
                 <td>
-                    <a>Delete</a>
+                    <a onclick="view_student()" data-icon="&#xf06e;"></a>
+                    <a onclick="edit_student()" data-icon="&#xf044;"></a>
+                    <a onclick="delete_student()" data-icon="&#xf2ed;"></a>
                 </td>
             </tr>
             <?php }?>
@@ -91,6 +93,7 @@
                                 request_service(
                                     `add_${name}`,
                                     response => {
+                                        //console.log(response);
                                         res_json = JSON.parse(response);
                                         if(res_json){
                                             let jsx = JSON.parse(res_json.response);
