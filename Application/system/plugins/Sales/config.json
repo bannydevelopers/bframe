@@ -7,7 +7,7 @@
                 "name":"Sales",
                 "alias":"Sales",
                 "href":"#Sales", 
-                "icon":"f508",
+                "icon":"f07a",
                 "permission":"view_sales",
                 "children":[
                     {

@@ -7,7 +7,7 @@
                 "name":"Store",
                 "alias":"Store",
                 "href":"#Store", 
-                "icon":"f508",
+                "icon":"f54f",
                 "permission":"view_store",
                 "children":[
                     {
