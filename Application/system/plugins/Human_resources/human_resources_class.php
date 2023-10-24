@@ -40,43 +40,61 @@ class human_resources{
         return;
     }
     public static function service_add_staff($data){
-        if(user::init()->user_can('add_staff')){
+        if(user::init()->user_can('view_staff')){
             $registry = storage::init();
             $db = db::get_connection($registry->system_config->db_configs);
 
             if(isset($_POST['full_name']) && isset($_POST['employment_date'])){
-                //return json_encode(['status'=>'info', 'message'=>json_encode($_POST)]);
                 $userdata = [
                     'full_name'=>addslashes( $_POST['full_name'] ),
                     'email'=>system::format_email( $_POST['email']), 
                     'phone'=>system::format_phone( $_POST['phone']), 
-                    'passcode'=>system::create_hash( $_POST['passcode']), 
+                    'passcode'=>system::create_hash( $_POST['email']), 
                     'status'=>addslashes( $_POST['status']),
                     'system_role'=>intval( $_POST['roles'])
                 ];
-                $k = $db->insert('user_accounts', $userdata);
-                if(!$db->error() && intval($k)){
-                    $staffdata = [
-                        'bank'=>intval( $_POST['bank']), 
-                        'bank_account_number'=>addslashes( $_POST['bank_account']),
-                        'registration_number'=>addslashes( $_POST['registration_no']), 
-                        'residence_address'=>'', 
-                        'designation'=>intval( $_POST['designation']),
-                        'work_location'=>'', 
-                        'department'=>intval( $_POST['department']),
-                        'user_reference'=>$k, 
-                        //'date_employed'=>'',
-                        //'employment_length'=>intval( $_POST['designation']), 
-                        //'employment_status'=>addslashes( $_POST['designation']), 
-                        //'employment_last_renewal'=>addslashes( $_POST['designation']),
-                        //'employment_end_date'=>addslashes( $_POST['designation'])
-                    ];
-                    $ks = $db->insert('staff', $staffdata);
-                    if($db->error() or !intval($ks)){
-                        $db->delete('user_accounts')->where(['user_id'=>$k])->commit();
+                $staffdata = [
+                    'bank'=>intval( $_POST['bank']), 
+                    'bank_account_number'=>addslashes( $_POST['bank_account']),
+                    'registration_number'=>addslashes( $_POST['registration_no']), 
+                    'residence_address'=>addslashes( $_POST['residence_address']), 
+                    'designation'=>intval( $_POST['designation']),
+                    'work_location'=>intval( $_POST['work_location']), 
+                    'department'=>intval( $_POST['department']),
+                    //'date_employed'=>'',
+                    //'employment_length'=>intval( $_POST['designation']), 
+                    //'employment_status'=>addslashes( $_POST['designation']), 
+                    //'employment_last_renewal'=>addslashes( $_POST['designation']),
+                    //'employment_end_date'=>addslashes( $_POST['designation'])
+                ];
+                if(isset($_POST['user_id'])){
+                    $staffdata['user_reference'] = $_POST['user_id'];
+                    if(user::init()->user_can('edit_staff')){
+                        $db->update('user_accounts', $userdata)
+                            ->where(['user_id'=>intval($_POST['user_id'])])
+                            ->commit();
+                        if(!$db->error()){
+                            $db->update('staff', $staffdata)
+                                ->where(['user_reference'=>intval($_POST['user_id'])])
+                                ->commit();
+                        }
                     }
+                    else return json_encode(['status'=>'error', 'message'=>'Access denied']);
                 }
-                if(!$db->error()) 
+                else{
+                    if(user::init()->user_can('add_staff')){
+                        $k = $db->insert('user_accounts', $userdata);
+                        if(!$db->error() && intval($k)){
+                            $staffdata['user_reference'] = $k; 
+                            $ks = $db->insert('staff', $staffdata);
+                            if($db->error() or !intval($ks)){
+                                $db->delete('user_accounts')->where(['user_id'=>$k])->commit();
+                            }
+                        }
+                    }
+                    else return json_encode(['status'=>'error', 'message'=>'Access denied']);
+                }
+                if(!$db->error())
                     return json_encode(['status'=>'success', 'message'=>'Staff saved successful']);
                 else 
                     return json_encode(['status'=>'error', 'message'=>json_encode($db->error())]);
@@ -94,25 +112,28 @@ class human_resources{
         else return 'Access denied, no enough permission!';
     }
     public static function service_add_designation($data){
-        $registry = storage::init();
-        $db = db::get_connection($registry->system_config->db_configs);
+        if(user::init()->user_can('add_designations')){
+            $registry = storage::init();
+            $db = db::get_connection($registry->system_config->db_configs);
 
-        if(isset($_POST['designation_name'])){
+            if(isset($_POST['designation_name'])){
 
-            $data = [
-                'designation_name'=>addslashes( $_POST['designation_name'] ),
-                'designation_description'=>addslashes( $_POST['designation_description'] ),
-                'created_by'=>user::init()->get_session_user('user_id'),
-                'create_date'=>date('Y-m-d')
-            ];
-            $db->insert('designations', $data);
-            if(!$db->error()) return json_encode(['status'=>'success', 'message'=>'Designation added successful']);
-            else return json_encode(['status'=>'error', 'message'=>$db->error()['message']]);
+                $data = [
+                    'designation_name'=>addslashes( $_POST['designation_name'] ),
+                    'designation_description'=>addslashes( $_POST['designation_description'] ),
+                    'created_by'=>user::init()->get_session_user('user_id'),
+                    'create_date'=>date('Y-m-d')
+                ];
+                $db->insert('designations', $data);
+                if(!$db->error()) return json_encode(['status'=>'success', 'message'=>'Designation added successful']);
+                else return json_encode(['status'=>'error', 'message'=>$db->error()['message']]);
+            }
+            ob_start();
+            $designations = $db->select('designations')->fetchAll();
+            include __DIR__.'/modules/html/add_designation.html';
+            return ob_get_clean();
         }
-        ob_start();
-        $designations = $db->select('designations')->fetchAll();
-        include __DIR__.'/modules/html/add_designation.html';
-        return ob_get_clean();
+        else return 'Access denied!';
     }
     public static function service_add_department($data){
         $registry = storage::init();
@@ -125,16 +146,22 @@ class human_resources{
             ];
             if(isset($_POST['dept_id']) && intval($_POST['dept_id'])) {
                 $k = intval($_POST['dept_id']);
-                $db->update('departments', $fd)->where("dept_id={$k}")->commit();
+                if(user::init()->user_can('edit_departments')){
+                    $db->update('departments', $fd)->where("dept_id={$k}")->commit();
+                }
+                else return 'Access denied!';
             }
             else{
-                $k = $db->insert('departments', $fd);
+                if(user::init()->user_can('add_departments')){
+                    $k = $db->insert('departments', $fd);
+                }
+                else return 'Access denied!';
             }
             if($db->error()) {
-                die(json_encode(['message'=>$db->error()['message'],'status'=>'error']));
+                return json_encode(['message'=>$db->error()['message'],'status'=>'error']);
             }
             else {
-                die(json_encode(['message'=>'Department added successful', 'status'=>'success']));
+                return json_encode(['message'=>'Department added successful', 'status'=>'success']);
             }
         }
         else{
@@ -152,7 +179,6 @@ class human_resources{
     public static function service_add_branch($data){
         $registry = storage::init();
         $db = db::get_connection($registry->system_config->db_configs);
-
         if(isset($_POST['branch_name'])){
             $fd = [
                 'branch_name'=>addslashes($_POST['branch_name']),
@@ -168,10 +194,10 @@ class human_resources{
                 $k = $db->insert('branches', $fd);
             }
             if($db->error()) {
-                die(json_encode(['message'=>$db->error()['message'],'status'=>'error']));
+                return json_encode(['message'=>$db->error()['message'],'status'=>'error']);
             }
             else {
-                die(json_encode(['message'=>'Branch added successful', 'status'=>'success']));
+                return json_encode(['message'=>'Branch added successful', 'status'=>'success']);
             }
         }
         else{

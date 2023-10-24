@@ -1,5 +1,4 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
-    <input type="hidden" name="user_id" value="" />
     <div class="flex">
         <div class="contentx">
             <div class="white content">
@@ -67,7 +66,7 @@
                     <option value="add">Add department</option>
                 </select>
                 <label for="branch">Work location</label>
-                <select name="branch" id="branch" onchange="add_form('branch')">
+                <select name="work_location" id="branch" onchange="add_form('branch')">
                     <option value="">Choose...</option>
                     <?php foreach($branches as $branch){?>
                     <option value="<?=$branch['branch_id']?>"><?=$branch['branch_name']?></option>

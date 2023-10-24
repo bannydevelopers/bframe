@@ -1,7 +1,7 @@
 <div class="flex">
     <h1 class="content-small no-pad-top">Staff</h1>
     <div class="shrink">
-        <button onclick="add_form('staff')" value="add" data-form-width="wide">Register staff</button>
+        <button onclick="add_form('staff')" value="add" data-form-width="wide" class="round">Register staff</button>
     </div>
 </div>
 <br>
@@ -50,80 +50,70 @@
                     <?=$st['dept_name']?>
                 </td>
                 <td>
-                    <a onclick="view_student()" data-icon="&#xf06e;"></a>
-                    <a onclick="edit_student()" data-icon="&#xf044;"></a>
-                    <a onclick="delete_student()" data-icon="&#xf2ed;"></a>
+                    <a onclick="view_staff()" data-icon="&#xf06e;"></a>
+                    <a onclick="edit_staff()" data-icon="&#xf044;"></a>
+                    <a onclick="delete_staff()" data-icon="&#xf2ed;"></a>
                 </td>
             </tr>
             <?php }?>
         </tbody>
     </table>
 </div>
-<script>
-    function add_form(name){
-        let main_evt = window.event;
-        main_evt.preventDefault();
-        if(main_evt.target.value == 'add'){
-            let wide = main_evt.target.getAttribute('data-form-width');
-            let customClass = (wide == 'wide') ? 'mySwalForm' : 'mySwalSmallForm';
-            request_service(
-                `add_${name}`,
-                response => {
-                    if(response != ''){
-                        let resp = JSON.parse(response);
-                        Swal.fire({
-                            html:resp.response[0],
-                            showConfirmButton:false,
-                            customClass: customClass
-                        });
-                    }
-                    else{
-                        Swal.fire({
-                            html:'Service not available',
-                            icon:'info'
-                        });
-                    }
-                    let form = document.querySelector(`.${customClass} form`);
-                    if(form != null){
-                        form.addEventListener(
-                            'submit',
-                            evt=>{
-                                evt.preventDefault();
-                                let fd = new FormData(form);
-                                request_service(
-                                    `add_${name}`,
-                                    response => {
-                                        //console.log(response);
-                                        res_json = JSON.parse(response);
-                                        if(res_json){
-                                            let jsx = JSON.parse(res_json.response);
-                                            Swal.fire({
-                                                title: jsx.message,
-                                                icon: jsx.status
-                                            })
-                                            .then(e=>{
-                                                window.location.reload();
-                                            });
-                                        }
-                                        else {
-                                            Swal.fire({
-                                                title: 'Malformed response returned',
-                                                icon: 'error',
-                                                html:response
-                                            });
-                                        }
-                                    },
-                                    fd
-                                );
-                            }
-                        );
-                    }
-                }
-            );
-        }
-        else return true;
-    }
-</script>
+<template>
+    <div class="vspaced" style="text-align: left;">
+        <div class="flex">
+            <div class="card">
+                <img src="{{img}}" width="100%">
+            </div>
+            <div class="content-small">
+                <h3 style="padding-bottom: .6em;" class="large-text">{{full_name}}</h3>
+                <div><strong>E-mail: </strong>{{email}}</div>
+                <div><strong>Phone: </strong>{{phone}}</div>
+                <div><strong>Regstration #: </strong>{{registration_number}}</div>
+                <div><strong>Employed: </strong>{{date_employed}}</div>
+            </div>
+        </div>
+        <div>
+            <div class="flex">
+                <div class="content-small">
+                    <strong>Residence address</strong>
+                    <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
+                </div>
+                <div>
+                    <div class="content-small">
+                        <strong>Designation: </strong><br>
+                        {{designation_name}}
+                    </div>
+                    <div class="content-small">
+                        <strong>Role: </strong><br>
+                        {{role_name}}
+                    </div>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="content-small">
+                    <strong>Work location: </strong><br>
+                    {{branch_name}}
+                </div>
+                <div class="content-small">
+                    <strong>Department: </strong><br>
+                    {{dept_name}}
+                </div>
+            </div>
+            <div class="flex">
+                <div class="content-small">
+                    <strong>Bank: </strong><br>
+                    {{bank_name}}
+                </div>
+                <div class="content-small">
+                    <strong>Account #: </strong><br>
+                    {{bank_account_number}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php include __DIR__.'/add_staff.html';?>
+</template>
 <style>
     .mySwalForm{
         min-width: 80%;
@@ -158,5 +148,107 @@
     }
     button{
         text-transform: uppercase;
+        white-space: nowrap;
+    }
+    .flex > *{
+        flex-basis: 100%;
+    }
+    .vspaced *{
+        line-height: 1.2;
+    }
+    .large-text{
+        font-size: 140%;
     }
 </style>
+<script>
+    function add_form(name){
+        let main_evt = window.event;
+        main_evt.preventDefault();
+        if(main_evt.target.value == 'add'){
+            let wide = main_evt.target.getAttribute('data-form-width');
+            let customClass = (wide == 'wide') ? 'mySwalForm' : 'mySwalSmallForm';
+            request_service(
+                `add_${name}`,
+                response => {
+                    if(response != ''){
+                        let resp = JSON.parse(response);
+                        Swal.fire({
+                            html:resp.response[0],
+                            showConfirmButton:false,
+                            customClass: customClass
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            html:'Service not available',
+                            icon:'info'
+                        });
+                    }
+                    let form = document.querySelector(`.${customClass} form`);
+                    if(form != null){
+                        form.addEventListener(
+                            'submit',
+                            evt=>{
+                                evt.preventDefault();
+                                let fd = new FormData(form);
+                                request_service(
+                                    `add_${name}`,
+                                    response => {
+                                        let res_json = JSON.parse(response);
+                                        if(res_json){
+                                            let jsx = JSON.parse(res_json.response);
+                                            Swal.fire({
+                                                title: jsx.message,
+                                                icon: jsx.status
+                                            })
+                                            .then(e=>{
+                                                window.location.reload();
+                                            });
+                                        }
+                                        else {
+                                            Swal.fire({
+                                                title: 'Malformed response returned',
+                                                icon: 'error',
+                                                html:response
+                                            });
+                                        }
+                                    },
+                                    fd
+                                );
+                            }
+                        );
+                    }
+                }
+            );
+        }
+        else return true;
+    }
+    const view_staff = ()=>{
+        let elem = window.event.target.parentNode.parentNode,
+            img = elem.querySelector('img');
+            htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        //console.log(elem.getAttribute('data-json'));
+        htz = htz.replace(/\{\{img\}\}/, img.src);
+        htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
+        Swal.fire({
+            html: htz
+        });
+    };
+    const edit_staff = ()=>{
+        let elem = window.event.target.parentNode.parentNode,
+            img = elem.querySelector('img');
+            htz = document.querySelector('template').content.children[1].cloneNode(true);
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        let inpts = htz.querySelectorAll('input'),
+            selec = htz.querySelectorAll('select');
+        [...inpts, ...selec].forEach(elem=>{
+            if(jsx[elem.name]) elem.value = jsx[elem.name];
+        });
+        //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
+        Swal.fire({
+            html: htz,
+            customClass: 'mySwalForm'
+        });
+    }
+</script>

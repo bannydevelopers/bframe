@@ -14,6 +14,12 @@ $staff = $db->select('staff')
               ->fetchAll();
 
 $body = '';
+
+$designations = $db->select('designations')->fetchAll();
+$departments = $db->select('departments')->fetchAll();
+$branches = $db->select('branches')->fetchAll();
+$banks = $db->select('banks')->fetchAll();
+$roles = $db->select('roles')->fetchAll();
 ob_start();
 include __DIR__.'/html/staff.html';
 $body = ob_get_clean();
