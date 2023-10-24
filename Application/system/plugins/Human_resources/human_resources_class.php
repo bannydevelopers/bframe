@@ -56,18 +56,41 @@ class human_resources{
             $db = db::get_connection($registry->system_config->db_configs);
 
             if(isset($_POST['full_name']) && isset($_POST['employment_date'])){
-                return json_encode(['status'=>'info', 'message'=>json_encode($_POST)]);
-                //user_id, full_name, email, phone, passcode, status, roles, registration_no, employment_date
-                //designation, department, branch, bank, bank_account
-                $data = [
-                    'designation_name'=>addslashes( $_POST['designation_name'] ),
-                    'designation_description'=>addslashes( $_POST['designation_description'] ),
-                    'created_by'=>user::init()->get_session_user('user_id'),
-                    'create_date'=>date('Y-m-d')
+                //return json_encode(['status'=>'info', 'message'=>json_encode($_POST)]);
+                $userdata = [
+                    'full_name'=>addslashes( $_POST['full_name'] ),
+                    'email'=>system::format_email( $_POST['email']), 
+                    'phone'=>system::format_phone( $_POST['phone']), 
+                    'passcode'=>system::create_hash( $_POST['passcode']), 
+                    'status'=>addslashes( $_POST['status']),
+                    'system_role'=>intval( $_POST['roles'])
                 ];
-                $db->insert('staff', $data);
-                if(!$db->error()) return json_encode(['status'=>'success', 'message'=>'Designation added successful']);
-                else return json_encode(['status'=>'error', 'message'=>$db->error()['message']]);
+                $k = $db->insert('user_accounts', $userdata);
+                if(!$db->error() && intval($k)){
+                    $staffdata = [
+                        'bank'=>intval( $_POST['bank']), 
+                        'bank_account_number'=>addslashes( $_POST['bank_account']),
+                        'registration_number'=>addslashes( $_POST['registration_no']), 
+                        'residence_address'=>'', 
+                        'designation'=>intval( $_POST['designation']),
+                        'work_location'=>'', 
+                        'department'=>intval( $_POST['department']),
+                        'user_reference'=>$k, 
+                        //'date_employed'=>'',
+                        //'employment_length'=>intval( $_POST['designation']), 
+                        //'employment_status'=>addslashes( $_POST['designation']), 
+                        //'employment_last_renewal'=>addslashes( $_POST['designation']),
+                        //'employment_end_date'=>addslashes( $_POST['designation'])
+                    ];
+                    $ks = $db->insert('staff', $staffdata);
+                    if($db->error() or !intval($ks)){
+                        $db->delete('user_accounts')->where(['user_id'=>$k])->commit();
+                    }
+                }
+                if(!$db->error()) 
+                    return json_encode(['status'=>'success', 'message'=>'Staff saved successful']);
+                else 
+                    return json_encode(['status'=>'error', 'message'=>json_encode($db->error())]);
             }
             ob_start();
             $designations = $db->select('designations')->fetchAll();
