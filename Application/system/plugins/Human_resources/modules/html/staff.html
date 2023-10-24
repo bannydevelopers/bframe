@@ -6,13 +6,11 @@
 </div>
 <br>
 <div>
-    <table>
+    <table class="paginate" data-items-per-page="10">
         <thead>
             <tr>
                 <th>
                     <input type="checkbox" onclick="upadte_checks()">
-                </th>
-                <th>
                     Particulars
                 </th>
                 <th>
@@ -30,101 +28,32 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    <input type="checkbox" onclick="upadte_checks()">
-                </td>
+            <?php foreach($staff as $st){?>
+            <tr data-json='<?=json_encode($st)?>'>
                 <td class="flex" style="display: flex;">
-                    <img src="<?=user::init()->get_user_avatar()?>" width="20">
-                    <span>&nbsp;Juma Sonyo</span>
-                </td>
-                <td>
-                    04533455<br>
-                    test@loca.hs
-                </td>
-                <td>
-                    <b>Teacher</b><br>
-                    <em>Head teacher</em>
-                </td>
-                <td>
-                    Science
-                </td>
-                <td>
-                    <button>Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="checkbox" onclick="upadte_checks()">
-                </td>
-                <td class="flex" style="display: flex;">
-                    <img src="<?=user::init()->get_user_avatar()?>" width="20">
+                    <input type="checkbox" name="staff_id[]" value="<?=$st['user_id']?>" style="max-width:13px">
+                    <span style="max-width: 40px;"><img src="<?=user::init()->get_user_avatar($st['user_id'])?>" width="100%"></span>
                     <span>
-                        <b>&nbsp;Juma Sonyo</b><br>
-                        <em>&nbsp;Headquarters</em>
+                        &nbsp;<?=$st['full_name']?><br>
+                        &nbsp;<?=$st['user_id']?>
                     </span>
                 </td>
                 <td>
-                    04533455<br>
-                    test@loca.hs
+                    <?=$st['email']?><br>
+                    <?=$st['phone']?>
                 </td>
                 <td>
-                    <b>Teacher</b><br>
-                    <em>Head teacher</em>
+                    <b><?=$st['role_name']?></b><br>
+                    <em><?=$st['designation_name']?></em>
                 </td>
                 <td>
-                    Science
+                    <?=$st['dept_name']?>
                 </td>
                 <td>
-                    <button>Delete</button>
+                    <a>Delete</a>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <input type="checkbox" onclick="upadte_checks()">
-                </td>
-                <td class="flex" style="display: flex;">
-                    <img src="<?=user::init()->get_user_avatar()?>" width="20">
-                    <span>&nbsp;Juma Sonyo</span>
-                </td>
-                <td>
-                    04533455<br>
-                    test@loca.hs
-                </td>
-                <td>
-                    <b>Teacher</b><br>
-                    <em>Head teacher</em>
-                </td>
-                <td>
-                    Science
-                </td>
-                <td>
-                    <button>Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="checkbox" onclick="upadte_checks()">
-                </td>
-                <td class="flex" style="display: flex;">
-                    <img src="<?=user::init()->get_user_avatar()?>" width="20">
-                    <span>&nbsp;Juma Sonyo</span>
-                </td>
-                <td>
-                    04533455<br>
-                    test@loca.hs
-                </td>
-                <td>
-                    <b>Teacher</b><br>
-                    <em>Head teacher</em>
-                </td>
-                <td>
-                    Science
-                </td>
-                <td>
-                    <button>Delete</button>
-                </td>
-            </tr>
+            <?php }?>
         </tbody>
     </table>
 </div>
@@ -139,8 +68,9 @@
                 `add_${name}`,
                 response => {
                     if(response != ''){
+                        let resp = JSON.parse(response);
                         Swal.fire({
-                            html:response,
+                            html:resp.response[0],
                             showConfirmButton:false,
                             customClass: customClass
                         });
@@ -163,15 +93,20 @@
                                     response => {
                                         res_json = JSON.parse(response);
                                         if(res_json){
+                                            let jsx = JSON.parse(res_json.response);
                                             Swal.fire({
-                                                title:res_json.message,
-                                                icon: res_json.status
+                                                title: jsx.message,
+                                                icon: jsx.status
+                                            })
+                                            .then(e=>{
+                                                window.location.reload();
                                             });
                                         }
                                         else {
                                             Swal.fire({
                                                 title: 'Malformed response returned',
-                                                icon: 'error'
+                                                icon: 'error',
+                                                html:response
                                             });
                                         }
                                     },
