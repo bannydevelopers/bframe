@@ -9,27 +9,31 @@
                 <input type="email" id="email" name="email" value="" required />
                 <label for="Phone">Phone</label>
                 <input type="number" id="phone" name="phone" value="" required />
-                <label for="passcode">Password</label>
-                <input type="password" id="passcode" name="passcode" placeholder="" required />
                 <div class="flex">
                     <div>
-                        <label for="status">Status</label>
-                        <select name="status" id="status" onchange="add_form('status')">
-                            <option value="">Choose...</option>
-                            <option value="active">Active</option>
-                            <option value="pending">Pending</option>
-                            <option value="locked">Locked</option>
-                        </select>
+                        <label for="residence_address">Residence address</label>
+                        <textarea id="residence_address" name="residence_address" rows="7"></textarea>
                     </div>
                     <div>
-                        <label for="roles">Role</label>
-                        <select name="roles" id="roles" onchange="add_form('roles')">
-                            <option value="">Choose...</option>
-                            <?php foreach($roles as $opt){?>
-                            <option value="<?=$opt['role_id']?>"><?=$opt['role_name']?></option>
-                            <?php }?>
-                            <option value="add">Add role</option>
-                        </select>
+                        <div>
+                            <label for="status">Status</label>
+                            <select name="status" id="status" onchange="add_form('status')" required>
+                                <option value="">Choose...</option>
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="locked">Locked</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="roles">Role</label>
+                            <select name="roles" id="roles" onchange="add_form('roles')" required>
+                                <option value="">Choose...</option>
+                                <?php foreach($roles as $opt){?>
+                                <option value="<?=$opt['role_id']?>"><?=$opt['role_name']?></option>
+                                <?php }?>
+                                <option value="add">Add role</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,7 +51,7 @@
                     </div>
                 </div>
                 <label for="designation">Designation</label>
-                <select name="designation" id="designation" onchange="add_form('designation')">
+                <select name="designation" id="designation" onchange="add_form('designation')" required>
                     <option value="">Choose...</option>
                     <?php foreach($designations as $desg){?>
                     <option value="<?=$desg['designation_id']?>"><?=$desg['designation_name']?></option>
@@ -64,7 +68,7 @@
                 </select>
                 <label for="branch">Work location</label>
                 <select name="branch" id="branch" onchange="add_form('branch')">
-                    <option value="headquarters">Headquarters</option>
+                    <option value="">Choose...</option>
                     <?php foreach($branches as $branch){?>
                     <option value="<?=$branch['branch_id']?>"><?=$branch['branch_name']?></option>
                     <?php }?>
@@ -83,7 +87,7 @@
                     </div>
                     <div>
                         <label for="bank_account">Account number</label>
-                        <input type="text" id="bank_account" name="bank_account" required />
+                        <input type="text" id="bank_account" name="bank_account" />
                     </div>
                 </div>
             </div>

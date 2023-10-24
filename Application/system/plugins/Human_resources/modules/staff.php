@@ -9,6 +9,7 @@ $staff = $db->select('staff')
               ->join('roles', 'system_role=role_id', 'left')
               ->join('designations', 'designation=designation_id', 'left')
               ->join('departments', 'department=dept_id', 'left')
+              ->join('branches', 'work_location=branch_id', 'left')
               ->order_by('staff_id', 'desc')
               ->fetchAll();
 

@@ -19,6 +19,8 @@ class human_resources{
         system::add_event_listener('add_staff', 'human_resources::service_add_staff');
         system::add_event_listener('add_designation', 'human_resources::service_add_designation');
         system::add_event_listener('add_department', 'human_resources::service_add_department');
+        system::add_event_listener('add_bank', 'human_resources::service_add_bank');
+        system::add_event_listener('add_branch', 'human_resources::service_add_branch');
     }
     public static function load_admin_dashboard($args){
         $registry = storage::init();
@@ -37,19 +39,6 @@ class human_resources{
         $registry = storage::init();
         return;
     }
-    /*protected function find_bbcode($content){
-        $html = htmlspecialchars_decode(stripslashes($content));
-		preg_match_all('/(\{\$)(.*?)(\})/i', $html, $pg_matches);
-		if(isset($pg_matches[2])){
-			$searches = $replacement = [];
-			foreach($pg_matches[2] as $k=>$v){
-				$searches[] = $pg_matches[0][$k];
-                $replacement[] = $v;
-			}
-		}
-		$html = str_replace($searches, $replacement, $html);
-        return $html;
-    }*/
     public static function service_add_staff($data){
         if(user::init()->user_can('add_staff')){
             $registry = storage::init();
@@ -130,7 +119,17 @@ class human_resources{
         $db = db::get_connection($registry->system_config->db_configs);
 
         if(isset($_POST['dept_name'])){
-            self::save_department();
+            $fd = [
+                'dept_name'=>addslashes($_POST['dept_name']),
+                'dept_desc'=>addslashes($_POST['dept_desc'])
+            ];
+            if(isset($_POST['dept_id']) && intval($_POST['dept_id'])) {
+                $k = intval($_POST['dept_id']);
+                $db->update('departments', $fd)->where("dept_id={$k}")->commit();
+            }
+            else{
+                $k = $db->insert('departments', $fd);
+            }
             if($db->error()) {
                 die(json_encode(['message'=>$db->error()['message'],'status'=>'error']));
             }
@@ -146,24 +145,39 @@ class human_resources{
             return ob_get_clean();
         }
     }
-    public static function save_department(){
-        if(!isset($_POST['dept_name'])) return 0;
+    public static function service_add_bank($data){
+        return 'no bank to add';
         
+    }
+    public static function service_add_branch($data){
         $registry = storage::init();
         $db = db::get_connection($registry->system_config->db_configs);
 
-        $fd = [
-            'dept_name'=>addslashes($_POST['dept_name']),
-            'dept_faculty'=>addslashes($_POST['dept_faculty']),
-            'dept_desc'=>addslashes($_POST['dept_desc'])
-        ];
-        if(isset($_POST['dept_id']) && intval($_POST['dept_id'])) {
-            $k = intval($_POST['dept_id']);
-            $db->update('departments', $fd)->where("dept_id={$k}")->commit();
+        if(isset($_POST['branch_name'])){
+            $fd = [
+                'branch_name'=>addslashes($_POST['branch_name']),
+                'branch_address'=>addslashes($_POST['branch_address']),
+                'branch_location'=>addslashes($_POST['branch_location']), 
+                'is_headquarters'=>intval($_POST['is_headquarters'])
+            ];
+            if(isset($_POST['branch_id']) && intval($_POST['branch_id'])) {
+                $k = intval($_POST['branch_id']);
+                $db->update('branches', $fd)->where("branch_id={$k}")->commit();
+            }
+            else{
+                $k = $db->insert('branches', $fd);
+            }
+            if($db->error()) {
+                die(json_encode(['message'=>$db->error()['message'],'status'=>'error']));
+            }
+            else {
+                die(json_encode(['message'=>'Branch added successful', 'status'=>'success']));
+            }
         }
         else{
-            $k = $db->insert('departments', $fd);
-        }
-        return $k;
+            ob_start();
+            include __DIR__.'/modules/html/add_branch.html';
+            return ob_get_clean();
+        }        
     }
 }
