@@ -1,0 +1,140 @@
+<div class="flex">
+    <h1 class="content-small no-pad-top">Payroll</h1>
+    <div class="shrink">
+      <button onclick="toggleCreatePayrollForm()" value="add" data-form-width="wide" class="round">Add payroll</button>
+    </div>
+</div>       
+<div class="flex cards">
+<?php foreach($payroll as $pay){?>
+    <div>
+        <h3><?=$roll['payroll_name']?></h3>
+        <div class="pb-2"><?=system::format_time($roll['create_date'])?></div>
+        <div class="text-right">
+            <a onclick="view_roll()" data-json='<?=$roll['payment_slips']?>'></a>
+            <a onclick="delete_roll(`<?=$roll['payroll_id']?>`)"></a>
+        </div>
+    </div>
+<?php }?>
+</div>
+<template>
+    <form class="space-y-6" method="POST">
+        <div class="flex flex-wrap -mx-3 mb-6">
+          <div class="w-full sm:w-1/2 px-3 my-2 mob:my-0">
+            <label>Month
+              <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="payroll_month">
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full sm:w-1/2 px-3 my-2 mob:my-0">
+            <label>Year
+              <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="payroll_year">
+                <option><?=date('Y')-1?></option>
+                <option selected><?=date('Y')?></option>
+                <option><?=date('Y')+1?></option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="w-full overflow-hidden rounded-lg shadow-md">
+          <div class="w-full overflow-x-auto">
+            <h3 class="mb-4 text-l font-small">Salary slips</h3>
+            <table class="w-full">
+              <thead>
+                <tr
+                  class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                >
+                  <th class="px-4 py-3"><input type="checkbox" onchange="update_checks()"></th>
+                  <th class="px-4 py-3">Employee</th>
+                  <th class="px-4 py-3">Basic salary</th>
+                  <th class="px-4 py-3">Allowance</th>
+                  <th class="px-4 py-3">Bonus</th>
+                  <th class="px-4 py-3">Gross Salary</th>
+                  <th class="px-4 py-3">Deductions</th>
+                  <th class="px-4 py-3">Net Salary</th>
+                </tr>
+              </thead>
+              <tbody
+                class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+              >
+              <?php 
+              if (is_array($slips) || is_object($slips))
+              foreach ($slips as $roll){?>
+                <tr id="tr-<?=$roll['slip_id']?>" class="text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <td class="px-4 py-3">
+                    <input type="checkbox" name="p_slips[]" value="<?=$roll['slip_id']?>" class="slips-check">
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex items-center text-sm">
+                      <div>
+                        <p class="font-semibold"><?=ucwords($roll['first_name'])?> <?=ucwords($roll['middle_name'])?> <?=ucwords($roll['last_name'])?></p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-sm">
+                    <?=number_format($roll['basic_salary'])?>
+                  </td>
+                  <td class="px-4 py-3 text-sm">
+                    <?=number_format($roll['allowance'])?>
+                  </td>
+                  <td class="px-4 py-3 text-sm">
+                    <?=number_format($roll['bonus'])?>
+                  </td>
+                  <td class="px-4 py-3 text-sm">
+                    <?=number_format(array_sum([$roll['basic_salary'],$roll['allowance'],$roll['bonus']]))?>
+                  </td>
+                  <td class="px-4 py-3 text-sm">
+                    <?=number_format(array_sum([$roll['health_insurance_fund'],$roll['payee'],
+                    $roll['health_insurance_fund'],$roll['social_security_fund'],
+                    $roll['worker_compasion_fund'],$roll['education_fund']]))?>
+                  </td>
+                  <td class="px-4 py-3 text-sm">
+                    <?=number_format(array_sum([$roll['basic_salary'],$roll['allowance'],$roll['bonus']])-array_sum([$roll['health_insurance_fund'],$roll['payee'],
+                    $roll['health_insurance_fund'],$roll['social_security_fund'],
+                    $roll['worker_compasion_fund'],$roll['education_fund']]))?>
+                  </td>
+                </tr>
+            <?php }?>
+              </tbody>
+          </table>
+          </div>
+        </div>
+
+        <div class="pb-8">
+          <button type="submit" class="float-right text-white bg-purple-700 hover:bg-purple-800 foroll:ring-4 foroll:outline-none foroll:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:foroll:ring-purple-800">Create</button>
+        </div>
+      </form>
+</template>
+<style>
+    .wideSwal{
+        min-width: 80%;
+    }
+    .wideSwal label{
+        text-align: left;
+        display: block;
+    }
+</style>
+<script>
+    function toggleCreatePayrollForm() {
+        let htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
+        Swal.fire({
+            title:'Create payroll',
+            html: htz,
+            customClass: 'wideSwal'
+        });
+    }
+  </script>
+
+
