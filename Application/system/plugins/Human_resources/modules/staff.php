@@ -19,7 +19,9 @@ if(isset($_POST['delete_staff'])){
     }
     die(json_encode( ["response"=>$msg]));
 }
-
+if(isset($_POST['import_staff'])){
+    die('We will continue tomorrow');
+}
 $staff = $db->select('staff')
               ->join('user_accounts','user_id=user_reference')
               ->join('roles', 'system_role=role_id', 'left')
