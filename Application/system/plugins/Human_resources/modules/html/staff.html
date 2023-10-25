@@ -116,16 +116,29 @@
     </div>
     <?php include __DIR__.'/add_staff.html';?>
     <form method="post" enctype="multipart/form-data">
+        <label>Department</label>
+        <select name="system_role">
+            <option value="">Choose...</option>
+            <?php foreach($departments as $dept){?>
+            <option value="<?=$dept['dept_id']?>"><?=$dept['dept_name']?></option>
+            <?php }?>
+        </select>
         <label>Role</label>
         <select name="system_role">
             <option value="">Choose...</option>
+            <?php foreach($roles as $opt){?>
+            <option value="<?=$opt['role_id']?>"><?=$opt['role_name']?></option>
+            <?php }?>
         </select>
         <label>Designation</label>
         <select name="designation">
             <option value="">Choose...</option>
+            <?php foreach($designations as $desg){?>
+            <option value="<?=$desg['designation_id']?>"><?=$desg['designation_name']?></option>
+            <?php }?>
         </select>
         <label>CSV file</label>
-        <input type="file" name="staff_list" accept=".csv">
+        <input type="file" name="staff_list" accept=".csv" required>
         <input type="hidden" name="import_staff" value="1">
         <div style="text-align: right;padding-top: 1em;">
             <button type="submit">Save</button>
