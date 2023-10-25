@@ -59,10 +59,11 @@
         </tbody>
     </table>
 </div>
+<style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex">
-            <div class="card">
+        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
+            <div class="card" style="box-shadow: none;">
                 <img src="{{img}}" width="100%">
             </div>
             <div class="content-small">
@@ -228,8 +229,9 @@
             img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
+        console.log(jsx);
         //console.log(elem.getAttribute('data-json'));
-        htz = htz.replace(/\{\{img\}\}/, img.src);
+        htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
         htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
             html: htz
@@ -239,16 +241,61 @@
         let elem = window.event.target.parentNode.parentNode,
             img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[1].cloneNode(true);
+        let hin = document.createElement('input');
+        hin.type = 'hidden';
+        hin.name = 'user_id';
+        htz.firstElementChild.firstElementChild.appendChild(hin);
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let inpts = htz.querySelectorAll('input'),
-            selec = htz.querySelectorAll('select');
+            selec = htz.querySelectorAll('select'),
+            tarea = htz.querySelectorAll('textarea');
         [...inpts, ...selec].forEach(elem=>{
+            if(elem.type == 'date' && jsx[elem.name]) jsx[elem.name] = [...jsx[elem.name.trim()]].splice(0,10).join('');
             if(jsx[elem.name]) elem.value = jsx[elem.name];
+        });
+        [...tarea].forEach(elem=>{
+            if(jsx[elem.name]) elem.innerHTML = jsx[elem.name];
         });
         //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
             html: htz,
-            customClass: 'mySwalForm'
+            customClass: 'mySwalForm',
+            showConfirmButton: false
         });
+        let form = document.querySelector('.mySwalForm form');
+        if(form != null){
+            form.addEventListener(
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    request_service(
+                        'add_staff',
+                        response => {
+                            console.log(response);
+                            let res_json = JSON.parse(response);
+                            if(res_json){
+                                let jsx = JSON.parse(res_json.response);
+                                Swal.fire({
+                                    title: jsx.message,
+                                    icon: jsx.status
+                                })
+                                .then(e=>{
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire({
+                                    title: 'Malformed response returned',
+                                    icon: 'error',
+                                    html:response
+                                });
+                            }
+                        },
+                        fd
+                    );
+                }
+            );
+        }
     }
 </script>
