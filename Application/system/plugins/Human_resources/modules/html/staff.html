@@ -49,7 +49,7 @@
                 <td>
                     <?=$st['dept_name']?>
                 </td>
-                <td>ew
+                <td>
                     <a onclick="view_staff()" data-icon="&#xf06e;"></a>
                     <a onclick="edit_staff()" data-icon="&#xf044;"></a>
                     <a onclick="delete_staff()" data-icon="&#xf2ed;"></a>
@@ -68,46 +68,46 @@
             </div>
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{full_name}}</h3>
-                <div><strong>E-mail: </strong>{{email}}</div>
-                <div><strong>Phone: </strong>{{phone}}</div>
-                <div><strong>Regstration #: </strong>{{registration_number}}</div>
-                <div><strong>Employed: </strong>{{date_employed}}</div>
+                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{email}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{phone}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Regstration #: </span>{{registration_number}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Employed: </span>{{date_employed}}</div>
             </div>
         </div>
         <div>
             <div class="flex">
                 <div class="content-small">
-                    <strong>Residence address</strong>
+                    <span style="color: rgb(35, 57, 136);">Residence address</span>
                     <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
                 </div>
                 <div>
                     <div class="content-small">
-                        <strong>Designation: </strong><br>
+                        <span style="color: rgb(35, 57, 136);">Designation: </span><br>
                         {{designation_name}}
                     </div>
                     <div class="content-small">
-                        <strong>Role: </strong><br>
+                        <span style="color: rgb(35, 57, 136);">Role: </span><br>
                         {{role_name}}
                     </div>
                 </div>
             </div>
             <div class="flex">
                 <div class="content-small">
-                    <strong>Work location: </strong><br>
+                    <span style="color: rgb(35, 57, 136);">Work location: </span><br>
                     {{branch_name}}
                 </div>
                 <div class="content-small">
-                    <strong>Department: </strong><br>
+                    <span style="color: rgb(35, 57, 136);">Department: </span><br>
                     {{dept_name}}
                 </div>
             </div>
             <div class="flex">
                 <div class="content-small">
-                    <strong>Bank: </strong><br>
+                    <span style="color: rgb(35, 57, 136);">Bank: </span><br>
                     {{bank_name}}
                 </div>
                 <div class="content-small">
-                    <strong>Account #: </strong><br>
+                    <span style="color: rgb(35, 57, 136);">Account #: </span><br>
                     {{bank_account_number}}
                 </div>
             </div>
@@ -297,5 +297,62 @@
                 }
             );
         }
+    };
+    const delete_staff = ()=>{
+        let elem = window.event.target.parentNode.parentNode;
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        let name = jsx.full_name,
+            uid = jsx.user_id;
+        Swal.fire({
+            title: `Delete ${name}?`,
+            showCancelButton: true,
+            confirmButtonText:'Sure, delete',
+            html:"No UNDO remember!"
+        })
+        .then(response=>{
+        if(response.isConfirmed){
+            let userdata = new FormData();
+            userdata.append('delete_staff', uid);
+            userdata.append('ajax',1);
+            ajax(
+            window.location.href, 
+            response=>{
+                let res_json = JSON.parse(response);
+                //console.log(response);
+                if(res_json){
+                    let jsx = res_json.response;
+                    Swal.fire({
+                        title: jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(e=>{
+                        if(jsx.status == 'success'){
+                             elem.parentNode.removeChild(elem);
+                             createPageButtons(); // create the page buttons initially
+                            showPage(currentPage);
+                        }
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Malformed response returned',
+                        icon: 'error',
+                        html:response
+                    });
+                }
+            },
+            error=>{
+                console.log(error);
+            },
+            userdata
+            );
+        }
+        else{
+            Swal.fire({
+            title: "Cancel Deletion",
+            icon:"error"
+            })
+        }
+        });
     }
 </script>
