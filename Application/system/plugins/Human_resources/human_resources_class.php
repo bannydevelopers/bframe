@@ -44,29 +44,30 @@ class human_resources{
             $registry = storage::init();
             $db = db::get_connection($registry->system_config->db_configs);
 
-            if(isset($_POST['full_name']) && isset($_POST['employment_date'])){
+            if(isset($_POST['full_name']) && isset($_POST['date_employed'])){
                 $userdata = [
                     'full_name'=>addslashes( $_POST['full_name'] ),
                     'email'=>system::format_email( $_POST['email']), 
                     'phone'=>system::format_phone( $_POST['phone']), 
                     'passcode'=>system::create_hash( $_POST['email']), 
                     'status'=>addslashes( $_POST['status']),
-                    'system_role'=>intval( $_POST['roles'])
+                    'system_role'=>intval( $_POST['system_role'])
                 ];
                 $staffdata = [
-                    'bank'=>intval( $_POST['bank']), 
-                    'bank_account_number'=>addslashes( $_POST['bank_account']),
-                    'registration_number'=>addslashes( $_POST['registration_no']), 
+                    'bank'=>intval( @$_POST['bank']), 
+                    'bank_account_number'=>addslashes( $_POST['bank_account_number']),
+                    'registration_number'=>addslashes( $_POST['registration_number']), 
                     'residence_address'=>addslashes( $_POST['residence_address']), 
                     'designation'=>intval( $_POST['designation']),
                     'work_location'=>intval( $_POST['work_location']), 
                     'department'=>intval( $_POST['department']),
-                    //'date_employed'=>'',
+                    'date_employed'=>$_POST['date_employed'],
                     //'employment_length'=>intval( $_POST['designation']), 
                     //'employment_status'=>addslashes( $_POST['designation']), 
                     //'employment_last_renewal'=>addslashes( $_POST['designation']),
                     //'employment_end_date'=>addslashes( $_POST['designation'])
                 ];
+                //return json_encode(['status'=>'info', 'message'=>json_encode($staffdata)]);
                 if(isset($_POST['user_id'])){
                     $staffdata['user_reference'] = $_POST['user_id'];
                     if(user::init()->user_can('edit_staff')){

@@ -7,7 +7,7 @@
                 <label for="email">E-mail</label>
                 <input type="email" id="email" name="email" value="" required />
                 <label for="Phone">Phone</label>
-                <input type="number" id="phone" name="phone" value="" required />
+                <input type="tel" id="phone" name="phone" value="" minlength="10" maxlength="14" required />
                 <div class="flex">
                     <div>
                         <label for="residence_address">Residence address</label>
@@ -25,7 +25,7 @@
                         </div>
                         <div>
                             <label for="roles">Role</label>
-                            <select name="roles" id="roles" onchange="add_form('roles')" required>
+                            <select name="system_role" id="roles" onchange="add_form('roles')" required>
                                 <option value="">Choose...</option>
                                 <?php foreach($roles as $opt){?>
                                 <option value="<?=$opt['role_id']?>"><?=$opt['role_name']?></option>
@@ -42,11 +42,11 @@
                 <div class="flex">
                     <div>
                         <label for="registration_no">Registration number</label>
-                        <input type="text" name="registration_no" id="registration_no" value="" required />
+                        <input type="text" name="registration_number" id="registration_no" value="" required />
                     </div>
                     <div>
                         <label for="employment_date">Date employed</label>
-                        <input type="date" name="employment_date" id="employment_date" value="" required />
+                        <input type="date" name="date_employed" id="employment_date" value="" required />
                     </div>
                 </div>
                 <label for="designation">Designation</label>
@@ -86,7 +86,7 @@
                     </div>
                     <div>
                         <label for="bank_account">Account number</label>
-                        <input type="text" id="bank_account" name="bank_account" />
+                        <input type="text" id="bank_account" name="bank_account_number" />
                     </div>
                 </div>
             </div>
