@@ -18,7 +18,7 @@ class user{
         $data = [];
         // Some fields are optional
         if(isset($user_data['full_name'])) $data['full_name'] = addslashes($user_data['full_name']);
-        if(isset($user_data['system_role'])) $data['system_role'] = addslashes($user_data['system_role']);
+        if(isset($user_data['system_role'])) $data['system_role'] = intval($user_data['system_role']);
         if(isset($user_data['status'])) $data['status'] = addslashes($user_data['status']);
         if(isset($user_data['phone'])) $data['phone'] = system::format_phone($user_data['phone']);
         if(isset($user_data['email'])) $data['email'] = system::format_email($user_data['email']);

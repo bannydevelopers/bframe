@@ -28,7 +28,7 @@
                     </div>
                     <div>
                         <label for="roles">Role</label>
-                        <select name="roles" id="roles">
+                        <select name="system_role" id="roles">
                             <option value="">Not set</option>
                         <?php foreach($roles as $opt){?>
                             <option value="<?=$opt['role_id']?>"<?=$user['system_role'] == $opt['role_id'] ? ' selected':''?>><?=$opt['role_name']?></option>
