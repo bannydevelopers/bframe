@@ -31,7 +31,11 @@ $staff = $db->select('staff')
               ->join('banks', 'bank=bank_id', 'left')
               ->order_by('staff_id', 'desc')
               ->fetchAll();
-
+$sortedStaff = [];
+foreach($staff as $st){
+    if(!isset($sortedStaff[$st['designation_name']])) $sortedStaff[$st['designation_name']] = [];
+    $sortedStaff[$st['designation_name']][] = $st;
+}
 $body = '';
 
 $designations = $db->select('designations')->fetchAll();
