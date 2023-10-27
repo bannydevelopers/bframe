@@ -1,0 +1,63 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="flex">
+        <div class="contentx">
+             <div class="white content">
+                <div>
+                    <label for="employee">Employee name</label>
+                    <select name="employee" id="employee" onchange="add_form('employee')" required>
+                        <option value="">Choose...</option>
+                        <?php foreach($employees as $user){?>
+                            <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
+                        <?php }?>    
+                    </select>
+                </div><br>
+                <div class="flex">
+                    <div>
+                        <label for="basic_salary">Basic salary</label>
+                        <input type="basic_salary" name="basic_salary" value="" required />
+                    </div>
+                    <div>
+                        <label for="allowance">Allowance</label>
+                        <input type="allowance" name="allowance" value="" required />
+                    </div>
+                </div><br>
+                <div class="flex">
+                    <div><label for="bonus">Bonus</label>
+                     <input type="bonus" name="bonus" value="" required />
+                    </div>
+                    <div><label for="payee">Payee</label>
+                     <input type="payee" name="payee" value="" required />
+                     </div>   
+                </div><br>
+                <div class="flex">
+                    <div>
+                        <label for="health_insurance_fund">Health insurance fund</label>
+                        <input type="health_insurance_fund" name="health_insurance_fund" value="" required />
+                    </div><br>
+                    <div>
+                        <label for="social_security_fund">Social security fund</label>
+                        <input type="social_security_fund" name="social_security_fund" value="" required />
+                    </div>
+                </div><br>
+                <div class="flex">
+                    <div>
+                        <label for="worker_compasion_fund">Worker compasion fund</label>
+                        <input type="worker_compasion_fund" name="worker_compasion_fund" value="" required />
+                    </div>
+                    <div>
+                        <label for="Education fund">Education fund</label>
+                        <input type="education_fund" name="education_fund" value="" required />
+                    </div>
+                </div><br>
+                <label for="other_deductions">Other deductions</label>
+                <input type="other_deductions" name="other_deductions" value="" required />
+
+            </div>
+        </div>
+
+    </div>
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+        <!--button type="reset">Reset form</button-->
+        <button type="submit" class="primary green">Create</button>
+    </div>
+</form>
