@@ -74,6 +74,7 @@ class db{
         $this->insert_update($table, $data, 'insert')->bind_data();
         return self::$conn->lastInsertId();
     }
+    
     public function update($table, $data){
         $this->insert_update($table, $data, 'update');
         return $this;
@@ -151,6 +152,15 @@ class db{
     }
     public function and($options, $data = []){
         return $this->make_condition($options, 'AND', $data);
+    }
+    public function in($options, $data = []){
+        if(is_array($options)){
+            if(is_int($options[0])) $options = implode(',', $options);
+            else $options = implode("','", $options);
+            $options = "'{$options}'";
+        }
+        $options = trim($options, '()');
+        return $this->make_condition("($options)", 'IN', $data);
     }
     public function having($condition){
         self::$qry .= ' HAVING '.rtrim($condition);
