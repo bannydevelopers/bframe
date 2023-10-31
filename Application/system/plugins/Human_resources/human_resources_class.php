@@ -15,12 +15,17 @@ class human_resources{
         system::add_event_listener('exec_end', 'human_resources::load_page', $_SERVER['REQUEST_URI']);
         // Hook to admin dashboard
         system::add_event_listener('admin_plugin_load', 'human_resources::load_admin_dashboard');
+        // Hook to admin card
+        system::add_event_listener('admin_profile_load', 'human_resources::load_admin_dashboard_cards');
         // Respond to service requests
         system::add_event_listener('add_staff', 'human_resources::service_add_staff');
         system::add_event_listener('add_designation', 'human_resources::service_add_designation');
         system::add_event_listener('add_department', 'human_resources::service_add_department');
         system::add_event_listener('add_bank', 'human_resources::service_add_bank');
         system::add_event_listener('add_branch', 'human_resources::service_add_branch');
+    }
+    public static function load_admin_dashboard_cards($args){
+        return '<div class="content" style="min-width:95%">hr cards</div>';
     }
     public static function load_admin_dashboard($args){
         $registry = storage::init();

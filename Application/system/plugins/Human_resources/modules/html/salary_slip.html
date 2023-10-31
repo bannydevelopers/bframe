@@ -41,19 +41,12 @@
             <tr data-json='<?=json_encode($ssp)?>'>
                 <td class="flex" style="display: flex;">
                     <input type="checkbox" name="staff_id[]" value="<?=$ssp['user_id']?>" style="max-width:13px">
-                    <span style="max-width: 40px;"><img src="<?=user::init()->get_user_avatar($ssp['user_id'])?>" width="100%"></span>
                     <span>
-                        <p class="font-semibold"><?=ucwords($ssp['first_name'])?> 
-                            <?=ucwords($ssp['middle_name'])?>
-                            <?=ucwords($ssp['last_name'])?>
+                        <p class="font-semibold"><?=ucwords($ssp['full_name'])?>
                         </p>
                     </span>
                 </td>
-                <td>
-                    <?=$ssp['email']?><br>
-                    <?=$ssp['phone']?>
-                </td>
-                <td>
+                <td class="content">
                     <?=number_format($ssp['basic_salary'])?>
                 </td>
                 <td>
@@ -134,68 +127,6 @@
     }
 </style>
 <script>
-    function add_form(name){
-        let main_evt = window.event;
-        main_evt.preventDefault();
-        if(main_evt.target.value == 'add'){
-            let wide = main_evt.target.getAttribute('data-form-width');
-            let customClass = (wide == 'wide') ? 'mySwalForm' : 'mySwalSmallForm';
-            request_service(
-                `add_${name}`,
-                response => {
-                    if(response != ''){
-                        let resp = JSON.parse(response);
-                        Swal.fire({
-                            html:resp.response[0],
-                            showConfirmButton:false,
-                            customClass: customClass
-                        });
-                    }
-                    else{
-                        Swal.fire({
-                            html:'Service not available',
-                            icon:'info'
-                        });
-                    }
-                    let form = document.querySelector(`.${customClass} form`);
-                    if(form != null){
-                        form.addEventListener(
-                            'submit',
-                            evt=>{
-                                evt.preventDefault();
-                                let fd = new FormData(form);
-                                request_service(
-                                    `add_${name}`,
-                                    response => {
-                                        let res_json = JSON.parse(response);
-                                        if(res_json){
-                                            let jsx = JSON.parse(res_json.response);
-                                            Swal.fire({
-                                                title: jsx.message,
-                                                icon: jsx.status
-                                            })
-                                            .then(e=>{
-                                                window.location.reload();
-                                            });
-                                        }
-                                        else {
-                                            Swal.fire({
-                                                title: 'Malformed response returned',
-                                                icon: 'error',
-                                                html:response
-                                            });
-                                        }
-                                    },
-                                    fd
-                                );
-                            }
-                        );
-                    }
-                }
-            );
-        }
-        else return true;
-    }
     const edit_slips = ()=>{
         let elem = window.event.target.parentNode.parentNode,
             img = elem.querySelector('img');
@@ -322,5 +253,23 @@
             customClass:'mySwalSmallForm'
         }
         Swal.fire(opts);
+        let frm = document.querySelector('.mySwalSmallForm form');
+        frm.addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let fd = new FormData(frm);
+            fd.append('ajax_request', 1);
+            ajax(
+                window.location.href,
+                success=>{
+                    Swal.fire({
+                        html:success
+                    });
+                },
+                error=>{
+                    console.log(error);
+                },
+                fd
+            );
+        });
     }
 </script>
