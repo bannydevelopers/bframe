@@ -1,0 +1,20 @@
+<div class="flex">
+    <h1 class="content-small no-pad-top">Designations</h1>
+    <div class="shrink" style="white-space: nowrap;text-align: right;">
+        <button onclick="create_payroll()" value="add" data-form-width="wide" class="round">Create designation</button>
+    </div>
+  </div>
+  <div>
+    <div class="flex cards">
+        <?php foreach($designations as $desn){?>
+            <div class="content rounded">
+                <h3><?=$desn['designation_name']?></h3>
+                <div><?=$desn['designation_description']?></div>
+                <div style="text-align: right;">
+                    <a onclick="edit_designation" data-icon="&#xf056;">&nbsp;</a>
+                    <a onclick="edit_designation" data-icon="&#xf1f8;">&nbsp;</a>
+                </div>
+            </div>
+        <?php }?>
+    </div>
+  </div>

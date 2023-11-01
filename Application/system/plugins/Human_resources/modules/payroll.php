@@ -32,11 +32,11 @@ if(isset($_POST['p_slips'])){
    //var_dump($db->error());
 }
 
-    if(isset($_POST['ajax_delete_payroll'])){
-        $db->delete('payroll')->where(['payroll_id'=>intval($_POST['ajax_delete_payroll'])])->commit();
-        if(!$db->error()) die('ok');
-        else die('fail');
-    }
+if(isset($_POST['ajax_delete_payroll'])){
+    $db->delete('payroll')->where(['payroll_id'=>intval($_POST['ajax_delete_payroll'])])->commit();
+    if(!$db->error()) die('ok');
+    else die('fail');
+}
 
 else{
     $msg = 'Permission denied!';
@@ -54,7 +54,7 @@ $slips = $db->select('salary_slip')
             ->join('user','salary_slip.employee=user.user_id')
             ->order_by('slip_id', 'desc')->fetchAll();
 
-
+ob_start();
 include __DIR__.'/html/payroll.html';
 $body = ob_get_clean();
 $return = ['title'=>' ','body'=>$body];
