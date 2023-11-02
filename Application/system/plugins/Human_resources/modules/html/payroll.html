@@ -191,10 +191,10 @@
       let opts = {
           title: 'Add payroll',
           html:cform,
-          customClass:'mySwalSmallForm'
+          customClass:'mySwalForm'
       }
       Swal.fire(opts);
-      let frm = document.querySelector('.mySwalSmallForm form');
+      let frm = document.querySelector('.mySwalForm form');
       frm.addEventListener('submit', evt=>{
           evt.preventDefault();
           let fd = new FormData(frm);
