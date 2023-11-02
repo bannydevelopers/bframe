@@ -57,13 +57,7 @@
                   <td class="px-4 py-3">
                     <input type="checkbox" name="p_slips[]" value="<?=$roll['slip_id']?>" class="slips-check">
                   </td>
-                  <td class="px-4 py-3">
-                    <div class="flex items-center text-sm">
-                      <div>
-                        <p class="font-semibold"><?=ucwords($roll['first_name'])?> <?=ucwords($roll['middle_name'])?> <?=ucwords($roll['last_name'])?></p>
-                      </div>
-                    </div>
-                  </td>
+                  <td class="px-4 py-3"><?=ucwords($roll['full_name'])?></td>
                   <td class="px-4 py-3 text-sm">
                     <?=number_format($roll['basic_salary'])?>
                   </td>

@@ -13,9 +13,7 @@
         "Project",
         "Accounts",
         "Inventory",
-        "Blogs",
-        "Front_desk",
-        "Forms"
+        "Front_desk"
     ],
     "gateways": {
         "payment": "pesapal",
