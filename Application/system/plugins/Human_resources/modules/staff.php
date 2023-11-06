@@ -98,6 +98,12 @@ if(isset($_FILES['staff_list'])){
     }
     die(json_encode(['message'=>$msg, 'status'=>$status]));
 }
+$whr = 1;
+$me = human_resources::get_staff();
+//var_dump($me);
+if($me['work_location'] == $moduleconfig->headquarters_branch) {
+    $whr = ['work_location'=>$moduleconfig->headquarters_branch];
+}
 $staff = $db->select('staff')
               ->join('user_accounts','user_id=user_reference')
               ->join('roles', 'system_role=role_id', 'left')
@@ -105,6 +111,7 @@ $staff = $db->select('staff')
               ->join('departments', 'department=dept_id', 'left')
               ->join('branches', 'work_location=branch_id', 'left')
               ->join('banks', 'bank=bank_id', 'left')
+              ->where($whr)
               ->order_by('staff_id', 'desc')
               ->fetchAll();
 $sortedStaff = [];

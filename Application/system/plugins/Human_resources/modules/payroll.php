@@ -22,13 +22,14 @@ if(isset($_POST['employee'])){
                 $ok  =  'success';
             }
             else $msg = $db->error()['message'];
+            var_dump($db->error()); 
          if(isset($_POST['ajax_request'])){
             die(json_encode(['status'=>$ok, 'message'=>$msg]));
            }
      }
   $payroll = $db->select('payroll')
               ->order_by('payroll_id', 'desc')->fetchAll();
-        var_dump($db->error());
+       
   $employee = $db->select('user')
                ->where(1)
                ->fetchAll();

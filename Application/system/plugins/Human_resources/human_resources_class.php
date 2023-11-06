@@ -1,8 +1,5 @@
 <?php
 class human_resources{
-    public $name = 'eTours';
-    public $version = 1.0;
-    public $desc = 'Plugin dedicated for complete tours management as a drop in';
 
     private static $instance = null;
     
@@ -28,8 +25,9 @@ class human_resources{
         return '<div class="content" style="min-width:95%">hr cards</div>';
     }
     public static function load_admin_dashboard($args){
-        $registry = storage::init();
         if(str_replace('-', '_', strtolower($args[0])) == __CLASS__) {
+            $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
+            $registry = storage::init();
             $myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";
             $_this = new static();
             $user = user::init()->get_session_user();
@@ -211,5 +209,17 @@ class human_resources{
             include __DIR__.'/modules/html/add_branch.html';
             return ob_get_clean();
         }        
+    }
+    public static function get_staff($index = null){
+        $config = storage::get_data('system_config')->db_configs;
+        $db = db::get_connection($config);
+        $me = $db->select('staff')
+                 ->where(['user_reference'=>user::init()->get_session_user('user_id')])
+                 ->limit(1)
+                 ->fetch();
+        var_dump(user::init()->get_session_user('user_id'), $me);
+        if(isset($me[$index])) return $me[$index];
+        else if($index == null) return $me;
+        else return null;
     }
 }
