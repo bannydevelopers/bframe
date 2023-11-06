@@ -56,6 +56,7 @@ class human_resources{
                     'status'=>addslashes( $_POST['status']),
                     'system_role'=>intval( $_POST['system_role'])
                 ];
+                
                 $staffdata = [
                     'bank'=>intval( @$_POST['bank']), 
                     'bank_account_number'=>addslashes( $_POST['bank_account_number']),
@@ -104,9 +105,14 @@ class human_resources{
                     return json_encode(['status'=>'error', 'message'=>json_encode($db->error())]);
             }
             ob_start();
+            $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
+            $mestaff = self::get_staff('work_location');
+            if($mestaff == $moduleconfig->headquarters_branch) $whr = 1;
+            else $whr = ['branch_id'=>$mestaff];
+
             $designations = $db->select('designations')->fetchAll();
             $departments = $db->select('departments')->fetchAll();
-            $branches = $db->select('branches')->fetchAll();
+            $branches = $db->select('branches')->where($whr)->fetchAll();
             $banks = $db->select('banks')->fetchAll();
             $roles = $db->select('roles')->fetchAll();
 
@@ -217,7 +223,7 @@ class human_resources{
                  ->where(['user_reference'=>user::init()->get_session_user('user_id')])
                  ->limit(1)
                  ->fetch();
-        var_dump(user::init()->get_session_user('user_id'), $me);
+        
         if(isset($me[$index])) return $me[$index];
         else if($index == null) return $me;
         else return null;

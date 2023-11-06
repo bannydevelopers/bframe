@@ -42,8 +42,8 @@
                 <td class="flex" style="display: flex;">
                     <input type="checkbox" name="staff_id[]" value="<?=$ssp['user_id']?>" style="max-width:13px">
                     <span>
-                        <p class="font-semibold"><?=ucwords($ssp['full_name'])?>
-                        </p>
+                        <sstrong><?=ucwords($ssp['full_name'])?></strong><br>
+                        <em><?=$ssp['branch_name']?></em>
                     </span>
                 </td>
                 <td class="content">
@@ -127,10 +127,10 @@
     }
 </style>
 <script>
-    const edit_slips = ()=>{
+    const edit_salary_slip = ()=>{
         let elem = window.event.target.parentNode.parentNode,
             img = elem.querySelector('img');
-            htz = document.querySelector('template').content.children[1].cloneNode(true);
+            htz = document.querySelector('template').content.children[0].cloneNode(true);
         let hin = document.createElement('input');
         hin.type = 'hidden';
         hin.name = 'user_id';
@@ -140,8 +140,15 @@
             selec = htz.querySelectorAll('select'),
             tarea = htz.querySelectorAll('textarea');
         [...inpts, ...selec].forEach(elem=>{
-            if(elem.type == 'date' && jsx[elem.name]) jsx[elem.name] = [...jsx[elem.name.trim()]].splice(0,10).join('');
-            if(jsx[elem.name]) elem.value = jsx[elem.name];
+            if(elem.type == 'date' && jsx[elem.name]) 
+                jsx[elem.name] = [...jsx[elem.name.trim()]].splice(0,10).join('');
+            if(jsx[elem.name]) 
+                elem.value = jsx[elem.name];
+            if(elem.name == 'employee') {
+                [...elem.children].forEach(opt=>{
+                    if(opt.value != jsx[elem.name]) opt.setAttribute('disabled', true);
+                });
+            }
         });
         [...tarea].forEach(elem=>{
             if(jsx[elem.name]) elem.innerHTML = jsx[elem.name];
@@ -149,23 +156,24 @@
         //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
             html: htz,
-            customClass: 'mySwalForm',
+            customClass: 'mySwalSmallForm',
             showConfirmButton: false
         });
-        let form = document.querySelector('.mySwalForm form');
+        let form = document.querySelector('.mySwalSmallForm form');
         if(form != null){
             form.addEventListener(
                 'submit',
                 evt=>{
                     evt.preventDefault();
                     let fd = new FormData(form);
-                    request_service(
-                        'add_slips',
-                        response => {
-                            console.log(response);
-                            let res_json = JSON.parse(response);
-                            if(res_json){
-                                let jsx = JSON.parse(res_json.response);
+                    fd.append('slip_id', jsx.slip_id);
+                    fd.append('ajax_request', 1);
+                    ajax(
+                        window.location.href,
+                        response=>{
+                            let jsx = JSON.parse(response);
+                            if(jsx){
+                                //let jsx = JSON.parse(res_json.response);
                                 Swal.fire({
                                     title: jsx.message,
                                     icon: jsx.status
@@ -182,19 +190,22 @@
                                 });
                             }
                         },
+                        error=>{
+                            console.log(error);
+                        },
                         fd
                     );
                 }
             );
         }
     };
-    const delete_slips = ()=>{
+    const delete_salary_slip = ()=>{
         let elem = window.event.target.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let name = jsx.full_name,
             uid = jsx.user_id;
         Swal.fire({
-            title: `Delete ${name}?`,
+            title: `Delete ${name}'s slip?`,
             showCancelButton: true,
             confirmButtonText:'Sure, delete',
             html:"No UNDO remember!"
@@ -202,24 +213,21 @@
         .then(response=>{
         if(response.isConfirmed){
             let userdata = new FormData();
-            userdata.append('delete_slips', uid);
-            userdata.append('ajax',1);
+            userdata.append('delete_slip', uid);
+            userdata.append('ajax_request', 1);
             ajax(
             window.location.href, 
             response=>{
-                let res_json = JSON.parse(response);
                 //console.log(response);
-                if(res_json){
-                    let jsx = res_json.response;
+                let jsx = JSON.parse(response);
+                if(jsx){
                     Swal.fire({
                         title: jsx.message,
                         icon: jsx.status
                     })
                     .then(e=>{
                         if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             createPageButtons(); // create the page buttons initially
-                            showPage(currentPage);
+                             window.location.reload();
                         }
                     });
                 }
@@ -250,7 +258,8 @@
         let opts = {
             title: 'Add slip',
             html:cform,
-            customClass:'mySwalSmallForm'
+            customClass:'mySwalSmallForm',
+            showConfirmButton: false
         }
         Swal.fire(opts);
         let frm = document.querySelector('.mySwalSmallForm form');
@@ -261,8 +270,13 @@
             ajax(
                 window.location.href,
                 success=>{
+                    let jsx = JSON.parse(success);
                     Swal.fire({
-                        html:success
+                        html:jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(val=>{
+                        window.location.reload();
                     });
                 },
                 error=>{

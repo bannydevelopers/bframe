@@ -71,7 +71,7 @@
                     <?php foreach($branches as $branch){?>
                     <option value="<?=$branch['branch_id']?>"><?=$branch['branch_name']?></option>
                     <?php }?>
-                    <option value="add">Add branch</option>
+                    <?php if($whr == 1){?><option value="add">Add branch</option><?php }?>
                 </select>
                 <div class="flex">
                     <div>
