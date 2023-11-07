@@ -201,9 +201,9 @@
     };
     const delete_salary_slip = ()=>{
         let elem = window.event.target.parentNode.parentNode;
-        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        let jsx = JSON.parse(elem.getAttribute('data-json'));console.log(jsx);
         let name = jsx.full_name,
-            uid = jsx.user_id;
+            uid = jsx.slip_id;
         Swal.fire({
             title: `Delete ${name}'s slip?`,
             showCancelButton: true,
