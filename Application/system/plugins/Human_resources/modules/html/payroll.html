@@ -13,7 +13,7 @@
             <div class="content-small"><?=system::format_time($pay['create_date'])?></div>
             <div style="text-align: right;" class="content-small">
                 <a onclick="view_roll()" data-json='<?=$pay['payment_slips']?>' data-icon="&#xf06e;"></a>
-                <a onclick="delete_roll(`<?=$pay['payroll_id']?>`)" data-icon="&#xf1f8;"></a>
+                <a onclick="delete_payroll(`<?=$pay['payroll_id']?>`,`<?=$pay['payroll_name']?>`)" data-icon="&#xf1f8;"></a>
             </div>
         </div>
     </div>
@@ -22,6 +22,44 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <?php include __DIR__.'/add_payroll.html';?>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Employee
+                </th>
+                <th>
+                    Basic salary
+                </th>
+                <th>
+                    Allowance
+                </th>
+                <th>
+                    Bonus
+                </th>
+                <th>
+                    Gross salary
+                </th>
+                <th>
+                    Deductions
+                </th>
+                <th>
+                    Net salary
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{full_name}}</td>
+                <td>{{basic_salary}}</td>
+                <td>{{allowance}}</td>
+                <td>{{bonus}}</td>
+                <td>{{gross_sallary}}</td>
+                <td>{{deduction}}</td>
+                <td>{{net_salary}}</td>
+            </tr>
+        </tbody>
+    </table>
 </template>
 <style>
   .mySwalForm{
@@ -131,62 +169,52 @@
           );
       }
   };
-  const delete_payroll = ()=>{
-      let elem = window.event.target.parentNode.parentNode;
-      let jsx = JSON.parse(elem.getAttribute('data-json'));
-      let name = jsx.full_name,
-          uid = jsx.user_id;
+  const delete_payroll = (uid, fname)=>{
       Swal.fire({
-          title: `Delete ${name}?`,
+          title: `Delete ${fname}?`,
           showCancelButton: true,
           confirmButtonText:'Sure, delete',
           html:"No UNDO remember!"
       })
       .then(response=>{
-      if(response.isConfirmed){
-          let userdata = new FormData();
-          userdata.append('delete_payroll', uid);
-          userdata.append('ajax',1);
-          ajax(
-          window.location.href, 
-          response=>{
-              let res_json = JSON.parse(response);
-              //console.log(response);
-              if(res_json){
-                  let jsx = res_json.response;
-                  Swal.fire({
-                      title: jsx.message,
-                      icon: jsx.status
-                  })
-                  .then(e=>{
-                      if(jsx.status == 'success'){
-                           elem.parentNode.removeChild(elem);
-                           createPageButtons(); // create the page buttons initially
-                          showPage(currentPage);
-                      }
-                  });
-              }
-              else {
-                  Swal.fire({
-                      title: 'Malformed response returned',
-                      icon: 'error',
-                      html:response
-                  });
-              }
-          },
-          error=>{
-              console.log(error);
-          },
-          userdata
-          );
-      }
-      else{
-          Swal.fire({
-          title: "Cancel Deletion",
-          icon:"error"
-          })
-      }
-      });
+        if(response.isConfirmed){
+            let userdata = new FormData();
+            userdata.append('delete_payroll', uid);
+            userdata.append('ajax_request',1);
+            ajax(
+            window.location.href, 
+            response=>{
+                let jsx = JSON.parse(response);
+                if(jsx){
+                    Swal.fire({
+                        title: jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(e=>{
+                        window.location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Malformed response returned',
+                        icon: 'error',
+                        html:response
+                    });
+                }
+            },
+            error=>{
+                console.log(error);
+            },
+            userdata
+            );
+        }
+        else{
+            Swal.fire({
+            title: "Cancel Deletion",
+            icon:"error"
+            })
+        }
+        });
   }
   const create_payroll = ()=>{
       let cform = document.querySelector('template').content.children[0].cloneNode(true);
@@ -206,6 +234,9 @@
               success=>{
                   Swal.fire({
                       html:success
+                  })
+                  .then(val=>{
+                    window.location.reload();
                   });
               },
               error=>{
@@ -214,5 +245,27 @@
               fd
           );
       });
+    }
+    const view_roll = ()=>{
+        let elem = window.event.target;
+        let slips = JSON.parse(elem.getAttribute('data-json')),
+            sform = document.querySelector('template').content.children[1].cloneNode(true);
+        let tr = sform.querySelector('tbody'),
+            tmp = '';
+        [...slips].forEach(item=>{
+            console.log(item);
+            item.gross_sallary = parseInt(item.allowance) + parseInt(item.bonus) + parseInt(item.basic_salary);
+            item.deduction = item.other_deduction + item.payee + item.education_fund + item.health_insurance_fund + item.worker_compasion_fund + item.social_security_fund;
+            item.net_salary = item.gross_sallary - item.deduction;
+            let trx = tr.cloneNode(true);
+            tmp += trx.innerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
+        });
+        tr.innerHTML = tmp;
+        Swal.fire({
+            title: elem.parentNode.parentNode.previousElementSibling.innerText,
+            html: sform,
+            customClass:'mySwalForm'
+        });
+        
     }
 </script>

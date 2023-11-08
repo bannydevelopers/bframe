@@ -272,7 +272,7 @@
                 success=>{
                     let jsx = JSON.parse(success);
                     Swal.fire({
-                        html:jsx.message,
+                        title:jsx.message,
                         icon: jsx.status
                     })
                     .then(val=>{
