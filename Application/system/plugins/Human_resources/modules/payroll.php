@@ -23,7 +23,7 @@
                 $ok  =  'success';
             }
             else $msg = $db->error()['message'];
-            var_dump($db->error()); 
+            //var_dump($db->error()); 
             if(isset($_POST['ajax_request'])){
             die(json_encode(['status'=>$ok, 'message'=>$msg]));
             }
@@ -45,20 +45,26 @@
             $whr = 1;
         }
         else{
-            $whr = ['work_location'=>$me['work_location']];
+            $whr = ['owner_branch'=>$me['work_location']];
         }
         $payroll = $db->select('payroll', 'payroll.*')
                     ->join('staff','created_by=user_reference')
                     ->where($whr)
                     ->order_by('payroll_id', 'desc')->fetchAll();
 
-        $employee = $db->select('user')
-                    ->where(1)
-                    ->fetchAll();
-
+        if($me['work_location'] == $moduleconfig->headquarters_branch) {
+            $whr = 1;
+        }
+        else{
+            $whr = ['work_location'=>$me['work_location']];
+        }
         $slips = $db->select('salary_slip')
-                    ->join('user_accounts','salary_slip.employee=user_accounts.user_id')
-                    ->order_by('slip_id', 'desc')->fetchAll();
+                ->join('user_accounts','user_id=employee')
+                ->join('staff','user_id=user_reference')
+                ->join('branches', 'work_location=branch_id', 'left')
+                ->where($whr)
+                ->order_by('branch_id, slip_id', 'desc')->fetchAll();
+
         //var_dump($db->error(), $slips);
         ob_start();
         include __DIR__.'/html/payroll.html';

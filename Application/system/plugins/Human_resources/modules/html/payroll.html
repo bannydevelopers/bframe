@@ -221,7 +221,8 @@
       let opts = {
           title: 'Add payroll',
           html:cform,
-          customClass:'mySwalForm'
+          customClass:'mySwalForm',
+          showConfirmButton: false
       }
       Swal.fire(opts);
       let frm = document.querySelector('.mySwalForm form');
@@ -232,12 +233,21 @@
           ajax(
               window.location.href,
               success=>{
+                let jsx = JSON.parse(success);
+                if(jsx){
                   Swal.fire({
-                      html:success
+                      title:jsx.message,
+                      icon:jsx.status
                   })
                   .then(val=>{
                     window.location.reload();
                   });
+                }
+                else{
+                    Swal.fire({
+                        html: success
+                    });
+                }
               },
               error=>{
                   console.log(error);
