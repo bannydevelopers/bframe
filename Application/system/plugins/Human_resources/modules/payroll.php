@@ -12,6 +12,7 @@
                         ->order_by('slip_id', 'desc')->fetchAll();
             $addData = [  
                 'payment_slips'=>json_encode($slips), 
+                'owner_branch'=>$me['work_location'],
                 'created_by'=>user::init()->get_session_user('user_id'),
                 'payroll_name'=>"{$_POST['payroll_month']}, {$_POST['payroll_year']}", 
             ];
