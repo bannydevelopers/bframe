@@ -2,7 +2,7 @@
     <h1 class="content-small no-pad-top">Product</h1>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
         <button onclick="import_staff()" class="round">Import product</button>
-        <button onclick="add_form('product')" value="add" data-form-width="wide" class="round">Add product</button>
+        <button onclick="add_product()" data-form-width="wide" class="round">Add product</button>
     </div>
 </div>
 <br>
@@ -13,107 +13,38 @@
         <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedProduct as $product){?>
-            <div class="white content-small">
-                <table class="paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th>
-                                <input type="checkbox" onclick="upadte_checks()">
-                                Product name
-                            </th>
-                            <th>
-                                Product descriptions
-                            </th>
-                            <th>
-                                Units
-                            </th>
-                            <th>
-                                &nbsp;
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <?php foreach($sortedProducts as $products){?>
+            <div class="collapsible">
+                <?php foreach($products as $category=>$product){?>
+                <div>
+                    <h3 class="grey content"><?=$category?></h3>
+                    <div class="flex cards">
                         <?php foreach($product as $pro){?>
-                        <tr data-json='<?=json_encode($pro)?>'>
-                            <td>
-                                <?=$pro['product_name']?><br>
-                            </td>
-                            <td>
-                                <b><?=$pro['product_description']?></b><br>
-                            </td>
-                            <td>
-                                <b><?=$pro['product_unit']?></b><br>
-                            </td>
-                            <td>
-                                <a onclick="view_product()" data-icon="&#xf06e;"></a>
+                        <div class="content-small rounded">
+                            <div class="content-small"><strong><?=$pro['product_name']?></strong></div>
+                            <div class="content-small" style="display: flex;">
+                                <em style="flex-basis: 100%;padding: 0 8px;"><?=$pro['product_description']?></em>
+                                <span style="flex-basis: auto;">
+                                    <img src="<?=$pro['product_image']?>" alt="img" width="120">
+                                </span>
+                            </div>
+                            <div class="content-small" style="text-align: right;">
                                 <a onclick="edit_product()" data-icon="&#xf044;"></a>
                                 <a onclick="delete_product()" data-icon="&#xf2ed;"></a>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
                         <?php }?>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+                <?php }?>
             </div>
-            <?php }?>
+        <?php }?>
         </div>
     </div>
 </div>
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
-    <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
-            <div class="card" style="box-shadow: none;">
-                <img src="{{img}}" width="100%">
-            </div>
-            <div class="content-small">
-                <h3 style="padding-bottom: .6em;" class="large-text">{{full_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{email}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{phone}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Regstration #: </span>{{registration_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Employed: </span>{{date_employed}}</div>
-            </div>
-        </div>
-        <div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Residence address</span>
-                    <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
-                </div>
-                <div>
-                    <div class="content-small">
-                        <span style="color: rgb(35, 57, 136);">Designation: </span><br>
-                        {{designation_name}}
-                    </div>
-                    <div class="content-small">
-                        <span style="color: rgb(35, 57, 136);">Role: </span><br>
-                        {{role_name}}
-                    </div>
-                </div>
-            </div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Work location: </span><br>
-                    {{branch_name}}
-                </div>
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Department: </span><br>
-                    {{dept_name}}
-                </div>
-            </div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Bank: </span><br>
-                    {{bank_name}}
-                </div>
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Account #: </span><br>
-                    {{bank_account_number}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php include __DIR__.'/add_staff.html';?>
+    <?php include __DIR__.'/add_product.html';?>
     <form method="post" enctype="multipart/form-data">
         <label>CSV file</label>
         <input type="file" name="staff_list" accept=".csv" required>
@@ -169,82 +100,13 @@
     }
 </style>
 <script>
-    function add_form(name){
-        let main_evt = window.event;
-        main_evt.preventDefault();
-        if(main_evt.target.value == 'add'){
-            let wide = main_evt.target.getAttribute('data-form-width');
-            let customClass = (wide == 'wide') ? 'mySwalForm' : 'mySwalSmallForm';
-            request_service(
-                `add_${name}`,
-                response => {
-                    if(response != ''){
-                        let resp = JSON.parse(response);
-                        Swal.fire({
-                            html:resp.response[0],
-                            showConfirmButton:false,
-                            customClass: customClass
-                        });
-                    }
-                    else{
-                        Swal.fire({
-                            html:'Service not available',
-                            icon:'info'
-                        });
-                    }
-                    let form = document.querySelector(`.${customClass} form`);
-                    if(form != null){
-                        form.addEventListener(
-                            'submit',
-                            evt=>{
-                                evt.preventDefault();
-                                let fd = new FormData(form);
-                                request_service(
-                                    `add_${name}`,
-                                    response => {
-                                        console.log(response);
-                                        let res_json = JSON.parse(response);
-                                        if(res_json){
-                                            let jsx = JSON.parse(res_json.response);
-                                            Swal.fire({
-                                                title: jsx.message,
-                                                icon: jsx.status
-                                            })
-                                            .then(e=>{
-                                                window.location.reload();
-                                            });
-                                        }
-                                        else {
-                                            Swal.fire({
-                                                title: 'Malformed response returned',
-                                                icon: 'error',
-                                                html:response
-                                            });
-                                        }
-                                    },
-                                    fd
-                                );
-                            }
-                        );
-                    }
-                }
-            );
-        }
-        else return true;
-    }
-    const view_staff = ()=>{
-        let elem = window.event.target.parentNode.parentNode,
-            img = elem.querySelector('img');
-            htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
-        let jsx = JSON.parse(elem.getAttribute('data-json'));
-        console.log(jsx);
-        //console.log(elem.getAttribute('data-json'));
-        htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
-        htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
+    const add_product = ()=>{
+        let tpl = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
-            html: htz
+            html:tpl,
+            customClass: 'mySwalSmallForm'
         });
-    };
+    }
     const edit_staff = ()=>{
         let elem = window.event.target.parentNode.parentNode,
             img = elem.querySelector('img');
