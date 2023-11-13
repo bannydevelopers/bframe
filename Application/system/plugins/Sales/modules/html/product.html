@@ -25,7 +25,7 @@
                             <div class="content-small" style="display: flex;">
                                 <em style="flex-basis: 100%;padding: 0 8px;"><?=$pro['product_description']?></em>
                                 <span style="flex-basis: auto;">
-                                    <img src="<?=$pro['product_image']?>" alt="img" width="120">
+                                    <img src="<?=$pro['product_image']?>" alt="img" width="60">
                                 </span>
                             </div>
                             <div class="content-small" style="text-align: right;">
@@ -105,127 +105,44 @@
         Swal.fire({
             title: 'Add product',
             html:tpl,
-            customClass: 'mySwalSmallForm'
-        });
-    }
-    const edit_staff = ()=>{
-        let elem = window.event.target.parentNode.parentNode,
-            img = elem.querySelector('img');
-            htz = document.querySelector('template').content.children[1].cloneNode(true);
-        let hin = document.createElement('input');
-        hin.type = 'hidden';
-        hin.name = 'user_id';
-        htz.firstElementChild.firstElementChild.appendChild(hin);
-        let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let inpts = htz.querySelectorAll('input'),
-            selec = htz.querySelectorAll('select'),
-            tarea = htz.querySelectorAll('textarea');
-        [...inpts, ...selec].forEach(elem=>{
-            if(elem.type == 'date' && jsx[elem.name]) jsx[elem.name] = [...jsx[elem.name.trim()]].splice(0,10).join('');
-            if(jsx[elem.name]) elem.value = jsx[elem.name];
-        });
-        [...tarea].forEach(elem=>{
-            if(jsx[elem.name]) elem.innerHTML = jsx[elem.name];
-        });
-        //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
-        Swal.fire({
-            html: htz,
-            customClass: 'mySwalForm',
+            customClass: 'mySwalSmallForm',
             showConfirmButton: false
         });
-        let form = document.querySelector('.mySwalForm form');
-        if(form != null){
-            form.addEventListener(
-                'submit',
-                evt=>{
-                    evt.preventDefault();
-                    let fd = new FormData(form);
-                    request_service(
-                        'add_staff',
-                        response => {
-                            console.log(response);
-                            let res_json = JSON.parse(response);
-                            if(res_json){
-                                let jsx = JSON.parse(res_json.response);
-                                Swal.fire({
-                                    title: jsx.message,
-                                    icon: jsx.status
-                                })
-                                .then(e=>{
-                                    window.location.reload();
-                                });
-                            }
-                            else {
-                                Swal.fire({
-                                    title: 'Malformed response returned',
-                                    icon: 'error',
-                                    html:response
-                                });
-                            }
-                        },
-                        fd
-                    );
-                }
-            );
-        }
-    };
-    const delete_staff = ()=>{
-        let elem = window.event.target.parentNode.parentNode;
-        let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
-        Swal.fire({
-            title: `Delete ${name}?`,
-            showCancelButton: true,
-            confirmButtonText:'Sure, delete',
-            html:"No UNDO remember!"
-        })
-        .then(response=>{
-        if(response.isConfirmed){
-            let userdata = new FormData();
-            userdata.append('delete_staff', uid);
-            userdata.append('ajax',1);
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let frm = new FormData(evt.target);
+            frm.append('ajax_request', 1);
             ajax(
-            window.location.href, 
-            response=>{
-                let res_json = JSON.parse(response);
-                //console.log(response);
-                if(res_json){
-                    let jsx = res_json.response;
-                    Swal.fire({
-                        title: jsx.message,
-                        icon: jsx.status
-                    })
-                    .then(e=>{
-                        if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             createPageButtons(); // create the page buttons initially
-                            showPage(currentPage);
-                        }
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: 'Malformed response returned',
-                        icon: 'error',
-                        html:response
-                    });
-                }
-            },
-            error=>{
-                console.log(error);
-            },
-            userdata
+                window.location.href,
+                response=>{
+                    //console.log(response);
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title:jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(val=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            title:response,
+                            icon: 'info'
+                        })
+                        .then(val=>{
+                            window.location.reload();
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                frm
             );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
-        }
         });
-    }
+    };
     const import_staff = ()=>{
         let htz = document.querySelector('template').content.children[2].cloneNode(true);
         Swal.fire({
@@ -274,5 +191,8 @@
                 }
             );
         }
-    }
+    };
+    const check_selection = ()=>{
+
+    };
 </script>

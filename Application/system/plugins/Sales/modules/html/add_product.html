@@ -1,32 +1,32 @@
-<div class="flex-container">
-    <form method="post" enctype="multipart/form-data">
-        <div class="white content">
-            <label for="product_name">Product name</label>
-            <input type="text" id="product_name" name="product_name" placeholder="...name" required />
-            <div class="flex">
-                <div>
-                    <label for="product_image">Product Image</label>
-                    <input  type="file" name="product_image" accept=".jpg, .jpeg, .png, .gif" id="product_image">
-                </div>
-                <div>
-                    <label for="product_category">Select category</label>
-                    <select name="product_category" id="product_category" onchange="check_selection('product_category')">
-                        <option value="">Choose...</option>
-                        <?php foreach($productCategory as $cat){?>
-                        <option value="<?=$cat['category_id']?>"><?=$cat['category_name']?></option>
-                        <?php }?>
-                        <option value="">Add category</option>
-                    </select>
-                </div>
+<form method="post" enctype="multipart/form-data">
+    <div class="white content">
+        <label for="product_name">Product name</label>
+        <input type="text" id="product_name" name="product_name" placeholder="...name" required />
+        <div class="flex">
+            <div>
+                <label for="product_image">Product Image</label>
+                <input  type="file" name="product_image" accept=".jpg, .jpeg, .png, .gif" id="product_image">
             </div>
-            <label for="product_description">Product description</label>
-            <textarea id="product_description" name="product_description" placeholder="..clarification of product" rows="4"></textarea>
-            <label for="product_unit">Units</label>
-            <div class="flex">
-                <input type="text" name="product_unit_singular" placeholder="Singular..." required />
-                <input type="text" name="product_unit_plural" placeholder="Plural..." required />
+            <div>
+                <label for="product_category">Select category</label>
+                <select name="product_category" id="product_category" onchange="check_selection('product_category')">
+                    <option value="">Choose...</option>
+                    <?php foreach($productCategory as $cat){?>
+                    <option value="<?=$cat['category_id']?>"><?=$cat['category_name']?></option>
+                    <?php }?>
+                    <option value="">Add category</option>
+                </select>
             </div>
-            
         </div>
-    </form>
-</div>
+        <label for="product_description">Product description</label>
+        <textarea id="product_description" name="product_description" placeholder="..clarification of product" rows="4"></textarea>
+        <label for="product_unit">Units</label>
+        <div class="flex">
+            <input type="text" name="product_unit_singular" placeholder="Singular..." required />
+            <input type="text" name="product_unit_plural" placeholder="Plural..." required />
+        </div>
+        <div style="text-align: right;">
+            <button type="submit">Save</button>
+        </div>
+    </div>
+</form>

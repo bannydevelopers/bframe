@@ -4,12 +4,38 @@ if($me){
     $hq = human_resources::get_headquarters_branch();
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
+    $status = 'error';
+    if(isset($_POST['product_name'])){
+        $data = [
+            'product_name'=>addslashes($_POST['product_name']),
+            'product_category'=>intval($_POST['product_category']),
+            'product_description'=>addslashes($_POST['product_description']),
+            'product_unit_singular'=>addslashes($_POST['product_unit_singular']),
+            'product_unit_plural'=>addslashes($_POST['product_unit_plural']),
+            'owner_branch'=>intval($me['work_location'])
+        ];
+        if(isset($_POST['product_id'])){
+            $k = intval($_POST['product_id']);
+            $db->update('product', $data)->where(['product_id'=>$k])->commit();
+        }
+        else{
+            $k = $db->insert('product', $data);
+        }
+        if(!$db->error() && $k) {
+            $msg = 'Saved successful';
+            $status = 'success';
+        }
+        else{
+            $msg = $db->error()['message'];
+        }
+        if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
+    }
     $productCategory = $db->select('product_category', 'category_id, category_name')
                         ->where(1)
                         ->fetchAll();
 
     if($me['work_location'] == $hq) $whr = 1;
-    else $whr = ['work_location'=>$me['work_location']];
+    else $whr = ['owner_branch'=>$me['work_location']];
 
     $columns = "product.*, IFNULL(category_name, 'General') as category_name, IFNULL(branch_name, 'Headquarters') as branch_name";
     $Products = $db->select('product', $columns)
@@ -17,7 +43,7 @@ if($me){
                         ->join('branches', 'branch_id=owner_branch', 'LEFT')
                         ->where($whr)
                         ->fetchAll();
-    
+
     $pic_root = 'Application/storage/uploads/products/product_thumb_';
     $sortedProducts = [];
     foreach($Products as $prod){
