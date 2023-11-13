@@ -18,19 +18,19 @@
                 <?php foreach($products as $category=>$product){?>
                 <div>
                     <h3 class="grey content"><?=$category?></h3>
-                    <div class="flex cards">
+                    <div class="flex cards card-4">
                         <?php foreach($product as $pro){?>
                         <div class="content-small rounded">
-                            <div class="content-small"><strong><?=$pro['product_name']?></strong></div>
                             <div class="content-small" style="display: flex;">
-                                <em style="flex-basis: 100%;padding: 0 8px;"><?=$pro['product_description']?></em>
+                                <div>
+                                    <div class="content-small"><strong><?=$pro['product_name']?></strong></div>
+                                    <em style="flex-basis: 100%;padding: 0 8px;"><?=$pro['product_description']?></em>
+                                </div>
                                 <span style="flex-basis: auto;">
-                                    <img src="<?=$pro['product_image']?>" alt="img" width="120">
+                                    <img src="<?=$pro['product_image']?>" alt="img" width="60"><br>
+                                    <a onclick="edit_product()" data-icon="&#xf044;"></a>
+                                    <a onclick="delete_product()" data-icon="&#xf2ed;"></a>
                                 </span>
-                            </div>
-                            <div class="content-small" style="text-align: right;">
-                                <a onclick="edit_product()" data-icon="&#xf044;"></a>
-                                <a onclick="delete_product()" data-icon="&#xf2ed;"></a>
                             </div>
                         </div>
                         <?php }?>
@@ -64,6 +64,12 @@
     }
     .mySwalSmallForm label{
         padding-left: 0;
+    }
+    @media screen and (min-width:1024px) {
+        .card-4 > *{
+            max-width: 23%;
+            margin: 1%;
+        }
     }
 </style>
 <style>
