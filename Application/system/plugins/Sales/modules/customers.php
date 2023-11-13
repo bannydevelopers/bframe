@@ -1,4 +1,8 @@
 <?php 
+$me = human_resources::get_staff();
+if($me){
+    $config = storage::get_data('system_config')->db_configs;
+    $db = db::get_connection($config);
     if(isset($_POST['delete_customer'])){
         $db->delete('customer')->where(['user_reference'=>intval($_POST['delete_customer'])])->commit();
         if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_customer'])])->commit();
@@ -62,18 +66,14 @@
         die(json_encode(['message'=>$msg, 'status'=>$status]));
     }
     //var_dump($me);
-    if($me['work_location'] == $moduleconfig->headquarters_branch) {
-        $whr = 1;
-    }
-    else{
-        $whr = ['work_location'=>$me['work_location']];
-    }
+    $customer = [];
     $sortedCustomer = [];
     foreach($customer as $st){
         if(!isset($sortedCustomer[$st['designation_name']])) $sortedCustomer[$st['designation_name']] = [];
         $sortedCustomer[$st['designation_name']][] = $st;
     }
     $body = '';
-    include __DIR__.'/html/customers.html';
+    include __DIR__.'/html/customer.html';
     $body = ob_get_clean();
     $return = ['title'=>' ','body'=>$body];
+}

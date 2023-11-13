@@ -38,9 +38,6 @@
                                 Address
                             </th>
                             <th>
-                                DATE REGISTERED
-                            </th>
-                            <th>
                                 &nbsp;
                             </th>
                         </tr>
@@ -54,20 +51,12 @@
                                     <img src="<?=user::init()->get_user_avatar($st['user_id'])?>" width="100%" style="border-radius: 4em;">
                                 </span>
                                 <span>
-                                    &nbsp;<?=$st['full_name']?><br>
-                                    &nbsp;<em><?=$st['branch_name']?></em>
+                                    &nbsp;<?=$st['full_name']?>
                                 </span>
                             </td>
                             <td>
                                 <?=$st['email']?><br>
                                 <?=$st['phone']?>
-                            </td>
-                            <td>
-                                <b><?=$st['role_name']?></b><br>
-                                <em><?=$st['designation_name']?></em>
-                            </td>
-                            <td>
-                                <?=$st['dept_name']?>
                             </td>
                             <td>
                                 <a onclick="view_customer()" data-icon="&#xf06e;"></a>
@@ -87,15 +76,12 @@
 <template>
     <div class="vspaced" style="text-align: left;">
         <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
-            <div class="card" style="box-shadow: none;">
-                <img src="{{img}}" width="100%">
-            </div>
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{full_name}}</h3>
                 <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{email}}</div>
                 <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{phone}}</div>
                 <div><span style="color: rgb(35, 57, 136);">Regstration #: </span>{{registration_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Employed: </span>{{date_employed}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Created date: </span>{{date_employed}}</div>
             </div>
         </div>
         <div>
@@ -103,36 +89,6 @@
                 <div class="content-small">
                     <span style="color: rgb(35, 57, 136);">Residence address</span>
                     <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
-                </div>
-                <div>
-                    <div class="content-small">
-                        <span style="color: rgb(35, 57, 136);">Designation: </span><br>
-                        {{designation_name}}
-                    </div>
-                    <div class="content-small">
-                        <span style="color: rgb(35, 57, 136);">Role: </span><br>
-                        {{role_name}}
-                    </div>
-                </div>
-            </div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Work location: </span><br>
-                    {{branch_name}}
-                </div>
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Department: </span><br>
-                    {{dept_name}}
-                </div>
-            </div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Bank: </span><br>
-                    {{bank_name}}
-                </div>
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Account #: </span><br>
-                    {{bank_account_number}}
                 </div>
             </div>
         </div>
@@ -193,7 +149,8 @@
     }
 </style>
 <script>
-    function add_form(name){
+    function add_form(name) {
+    console.log('add_form function called');
         let main_evt = window.event;
         main_evt.preventDefault();
         if(main_evt.target.value == 'add'){
