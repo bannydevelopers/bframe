@@ -73,6 +73,7 @@ if($me){
         $sortedCustomer[$st['designation_name']][] = $st;
     }
     $body = '';
+    ob_start();
     include __DIR__.'/html/customer.html';
     $body = ob_get_clean();
     $return = ['title'=>' ','body'=>$body];

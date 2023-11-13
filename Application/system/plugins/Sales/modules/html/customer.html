@@ -2,7 +2,7 @@
     <h1 class="content-small no-pad-top">Customer</h1>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
         <button onclick="import_customer()" class="round">Import customer</button>
-        <button onclick="add_form('customer')" value="add" data-form-width="wide" class="round">Register customer</button>
+        <button onclick="add_customer()" value="add" data-form-width="wide" class="round">Register customer</button>
     </div>
 </div>
 <br>
@@ -149,69 +149,14 @@
     }
 </style>
 <script>
-    function add_form(name) {
-    console.log('add_form function called');
-        let main_evt = window.event;
-        main_evt.preventDefault();
-        if(main_evt.target.value == 'add'){
-            let wide = main_evt.target.getAttribute('data-form-width');
-            let customClass = (wide == 'wide') ? 'mySwalForm' : 'mySwalSmallForm';
-            request_service(
-                `add_${name}`,
-                response => {
-                    if(response != ''){
-                        let resp = JSON.parse(response);
-                        Swal.fire({
-                            html:resp.response[0],
-                            showConfirmButton:false,
-                            customClass: customClass
-                        });
-                    }
-                    else{
-                        Swal.fire({
-                            html:'Service not available',
-                            icon:'info'
-                        });
-                    }
-                    let form = document.querySelector(`.${customClass} form`);
-                    if(form != null){
-                        form.addEventListener(
-                            'submit',
-                            evt=>{
-                                evt.preventDefault();
-                                let fd = new FormData(form);
-                                request_service(
-                                    `add_${name}`,
-                                    response => {
-                                        console.log(response);
-                                        let res_json = JSON.parse(response);
-                                        if(res_json){
-                                            let jsx = JSON.parse(res_json.response);
-                                            Swal.fire({
-                                                title: jsx.message,
-                                                icon: jsx.status
-                                            })
-                                            .then(e=>{
-                                                window.location.reload();
-                                            });
-                                        }
-                                        else {
-                                            Swal.fire({
-                                                title: 'Malformed response returned',
-                                                icon: 'error',
-                                                html:response
-                                            });
-                                        }
-                                    },
-                                    fd
-                                );
-                            }
-                        );
-                    }
-                }
-            );
-        }
-        else return true;
+    function add_customer() {
+        let formx = document.querySelector('template').content.cloneNode(true).children[1];
+        Swal.fire({
+            title: 'Add customer',
+            html: formx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false
+        });
     }
     const view_customer = ()=>{
         let elem = window.event.target.parentNode.parentNode,

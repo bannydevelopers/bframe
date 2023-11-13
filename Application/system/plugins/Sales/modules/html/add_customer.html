@@ -1,18 +1,32 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="flex">
-        <div class="contentx">
-            <div class="white content">
-                <label for="full_name">Full name</label>
-                <input type="text" id="full_name" name="full_name" value="" required />
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" value="" required />
-                <label for="Phone">Phone</label>
-                <input type="tel" id="phone" name="phone" value="" minlength="10" maxlength="14" required />
-                <div class="flex">
-                    <div>
-                        <label for="residence_address">Residence address</label>
-                        <textarea id="residence_address" name="residence_address" rows="7"></textarea>
-                    </div>
+    <div class="content-small">
+        <div class="white">
+            <label for="full_name">Full name</label>
+            <input type="text" id="full_name" name="full_name" value="" required />
+            <div class="flex">
+                <div>
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" value="" required />
+                </div>
+                <div>
+                    <label for="Phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" value="" minlength="10" maxlength="14" required />
+                </div>
+            </div>    
+            <div class="flex">
+                <div>
+                    <label for="tin">TIN</label>
+                    <input type="text" id="tin" name="tin" value="" required />
+                </div>
+                <div>
+                    <label for="tin">VRN</label>
+                    <input type="text" id="vrn" name="vrn" value="" minlength="10" maxlength="14" required />
+                </div>
+            </div>          
+            <div class="flex">
+                <div>
+                    <label for="residence_address">Residence address</label>
+                    <textarea id="residence_address" name="residence_address" rows="5"></textarea>
                 </div>
             </div>
         </div>
