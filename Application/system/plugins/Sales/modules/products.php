@@ -1,24 +1,29 @@
 <?php 
 $me = human_resources::get_staff();
 if($me){
+    $hq = human_resources::get_headquarters_branch();
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
     $productCategory = $db->select('product_category', 'category_id, category_name')
                         ->where(1)
                         ->fetchAll();
 
+    if($me['work_location'] == $hq) $whr = 1;
+    else $whr = ['work_location'=>$me['work_location']];
+
     $columns = "product.*, IFNULL(category_name, 'General') as category_name, IFNULL(branch_name, 'Headquarters') as branch_name";
     $Products = $db->select('product', $columns)
                         ->join('product_category', 'category_id=product_category', 'LEFT')
                         ->join('branches', 'branch_id=owner_branch', 'LEFT')
-                        ->where(1)
+                        ->where($whr)
                         ->fetchAll();
+    
     $pic_root = 'Application/storage/uploads/products/product_thumb_';
-    $sortedProduct = [];
+    $sortedProducts = [];
     foreach($Products as $prod){
-        if(!isset($sortedProduct[$prod['branch_name']])) $sortedProduct[$prod['branch_name']] = [];
-        if(!isset($sortedProduct[$prod['branch_name']][$prod['category_name']])){
-            $sortedProduct[$prod['branch_name']][$prod['category_name']] = [];
+        if(!isset($sortedProducts[$prod['branch_name']])) $sortedProducts[$prod['branch_name']] = [];
+        if(!isset($sortedProducts[$prod['branch_name']][$prod['category_name']])){
+            $sortedProducts[$prod['branch_name']][$prod['category_name']] = [];
         }
         $root = '/storage/uploads/products/product_thumb_';
         if(is_readable(realpath(__DIR__.'/../../../../')."{$root}{$prod['product_id']}.jpg")) 
@@ -28,7 +33,7 @@ if($me){
 
         $sortedProducts[$prod['branch_name']][$prod['category_name']][] = $prod;
     }
-    //var_dump('<pre>',$sortedProduct);die;
+    //var_dump('<pre>',$sortedProducts);die;
     ob_start();
     include __DIR__.'/html/product.html';
     $body = ob_get_clean();

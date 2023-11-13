@@ -8,7 +8,7 @@
 <br>
 <div>
     <div class="tab-view">
-        <?php foreach(array_keys($sortedProduct) as $i=>$k){?>
+        <?php foreach(array_keys($sortedProducts) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
@@ -103,6 +103,7 @@
     const add_product = ()=>{
         let tpl = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
+            title: 'Add product',
             html:tpl,
             customClass: 'mySwalSmallForm'
         });

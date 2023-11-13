@@ -42,6 +42,10 @@ class human_resources{
         $registry = storage::init();
         return;
     }
+    public static function get_headquarters_branch(){
+        $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
+        return $moduleconfig->headquarters_branch;
+    }
     public static function service_add_staff($data){
         if(user::init()->user_can('view_staff')){
             $registry = storage::init();
