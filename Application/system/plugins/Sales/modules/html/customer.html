@@ -23,19 +23,16 @@
                                 Name
                             </th>
                             <th>
-                                Phonenumber
+                                Email
                             </th>
                             <th>
-                                Email
+                                Address
                             </th>
                             <th>
                                 TIN
                             </th>
                             <th>
                                 VRN
-                            </th>
-                            <th>
-                                Address
                             </th>
                             <th>
                                 &nbsp;
@@ -46,17 +43,27 @@
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
                             <td class="flex" style="display: flex;">
-                                <input type="checkbox" name="customer_id[]" value="<?=$st['user_id']?>" style="max-width:13px;max-height:13px">
-                                <span style="max-width: 40px;">
-                                    <img src="<?=user::init()->get_user_avatar($st['user_id'])?>" width="100%" style="border-radius: 4em;">
-                                </span>
+                                <input type="checkbox" name="customer_name[]" value="<?=$st['customer_name']?>" style="max-width:13px;max-height:13px">
                                 <span>
-                                    &nbsp;<?=$st['full_name']?>
+                                    &nbsp;<?=$st['customer_name']?><br>
+                                          <?=$st['customer_phone_number']?>
                                 </span>
                             </td>
                             <td>
-                                <?=$st['email']?><br>
-                                <?=$st['phone']?>
+                                <?=$st['customer_email']?><br>
+                                
+                            </td>
+                            <td>
+                                <?=$st['customer_physical_adress']?><br>
+                                
+                            </td>
+                            <td>
+                                <?=$st['tin_number']?><br>
+                                
+                            </td>
+                            <td>
+                                <?=$st['vrn_number']?><br>
+                                
                             </td>
                             <td>
                                 <a onclick="view_customer()" data-icon="&#xf06e;"></a>
@@ -77,10 +84,10 @@
     <div class="vspaced" style="text-align: left;">
         <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
-                <h3 style="padding-bottom: .6em;" class="large-text">{{full_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{email}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{phone}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Regstration #: </span>{{registration_number}}</div>
+                <h3 style="padding-bottom: .6em;" class="large-text">{{customer_name}}</h3>
+                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{customer_email}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{customer_phone_number}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Address #: </span>{{customer_physical_adress}}</div>
                 <div><span style="color: rgb(35, 57, 136);">Created date: </span>{{date_employed}}</div>
             </div>
         </div>
@@ -160,12 +167,11 @@
     }
     const view_customer = ()=>{
         let elem = window.event.target.parentNode.parentNode,
-            img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        console.log(jsx);
+        //console.log(jsx);
         //console.log(elem.getAttribute('data-json'));
-        htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
+        //htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
         htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
             html: htz
@@ -173,7 +179,6 @@
     };
     const edit_customer = ()=>{
         let elem = window.event.target.parentNode.parentNode,
-            img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[1].cloneNode(true);
         let hin = document.createElement('input');
         hin.type = 'hidden';
@@ -192,11 +197,12 @@
         });
         //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
+            title: `Edit ${jsx.customer_name}`,
             html: htz,
-            customClass: 'mySwalForm',
+            customClass: 'mySwalSmallForm',
             showConfirmButton: false
         });
-        let form = document.querySelector('.mySwalForm form');
+        let form = document.querySelector('.mySwalSmallForm form');
         if(form != null){
             form.addEventListener(
                 'submit',

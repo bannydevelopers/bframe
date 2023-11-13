@@ -3,6 +3,31 @@ $me = human_resources::get_staff();
 if($me){
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
+    if(isset($_POST['customer_name'])){
+        //var_dump($_POST);
+        $data = [
+            'owner_branch'=>$me['work_location'],
+            'customer_name'=>$_POST['customer_name'], 
+            'customer_phone_number'=>$_POST['customer_phone_number'], 
+            'customer_email'=>$_POST['customer_email'], 
+            'customer_physical_adress'=>$_POST['customer_physical_adress'], 
+            'tin_number'=>$_POST['tin_number'], 
+            'vrn_number'=>$_POST['vrn_number'], 
+            'created_time'=>date('Y-m-d H:i:s')
+        ];
+        //var_dump($db->error());
+        if(isset($_POST['customer_id']) && intval($_POST['customer_id']) > 0){
+            $k = intval($_POST['customer_id']);
+            $db->update('customer', $data)->where(['customer_id'=>$_POST['customer_id']])->commit();
+        }
+        else $k = $db->insert('customer', $data);
+        if(!$db->error() && $k) {
+            $msg = 'Customer saved successful';
+            $ok =true;
+        }
+        else $msg = $db->error()['message']; 
+    }
+    
     if(isset($_POST['delete_customer'])){
         $db->delete('customer')->where(['user_reference'=>intval($_POST['delete_customer'])])->commit();
         if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_customer'])])->commit();
@@ -18,60 +43,16 @@ if($me){
                 'message'=>$db->error()['message']
             ];
         }
-        die(json_encode( ["response"=>$msg])); 
-        foreach($lines as $k=>$line) {
-            if(empty($line)) continue;
-            $lines[$k] = explode(',', $line); // convert string to array
-            if(count($lines[0]) != 15) die('Invalid file uploaded');
-            if($k == 0) continue;
-            $lines[$k][11] = date('Y-m-d', strtotime($lines[$k][11]));
-            $lines[$k][13] = date('Y-m-d', strtotime($lines[$k][13]));
-            $lines[$k][14] = date('Y-m-d', strtotime($lines[$k][14]));
-            $system_role[] = trim($lines[$k][3]);
-            $bank[] = trim($lines[$k][4]);
-            $designation[] = trim($lines[$k][8]);
-            $work_location[] = trim($lines[$k][9]);
-            $department[] = trim($lines[$k][10]);
-        }
-        $msg = 'Unknown error occured, probably file format not recognized';
-        $status = 'error';
-        $last_line = [];
-        if(!$db->error()){
-            $qry = 'BEGIN;'.PHP_EOL;
-            foreach($lines as $k => $line){
-                if($k == 0 or empty($line[0])) continue;
-
-                $last_line = $line;
-                $role = array_search($line[3], array_column($system_roles, 'role_id'));
-                $role_id = $system_roles[$role]['role_id'];
-
-                $pass = system::create_hash($line[1]);
-                $qry .= "INSERT INTO user_accounts (full_name, email, phone, passcode) VALUES ('{$line[0]}','{$line[1]}','{$line[2]}','{$pass}');".PHP_EOL;
-
-                $qry .= "INSERT INTO customer (user_reference, bank, bank_account_number, registration_number, residence_address,designation, work_location, department, date_employed, employment_length, employment_last_renewal, employment_end_date) VALUES (LAST_INSERT_ID(), '{$line[4]}','{$line[5]}','{$line[6]}','{$line[7]}','{$designation_id}','{$branch_id}','{$dept_id}','{$line[11]}','{$line[12]}','{$line[13]}','{$line[14]}');".PHP_EOL;
-            }
-            $qry .= 'COMMIT;';
-
-            $db->query($qry);
-            $chk = $db->select('customer', 'user_reference')
-                    ->where("user_reference IN (SELECT user_id FROM user_accounts user_id WHERE email ='{$last_line[1]}')")
-                    ->fetch();
-
-            if(!$db->error() && $chk) {
-                $msg = 'Customer import complete';
-                $status = 'success';
-            }
-            else $msg = 'Import failed';
-        }
-        die(json_encode(['message'=>$msg, 'status'=>$status]));
     }
-    //var_dump($me);
-    $customer = [];
+    $customer = $db->select('customer')
+                    ->join('branches', 'branch_id=owner_branch')
+                    ->fetchAll();
     $sortedCustomer = [];
     foreach($customer as $st){
-        if(!isset($sortedCustomer[$st['designation_name']])) $sortedCustomer[$st['designation_name']] = [];
-        $sortedCustomer[$st['designation_name']][] = $st;
+        if(!isset($sortedCustomer[$st['branch_name']])) $sortedCustomer[$st['branch_name']] = [];
+        $sortedCustomer[$st['branch_name']][] = $st;
     }
+
     $body = '';
     ob_start();
     include __DIR__.'/html/customer.html';
