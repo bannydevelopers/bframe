@@ -14,26 +14,28 @@
         <?php }?>
         <div class="tab-panes">
         <?php foreach($sortedProducts as $products){?>
-            <div class="collapsible">
+            <div class="collapsibles" style="font-size: 90%;">
                 <?php foreach($products as $category=>$product){?>
                 <div>
                     <h3 class="grey content"><?=$category?></h3>
-                    <div class="flex cards card-4">
-                        <?php foreach($product as $pro){?>
-                        <div class="content-small rounded">
-                            <div class="content-small" style="display: flex;">
+                    <div>
+                        <div class="flex cards card-4">
+                            <?php foreach($product as $pro){?>
+                            <div class="content-small rounded" style="display: flex;">
                                 <div>
                                     <div class="content-small"><strong><?=$pro['product_name']?></strong></div>
                                     <em style="flex-basis: 100%;padding: 0 8px;"><?=$pro['product_description']?></em>
                                 </div>
-                                <span style="flex-basis: auto;">
-                                    <img src="<?=$pro['product_image']?>" alt="img" width="60"><br>
-                                    <a onclick="edit_product()" data-icon="&#xf044;"></a>
-                                    <a onclick="delete_product()" data-icon="&#xf2ed;"></a>
-                                </span>
+                                <div style="flex-basis: auto;box-shadow: 0 0 3px #999">
+                                    <img src="<?=$pro['product_image']?>" alt="img" width="80"><br>
+                                    <div style="text-align: center;padding:0.4em;white-space: nowrap;">
+                                        <a onclick="edit_product()" data-icon="&#xf044;"></a>&nbsp;
+                                        <a onclick="delete_product()" data-icon="&#xf2ed;"></a>
+                                    </div>
+                                </div>
                             </div>
+                            <?php }?>
                         </div>
-                        <?php }?>
                     </div>
                 </div>
                 <?php }?>
@@ -65,12 +67,12 @@
     .mySwalSmallForm label{
         padding-left: 0;
     }
-    @media screen and (min-width:1024px) {
+    /*@media screen and (min-width:1024px) {
         .card-4 > *{
             max-width: 23%;
             margin: 1%;
         }
-    }
+    }*/
 </style>
 <style>
     .contentx{
@@ -122,8 +124,8 @@
                 window.location.href,
                 response=>{
                     //console.log(response);
-                    let jsx = JSON.parse(response);
-                    if(jsx){
+                    if(response.startsWith('{') || response.startsWith('[')){
+                        let jsx = JSON.parse(response);
                         Swal.fire({
                             title:jsx.message,
                             icon: jsx.status
