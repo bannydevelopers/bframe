@@ -1,19 +1,19 @@
 <div class="flex">
-    <h1 class="content-small no-pad-top">Customer</h1>
+    <h1 class="content-small no-pad-top">Supplier</h1>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
-        <button onclick="import_customer()" class="round">Import customer</button>
-        <button onclick="add_customer()" value="add" data-form-width="wide" class="round">Register customer</button>
+        <button onclick="import_supplier()" class="round">Import supplier</button>
+        <button onclick="add_supplier()" value="add" data-form-width="wide" class="round">Register supplier</button>
     </div>
 </div>
 <br>
 <div>
     <div class="tab-view">
-        <?php foreach(array_keys($sortedCustomer) as $i=>$k){?>
+        <?php foreach(array_keys($sortedSupplier) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedCustomer as $v){?>
+            <?php foreach($sortedSupplier as $v){?>
             <div class="white content-small">
                 <table class="paginate" data-items-per-page="10">
                     <thead>
@@ -23,16 +23,16 @@
                                 Name
                             </th>
                             <th>
+                                Email
+                            </th>
+                            <th>
+                                Phone Number
+                            </th>
+                            <th>
                                 Address
                             </th>
                             <th>
-                                TIN
-                            </th>
-                            <th>
-                                VRN
-                            </th>
-                            <th>
-                                Date registered
+                                Description
                             </th>
                             <th>
                                 &nbsp;
@@ -43,32 +43,30 @@
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
                             <td class="flex" style="display: flex;">
-                                <input type="checkbox" name="customer_name[]" value="<?=$st['customer_name']?>" style="max-width:13px;max-height:13px">
+                                <input type="checkbox" name="supplier_name[]" value="<?=$st['supplier_name']?>" style="max-width:13px;max-height:13px">
                                 <span>
-                                    &nbsp;<?=$st['customer_name']?><br>
-                                          <?=$st['customer_phone_number']?><br>
-                                          <?=$st['customer_email']?><br>
+                                    &nbsp;<?=$st['supplier_name']?>
                                 </span>
                             </td>
                             <td>
-                                <?=$st['customer_physical_adress']?><br>  
+                                <?=$st['supplier_email']?><br>  
                             </td>
                             <td>
-                                <?=$st['tin_number']?><br>
+                                <?=$st['supplier_phone_number']?><br>
                                 
                             </td>
                             <td>
-                                <?=$st['vrn_number']?><br>
+                                <?=$st['supplier_physical_address']?><br>
                                 
                             </td>
                             <td>
-                                <?=$st['created_time']?><br>
+                                <?=$st['supplier_details']?><br>
                                 
                             </td>
                             <td>
-                                <a onclick="view_customer()" data-icon="&#xf06e;"></a>
-                                <a onclick="edit_customer()" data-icon="&#xf044;"></a>
-                                <a onclick="delete_customer()" data-icon="&#xf2ed;"></a>
+                                <a onclick="view_supplier()" data-icon="&#xf06e;"></a>
+                                <a onclick="edit_supplier()" data-icon="&#xf044;"></a>
+                                <a onclick="delete_supplier()" data-icon="&#xf2ed;"></a>
                             </td>
                         </tr>
                         <?php }?>
@@ -84,26 +82,26 @@
     <div class="vspaced" style="text-align: left;">
         <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
-                <h3 style="padding-bottom: .6em;" class="large-text">{{customer_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{customer_email}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{customer_phone_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Address #: </span>{{customer_physical_adress}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Date Registered: </span>{{created_time}}</div>
+                <h3 style="padding-bottom: .6em;" class="large-text">{{supplier_name}}</h3>
+                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{supplier_email}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{supplier_phone_number}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Address #: </span>{{supplier_physical_adress}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Description: </span>{{supplier_details}}</div>
             </div>
         </div>
         <div>
             <div class="flex">
                 <div class="content-small">
                     <span style="color: rgb(35, 57, 136);">Residence address</span>
-                    <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
+                    <pre style="font-family: inherit;margin: 0;padding: 0;">{{supplier_physical_adress}}</pre>
                 </div>
             </div>
         </div>
     </div>
-    <?php include __DIR__.'/add_customer.html';?>
+    <?php include __DIR__.'/add_supplier.html';?>
     <form method="post" enctype="multipart/form-data">
         <label>CSV file</label>
-        <input type="file" name="customer_list" accept=".csv" required>
+        <input type="file" name="supplier_list" accept=".csv" required>
         <div style="text-align: right;padding-top: 1em;">
             <button type="submit">Save</button>
         </div>
@@ -156,28 +154,25 @@
     }
 </style>
 <script>
-    function add_customer() {
+    function add_supplier() {
         let formx = document.querySelector('template').content.cloneNode(true).children[1];
         Swal.fire({
-            title: 'Add customer',
+            title: 'Add supplier',
             html: formx,
             customClass: 'mySwalSmallForm',
             showConfirmButton: false
         });
     }
-    const view_customer = ()=>{
+    const view_supplier = ()=>{
         let elem = window.event.target.parentNode.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        //console.log(jsx);
-        //console.log(elem.getAttribute('data-json'));
-        //htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
         htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
             html: htz
         });
     };
-    const edit_customer = ()=>{
+    const edit_supplier = ()=>{
         let elem = window.event.target.parentNode.parentNode,
             htz = document.querySelector('template').content.children[1].cloneNode(true);
         let hin = document.createElement('input');
@@ -195,9 +190,8 @@
         [...tarea].forEach(elem=>{
             if(jsx[elem.name]) elem.innerHTML = jsx[elem.name];
         });
-        //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
-            title: `Edit ${jsx.customer_name}`,
+            title: `Edit ${jsx.supplier_name}`,
             html: htz,
             customClass: 'mySwalSmallForm',
             showConfirmButton: false
@@ -210,7 +204,7 @@
                     evt.preventDefault();
                     let fd = new FormData(form);
                     request_service(
-                        'add_customer',
+                        'add_supplier',
                         response => {
                             console.log(response);
                             let res_json = JSON.parse(response);
@@ -238,7 +232,7 @@
             );
         }
     };
-    const delete_customer = ()=>{
+    const delete_supplier = ()=>{
         let elem = window.event.target.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let name = jsx.full_name,
@@ -252,7 +246,7 @@
         .then(response=>{
         if(response.isConfirmed){
             let userdata = new FormData();
-            userdata.append('delete_customer', uid);
+            userdata.append('delete_supplier', uid);
             userdata.append('ajax',1);
             ajax(
             window.location.href, 
@@ -295,10 +289,10 @@
         }
         });
     }
-    const import_customer = ()=>{
+    const import_supplier = ()=>{
         let htz = document.querySelector('template').content.children[2].cloneNode(true);
         Swal.fire({
-            title: 'Import customer',
+            title: 'Import supplier',
             html:htz,
             customClass:'mySwalSmallForm',
             showConfirmButton:false
