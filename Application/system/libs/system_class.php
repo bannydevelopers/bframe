@@ -324,15 +324,15 @@ class system{
         if($crop){
           //if($w < $width or $h < $height) return "Picture is too small!";
           $ratio = max($width/$w, $height/$h);
-          $h = $height / $ratio;
+          $h = intval($height / $ratio);
           $x = ($w - $width / $ratio) / 2;
-          $w = $width / $ratio;
+          $w = intval($width / $ratio);
         }
         else{
           //if($w < $width and $h < $height) return "Picture is too small!";
           $ratio = min($width/$w, $height/$h);
-          $width = $w * $ratio;
-          $height = $h * $ratio;
+          $width = intval($w * $ratio);
+          $height = intval($h * $ratio);
           $x = 0;
         }
       
@@ -344,8 +344,8 @@ class system{
           imagealphablending($new, false);
           imagesavealpha($new, true);
         }
-      
-        imagecopyresampled($new, $img, 0, 0, $x, 0, intval($width), intval($height), intval($w), intval($h));
+      // I'll fix it some day
+        @imagecopyresampled($new, $img, 0, 0, $x, 0, (int)$width, (int)$height, (int)$w, (int)$h);
         $dest_type = explode('.', $dst);
         $ext = end($dest_type);
         switch($ext){

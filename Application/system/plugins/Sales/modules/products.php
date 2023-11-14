@@ -19,14 +19,29 @@ if($me){
             $db->update('product', $data)->where(['product_id'=>$k])->commit();
         }
         else{
-            $k = $db->insert('product', $data);
+            $chk = $db->select('product', 'product_name')
+                      ->where(['product_name'=>$data['product_name'], 'owner_branch'=>$data['owner_branch']])
+                      ->limit(1)
+                      ->fetchAll();
+
+            if(!$chk) $k = $db->insert('product', $data);
+            else $k = 0;
+        }
+        if(isset($_FILES['product_image']) && is_readable($_FILES['product_image']['tmp_name']) && $k){
+            $dir = realpath(__DIR__.'/../../../../storage/uploads/products/');
+            $source = $_FILES['product_image']['tmp_name'];//product_thumb_0.jpg
+            $bp = system::upload_image($source, "{$dir}/product_{$k}.jpg", ['width'=>600, 'height'=>400]);
+
+            file_put_contents("{$dir}/tmp.jpg", file_get_contents($bp));
+            $thumb = system::upload_image("{$dir}/tmp.jpg", "{$dir}/product_thumb_{$k}.jpg", ['width'=>200, 'height'=>170]);
         }
         if(!$db->error() && $k) {
             $msg = 'Saved successful';
             $status = 'success';
         }
         else{
-            $msg = $db->error()['message'];
+            $err = $db->error();
+            $msg = $k == 0 ? 'Product exists' : $err['message'];
         }
         if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
     }
