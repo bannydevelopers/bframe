@@ -1,0 +1,63 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="content-small">
+        <div class="white">
+            <div class="flex">
+                <div>
+                    <label for="product_name">Product Name</label>
+                    <select name="product_name" id="product_name" onchange="check_selection('product_name')">
+                        <option value="">Choose...</option>
+                        <?php foreach($product as $pro){?>
+                        <option value="<?=$pro['product_id']?>"><?=$pro['product_name']?></option>
+                        <?php }?>
+                        <option value="">Add product</option>
+                    </select>
+                </div>
+            </div>    
+            <div class="flex">
+                <div>
+                    <label for="stock_batch">Stock Batch</label>
+                    <input type="text" id="stock_batch" name="stock_batch" value="" minlength="10" maxlength="14" required />
+                </div>
+                <div>
+                    <label for="stock_quantity">Quantity</label>
+                    <input type="number" id="stock_quantity" name="stock_quantity" value="0" required />
+                </div>
+
+            </div>          
+            <div class="flex">
+                <div>
+                    <label for="buying_price">Buying price</label>
+                    <input type="text" id="buying_price" name="buying_price" value="" minlength="10" maxlength="14" required />
+                </div>
+                <div>
+                    <label for="stock_expenses">Expenses</label>
+                    <input type="text" name="stock_expenses" value="" minlength="10" maxlength="14" >
+                </div>
+                
+            </div>
+            <div class="flex">
+                <div>
+                    <label for="selling_price">Selling price</label>
+                    <input type="text" id="selling_price" name="selling_price" value="" required />
+                </div>       
+                <div>
+                    <label for="supplier">Supplier</label>
+                    <select name="supplier" id="supplier" onchange="check_selection('supplier')">
+                        <option value="">Choose...</option>
+                        <?php foreach($supplier as $sup){?>
+                        <option value="<?=$sup['supplier_id']?>"><?=$sup['supplier_name']?></option>
+                        <?php }?>
+                        <option value="">Add supplier</option>
+                    </select>
+                </div>
+                 
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+        <!--button type="reset">Reset form</button-->
+        <button type="submit" class="primary green">Save</button>
+    </div>
+</form>

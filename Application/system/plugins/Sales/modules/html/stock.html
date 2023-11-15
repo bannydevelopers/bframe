@@ -1,0 +1,359 @@
+<div class="flex">
+    <h1 class="content-small no-pad-top">Stock</h1>
+    <div class="shrink" style="white-space: nowrap;text-align: right;">
+        <button onclick="add_stock()" value="add" data-form-width="wide" class="round">Register stock</button>
+    </div>
+</div>
+<br>
+<div>
+    <div class="tab-view">
+        <?php foreach(array_keys($sortedStock) as $i=>$k){?>
+        <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
+        <label for="class_tab<?=$i?>"><?=$k?></label>
+        <?php }?>
+        <div class="tab-panes">
+            <?php foreach($sortedStock as $v){?>
+            <div class="white content-small">
+                <table class="paginate" data-items-per-page="10">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" onclick="upadte_checks()">
+                                Name
+                            </th>
+                            <th>
+                                Batch
+                            </th><br>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Purchase price
+                            </th>
+                            <th>
+                                Selling price
+                            </th>
+                            <th>
+                            Expenses
+                            </th>
+                            <th>
+                                Supplier
+                            </th>
+                            <th>
+                                Received By
+                                </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($v as $st){?>
+                        <tr data-json='<?=json_encode($st)?>'>
+                            <td class="flex" style="display: flex;">
+                                <input type="checkbox" name="product[]" value="<?=$st['product']?>" style="max-width:13px;max-height:13px">
+                                <span>
+                                    <?=$st['product_name']?>       
+                                </span>
+                            </td>
+                            <td>
+                                <?=$st['stock_batch']?><br>  
+                            </td>
+                            <td>
+                                <?=intval($st['stock_out'])?>/<?=$st['stock_quantity']?><br>  
+                            </td>
+                            <td>
+                                <?=$st['buying_price']?><br>
+                                
+                            </td>
+                            <td>
+                                <?=$st['selling_price']?><br>
+                                
+                            </td>
+                            <td>
+                                <?=$st['stock_expenses']?><br>
+                                
+                            </td>
+                           <td>
+                                <?=$st['supplier_name']?><br>
+                                
+                            </td>
+                            <td>
+                                <?=$st['full_name']?>
+                              </td>
+                            <td>
+                                <a onclick="view_stock()" data-icon="&#xf06e;"></a>
+                                <a onclick="edit_stock()" data-icon="&#xf044;"></a>
+                                <a onclick="delete_stock()" data-icon="&#xf2ed;"></a>
+                            </td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+            </div>
+            <?php }?>
+        </div>
+    </div>
+</div>
+
+<style>.swal2-html-container{overflow: visible;}</style>
+<template>
+    <div class="vspaced" style="text-align: left;">
+        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
+            <div class="content-small">
+                <h3 style="padding-bottom: .6em;" class="large-text">{{product_name}}</h3>
+                <div><span style="color: rgb(35, 57, 136);">Batch: </span>{{stock_batch}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Quantity: </span>{{stock_quantity}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Buying price #: </span>{{buying_price}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Selling price: </span>{{selling_price}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Expenses #: </span>{{stock_expenses}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Supplier: </span>{{stock_supplier}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Received By #: </span>{{stock_receiver}}</div>
+            </div>
+        </div>
+    </div>
+    <?php include __DIR__.'/add_stock.html';?>
+    <form method="post" enctype="multipart/form-data">
+        <label>CSV file</label>
+        <input type="file" name="stock_list" accept=".csv" required>
+        <div style="text-align: right;padding-top: 1em;">
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</template>
+<style>
+    .mySwalForm{
+        min-width: 80%;
+    }
+    .mySwalForm label, .mySwalSmallForm label{
+        display: block;
+        text-align: left;
+        padding-left: 1em;
+    }
+    .mySwalSmallForm label{
+        padding-left: 0;
+    }
+</style>
+<style>
+    .contentx{
+        padding: 0 1em;
+        flex-basis: 100%;
+    }
+    .contentx > *{
+        flex-basis: 100%;
+    }
+    .contentx input,.contentx select{
+        border:1px solid #eee;
+        width: calc( 100% - 1.8em );
+        margin-top: 6px;
+    }
+    .contentx label{
+        padding-top: .8em;
+    }
+    .contentx option{
+        line-height: 1.5em;
+    }
+    button{
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+    .flex > *{
+        flex-basis: 100%;
+    }
+    .vspaced *{
+        line-height: 1.2;
+    }
+    .large-text{
+        font-size: 140%;
+    }
+</style>
+<script>
+    function add_stock() {
+        let formx = document.querySelector('template').content.cloneNode(true).children[1];
+        Swal.fire({
+            title: 'Add stock',
+            html: formx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false
+        });
+    }
+    const view_stock = ()=>{
+        let elem = window.event.target.parentNode.parentNode,
+            htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        //console.log(jsx);
+        //console.log(elem.getAttribute('data-json'));
+        //htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
+        htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
+        Swal.fire({
+            html: htz
+        });
+    };
+    const edit_stock = ()=>{
+        let elem = window.event.target.parentNode.parentNode,
+            htz = document.querySelector('template').content.children[1].cloneNode(true);
+        let hin = document.createElement('input');
+        hin.type = 'hidden';
+        hin.name = 'user_id';
+        htz.firstElementChild.firstElementChild.appendChild(hin);
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        let inpts = htz.querySelectorAll('input'),
+            selec = htz.querySelectorAll('select'),
+            tarea = htz.querySelectorAll('textarea');
+        [...inpts, ...selec].forEach(elem=>{
+            if(elem.type == 'date' && jsx[elem.name]) jsx[elem.name] = [...jsx[elem.name.trim()]].splice(0,10).join('');
+            if(jsx[elem.name]) elem.value = jsx[elem.name];
+        });
+        [...tarea].forEach(elem=>{
+            if(jsx[elem.name]) elem.innerHTML = jsx[elem.name];
+        });
+        //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
+        Swal.fire({
+            title: `Edit ${jsx.stock_name}`,
+            html: htz,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false
+        });
+        let form = document.querySelector('.mySwalSmallForm form');
+        if(form != null){
+            form.addEventListener(
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    request_service(
+                        'add_stock',
+                        response => {
+                            console.log(response);
+                            let res_json = JSON.parse(response);
+                            if(res_json){
+                                let jsx = JSON.parse(res_json.response);
+                                Swal.fire({
+                                    title: jsx.message,
+                                    icon: jsx.status
+                                })
+                                .then(e=>{
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire({
+                                    title: 'Malformed response returned',
+                                    icon: 'error',
+                                    html:response
+                                });
+                            }
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    };
+    const delete_stock = ()=>{
+        let elem = window.event.target.parentNode.parentNode;
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        let name = jsx.full_name,
+            uid = jsx.user_id;
+        Swal.fire({
+            title: `Delete ${name}?`,
+            showCancelButton: true,
+            confirmButtonText:'Sure, delete',
+            html:"No UNDO remember!"
+        })
+        .then(response=>{
+        if(response.isConfirmed){
+            let userdata = new FormData();
+            userdata.append('delete_stock', uid);
+            userdata.append('ajax',1);
+            ajax(
+            window.location.href, 
+            response=>{
+                let res_json = JSON.parse(response);
+                //console.log(response);
+                if(res_json){
+                    let jsx = res_json.response;
+                    Swal.fire({
+                        title: jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(e=>{
+                        if(jsx.status == 'success'){
+                             elem.parentNode.removeChild(elem);
+                             createPageButtons(); // create the page buttons initially
+                            showPage(currentPage);
+                        }
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Malformed response returned',
+                        icon: 'error',
+                        html:response
+                    });
+                }
+            },
+            error=>{
+                console.log(error);
+            },
+            userdata
+            );
+        }
+        else{
+            Swal.fire({
+            title: "Cancel Deletion",
+            icon:"error"
+            })
+        }
+        });
+    }
+    const import_stock = ()=>{
+        let htz = document.querySelector('template').content.children[2].cloneNode(true);
+        Swal.fire({
+            title: 'Import stock',
+            html:htz,
+            customClass:'mySwalSmallForm',
+            showConfirmButton:false
+        });
+        let form = document.querySelector('.mySwalSmallForm form');
+        if(form != null){
+            form.addEventListener(
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    Swal.fire({
+                        title: 'Working, please wait...',
+                        icon: 'info',
+                        showConfirmButton:false
+                    });
+                    ajax(
+                        window.location.href,
+                        success=>{
+                            if([...success][0] == '{' || [...success][0] == '['){
+                                let jsx = JSON.parse(success);
+                                Swal.fire({
+                                    icon:jsx.status,
+                                    title:jsx.message
+                                })
+                                .then(val=>{
+                                    window.location.reload();
+                                });
+                            }
+                            else{
+                                Swal.fire({
+                                    icon:'error',
+                                    title:success
+                                });
+                            }
+                        },
+                        error=>{
+                            console.log(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    }
+</script>
