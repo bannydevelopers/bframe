@@ -28,13 +28,8 @@ if($me){
 
     (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', pc.id, 'name', pc.name)) FROM people pc
     WHERE pc.parent_id=p.id) AS children
-
+    
     FROM people p
-
-
-
-
-
     SELECT invoice.*, 
     (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product, 'price', price, 'qty', quantity)) FROM invoice_items
     WHERE invoice_id=invoice) AS children
