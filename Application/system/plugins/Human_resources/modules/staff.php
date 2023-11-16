@@ -102,7 +102,7 @@ if($me){
         die(json_encode(['message'=>$msg, 'status'=>$status]));
     }
     //var_dump($me);
-    if($me['work_location'] == $moduleconfig->headquarters_branch) {
+    if($me['work_location'] == human_resources::get_headquarters_branch()) {
         $whr = 1;
     }
     else{

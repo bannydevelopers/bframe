@@ -5,11 +5,23 @@ if($me){
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
 
-    $qry = "SELECT invoice.*, branches.branch_name, customer.customer_name,
-        (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product_name, 'price', price, 'qty', quantity, 'product_id', product_id, 'item_desc', product_description, 'unit_single', product_unit_singular, 'unit_prural', product_unit_plural)) FROM invoice_items JOIN product ON product_id=product
-        WHERE invoice_id=invoice) AS invoice_items
-        FROM invoice JOIN branches ON branch_id=owner_branch JOIN customer ON customer_id=customer";
-    $invoice = $db->query($qry)->fetchAll();
+    if($me['work_location'] == human_resources::get_headquarters_branch()) {
+        $whr = 1;
+    }
+    else{
+        $whr = "invoice.owner_branch={$me['work_location']}";
+    }
+    
+    $items_q = "(SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product_name, 'price', price, 'qty', quantity, 'product_id', product_id, 'item_desc', product_description, 'unit_single', product_unit_singular, 'unit_prural', product_unit_plural)) FROM invoice_items JOIN product ON product_id=product
+    WHERE invoice_id=invoice) AS invoice_items";
+    $qry = "invoice.*, branches.branch_name, customer.customer_name, {$items_q}";
+        //FROM invoice JOIN  ON  JOIN  ON ";
+    $invoice = $db->select('invoice',$qry)
+                  ->join('branches','branch_id=owner_branch')
+                  ->join('customer', 'customer_id=customer')
+                  ->where($whr)
+                  ->fetchAll();
+
     //var_dump($db->error(),$invoice);
     $sortedInvoice = [];
     foreach($invoice as $inv){

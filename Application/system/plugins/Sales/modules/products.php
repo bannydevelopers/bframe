@@ -45,8 +45,14 @@ if($me){
         }
         if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
     }
+    if($me['work_location'] == human_resources::get_headquarters_branch()) {
+        $whr = 1;
+    }
+    else{
+        $whr = ['owner_branch'=>$me['work_location']];
+    }
     $productCategory = $db->select('product_category', 'category_id, category_name')
-                        ->where(1)
+                        ->where($whr)
                         ->fetchAll();
 
     if($me['work_location'] == $hq) $whr = 1;

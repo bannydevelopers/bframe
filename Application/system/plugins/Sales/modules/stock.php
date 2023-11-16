@@ -54,6 +54,9 @@ if($me){
                     ->fetchAll();
 
     $whr = 'stock.stock_ref < 1';
+    if($me['work_location'] != human_resources::get_headquarters_branch()) {
+        $whr .= " AND stock.owner_branch={$me['work_location']}";
+    }
     $stock = $db->select('stock', 'stock.*,product.*,supplier.*,branches.branch_name,user_accounts.full_name,sum(outgoing.stock_quantity) as stock_out')
                 ->join('branches', 'branch_id=owner_branch')
                 ->join('product', 'product_id=stock.product')
@@ -64,7 +67,7 @@ if($me){
                 ->where($whr)
                 ->group_by('stock_id')
                 ->fetchAll();
-//var_dump('<pre>',$stock);die;
+
     $product = $db->select('product', 'product_id, product_name')
                 ->where(1)
                 ->fetchAll();
