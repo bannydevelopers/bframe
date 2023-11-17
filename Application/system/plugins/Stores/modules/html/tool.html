@@ -1,5 +1,5 @@
 <div class="flex">
-    <h1 class="content-small no-pad-top">Tool</h1>
+    <h1 class="content-small no-pad-top">ToolS</h1>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
         <button onclick="add_tool()" value="add" data-form-width="wide" class="round">Add tool</button>
     </div>
@@ -14,17 +14,17 @@
         <div class="tab-panes">
             <?php foreach($sortedTool as $k=>$tools){?>
             <div class="white">
-                <div class="tab-view" style="text-align: left;">
+                <div class="tab-view" style="text-align: left; margin-top: 20px;">
                     <input type="radio" name="itab<?=$k?>" id="class_tab12<?=$k?>" checked>
                     <label for="class_tab12<?=$k?>">Overview</label>
                     <input type="radio" name="itab<?=$k?>" id="class_tab22<?=$k?>">
-                    <label for="class_tab22<?=$k?>">Available</label>
+                    <label for="class_tab22<?=$k?>">Available (<?=intval(count($tools_available))?>)</label>
                     <input type="radio" name="itab<?=$k?>" id="class_tab23<?=$k?>">
-                    <label for="class_tab23<?=$k?>">Borrowed</label>
+                    <label for="class_tab23<?=$k?>">Borrowed (<?=intval(count($tools_borrowed))?>)</label>
                     <input type="radio" name="itab<?=$k?>" id="class_tab24<?=$k?>">
-                    <label for="class_tab24<?=$k?>">Requested</label>
+                    <label for="class_tab24<?=$k?>">Requested (<?=intval(count($tools_requests))?>)</label>
                     <input type="radio" name="itab<?=$k?>" id="class_tab25<?=$k?>">
-                    <label for="class_tab25<?=$k?>">Off service</label>
+                    <label for="class_tab25<?=$k?>">Off service (<?=intval(count($tools_offservice))?>)</label>
                     <div class="tab-panes" style="text-align: left;">
                         <!-- -->
                             <div class="white content-small">
