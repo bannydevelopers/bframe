@@ -26,9 +26,10 @@ if($me){
     $sortedInvoice = [];
     foreach($invoice as $inv){
         if(!isset($sortedInvoice[$inv['branch_name']])) $sortedInvoice[$inv['branch_name']] = [];
-        $inv['invoice_items'] = $inv['invoice_items'] ? json_decode($inv['invoice_items']) : [];
+        $inv['invoice_items'] = $inv['invoice_items'] ? json_decode($inv['invoice_items'],true) : [];
         $sortedInvoice[$inv['branch_name']][] = $inv;
     } 
+    //var_dump('<pre>',$sortedInvoice);die;
     ob_start();
     include __DIR__.'/html/invoice.html';
     $body = ob_get_clean();

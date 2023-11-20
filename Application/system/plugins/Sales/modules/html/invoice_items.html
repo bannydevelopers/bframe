@@ -1,0 +1,38 @@
+<form method="post">
+    <table class="paginate" data-items-per-page="10">
+        <thead>
+            <tr>
+                <th>
+                    Item name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-json='<?=json_encode($st)?>'>
+                <td>
+                    {{product}}
+                </td>
+                <td>
+                    {{item_desc}}
+                </td>
+                <td>
+                    <input value="{{qty}}" name="qty[{{id}}]" style="width: auto;" type="number"> {{unit}}                
+                </td>
+                <td>
+                    <a onclick="view_tool()" data-icon="&#xf06e;"></a>
+                    <a onclick="edit_tool()" data-icon="&#xf044;"></a>
+                    <a onclick="delete_tool()" data-icon="&#xf2ed;"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
