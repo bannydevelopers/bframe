@@ -12,6 +12,24 @@ if($me){
         $whr = "invoice.owner_branch={$me['work_location']}";
     }
     
+    if(isset($_POST['qty'])){
+        $qry = "INSERT INTO invoice_items (item_id, price, product, invoice, quantity) VALUES ";
+        //INSERT INTO table_users (cod_user, date, user_rol, cod_office) VALUES
+        //('622057', '12082014', 'student', '17389551'),
+        //('2913659', '12082014', 'assistant','17389551'),
+        //('6160230', '12082014', 'admin', '17389551')
+        //ON DUPLICATE KEY UPDATE
+        //cod_user=VALUES(cod_user), date=VALUES(date)
+        $tmp = [];
+        foreach($_POST['qty'] as $id=>$qty){
+            $tmp[] = "({$id}, {$_POST['price'][$id]}, 8, 8, $qty)";
+        }
+        $tmp = implode(',', $tmp);
+        $qry .= " {$tmp} ON DUPLICATE KEY UPDATE item_id = VALUES(item_id), price=VALUES(price), quantity=VALUES(quantity)";
+        $db->query($qry);
+        if($db->error()) die('Saving failed');
+        else die('Saved successful');
+    }
     $items_q = "(SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product_name, 'price', price, 'qty', quantity, 'product_id', product_id, 'item_desc', product_description, 'unit_single', product_unit_singular, 'unit_prural', product_unit_plural)) FROM invoice_items JOIN product ON product_id=product
     WHERE invoice_id=invoice) AS invoice_items";
     $qry = "invoice.*, branches.branch_name, customer.customer_name, {$items_q}";

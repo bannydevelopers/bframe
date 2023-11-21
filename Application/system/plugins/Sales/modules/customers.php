@@ -21,17 +21,18 @@ if($me){
             $db->update('customer', $data)->where(['customer_id'=>$_POST['customer_id']])->commit();
         }
         else $k = $db->insert('customer', $data);
+        $ok = 'error';
         if(!$db->error() && $k) {
             $msg = 'Customer saved successful';
-            $ok =true;
+            $ok ='success';
         }
         else $msg = $db->error()['message']; 
+        if(isset($_POST['ajax_request'])) die($msg);
     }
     
     if(isset($_POST['delete_customer'])){
-        $db->delete('customer')->where(['user_reference'=>intval($_POST['delete_customer'])])->commit();
-        if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_customer'])])->commit();
-        if(!$db->error()){
+        $k = $db->delete('customer')->where(['customer_id'=>intval($_POST['delete_customer'])])->commit();
+        if(!$db->error() && $k){
             $msg = [
                 'status'=>'success',
                 'message'=>'Customer deleted successful'
@@ -43,6 +44,7 @@ if($me){
                 'message'=>$db->error()['message']
             ];
         }
+        if(isset($_POST['ajax_request'])) die(json_encode($msg));
     }
     if($me['work_location'] == human_resources::get_headquarters_branch()) {
         $whr = 1;
@@ -53,6 +55,7 @@ if($me){
     $customer = $db->select('customer')
                     ->join('branches', 'branch_id=owner_branch')
                     ->where($whr)
+                    ->order_by('customer_id', 'desc')
                     ->fetchAll();
     $sortedCustomer = [];
     foreach($customer as $st){

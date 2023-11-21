@@ -47,6 +47,32 @@
                                 <!--pre><?=json_encode($item, JSON_PRETTY_PRINT)?></pre-->
                             <?php } ?>
                         </div>
+                        <div class="white flex cards">
+                            <?php foreach($invoices as $item){if($item['invoice_type'] == 'tax') continue;?>
+                                <div class="content rounded">
+                                    <div class="content-small grey">
+                                        <strong><?=$item['customer_name']?></strong>
+                                    </div>
+                                    <div>
+                                        <span>Created: </span>
+                                        <em><?=system::format_time($item['created_time'], 3)?></em>
+                                    </div>
+                                    <div>
+                                        <span>Due: </span>
+                                        <em><?=system::format_time($item['due_date'], 2)?></em>
+                                    </div>
+                                    <div>
+                                        <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
+                                    </div>
+                                    <div style="text-align: right;" data-json='<?=json_encode($item["invoice_items"])?>'>
+                                        <a data-icon="&#xf06e;" class="content-smallx" onclick="view_invoice()"></a>
+                                        <a data-icon="&#xf044;" class="content-smallx"></a>
+                                        <a data-icon="&#xf2ed;" class="content-smallx"></a>
+                                    </div>
+                                </div>
+                                <!--pre><?=json_encode($item, JSON_PRETTY_PRINT)?></pre-->
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,39 +92,69 @@
 <script>
     const view_invoice = ()=>{
         let elem = window.event.target,
-            frm = document.querySelector('template').content.cloneNode(true).children[1]
-            jsx = elem.parentNode.getAttribute('data-json');
+            frm = document.querySelector('template').content.cloneNode(true).children[1],
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            htz = frm.querySelector('tbody tr');
+        let tmp = '', sn = 0;
+        [...jsx].forEach(item=>{
+            item.sn = ++sn;
+            item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
+            item.total_price = parseInt(item.qty) * parseInt(item.price);
+            tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
+        });
+        frm.querySelector('tbody tr').outerHTML = tmp;
         Swal.fire({
             html: frm,
-            customClass:'mySwal'
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        document.querySelector('.mySwal form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let fd = new FormData(evt.target);
+            //fd.append('save_invoice_items',1)
+            ajax(
+                window.location.href,
+                response=>{
+                    Swal.fire({
+                        html: response,
+                        icon:'info'
+                    })
+                    .then(any=>{
+                        window.location.reload();
+                    });
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fd
+            );
         });
     };
+    const update_price = ()=>{
+        let elem = window.event.target.parentNode.parentNode;
+        let prc = parseInt(elem.children[3].children[0].value) *  parseInt(elem.children[4].children[0].value);
+        elem.children[5].innerText = prc;
+    };
+    function decToOctal(n){
+        
+        // array to store octal number
+        let octalNum = new Array(100);
 
-// JavaScript program to convert a decimal
-// number to octal number
+        // counter for octal number array
+        let i = 0;
+        while (n != 0) {
 
-// function to convert decimal to octal
-function decToOctal(n)
-{
-	
-	// array to store octal number
-	let octalNum = new Array(100);
-
-	// counter for octal number array
-	let i = 0;
-	while (n != 0) {
-
-		// storing remainder in octal array
-		octalNum[i] = n % 8;
-		n = Math.floor(n / 8);
-		i++;
-	}
-    let tmp = '';
-	// printing octal number array in reverse order
-	for (let j = i - 1; j >= 0; j--){
-		tmp += octalNum[j];
+            // storing remainder in octal array
+            octalNum[i] = n % 8;
+            n = Math.floor(n / 8);
+            i++;
+        }
+        let tmp = '';
+        // printing octal number array in reverse order
+        for (let j = i - 1; j >= 0; j--){
+            tmp += octalNum[j];
+        }
+        return tmp;
     }
-    return tmp;
-}
 
 </script>
