@@ -721,6 +721,20 @@
         <script>
             var useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
             var req_uri = document.querySelector('head').getAttribute('data-uri');
+            /*if ( window.history.replaceState ) {
+                window.history.replaceState( null, null, window.location.href );
+            }  */
+            
+            function jsprint(html, opts){
+                    var printWindow = window.open('', '', 'height=600,width=1200');
+                    printWindow.document.write('<html><head><title>Print preview</title>');
+                    if(opts != undefined && opts.css != undefined) printWindow.document.write(`<style>${opts.css}</style>`);
+                    printWindow.document.write('</head><body >');
+                    printWindow.document.write(html);
+                    printWindow.document.write('</body></html>');
+                    printWindow.document.close();
+                    printWindow.print();
+            }
             const ajax = (url, success, fail, data, method)=>{
                 fetch(
                     url, 

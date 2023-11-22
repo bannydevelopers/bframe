@@ -32,11 +32,12 @@ if($me){
     }
     $items_q = "(SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product_name, 'price', price, 'qty', quantity, 'product_id', product_id, 'item_desc', product_description, 'unit_single', product_unit_singular, 'unit_prural', product_unit_plural)) FROM invoice_items JOIN product ON product_id=product
     WHERE invoice_id=invoice) AS invoice_items";
-    $qry = "invoice.*, branches.branch_name, customer.customer_name, {$items_q}";
+    $qry = "invoice.*, branches.branch_name, customer.*, user_accounts.full_name, {$items_q}";
         //FROM invoice JOIN  ON  JOIN  ON ";
     $invoice = $db->select('invoice',$qry)
                   ->join('branches','branch_id=owner_branch')
                   ->join('customer', 'customer_id=customer')
+                  ->join('user_accounts', 'user_id=sale_represantative')
                   ->where($whr)
                   ->fetchAll();
 
@@ -47,6 +48,14 @@ if($me){
         $inv['invoice_items'] = $inv['invoice_items'] ? json_decode($inv['invoice_items'],true) : [];
         $sortedInvoice[$inv['branch_name']][] = $inv;
     } 
+    $company = storage::get_data('system_config')->company_profile;
+
+    ob_start();
+    $dir = realpath(__DIR__.'/html/invoice_tpl');
+    foreach(scandir($dir) as $filename){
+        if(pathinfo("{$dir}/{$filename}", PATHINFO_EXTENSION) == 'html') include "{$dir}/{$filename}";
+    }
+    $invoice_tpl = ob_get_clean();
     //var_dump('<pre>',$sortedInvoice);die;
     ob_start();
     include __DIR__.'/html/invoice.html';

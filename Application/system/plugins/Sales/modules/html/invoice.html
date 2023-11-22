@@ -1,7 +1,6 @@
 <div class="flex">
     <h1 class="content-small no-pad-top">Invoice</h1>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
-        <button onclick="import_invoice()" class="round">Import invoice</button>
         <button onclick="add_invoice()" value="add" data-form-width="wide" class="round">Create proforma</button>
     </div>
 </div>
@@ -38,10 +37,10 @@
                                     <div>
                                         <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
                                     </div>
-                                    <div style="text-align: right;" data-json='<?=json_encode($item["invoice_items"])?>'>
-                                        <a data-icon="&#xf06e;" class="content-smallx" onclick="view_invoice()"></a>
-                                        <a data-icon="&#xf044;" class="content-smallx"></a>
-                                        <a data-icon="&#xf2ed;" class="content-smallx"></a>
+                                    <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                        <a data-icon="&#xf06e;" onclick="view_invoice()"></a>
+                                        <a data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                        <a data-icon="&#xf2ed;" onclick="delete_invoice()"></a>
                                     </div>
                                 </div>
                                 <!--pre><?=json_encode($item, JSON_PRETTY_PRINT)?></pre-->
@@ -64,10 +63,8 @@
                                     <div>
                                         <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
                                     </div>
-                                    <div style="text-align: right;" data-json='<?=json_encode($item["invoice_items"])?>'>
-                                        <a data-icon="&#xf06e;" class="content-smallx" onclick="view_invoice()"></a>
-                                        <a data-icon="&#xf044;" class="content-smallx"></a>
-                                        <a data-icon="&#xf2ed;" class="content-smallx"></a>
+                                    <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                        <a data-icon="&#xf02f;" onclick="print_preview()"></a>
                                     </div>
                                 </div>
                                 <!--pre><?=json_encode($item, JSON_PRETTY_PRINT)?></pre-->
@@ -83,10 +80,18 @@
 <template>
     <?php include __DIR__.'/add_invoice.html';?>
     <?php include __DIR__.'/invoice_items.html';?>
+    <div>
+        <?=$invoice_tpl?>
+    </div>
 </template>
 <style>
     .mySwal{
         min-width: 80%;
+    }
+    .mySwal table, .mySwal tr, .mySwal th, .mySwal tr:hover{
+        background-color: #fff;
+        box-shadow: none;
+        border: none;
     }
 </style>
 <script>
@@ -96,7 +101,7 @@
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
         let tmp = '', sn = 0;
-        [...jsx].forEach(item=>{
+        [...jsx.invoice_items].forEach(item=>{
             item.sn = ++sn;
             item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
             item.total_price = parseInt(item.qty) * parseInt(item.price);
@@ -129,6 +134,67 @@
                 fd
             );
         });
+    };
+    const print_preview = ()=>{
+        let elem = window.event.target,
+            tplx = document.querySelector('template').content.cloneNode(true).children[2],
+            json = JSON.parse(elem.parentNode.getAttribute('data-json'));
+        
+        let temp = tplx.querySelector(`#branch_${json.owner_branch}`);
+        if(!temp) temp = tplx.querySelector('#branch_0');
+        tplx = temp;
+        /* copy */
+        //let json = JSON.parse(elem.getAttribute('data-json'));
+
+        json.total = 0;
+        json.grand_total = 0;
+
+        let tmp = '', sn = 0;
+        let reli = json.invoice_items;
+        for(x in reli) {
+            let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
+                itotal = item_total.toLocaleString('en-US'),
+                price = reli[x].price.toLocaleString('en-US'),
+                xyz = '';
+            if(reli[x].unit == 'People') {
+                reli[x].unit = 'LUMPSUM';
+                xyz = '';
+            }
+            else xyz = reli[x].qty;
+            if(reli[x].qty == 1) reli[x].unit = reli[x].unit_single;
+            else reli[x].unit = reli[x].unit_prural;
+            
+            tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
+                <td>${reli[x].product}</td>
+                <td>${reli[x].item_desc}</td>
+                <td>${xyz} ${reli[x].unit}</td>
+                <td>${price}</td>
+                <td style="text-align: right;">${itotal}</td></tr>`;
+            json.total += item_total;
+        }
+        //console.log(tmp[sn]);
+        json.VAT = (json.total * 0.05);
+        json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
+        json.VAT = json.VAT.toLocaleString('en-US');
+        json.total = json.total.toLocaleString('en-US');
+        json.order_id = 6891+parseInt(json.invoice_id);
+        //let tpl = document.getElementById('invoice-tpl').content.cloneNode(true);
+        tplx.querySelector('#items_list').outerHTML = tmp;
+
+        json.created_time = json.created_time.slice(0, 10);
+        json.due_date = json.due_date.slice(0, 10);
+
+        htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
+        Swal.fire({
+            html:htmlContent,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        /* end */
+        /*Swal.fire({
+            html: tmp,
+            customClass: 'mySwal'
+        });*/
     };
     const update_price = ()=>{
         let elem = window.event.target.parentNode.parentNode;

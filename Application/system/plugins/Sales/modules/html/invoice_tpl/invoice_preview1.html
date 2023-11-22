@@ -1,0 +1,143 @@
+<div id="branch_0">
+    <div>
+        <table style="width: 100%;font-family: Verdana, Geneva, Tahoma, sans-serif;line-height: 1.4;font-size: 13px;color: #060c67;">
+          <tr class="white">
+            <td colspan="3">
+              <div style="display: flex;">
+                <div style="text-align: left;flex-basis: 100%;">
+                  <div style="text-transform: capitalize;">{{customer_name}}</div>
+                  <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
+                  <div>TIN: {{tin_number}}</div>
+                  <div>VRN: {{vrn_number}}</div>
+                </div>
+                <div style="flex-basis: 100%;">
+                  <div style="text-align: center;"">
+                    <img src="/Application/storage/uploads/images/logo.png" style="height: 150px;margin: auto;" alt="logo">
+                  </div>
+                </div>
+                <div style="text-align: right;flex-basis: 100%">
+                  <div style="font-size: 120%;"><?=$company->company_legal_name?></div>
+                  <pre style="font-family: inherit;"><?=$company->company_address?></pre>
+                  <div><?=$company->email?></div>
+                  <div><?=$company->phone_number?></div>
+                  <div>TIN: <?=$company->TIN_number?></div>
+                  <div>VRN: <?=$company->VRN_number?></div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="white">
+            <td>
+              <table style="min-width: 30%;text-align: left;font-size: 13px;">
+                <tr class="white">
+                    <td><b>As per your order NO:</b></td>
+                    <td>{{order_id}}</td>
+                  </tr>
+                <tr class="white">
+                  <td><b>Proforma Invoice number.</b></td>
+                  <td>{{order_id}}</td>
+                </tr>
+                <tr class="white">
+                  <td><b>Create date</b></td>
+                  <td>{{created_time}}</td>
+                </tr>
+                <tr class="white">
+                  <td><b>Due date</b></td>
+                  <td>{{due_date}}</td>
+                </tr>
+                <tr class="white">
+                  <td><b>Sales represantantive</b></td>
+                  <td>{{full_name}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="white">
+            <td colspan="3">
+              <div style="text-align: center;">
+                <b style="text-transform: uppercase;font-size: 140%;">{{invoice_type}} INVOICE</b>
+              </div>
+              
+              <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #222;" class="white">
+                  <th>S/N</th>
+                  <th>Item name</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Unit price</th>
+                  <th style="text-align: right;">Total amount</th>
+                </tr>
+                <tr id="items_list" class="white">
+                </tr>
+                <tr style="border-top: 1px solid #222;" class="white">
+                  <td colspan="4">&nbsp;</td>
+                  <th style="text-align: right;">Total</th> 
+                  <th style="text-align: right;">{{total}}</th>
+                </tr>
+                <tr class="white">
+                  <td colspan="4">&nbsp;</td>
+                  <th style="text-align: right;">VAT (18%)</th>
+                  <th style="text-align: right;"><span>{{VAT}}</span></th>
+                </tr> 
+                <tr>
+                  <td colspan="4">&nbsp;</td>
+                  <th style="text-align: right;">Total including VAT</th>
+                  <th style="text-align: right;padding: 0;">
+                    <span style="border-top: 1px solid #222;padding:10px">{{grand_total}}</span>
+                  </th>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr style="margin-top: 6em;" class="white">
+            <td style="text-align: left;">
+              <span style="text-align: center;display: inline-block;">
+                <span>___________________</span><br>
+                <span>Seller's signature</span>
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <!--span style="text-align: center;display: inline-block;">
+                <span>___________________</span><br>
+                <span>Client's signature</span>
+              </span-->&nbsp;
+            </td>
+          </tr-->
+          <tr style="margin-top: 6em;" class="white">
+            <td colspan="3" style="text-align: left;font-size: 13px;">
+              <div style="display: flex;">
+                <div>
+                  <b>Payment terms</b><br>
+                  <pre style="font-family: inherit;"><?=$company->payment_terms?></pre>
+                </div>
+                <div style="margin: 0 2em;">
+                  <b>Primary payment account</b><br>
+                  <pre style="font-family: inherit;"><?=$company->primary_payment_account?></pre>
+                </div>
+                <div>
+                  <b>Auxilliary payment account</b><br>
+                  <pre style="font-family: inherit;"><?=$company->aux_payment_account?></pre>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <style>
+            th,td{
+              padding: 10px;
+            }
+            th{
+              white-space: nowrap;
+            }
+          </style>
+        </table>
+        <div style="position: absolute;top: 1em;right: 1em; padding: .4em .6em;box-shadow: 0 0 4px #999;border-radius: 4em;background-color: #fff;">
+          <button onclick="jsprint(this.parentNode.previousElementSibling.outerHTML)" class="fa fa-print"></button>
+        </div>
+        <style>
+          td,th{
+            vertical-align: top;
+            padding: 8px;
+          }
+        </style>
+    </div>
+</div>
