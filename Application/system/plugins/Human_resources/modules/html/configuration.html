@@ -1,25 +1,28 @@
 <h1 class="content-small no-pad-top">Configuration</h1>
 <div>
     <div class="flex cards">
-        <div style="min-width: 46%;">
+        <form method="post" style="min-width: 46%;">
             <h3 class="content-small" style="border-bottom: 1px solid #ddd;">Leave approve flow</h3>
             <div class="content">
                 <label>Roles</label>
-                <?php foreach($myroles as $mr){?>
-                <div class="flex">
+                <?php foreach($myroles as $k => $mr){?>
+                <div class="flex content-small">
                     <select name="leave_approve_flow[]">
                         <option value="">Not set</option>
                         <?php foreach($roles as $r){?>
                         <option value="<?=$r['role_id']?>"<?=$mr['role_id'] == $r['role_id']?' selected':''?>><?=$r['role_name']?></option>
                         <?php }?>
                     </select>
-                    <button type="button" onclick="appendInputFn()">+</button>
+                    <button type="button" onclick="appendInput()">+</button>
                     <button type="button" onclick="delInput()">x</button>
                 </div>
                 <?php }?>
             </div>
-        </div>
-        <div style="min-width: 46%;">
+            <div style="text-align: right;" class="content">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+        <form method="post" style="min-width: 46%;">
             <h3 class="content-small" style="border-bottom: 1px solid #ddd;">General settings</h3>
             <div class="content">
                 <label>Headquarters branch</label>
@@ -30,6 +33,28 @@
                     <?php }?>
                 </select>
             </div>
-        </div>
+            <div style="text-align: right;" class="content">
+                <button type="submit">Save</button>
+            </div>
+        </form>
     </div>
 </div>
+<script>
+    const appendInput = ()=>{
+        let elem = window.event.target.parentNode;
+        elem.insertAdjacentHTML('afterEnd', elem.cloneNode(true).outerHTML);
+        elem.nextElementSibling.querySelector('select').options.selectedIndex = 0;
+    };
+    const delInput = ()=>{
+        let elem = window.event.target.parentNode;
+        console.log(elem.parentNode.children.length);
+        if(elem.parentNode.children.length < 3){
+            Swal.fire({
+                icon: 'info',
+                html: 'Removing last standing element is not obvious!'
+            });
+            return;
+        }
+        else elem.parentNode.removeChild(elem);
+    }
+</script>
