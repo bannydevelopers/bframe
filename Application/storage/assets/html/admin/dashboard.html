@@ -7,8 +7,8 @@
               <div class="ag-dcard-item_title">
                 <?=$card['total']?>
               </div>
-              <div class="ag-dcard-item_date-box">
-                <span class="ag-dcard-item_date">
+              <div class="ag-dcard-footer-box">
+                <span class="ag-dcard-footer">
                     <?=strtoupper($k)?>
                 </span>
               </div>
@@ -53,7 +53,7 @@
     position: relative;
     }
     .ag-dcard-item_link:hover,
-    .ag-dcard-item_link:hover .ag-dcard-item_date {
+    .ag-dcard-item_link:hover .ag-dcard-footer {
     text-decoration: none;
     /*color: #FFF;*/
     }
@@ -75,14 +75,14 @@
     z-index: 2;
     position: relative;
     }
-    .ag-dcard-item_date-box {
+    .ag-dcard-footer-box {
     font-size: 18px;
     color: #FFF;
 
     z-index: 2;
     position: relative;
     }
-    .ag-dcard-item_date {
+    .ag-dcard-footer {
     font-weight: bold;
     color: #007bff;
 
@@ -149,7 +149,7 @@
     .ag-dcard-item_link {
         padding: 22px 40px;
     }
-    .ag-dcard-item_date-box {
+    .ag-dcard-footer-box {
         font-size: 16px;
     }
     }
