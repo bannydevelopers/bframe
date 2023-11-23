@@ -22,7 +22,10 @@ class human_resources{
         system::add_event_listener('add_branch', 'human_resources::service_add_branch');
     }
     public static function load_admin_dashboard_cards($args){
-        return '<div class="content" style="min-width:95%;box-shadow:none">hr cards</div>';
+        // fetch info
+        ob_start();
+        include __DIR__.'/modules/html/card.html';
+        return ob_get_clean();
     }
     public static function load_admin_dashboard($args){
         if(str_replace('-', '_', strtolower($args[0])) == __CLASS__) {

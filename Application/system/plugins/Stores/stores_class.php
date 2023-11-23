@@ -16,7 +16,10 @@ class Stores{
         system::add_event_listener('admin_widgets_load', 'stores::load_admin_dashboard_cards');
     }
     public static function load_admin_dashboard_cards($args){
-        return '<div class="content">stores cards</div><div class="content">stores cards 2</div>';
+        // fetch info
+        ob_start();
+        include __DIR__.'/modules/html/card.html';
+        return ob_get_clean();
     }
     public static function load_admin_dashboard($args){
         if(str_replace('-', '_', strtolower($args[0])) == strtolower(__CLASS__)) {
