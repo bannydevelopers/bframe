@@ -1,0 +1,37 @@
+{
+    "name":"Banks",
+    "description":"Simple yet powerful, modern online manager for Banks tasks.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Banks",
+                "alias":"Banks",
+                "href":"#Banks", 
+                "icon":"f508",
+                "permission":"view_banks",
+                "children":[
+                    {
+                        "name":"Deposit",
+                        "href":"/plugin/Banks/deposit_info",
+                        "icon":"f594",
+                        "permission":"view_deposit_info"
+                    },
+                    {
+                        "name":"Withdraw",
+                        "href":"/plugin/Banks/withdraw",
+                        "icon":"",
+                        "permission":"view_withdraw"
+                    },
+                    {
+                        "name":"Share",
+                        "href":"/plugin/Banks/pont-to-share",
+                        "icon":"",
+                        "permission":"view_deposit_info"
+                    }
+                
+                ]
+            }
+        ]
+    },
+    "headquarters_branch":"1"
+}
