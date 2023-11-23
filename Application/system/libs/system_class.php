@@ -345,7 +345,7 @@ class system{
           imagesavealpha($new, true);
         }
       // I'll fix it some day
-        @imagecopyresampled($new, $img, 0, 0, $x, 0, (int)$width, (int)$height, (int)$w, (int)$h);
+        @imagecopyresampled($new, $img, 0, 0, (int)$x, 0, (int)$width, (int)$height, (int)$w, (int)$h);
         $dest_type = explode('.', $dst);
         $ext = end($dest_type);
         switch($ext){

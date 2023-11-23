@@ -168,10 +168,10 @@ class admin{
             $_this::$data['admin_widgets']['plugins'] = ['total' => count($plugins_count)];
         }
         
-        $widgets = system::dispatch_event('admin_profile_load', []);
+        $widgets = system::dispatch_event('admin_widgets_load', []);
         if($widgets && $widgets[0]){
             $_this::$data['widgets'] = '';
-            foreach($widgets as $widget) $_this::$data['widgets'] = $widget;
+            foreach($widgets as $widget) $_this::$data['widgets'] .= $widget;
         }
 
         $user = user::init()->get_session_user('full_name');

@@ -13,7 +13,7 @@ class human_resources{
         // Hook to admin dashboard
         system::add_event_listener('admin_plugin_load', 'human_resources::load_admin_dashboard');
         // Hook to admin card
-        system::add_event_listener('admin_profile_load', 'human_resources::load_admin_dashboard_cards');
+        system::add_event_listener('admin_widgets_load', 'human_resources::load_admin_dashboard_cards');
         // Respond to service requests
         system::add_event_listener('add_staff', 'human_resources::service_add_staff');
         system::add_event_listener('add_designation', 'human_resources::service_add_designation');
@@ -22,7 +22,7 @@ class human_resources{
         system::add_event_listener('add_branch', 'human_resources::service_add_branch');
     }
     public static function load_admin_dashboard_cards($args){
-        return '<div class="content" style="min-width:95%">hr cards</div>';
+        return '<div class="content" style="min-width:95%;box-shadow:none">hr cards</div>';
     }
     public static function load_admin_dashboard($args){
         if(str_replace('-', '_', strtolower($args[0])) == __CLASS__) {

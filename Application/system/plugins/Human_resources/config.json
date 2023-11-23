@@ -54,7 +54,7 @@
                     },
                     {
                         "name":"Configuration",
-                        "href":"/plugin/Human-resources/Configuration",
+                        "href":"/plugin/Human-resources/configuration",
                         "icon":"",
                         "permission":"view_hr_configuration"
                     }
@@ -62,5 +62,6 @@
             }
         ]
     },
-    "headquarters_branch":"1"
+    "headquarters_branch":"1",
+    "leave_approve_flow":"1,2,3,4,5,6"
 }

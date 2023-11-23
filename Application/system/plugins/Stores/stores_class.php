@@ -13,10 +13,10 @@ class Stores{
         // Hook to admin dashboard
         system::add_event_listener('admin_plugin_load', 'stores::load_admin_dashboard');
         // Hook to admin card
-        system::add_event_listener('admin_profile_load', 'stores::load_admin_dashboard_cards');
+        system::add_event_listener('admin_widgets_load', 'stores::load_admin_dashboard_cards');
     }
     public static function load_admin_dashboard_cards($args){
-        return '<div class="content" style="min-width:95%">hr cards</div>';
+        return '<div class="content">stores cards</div><div class="content">stores cards 2</div>';
     }
     public static function load_admin_dashboard($args){
         if(str_replace('-', '_', strtolower($args[0])) == strtolower(__CLASS__)) {
