@@ -6,7 +6,7 @@
             {
                 "name":"Sales",
                 "alias":"Sales",
-                "href":"#Sales", 
+                "href":"/plugin/Sales", 
                 "icon":"f07a",
                 "permission":"view_sales",
                 "children":[
