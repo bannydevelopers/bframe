@@ -222,5 +222,41 @@
         }
         return tmp;
     }
+    function add_invoice() {
+        let formx = document.querySelector('template').content.cloneNode(true).children[1];
+        Swal.fire({
+            title: 'Add Invoice',
+            html: formx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false
+        });
+        let form = document.querySelector('.mySwalSmallForm form');
+        if(form != null){
+            form.addEventListener( 
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    fd.append('ajax_request',1);
+                    ajax(
+                        window.location.href,
+                        response=>{
+                            Swal.fire({
+                                html: response,
+                                icon:'info'
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        error=>{
+                            Swal.fire(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    }
 
 </script>
