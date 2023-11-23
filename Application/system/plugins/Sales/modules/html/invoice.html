@@ -223,12 +223,12 @@
         return tmp;
     }
     function add_invoice() {
-        let formx = document.querySelector('template').content.cloneNode(true).children[1];
+        let formx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
             title: 'Add Invoice',
             html: formx,
-            customClass: 'mySwalSmallForm',
-            showConfirmButton: false
+            customClass:'mySwal',
+            showConfirmButton:false
         });
         let form = document.querySelector('.mySwalSmallForm form');
         if(form != null){
@@ -258,5 +258,17 @@
             );
         }
     }
+    
+    function replicate_items() {
+        let btn = window.event.target;
+        let html = btn.previousElementSibling.children[0].children[3];
+        html.insertAdjacentHTML('afterEnd', html.cloneNode(true).outerHTML);
+    }
+    function delete_item() {
+        let btn = window.event.target;
+        let html = btn.parentNode.parentNode.parentNode.removeChild(btn.parentNode.parentNode);
+    }
+
+    
 
 </script>

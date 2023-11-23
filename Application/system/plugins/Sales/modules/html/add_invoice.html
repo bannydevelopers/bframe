@@ -1,1 +1,65 @@
-<form method="post"></form>
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="content-small">
+        <div class="white">
+            <div class="flex">
+                <div>
+                    <label for="invoice_type">Invoice Type</label>
+                    <select name="invoice_type" id="invoice_type" onchange="check_selection('invoice_type')">
+                        <option value="">Choose...</option>
+                        <?php foreach($invoicetype as $it){?>
+                        <option value="<?=$it['invoice_id']?>"><?=$it['invoice_type']?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div>
+                    <label for="customer_name">Customer Name</label>
+                    <select name="customer_name" id="customer_name" onchange="check_selection('customer_name')">
+                        <option value="">Choose...</option>
+                        <?php foreach($customer as $cus){?>
+                        <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
+                        <?php }?>
+                        <option value="">Add customer</option>
+                    </select>
+                </div>
+            </div>
+            <div >
+            ITEMS
+            </div>
+            <hr>        
+            <div class="flex">
+                <div>
+                    <label for="product_name">Items</label>
+                    <select name="product_name" id="product_name" onchange="check_selection('product_name')">
+                        <option value="">Choose...</option>
+                        <?php foreach($product as $pro){?>
+                        <option value="<?=$pro['product_id']?>"><?=$pro['product_name']?></option>
+                        <?php }?>
+                        <option value="">Add product</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="stock_expenses">Quantity</label>
+                    <input type="number" name="stock_expenses" value="0">
+                </div>
+                <div>
+                    <label for="stock_expenses">Price per item</label>
+                    <input type="number" name="stock_expenses" value="0">
+                </div>
+                <div>
+                    <label for="stock_expenses">Total price</label>
+                    <input type="number" name="stock_expenses" value="0">
+                </div>
+                <div>
+                    <button type="button" class="primary green" onclick="delete_item()">Delete</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+        <button type="button" class="primary green" onclick="replicate_items()">Increase item</button>
+        <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+            <!--button type="reset">Reset form</button-->
+        <button type="submit" class="primary green">Save</button>
+    </div>
+</form>
+ 
