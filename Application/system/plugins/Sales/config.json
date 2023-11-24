@@ -19,7 +19,7 @@
                     {
                         "name":"Stock",
                         "href":"/plugin/Sales/stock",
-                        "icon":"",
+                        "icon":"f011",
                         "permission":"view_stock"
                     },
                     {
