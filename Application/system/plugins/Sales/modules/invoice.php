@@ -56,22 +56,18 @@ if($me){
         if(pathinfo("{$dir}/{$filename}", PATHINFO_EXTENSION) == 'html') include "{$dir}/{$filename}";
     }
     $invoice_tpl = ob_get_clean();
+    if($me['work_location'] == human_resources::get_headquarters_branch()) {
+        $whr = 1;
+    }
+    else{
+        $whr = ["owner_branch"=>$me['work_location']];
+    }
+    $product = $db->select('product')->where($whr)->fetchAll();
+    $customer = $db->select('customer')->where($whr)->fetchAll();
+  
     //var_dump('<pre>',$sortedInvoice);die;
     ob_start();
     include __DIR__.'/html/invoice.html';
     $body = ob_get_clean();
     $return = ['title'=>' ','body'=>$body];
-
-
-
-    /*SELECT p.id, p.name, 
-
-    (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', pc.id, 'name', pc.name)) FROM people pc
-    WHERE pc.parent_id=p.id) AS children
-    
-    FROM people p
-    SELECT invoice.*, 
-    (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product, 'price', price, 'qty', quantity)) FROM invoice_items
-    WHERE invoice_id=invoice) AS children
-    FROM invoice*/
 }

@@ -5,14 +5,11 @@
                 <div>
                     <label for="invoice_type">Invoice Type</label>
                     <select name="invoice_type" id="invoice_type" onchange="check_selection('invoice_type')">
-                        <option value="">Choose...</option>
-                        <?php foreach($invoicetype as $it){?>
-                        <option value="<?=$it['invoice_id']?>"><?=$it['invoice_type']?></option>
-                        <?php }?>
+                        <option value="proforma">Proforma invoice</option>
                     </select>
                 </div>
                 <div>
-                    <label for="customer_name">Customer Name</label>
+                    <label for="customer_name">Customer</label>
                     <select name="customer_name" id="customer_name" onchange="check_selection('customer_name')">
                         <option value="">Choose...</option>
                         <?php foreach($customer as $cus){?>
@@ -22,17 +19,16 @@
                     </select>
                 </div>
             </div>
-            <div >
+            <div class="content" style="text-align: left;">
             ITEMS
-            </div>
-            <hr>        
-            <div class="flex">
+            </div>      
+            <div class="flex content">
                 <div>
                     <label for="product_name">Items</label>
-                    <select name="product_name" id="product_name" onchange="check_selection('product_name')">
+                    <select name="product" id="product_name">
                         <option value="">Choose...</option>
                         <?php foreach($product as $pro){?>
-                        <option value="<?=$pro['product_id']?>"><?=$pro['product_name']?></option>
+                        <option value="<?=$pro['product_id']?>" title="<?=$pro['product_description']?>"><?=$pro['product_name']?></option>
                         <?php }?>
                         <option value="">Add product</option>
                     </select>
@@ -47,18 +43,19 @@
                 </div>
                 <div>
                     <label for="stock_expenses">Total price</label>
-                    <input type="number" name="stock_expenses" value="0">
+                    <input type="number" name="stock_expenses" value="0" readonly>
                 </div>
                 <div>
-                    <button type="button" class="primary green" onclick="delete_item()">Delete</button>
+                    <label>&nbsp;</label>
+                    <div style="white-space: nowrap;">
+                        <button type="button"" onclick="replicate_items()" data-icon="&#xf067;">&nbsp;</button>
+                        <button type="button"" onclick="delete_item()" data-icon="&#xf1f8;">&nbsp;</button>
+                    </div>
                 </div>
             </div>
-            
         </div>
     </div>
-        <button type="button" class="primary green" onclick="replicate_items()">Increase item</button>
-        <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
-            <!--button type="reset">Reset form</button-->
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
         <button type="submit" class="primary green">Save</button>
     </div>
 </form>

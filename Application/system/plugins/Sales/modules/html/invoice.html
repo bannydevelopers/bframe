@@ -93,6 +93,27 @@
         box-shadow: none;
         border: none;
     }
+    .mySwal label, .smallSwal label{
+        text-align: left;
+        display: block;
+    }
+    .selectsearchbox{
+        position: absolute;
+        left: 0;
+        background-color: #fff;
+        display: inline-block;
+        width: 100%;
+        text-align: left;
+        z-index: 4;
+    }
+    .selectsearchbox ul{
+        box-shadow: 0 0 3px #999;
+    }
+    .selectsearchbox li{
+        background-color: #fff;
+        padding: .6em;
+        cursor: pointer;
+    }
 </style>
 <script>
     const view_invoice = ()=>{
@@ -230,6 +251,7 @@
             customClass:'mySwal',
             showConfirmButton:false
         });
+        search_select();
         let form = document.querySelector('.mySwalSmallForm form');
         if(form != null){
             form.addEventListener( 
@@ -260,15 +282,61 @@
     }
     
     function replicate_items() {
-        let btn = window.event.target;
-        let html = btn.previousElementSibling.children[0].children[3];
-        html.insertAdjacentHTML('afterEnd', html.cloneNode(true).outerHTML);
+        let btn = window.event.target.parentNode.parentNode.parentNode;
+        btn.insertAdjacentHTML('afterEnd', btn.cloneNode(true).outerHTML);
     }
     function delete_item() {
-        let btn = window.event.target;
-        let html = btn.parentNode.parentNode.parentNode.removeChild(btn.parentNode.parentNode);
+        let btn = window.event.target.parentNode.parentNode.parentNode;
+        let html = btn.parentNode.removeChild(btn);
     }
+const search_select = ()=>{
+    let sels = document.querySelectorAll('select');
+    if(!sels) return;
+    let sbx = '<div class="selectsearchbox"><input type="search" placeholder="Search..."></div>';
+    [...sels].forEach(sel=>{
+        sel.addEventListener('click', evt=>{
+            evt.target.parentNode.style.position = 'relative';
+            evt.target.insertAdjacentHTML('afterEnd', sbx);
+            sel.nextElementSibling.children[0].focus();
+            sel.nextElementSibling.children[0].addEventListener('blur', ev=>{
+                setTimeout(fn=>{
+                    ev.target.parentNode.outerHTML = '';
+                }, 400);
+            });
+            let opts = sel.innerHTML.replace('option','li');
+            sel.nextElementSibling.insertAdjacentHTML('beforeEnd', `<ul>${opts}</ul>`);
+            let ul = sel.nextElementSibling.querySelector('ul');
+            ul.addEventListener('click', e=>{
+                sel.value = e.target.getAttribute('value');
+            });
+            sel.nextElementSibling.children[0].addEventListener('keyup', evx=>{
+                let li = evx.target.nextElementSibling.querySelectorAll('li');
+                //console.log(evx.target.nextElementSibling);
+                let filter = evx.target.value.toUpperCase();
+                for (i = 0; i < li.length; i++) {
+                    txtValue = li[i].textContent || li[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            });
 
-    
+            /*
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+            */
+        });
+    });
 
+}
+search_select();
 </script>
