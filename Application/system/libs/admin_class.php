@@ -158,7 +158,7 @@ class admin{
         if($user->user_can('view_user')){
             $_this::$data['admin_widgets']['users'] = $db->select('user_accounts', 'count(user_id) as total')->fetch();
         }
-        if($user->user_can('view_pages')){
+        if($user->user_can('view_page')){
             $_this::$data['admin_widgets']['pages'] = $db->select('pages', 'count(page_id) as total')->fetch();
         }
         if($user->user_can('view_plugins')){
