@@ -8,6 +8,8 @@ if($me){
     if(isset($_POST['product_name'])){
         $data = [
             'product_name'=>addslashes($_POST['product_name']),
+            'product_price'=>intval($_POST['product_price']),
+            'product_model'=>addslashes($_POST['product_model']),
             'product_category'=>intval($_POST['product_category']),
             'product_description'=>addslashes($_POST['product_description']),
             'product_unit_singular'=>addslashes($_POST['product_unit_singular']),

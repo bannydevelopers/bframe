@@ -4,11 +4,11 @@
         <input type="text" id="product_name" name="product_name" placeholder="...name" required />
         <div class="flex">
             <div>
-                <label for="product_image">Product Image</label>
-                <input  type="file" name="product_image" accept=".jpg, .jpeg, .png, .gif" id="product_image">
+                <label for="product_model">Product model</label>
+                <input type="text" id="product_model" name="product_model" placeholder="...model" required />
             </div>
             <div>
-                <label for="product_category">Select category</label>
+                <label for="product_category">Category</label>
                 <select name="product_category" id="product_category" onchange="check_selection('product_category')">
                     <option value="">Choose...</option>
                     <?php foreach($productCategory as $cat){?>
@@ -16,6 +16,16 @@
                     <?php }?>
                     <option value="">Add category</option>
                 </select>
+            </div>
+        </div>
+        <div class="flex">
+            <div>
+                <label for="product_price">Current price</label>
+                <input type="number" min="0" id="product_price" name="product_price" placeholder="...sell price per item" required />
+            </div>
+            <div>
+                <label for="product_image">Product image</label>
+                <input  type="file" name="product_image" accept=".jpg, .jpeg, .png, .gif" id="product_image">
             </div>
         </div>
         <label for="product_description">Product description</label>

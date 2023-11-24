@@ -11,21 +11,44 @@ if($me){
     else{
         $whr = "invoice.owner_branch={$me['work_location']}";
     }
-    
+    if(isset($_POST['invoice_type'])){
+        $inv_data = [
+            'invoice_type'=>addslashes($_POST['invoice_type']),
+            'due_date'=>addslashes($_POST['due_date']),
+            'customer'=>addslashes($_POST['customer']),
+            'sale_represantative'=>intval($me['user_reference']),
+            'owner_branch'=>intval($me['work_location']),
+            'created_time'=>date('Y-m-d')
+        ];
+        $inv_items_qry = [];
+        $inv_id = $db->insert('invoice', $inv_data);
+        if($inv_id){
+            foreach($_POST['product'] as $k=>$p){
+                $inv_items_qry[] = "({$p}, {$inv_id}, {$_POST['price'][$k]}, {$_POST['quantity'][$k]})";
+            }
+            $inv_items_qry = implode(',', $inv_items_qry);
+            $db->query("INSERT INTO invoice_items (product, invoice, price, quantity) VALUES {$inv_items_qry}");
+        }
+        if($db->error()) $msg = $db->error()['message'];
+        else $msg = 'Saved successful';
+        if(isset($_POST['ajax_request'])) die($msg);
+    }
     if(isset($_POST['qty'])){
-        $qry = "INSERT INTO invoice_items (item_id, price, product, invoice, quantity) VALUES ";
-        //INSERT INTO table_users (cod_user, date, user_rol, cod_office) VALUES
-        //('622057', '12082014', 'student', '17389551'),
-        //('2913659', '12082014', 'assistant','17389551'),
-        //('6160230', '12082014', 'admin', '17389551')
-        //ON DUPLICATE KEY UPDATE
-        //cod_user=VALUES(cod_user), date=VALUES(date)
+        /*
+            //INSERT INTO table_users (cod_user, date, user_rol, cod_office) VALUES
+            //('622057', '12082014', 'student', '17389551'),
+            //('2913659', '12082014', 'assistant','17389551'),
+            //('6160230', '12082014', 'admin', '17389551')
+            //ON DUPLICATE KEY UPDATE
+            //cod_user=VALUES(cod_user), date=VALUES(date)
+        */
         $tmp = [];
         foreach($_POST['qty'] as $id=>$qty){
             $tmp[] = "({$id}, {$_POST['price'][$id]}, 8, 8, $qty)";
         }
         $tmp = implode(',', $tmp);
-        $qry .= " {$tmp} ON DUPLICATE KEY UPDATE item_id = VALUES(item_id), price=VALUES(price), quantity=VALUES(quantity)";
+        $qry = "INSERT INTO invoice_items (item_id, price, product, invoice, quantity) VALUES "
+             . " {$tmp} ON DUPLICATE KEY UPDATE item_id = VALUES(item_id), price=VALUES(price), quantity=VALUES(quantity)";
         $db->query($qry);
         if($db->error()) die('Saving failed');
         else die('Saved successful');
@@ -39,6 +62,7 @@ if($me){
                   ->join('customer', 'customer_id=customer')
                   ->join('user_accounts', 'user_id=sale_represantative')
                   ->where($whr)
+                  ->order_by('invoice_id', 'desc')
                   ->fetchAll();
 
     //var_dump($db->error(),$invoice);
