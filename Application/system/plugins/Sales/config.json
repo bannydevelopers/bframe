@@ -1,14 +1,14 @@
 {
-    "name":"Sales",
+    "name":"Purchase & Sale",
     "description":"Sales customer management, stock, invoicing, purchase orders, products, suppliers, and robust reporting.",
     "admin":{
         "navigation":[
             {
-                "name":"Sales",
+                "name":"Purchase & Sale",
                 "alias":"Sales",
                 "href":"/plugin/Sales", 
                 "icon":"f07a",
-                "permission":"view_sales",
+                "permission":"view_purchase_sales",
                 "children":[
                     {
                         "name":"Customers",
@@ -21,6 +21,12 @@
                         "href":"/plugin/Sales/stock",
                         "icon":"",
                         "permission":"view_stock"
+                    },
+                    {
+                        "name":"Sales",
+                        "href":"/plugin/Sales/sales",
+                        "icon":"",
+                        "permission":"view_sales"
                     },
                     {
                         "name":"Invoice",

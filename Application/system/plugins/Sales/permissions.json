@@ -1,5 +1,6 @@
 [
     "view_sales",
+    "view_purchase_sales",
     "add_customers",
     "edit_customers",
     "view_customers",
