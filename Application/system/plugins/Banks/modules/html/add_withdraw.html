@@ -1,0 +1,51 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="content-small">
+        <div class="white">
+            <div>
+                <label for="bank">Bank</label>
+                <select name="bank" id="bank" onchange="add_form('bank')">
+                    <option value="">Choose...</option>
+                    <?php foreach($banks as $bank){?>
+                    <option value="<?=$bank['bank_id']?>"><?=$bank['bank_name']?></option>
+                    <?php }?>
+                    <option value="add">Add bank</option>
+                </select>
+            </div>
+            <div class="flex">
+                <div>
+                    <label for="payment_to">Payment to</label>
+                    <input type="text" id="payment_to" name="payment_to" value="" required />
+                </div>
+                <div>
+                    <label for="due_date">Due date</label>
+                    <input type="date" id="due_date" name="due_date" value="" required />
+                </div>
+            </div>    
+            <div class="flex">
+                <div>
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" name="amount" value="" required />
+                </div>
+                <div>
+                    <label for="mode_of_payment">Payment mode</label>
+                    <input type="text" id="mode_of_payment" name="mode_of_payment" value="" required />
+                </div>
+            </div>          
+            <div class="flex">
+                <div>
+                    <label for="approved_by">Approved by</label>
+                    <select name="approved_by" id="approved_by" onchange="check_selection('full_name')">
+                        <option value="">Choose...</option>
+                        <?php foreach($staff as $star){?>
+                        <option value="<?=$star['user_id']?>"><?=$star['full_name']?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+        <!--button type="reset">Reset form</button-->
+        <button type="submit" class="primary green">Save</button>
+    </div>
+</form>
