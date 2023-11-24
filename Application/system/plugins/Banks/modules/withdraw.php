@@ -7,7 +7,6 @@ if($me){
         //var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
-            'bank_name'=>$_POST['bank_name'],
             'payment_to'=>$_POST['payment_to'],   
             'due_date'=>$_POST['due_date'], 
             'amount'=>$_POST['amount'], 
@@ -52,6 +51,8 @@ if($me){
     }
     $withdraw = $db->select('withdraw')
                     ->join('branches', 'branch_id=owner_branch')
+                    ->join('banks','bank_id=bank')
+                    ->join('user_accounts','user_id=staff')
                     ->where($whr)
                     ->order_by('withdraw_id', 'desc')
                     ->fetchAll();

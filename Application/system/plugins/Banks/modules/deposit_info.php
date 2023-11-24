@@ -4,14 +4,12 @@ if($me){
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
     if(isset($_POST['amount'])){
-        //var_dump($_POST);
+        var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
-            'received_from'=>$_POST['received_from'],
             'per_invoice_no'=>$_POST['per_invoice_no'],   
             'date'=>$_POST['date'], 
-            'amount'=>$_POST['amount'], 
-            'bank_name'=>$_POST['bank_name'],
+            'amount'=>$_POST['amount'],
             'cheque_no'=>$_POST['cheque_no']
         ];
         //var_dump($db->error());
@@ -53,9 +51,12 @@ if($me){
     }
     $deposit = $db->select('deposit_info')
                     ->join('branches', 'branch_id=owner_branch')
+                    ->join('customer','customer_id=received_from')
+                    ->join('banks','bank_id=bank')
                     ->where($whr)
                     ->order_by('deposit_id', 'desc')
                     ->fetchAll();
+
     $sortedDeposit = [];
     foreach($deposit as $st){
         if(!isset($sortedDeposit[$st['branch_name']])) $sortedDeposit[$st['branch_name']] = [];

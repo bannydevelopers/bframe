@@ -19,19 +19,22 @@
                         <tr>
                             <th>
                                 <input type="checkbox" onclick="upadte_checks()">
-                                Bank name
+                                Received from
                             </th>
                             <th>
-                                Payment to
+                                Per invoice no
                             </th>
                             <th>
-                                Due date
+                                Date
                             </th>
                             <th>
                                 Amount
                             </th>
                             <th>
-                                Mode of Payment
+                                Bank name
+                            </th>
+                            <th>
+                                Cheque no
                             </th>
                             <th>
                                 &nbsp;
@@ -42,29 +45,29 @@
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
                             <td class="flex" style="display: flex;">
-                                <input type="checkbox" name="bank_name[]" value="<?=$st['bank_name']?>" style="max-width:13px;max-height:13px">
+                                <input type="checkbox" name="customer_name[]" value="<?=$st['customer_name']?>" style="max-width:13px;max-height:13px">
                                 <span>
-                                    <?=$st['bank_name']?><br>
+                                    <?=$st['customer_name']?><br>
                                 </span>
                             </td>
                             <td>
-                                <?=$st['payment_to']?><br>
-                                
-                            </td> 
-                            <td>
-                                <?=$st['Amount']?><br>  
-                            </td>
-                           
-                            <td>
-                                <?=$st['due_date']?><br>
+                                <?=$st['per_invoice_no']?><br>
                                 
                             </td>
                             <td>
-                                <?=$st['mode_of_payment']?><br>
+                                <?=$st['date']?><br>
+                                
+                            </td>
+                             
+                            <td>
+                                <?=$st['amount']?><br>  
+                            </td>
+                            <td>
+                                <?=$st['bank_name']?><br>
                                 
                             </td>
                             <td>
-                                <?=$st['full_name']?><br>
+                                <?=$st['cheque_no']?><br>
                                 
                             </td>
                             <td>
@@ -86,12 +89,12 @@
     <div class="vspaced" style="text-align: left;">
         <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
-                <h3 style="padding-bottom: .6em;" class="large-text">{{bank_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">Payment to: </span>{{payment_to}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Due date: </span>{{due_date}}</div>
+                <h3 style="padding-bottom: .6em;" class="large-text">{{customer_name}}</h3>
+                <div><span style="color: rgb(35, 57, 136);">Per invoice no: </span>{{per_invoice_no}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Date: </span>{{date}}</div>
                 <div><span style="color: rgb(35, 57, 136);">Amount: </span>{{amount}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Mode of payment: </span>{{mode_of_payment}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Approved by: </span>{{approved_by}}</div>
+                <div><span style="color: rgb(35, 57, 136);">bank name: </span>{{bank}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Cheque no: </span>{{cheque_no}}</div>
             </div>
         </div>
     </div>
