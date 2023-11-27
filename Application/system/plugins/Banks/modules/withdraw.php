@@ -56,6 +56,22 @@ if($me){
                     ->where($whr)
                     ->order_by('withdraw_id', 'desc')
                     ->fetchAll();
+
+    $banks = $db ->select('banks','bank_id, bank_name')
+                  ->where(1)
+                  ->fetchAll();
+
+    $staff = $db->select('staff')
+                ->join('user_accounts','user_id=user_reference')
+                ->join('roles', 'system_role=role_id', 'left')
+                ->join('designations', 'designation=designation_id', 'left')
+                ->join('departments', 'department=dept_id', 'left')
+                ->join('branches', 'work_location=branch_id', 'left')
+                ->join('banks', 'bank=bank_id', 'left')
+                ->where($whr)
+                ->order_by('staff_id', 'desc')
+                ->fetchAll();
+   
     $sortedWithdraw = [];
     foreach($withdraw as $st){
         if(!isset($sortedWithdraw[$st['branch_name']])) $sortedWithdraw[$st['branch_name']] = [];

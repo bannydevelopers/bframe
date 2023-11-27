@@ -42,15 +42,6 @@
                     <label for="cheque_no">Cheque no</label>
                     <input type="text" id="cheque_no" name="cheque_no" value="" required />
                 </div>
-                <div>
-                    <label for="approved_by">Approved by</label>
-                    <select name="approved_by" id="approved_by" onchange="check_selection('full_name')">
-                        <option value="">Choose...</option>
-                        <?php foreach($staff as $star){?>
-                        <option value="<?=$star['user_id']?>"><?=$star['full_name']?></option>
-                        <?php }?>
-                    </select>
-                </div>
             </div>
         </div>
     </div>
