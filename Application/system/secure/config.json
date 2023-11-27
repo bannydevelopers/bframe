@@ -7,13 +7,12 @@
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
+        "Office_inventory",
         "Sales",
         "Banks",
         "Human_resources",
-        "Stores",
         "Project",
         "Accounts",
-        "Inventory",
         "Front_desk"
     ],
     "gateways": {

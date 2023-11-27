@@ -1,5 +1,5 @@
 <div class="flex">
-    <h1 class="content-small no-pad-top">ToolS</h1>
+    <h1 class="content-small no-pad-top">Tools</h1>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
         <button onclick="add_tool()" value="add" data-form-width="wide" class="round">Add tool</button>
     </div>
@@ -26,8 +26,8 @@
                     <input type="radio" name="itab<?=$k?>" id="class_tab25<?=$k?>">
                     <label for="class_tab25<?=$k?>">Off service (<?=intval(count($tools_offservice))?>)</label>
                     <div class="tab-panes" style="text-align: left;">
-                        <!-- -->
-                        <div></div>
+
+                        <div>Overview</div>
                         <div class="white content-small">
                             <table class="paginate" data-items-per-page="10">
                                 <thead>
@@ -110,8 +110,6 @@
                                         </td>
                                         <td>
                                             <a onclick="view_tool()" data-icon="&#xf06e;"></a>
-                                            <a onclick="edit_tool()" data-icon="&#xf044;"></a>
-                                            <a onclick="delete_tool()" data-icon="&#xf2ed;"></a>
                                         </td>
                                     </tr>
                                     <?php }?>
@@ -155,8 +153,6 @@
                                         </td>
                                         <td>
                                             <a onclick="view_tool()" data-icon="&#xf06e;"></a>
-                                            <a onclick="edit_tool()" data-icon="&#xf044;"></a>
-                                            <a onclick="delete_tool()" data-icon="&#xf2ed;"></a>
                                         </td>
                                     </tr>
                                     <?php }?>
@@ -200,8 +196,6 @@
                                         </td>
                                         <td>
                                             <a onclick="view_tool()" data-icon="&#xf06e;"></a>
-                                            <a onclick="edit_tool()" data-icon="&#xf044;"></a>
-                                            <a onclick="delete_tool()" data-icon="&#xf2ed;"></a>
                                         </td>
                                     </tr>
                                     <?php }?>
@@ -363,108 +357,50 @@
     };
     const delete_tool = ()=>{
         let elem = window.event.target.parentNode.parentNode;
-        let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
+        let jx = JSON.parse(elem.getAttribute('data-json'));
+    
+        console.log(jx);
         Swal.fire({
-            title: `Delete ${name}?`,
+            title: `Delete ${jx.tool_name}?`,
             showCancelButton: true,
             confirmButtonText:'Sure, delete',
             html:"No UNDO remember!"
         })
         .then(response=>{
-        if(response.isConfirmed){
-            let userdata = new FormData();
-            userdata.append('delete_tool', uid);
-            userdata.append('ajax',1);
-            ajax(
-            window.location.href, 
-            response=>{
-                let res_json = JSON.parse(response);
-                //console.log(response);
-                if(res_json){
-                    let jsx = res_json.response;
-                    Swal.fire({
-                        title: jsx.message,
-                        icon: jsx.status
-                    })
-                    .then(e=>{
-                        if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             createPageButtons(); // create the page buttons initially
-                            showPage(currentPage);
-                        }
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: 'Malformed response returned',
-                        icon: 'error',
-                        html:response
-                    });
-                }
-            },
-            error=>{
-                console.log(error);
-            },
-            userdata
-            );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
-        }
-        });
-    }
-    const import_tool = ()=>{
-        let htz = document.querySelector('template').content.children[2].cloneNode(true);
-        Swal.fire({
-            title: 'Import tool',
-            html:htz,
-            customClass:'mySwalSmallForm',
-            showConfirmButton:false
-        });
-        let form = document.querySelector('.mySwalSmallForm form');
-        if(form != null){
-            form.addEventListener(
-                'submit',
-                evt=>{
-                    evt.preventDefault();
-                    let fd = new FormData(form);
-                    Swal.fire({
-                        title: 'Working, please wait...',
-                        icon: 'info',
-                        showConfirmButton:false
-                    });
-                    ajax(
-                        window.location.href,
-                        success=>{
-                            if([...success][0] == '{' || [...success][0] == '['){
-                                let jsx = JSON.parse(success);
-                                Swal.fire({
-                                    icon:jsx.status,
-                                    title:jsx.message
-                                })
-                                .then(val=>{
-                                    window.location.reload();
-                                });
+            if(response.isConfirmed){
+                let userdata = new FormData();
+                userdata.append('delete_tool', jx.tool_id);
+                userdata.append('ajax_request',1);
+                ajax(
+                window.location.href, 
+                response=>{
+                    console.log(response);
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title: jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(e=>{
+                            if(jsx.status == 'success'){
+                                elem.parentNode.removeChild(elem);
                             }
-                            else{
-                                Swal.fire({
-                                    icon:'error',
-                                    title:success
-                                });
-                            }
-                        },
-                        error=>{
-                            console.log(error);
-                        },
-                        fd
-                    );
-                }
-            );
-        }
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Malformed response returned',
+                            icon: 'error',
+                            html:response
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                userdata
+                );
+            }
+        });
     }
 </script>
