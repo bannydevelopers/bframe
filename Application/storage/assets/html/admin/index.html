@@ -9,6 +9,8 @@
         <meta property="og:image" content="app/storage/uploads/images/logo.png" />
         <link rel="shortcut icon" type="image/png" href="app/storage/uploads/images/logo.png">
         <meta property="og:url" content="https://<?=$_SERVER['HTTP_HOST']?>" />
+        <link rel="stylesheet" href="vendor/components/font-awesome/all.min.css">
+        
         <title>Dashboard <?=(!empty(trim($title)) ? (" | {$title}") : '')?></title>
         
         <style>
@@ -107,7 +109,29 @@
                             <button data-icon="&#xf002;" class="plain-btn xl content"></button>
                             <input type="search" name="q" placeholder="Search..." />
                         </form>
-                        <div>
+                        <div class="jr-nav">
+                            <ul class="jr-ul">
+                              <li class="jr-li">
+                                <i class="fa fa-user"></i>
+                                <i class="fa fa-user"></i>
+                              </li>
+                              <li class="jr-li">
+                                <img src="images/profile.png" class="profile" />
+                                <ul class="jr-ul">
+                                  <li class="sub-item jr-li">
+                                    
+                                    <p>Profile</p>
+                                  </li>
+                                  <li class="sub-item jr-li">
+                                    
+                                    <p>Logout</p>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                        </div>
+
+                        <!--<div>
                             <div style="text-align: right;">
                                 <span style="max-height:30px">
                                     <img onclick="this.nextElementSibling.click()" class="white" src="<?=user::init()->get_user_avatar()?>" height="30" style="border-radius: 3em;padding: 2px;">
@@ -124,7 +148,7 @@
                                     </span>
                                 </span>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -681,3 +705,75 @@
        </script>
     </body>
 </html>
+<style>
+    img {
+      max-width: 100%;
+      height: auto;
+    }.jr-nav {
+      background-color: #fff;
+      padding: 0 3rem;
+      border-radius: 0.625rem;
+    }.jr-ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+    }.jr-li {
+      list-style-type: none;
+      position: relative;
+      padding: 0.625rem 0 0.5rem;
+    }.jr-li .jr-ul {
+      flex-direction: column;
+      position: absolute;
+      background-color: white;
+      align-items: flex-start;
+      transition: all 0.5s ease;
+      width: 20rem;
+      right: -3rem;
+      top: 4.5rem;
+      border-radius: 0.325rem;
+      gap: 0;
+      padding: 1rem 0rem;
+      opacity: 0;
+      box-shadow: 0px 0px 100px rgba(20, 18, 18, 0.25);
+      display: none;
+    }.jr-ul .jr-li:hover > .jr-ul, .jr-ul .jr-li .jr-ul:hover {
+      visibility: visible;
+      opacity: 1;
+      display: flex;
+    }.material-icons-outlined {
+      color: #888888;
+      transition: all 0.3s ease-out;
+    }.material-icons-outlined:hover {
+      color: #ff9800;
+      transform: scale(1.25) translateY(-4px);
+      cursor: pointer;
+    }.profile {
+      height: 3rem;
+      width: auto;
+      cursor: pointer;
+    }.sub-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.725rem;
+      cursor: pointer;
+      padding: 0.5rem 1.5rem;
+    }.sub-item:hover {
+      background-color: rgba(232, 232, 232, 0.4);
+    }.sub-item:hover .material-icons-outlined {
+      color: #ff9800;
+      transform: scale(1.08) translateY(-2px);
+      cursor: pointer;
+    }.sub-item:hover p {
+      color: #000;
+      cursor: pointer;
+    }.sub-item p {
+      font-size: 0.85rem;
+      color: #888888;
+      font-weight: 500;
+      margin: 0.4rem 0;
+      flex: 1;
+    }
+    </style>
