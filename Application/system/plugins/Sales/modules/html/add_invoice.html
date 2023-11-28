@@ -2,12 +2,7 @@
     <div class="content-small">
         <div class="white">
             <div class="flex">
-                <div>
-                    <label for="invoice_type">Invoice Type</label>
-                    <select name="invoice_type" id="invoice_type" onchange="check_selection('invoice_type')">
-                        <option value="proforma">Proforma invoice</option>
-                    </select>
-                </div>
+                <input type="hidden" name="invoice_type" value="proforma">
                 <div>
                     <label for="customer">Customer</label>
                     <select name="customer" id="customer" onchange="check_selection('customer')">
@@ -19,8 +14,16 @@
                     </select>
                 </div>
                 <div>
+                    <label for="order_number">Order number</label>
+                    <input type="text" name="order_number" id="order_number" placeholder="order number if any">
+                </div>
+                <div>
+                    <label for="created_time">Create date</label>
+                    <input type="date" name="created_time" id="created_time" value="<?=date('Y-m-d', time())?>">
+                </div>
+                <div>
                     <label for="due_date">Due date</label>
-                    <input type="date" name="due_date">
+                    <input type="date" name="due_date" id="due_date" value="<?=date('Y-m-d', (time()+(3600*24*29)))?>">
                 </div>
             </div>
             <div class="content" style="text-align: left;">

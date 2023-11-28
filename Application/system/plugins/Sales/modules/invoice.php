@@ -15,10 +15,11 @@ if($me){
         $inv_data = [
             'invoice_type'=>addslashes($_POST['invoice_type']),
             'due_date'=>addslashes($_POST['due_date']),
+            'order_number'=>addslashes($_POST['order_number']),
             'customer'=>addslashes($_POST['customer']),
             'sale_represantative'=>intval($me['user_reference']),
             'owner_branch'=>intval($me['work_location']),
-            'created_time'=>date('Y-m-d')
+            'created_time'=>addslashes($_POST['created_time'])
         ];
         $inv_items_qry = [];
         $inv_id = $db->insert('invoice', $inv_data);
@@ -72,7 +73,21 @@ if($me){
         $inv['invoice_items'] = $inv['invoice_items'] ? json_decode($inv['invoice_items'],true) : [];
         $sortedInvoice[$inv['branch_name']][] = $inv;
     } 
-    $company = storage::get_data('system_config')->company_profile;
+
+    if($me['work_location'] == human_resources::get_headquarters_branch()) {
+        $whr = 1;
+    }
+    else{
+        $whr = ["branch_id"=>$me['work_location']];
+    }
+
+    $default = storage::get_data('system_config')->company_profile;
+    $branches = $db->select('branches', 'branch_id,branch_profile')->where($whr)->fetchAll();
+    $company = [];
+    foreach($branches as $b){
+        if(!$b['branch_profile']) $company[$b['branch_id']] = $default;
+        else $company[$b['branch_id']] = json_decode($b['branch_profile']);
+    }
 
     ob_start();
     $dir = realpath(__DIR__.'/html/invoice_tpl');
@@ -80,6 +95,7 @@ if($me){
         if(pathinfo("{$dir}/{$filename}", PATHINFO_EXTENSION) == 'html') include "{$dir}/{$filename}";
     }
     $invoice_tpl = ob_get_clean();
+
     if($me['work_location'] == human_resources::get_headquarters_branch()) {
         $whr = 1;
     }

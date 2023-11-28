@@ -1,18 +1,18 @@
 {
     "session_name": "userdata",
     "site_name": "CMIS v2",
-    "theme": "HansHotel",
+    "theme": "Default",
     "dashboard_url": "admin",
     "currency": "TZS",
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
+        "Communication",
         "Office_inventory",
         "Sales",
         "Banks",
         "Human_resources",
         "Project",
-        "Accounts",
         "Front_desk"
     ],
     "gateways": {
