@@ -10,7 +10,9 @@ if($me){
             'per_invoice_no'=>$_POST['per_invoice_no'],   
             'date'=>$_POST['date'], 
             'amount'=>$_POST['amount'],
-            'cheque_no'=>$_POST['cheque_no']
+            'cheque_no'=>$_POST['cheque_no'],
+            'received_from'=>$_POST['customer_name'],
+            'bank'=>$_POST['bank']
         ];
         //var_dump($db->error());
         if(isset($_POST['deposit_id']) && intval($_POST['deposit_id']) > 0){
@@ -55,6 +57,14 @@ if($me){
                     ->join('banks','bank_id=bank')
                     ->where($whr)
                     ->order_by('deposit_id', 'desc')
+                    ->fetchAll();
+
+    $banks = $db ->select('banks','bank_id, bank_name')
+                    ->where(1)
+                    ->fetchAll();
+
+    $customer = $db ->select('customer','customer_id, customer_name')
+                    ->where(1)
                     ->fetchAll();
 
     $sortedDeposit = [];

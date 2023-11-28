@@ -10,9 +10,8 @@ if($me){
             'supplier_name'=>$_POST['supplier_name'], 
             'supplier_phone_number'=>$_POST['supplier_phone_number'], 
             'supplier_email'=>$_POST['supplier_email'], 
-            'supplier_physical_adress'=>$_POST['supplier_physical_adress'], 
-            'supplier_details'=>$_POST['supplier_details'],  
-            'created_time'=>date('Y-m-d H:i:s')
+            'supplier_physical_address'=>$_POST['supplier_physical_adress'], 
+            'supplier_details'=>$_POST['supplier_details']
         ];
         if(isset($_POST['supplier_id']) && intval($_POST['supplier_id']) > 0){
             $k = intval($_POST['supplier_id']);

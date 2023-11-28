@@ -50,8 +50,8 @@
                     <input type="date" id="due_date" name="due_date" value="" required />
                 </div> 
                 <div>
-                    <label for="approved_by">Approved by</label>
-                    <select name="approved_by" id="approved_by" onchange="add_form('employee')" required>
+                    <label for="staff">Approved by</label>
+                    <select name="staff" id="staff" onchange="add_form('staff')" required>
                         <option value="">Choose...</option>
                         <?php foreach($staff as $star){?>
                             <option value="<?=$star['user_id']?>"><?=$star['full_name']?></option>
