@@ -16,6 +16,7 @@
         </div>
     <?php }?>
 </div>
+<hr>
 <div class="flex cards" style="justify-content: left;">
     <?php print_r(@$widgets)?>
 </div>
@@ -33,7 +34,7 @@
     align-items: flex-start;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    padding: 50px 0;
+    padding: 20px 0;
     }
     .ag-dcard_item {
     -ms-flex-preferred-size: calc(33.33333% - 30px);
@@ -47,7 +48,7 @@
     }
     .ag-dcard-item_link {
     display: block;
-    padding: 15px 20px;
+    padding: 5px 20px;
     background-color: #f6f8fc;
     overflow: hidden;
     position: relative;
@@ -64,7 +65,7 @@
     }
     .ag-dcard-item_title {
     min-height: 67px;
-    margin: 0 0 25px;
+    margin: 0 0 0;
 
     overflow: hidden;
 
@@ -141,13 +142,8 @@
         flex-basis: 100%;
     }
     .ag-dcard-item_title {
-        min-height: 32px;
         line-height: 1;
-
         font-size: 2.5rem;
-    }
-    .ag-dcard-item_link {
-        padding: 22px 40px;
     }
     .ag-dcard-footer-box {
         font-size: 16px;
