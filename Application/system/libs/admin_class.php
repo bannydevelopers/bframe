@@ -61,6 +61,11 @@ class admin{
         $pages = $db->select('pages','page_id,page_name')->where(['page_type'=>0])->fetchAll();
         $pkids = [
                     [
+                        'name'=>'All pages',
+                        'href'=>'/pages',
+                        'permission'=>'view_page'
+                    ],
+                    [
                         'name'=>'Create page',
                         'href'=>'/pages/add',
                         'permission'=>'add_page'
@@ -92,6 +97,7 @@ class admin{
         [
             [
                 'name'=>'Users',
+                'alias'=>'users',
                 'href'=>'#users', 
                 'icon'=>'f509',
                 'permission'=>'view_user',
@@ -110,6 +116,7 @@ class admin{
             ],
             [
                 'name'=>'Pages',
+                'alias'=>'pages',
                 'href'=>'/pages', 
                 'icon'=>'f15c',
                 'permission'=>'view_page',
@@ -146,7 +153,6 @@ class admin{
             ]
         ];
         $nav = array_merge($nav, $settings);
-        //var_dump('<pre>',$nav);
         return $nav;
 
     }
