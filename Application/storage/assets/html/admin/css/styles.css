@@ -9,12 +9,8 @@
     --primary-bg: #2D4A8A;
     --primary-txt: #ffffff;
 }
-
-/* Styles, not important */
-*, *:before, *:after {
-    position: relative;
-    box-sizing: border-box;
-    line-height: 1em;
+ul, li {
+    list-style: none;
 }
 
 html {
@@ -34,31 +30,12 @@ body{
 h1,h2,h3,h4,h5,h6{
     margin: 0;
 }
-a, span, b,small,i,em{
-    display: inline-block;
-}
 h2 {
     font-weight: normal;
 }
 img{
     vertical-align: middle;
     max-width: 100%;
-}
-a,a:visited{
-    color: #551A8B;
-    cursor: pointer;
-    text-decoration: none;
-}
-em{
-    font-family: 'Times New Roman', Times, serif;
-}
-ul{
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-}
-li > ul{
-    padding-left: 12px;
 }
 table{
     width: 100%;
@@ -141,14 +118,14 @@ input[type=button],input[type=submit],input[type=reset],button,.btn{
     box-shadow: 0 0 3px #aaa;
     padding: 12px 18px;
     margin: 3px;
-    }
-    input[type=button],input[type=submit],input[type=reset],button,input[type=checkbox]{
-        display: inline-block;
-        width: auto;
-    }
-    input[type=checkbox] ~ label,input[type=radio] ~ label{
-        display: inline-block;
-    }
+}
+input[type=button],input[type=submit],input[type=reset],button,input[type=checkbox]{
+    display: inline-block;
+    width: auto;
+}
+input[type=checkbox] ~ label,input[type=radio] ~ label{
+    display: inline-block;
+}
 
 .content{
     padding: 16px;
@@ -170,9 +147,6 @@ input[type=button],input[type=submit],input[type=reset],button,.btn{
     background: #f5f5f5;
     color: #111;
 }
-/*.flex, .vertical-flex{
-    flex: 1;
-}*/
 .flex > *, .vertical-flex > *{
     flex-grow: 1;
 }
@@ -200,78 +174,6 @@ input[type=button],input[type=submit],input[type=reset],button,.btn{
 }
 .icon-only{
     width: 3em;
-}
-.side-nav > ul > li{
-    padding-left: 2em;
-    background: transparent;
-    border-radius: 0 1em 1em 0;
-    margin-right: 18px;
-    margin-bottom: 6px;
-}
-.side-nav li > ul{
-    margin-left: 1em;
-}
-.side-nav li{
-    position: relative;
-}
-.side-nav .active{
-    background: #D3E3FD;
-}
-.side-nav li a{
-    color: #001D35;
-    text-decoration: none;
-    padding: 8px;
-    display: block;
-}
-.side-nav li a::before{
-    padding-right: 1em;
-}
-.side-nav li > ul a::before{
-    padding-right: .3em;
-}
-.side-nav li > ul a{
-    /*white-space: nowrap;*/
-    text-overflow: ellipsis;
-    font-size: 90%;
-}
-.side-nav  li > [type=checkbox]{
-    display: none;
-}
-.serach-form{
-    background-color: var(--grey);
-    display: flex;
-    transition: all .4s;
-}
-.serach-form:focus-within{
-    background-color: var(--white);
-    box-shadow: 0 0 5px #aaa;
-    transition: all .4s;
-}
-.serach-form input{
-    font-size: 102%;
-    box-shadow: none;
-}
-.serach-form input:focus{
-    box-shadow: none;
-}
-.side-nav  li > [type=radio]{
-    display: none;
-}
-nav.side-nav{
-    position: fixed;
-    top: 3.2em;
-    bottom: 0;
-    left: -88%;
-    z-index: 3;
-    box-shadow: 0 0 3px #aaa;
-    width: 85%;
-    background: var(--grey);
-    transition: all .4s;
-}
-nav.side-nav.visible{
-    left: 0;
-    left: 0;
-    transition: all .4s;
 }
 .mobile-hidden{
     display: none;
@@ -420,82 +322,7 @@ nav.side-nav.visible{
     .mobile-hidden{
         display: inherit;
     }
-    .side-nav  li > [type=radio]{
-        position: absolute;
-        right: 1em;
-        top: .3em;
-        display: block;
-        max-width: 0px;
-        padding: 8px;
-        cursor:s-resize;
-    }
-    .side-nav li > ul{
-        transform: scaleY(0);
-        transition: all .4s;
-        transform-origin: top;
-        height: 0;
-    }
-    .side-nav li > [type=radio]{
-        transition: all .4s;
-    }
-    .side-nav li > [type=radio]:checked{
-        transform-origin: left;
-        transform: rotate(180deg) translateX(-0.7em);
-        transition: all .4s;
-    }
-    .side-nav li > [type=radio]:checked ~ ul,.side-nav ul:target{
-        transform: scaleY(1);
-        transition: all .4s;
-        height: 100%;
-    }
-    nav.visible li > [type=radio]:checked ~ ul{
-        transform: scaleY(0);
-        transition: all .4s;
-        height: 0;
-    }
-    nav.side-nav{
-        position: relative;
-        top: unset;
-        bottom: unset;
-        left: unset;
-        z-index: unset;
-        box-shadow: none;
-        width: 240px;
-        background: transparent;
-        transition: all .4s;
-    } 
-    .side-widget{
-        width: 240px;
-        min-width: 240px;
-    }
-    .side-widget.visible, nav.visible{
-        width: 5.4em;
-        min-width: auto;
-        transition: all .4s;
-    }
-    nav.visible [type=radio]{
-        display: none;
-    }
-    nav.side-nav.visible a{
-        white-space: nowrap;
-    }
-    nav.side-nav.visible > ul > li a > span{
-        white-space: nowrap;
-        max-width: 0;
-        overflow: hidden;
-    }
-    nav.visible li > ul > li{
-        position: relative;
-        background-color: var(--grey);
-    }
-    nav.visible li:hover > ul,nav.visible li:hover > [type=radio]:checked ~ ul{
-        position: absolute;
-        top: .4em;
-        left: 2em;
-        width: auto;
-        z-index: 3;
-        transform: scaleY(1);
-    }
+
     .fill-parent{
         min-height: calc(100vh - 5em);
     }
