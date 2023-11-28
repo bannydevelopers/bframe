@@ -25,13 +25,10 @@
                                 Address
                             </th>
                             <th>
-                                TIN
+                                Contacts
                             </th>
                             <th>
-                                VRN
-                            </th>
-                            <th>
-                                Date registered
+                                Legal entities
                             </th>
                             <th>
                                 &nbsp;
@@ -41,28 +38,24 @@
                     <tbody>
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
-                            <td class="flex" style="display: flex;">
+                            <td style="display: flex;">
                                 <input type="checkbox" name="customer_name[]" value="<?=$st['customer_name']?>" style="max-width:13px;max-height:13px">
                                 <span>
                                     &nbsp;<?=$st['customer_name']?><br>
-                                          <?=$st['customer_phone_number']?><br>
-                                          <?=$st['customer_email']?><br>
+                                    <i class="fa fa-calendar">&nbsp;</i><em><?=system::format_time($st['created_time'],3)?></em>
                                 </span>
                             </td>
                             <td>
                                 <?=$st['customer_physical_adress']?><br>  
                             </td>
                             <td>
-                                <?=$st['tin_number']?><br>
+                                <?=$st['customer_phone_number']?><br>
+                                <?=$st['customer_email']?>
                                 
                             </td>
                             <td>
-                                <?=$st['vrn_number']?><br>
-                                
-                            </td>
-                            <td>
-                                <?=$st['created_time']?><br>
-                                
+                               <strong>TIN:&nbsp;</strong> <?=$st['tin_number']?><br>
+                               <strong>VRN:&nbsp;</strong> <?=$st['vrn_number']?>                                
                             </td>
                             <td>
                                 <a onclick="view_customer()" data-icon="&#xf06e;"></a>

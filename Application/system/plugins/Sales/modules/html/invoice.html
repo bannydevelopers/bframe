@@ -43,14 +43,14 @@
                                     <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
                                         <a data-icon="&#xf06e;" onclick="view_invoice()"></a>
                                         <a data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                        <a data-icon="&#xf2ed;" onclick="delete_invoice()"></a>
+                                        <a data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
                                     </div>
                                 </div>
                                 <!--pre><?=json_encode($item, JSON_PRETTY_PRINT)?></pre-->
                             <?php } ?>
                         </div>
                         <div class="white flex cards">
-                            <?php foreach($invoices as $item){if($item['invoice_type'] == 'tax') continue;?>
+                            <?php foreach($invoices as $item){if($item['invoice_type'] != 'tax') continue;?>
                                 <div class="content rounded">
                                     <div class="content-small grey">
                                         <strong><?=$item['customer_name']?></strong>
@@ -229,6 +229,42 @@
             html: tmp,
             customClass: 'mySwal'
         });*/
+    };
+    const delete_invoice = (invoice_ref)=>{
+        let elem = window.event.target,
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            ref = decToOctal(invoice_ref);
+        Swal.fire({
+            icon: 'question',
+            html: `Delete invoice with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
+            showCancelButton: true
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let dt = new FormData();
+                dt.append('delete_invoice', invoice_ref);
+                dt.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon: 'error',
+                            html: error
+                        });
+                    },
+                    dt
+                );
+            }
+        });
     };
     const update_price = ()=>{
         let elem = window.event.target.parentNode.parentNode;

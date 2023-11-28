@@ -29,12 +29,6 @@
                         "permission":""
                     },
                     {
-                        "name":"Events",
-                        "href":"/plugin/Front-desk/events",
-                        "icon":"",
-                        "permission":""
-                    },
-                    {
                         "name":"Appointments",
                         "href":"/plugin/Front-desk/appointments",
                         "icon":"",
