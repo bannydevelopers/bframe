@@ -1,5 +1,5 @@
 <?php
-class Stores{
+class Office_inventory{
 
     private static $instance = null;
     
@@ -9,11 +9,11 @@ class Stores{
 
     public static function init(){
         // Hook to the system
-        system::add_event_listener('exec_end', 'stores::load_page', $_SERVER['REQUEST_URI']);
+        system::add_event_listener('exec_end', 'office_inventory::load_page', $_SERVER['REQUEST_URI']);
         // Hook to admin dashboard
-        system::add_event_listener('admin_plugin_load', 'stores::load_admin_dashboard');
+        system::add_event_listener('admin_plugin_load', 'office_inventory::load_admin_dashboard');
         // Hook to admin card
-        system::add_event_listener('admin_widgets_load', 'stores::load_admin_dashboard_cards');
+        system::add_event_listener('admin_widgets_load', 'office_inventory::load_admin_dashboard_cards');
     }
     public static function load_admin_dashboard_cards($args){
         // fetch info

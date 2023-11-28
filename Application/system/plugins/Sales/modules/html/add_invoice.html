@@ -1,66 +1,24 @@
-<form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="content-small">
-        <div class="white">
-            <div class="flex">
-                <div>
-                    <label for="invoice_type">Invoice Type</label>
-                    <select name="invoice_type" id="invoice_type" onchange="check_selection('invoice_type')">
-                        <option value="proforma">Proforma invoice</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="customer">Customer</label>
-                    <select name="customer" id="customer" onchange="check_selection('customer')">
-                        <option value="">Choose...</option>
-                        <?php foreach($customer as $cus){?>
-                        <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
-                        <?php }?>
-                        <option value="add">Add customer</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="due_date">Due date</label>
-                    <input type="date" name="due_date">
-                </div>
-            </div>
-            <div class="content" style="text-align: left;">
-            ITEMS
-            </div>      
-            <div class="flex content">
-                <div>
-                    <label for="product">Items</label>
-                    <select name="product[]" id="product" onchange="check_selection('customer')">
-                        <option value="">Choose...</option>
-                        <?php foreach($product as $pro){?>
-                        <option value="<?=$pro['product_id']?>" title="<?=$pro['product_description']?>" data-price="<?=$pro['product_price']?>"><?=$pro['product_name']?></option>
-                        <?php }?>
-                        <option value="add">Add product</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="quantity">Quantity</label>
-                    <input type="number" name="quantity[]" value="0">
-                </div>
-                <div>
-                    <label for="price">Price per item</label>
-                    <input type="number" name="price[]" value="0">
-                </div>
-                <div>
-                    <label>Total price</label>
-                    <input type="number" value="0" readonly>
-                </div>
-                <div>
-                    <label>&nbsp;</label>
-                    <div style="white-space: nowrap;">
-                        <button type="button"" onclick="replicate_items()" data-icon="&#xf067;">&nbsp;</button>
-                        <button type="button"" onclick="delete_item()" data-icon="&#xf1f8;">&nbsp;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<form method="post" autocomplete="off" class="content-small">
+    <div>
+        <label>Reference proforma</label>
+        <select name="reference_invoice" required>
+            <option value="">Choose...</option>
+            <?php foreach($proforma as $prof){ if($prof['reference_invoice']) continue;?>
+            <option value="<?=$prof['invoice_id']?>">
+                #<?=decoct($prof['invoice_id'])?> - <?=$prof['customer_name']?> (<?=$prof['branch_name']?>)
+            </option>
+            <?php } ?>
+        </select>
     </div>
-    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
-        <button type="submit" class="primary green">Save</button>
+    <div>
+        <label>Local purchase order</label>
+        <input type="text" name="local_purchase_order" placeholder="...local purchase order">
+    </div>
+    <div>
+        <label>Remarks</label>
+        <textarea name="tax_invoice_remarks" placeholder="...local purchase order" rows="4"></textarea>
+    </div>
+    <div style="text-align: right;" class="content-small">
+        <button>Save</button>
     </div>
 </form>
- 

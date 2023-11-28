@@ -10,9 +10,12 @@ if($me){
             'payment_to'=>$_POST['payment_to'],   
             'due_date'=>$_POST['due_date'], 
             'amount'=>$_POST['amount'], 
-            'mode_of_payment'=>$_POST['mode_of_payment']
+            'mode_of_payment'=>$_POST['mode_of_payment'],
+            'bank'=>$_POST['bank_name'],
+            'cheque_no'=>$_POST['cheque_number'],
+            'staff'=>$_POST['staff']
         ];
-        //var_dump($db->error());
+        
         if(isset($_POST['withdraw_id']) && intval($_POST['withdraw_id']) > 0){
             $k = intval($_POST['withdraw_id']);
             $db->update('withdraw', $data)->where(['withdraw_id'=>$_POST['withdraw_id']])->commit();
@@ -26,7 +29,7 @@ if($me){
         else $msg = $db->error()['message']; 
         if(isset($_POST['ajax_request'])) die($msg);
     }
-    
+    var_dump($db->error());
     if(isset($_POST['delete_withdraw'])){
         $k = $db->delete('withdraw')->where(['withdraw_id'=>intval($_POST['delete_withdraw'])])->commit();
         if(!$db->error() && $k){

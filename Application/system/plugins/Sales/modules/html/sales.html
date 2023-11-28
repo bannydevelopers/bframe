@@ -1,34 +1,40 @@
 <div class="flex">
-    <h3 class="content-small no-pad-top">Customer</h3>
+    <h1 class="content-small no-pad-top">Sales in cash</h1>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
-        <button onclick="add_customer()" value="add" data-form-width="wide" class="round">Register customer</button>
+        <button onclick="add_sales()" value="add" data-form-width="wide" class="round">Record sales</button>
     </div>
 </div>
 <br>
 <div>
     <div class="tab-view">
-        <?php foreach(array_keys($sortedCustomer) as $i=>$k){?>
+        <?php foreach(array_keys($sortedSales) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedCustomer as $v){?>
+            <?php foreach($sortedSales as $v){?>
             <div class="white content-small">
                 <table class="paginate" data-items-per-page="10">
                     <thead>
                         <tr>
                             <th>
                                 <input type="checkbox" onclick="upadte_checks()">
-                                Name
+                                Customer name
                             </th>
                             <th>
-                                Address
+                                Sales date
                             </th>
                             <th>
-                                Contacts
+                                Sales number
                             </th>
                             <th>
-                                Legal entities
+                                Product sold
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Amount
                             </th>
                             <th>
                                 &nbsp;
@@ -38,29 +44,33 @@
                     <tbody>
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
-                            <td style="display: flex;">
+                            <td class="flex" style="display: flex;">
                                 <input type="checkbox" name="customer_name[]" value="<?=$st['customer_name']?>" style="max-width:13px;max-height:13px">
                                 <span>
                                     &nbsp;<?=$st['customer_name']?><br>
-                                    <i class="fa fa-calendar">&nbsp;</i><em><?=system::format_time($st['created_time'],3)?></em>
                                 </span>
                             </td>
                             <td>
-                                <?=$st['customer_physical_adress']?><br>  
+                                <?=$st['sales_date']?><br>  
                             </td>
                             <td>
-                                <?=$st['customer_phone_number']?><br>
-                                <?=$st['customer_email']?>
+                                <?=$st['sales_number']?><br>
+                            </td>
+                            <td>
+                                <?=$st['product_name']?><br>
+                            </td>
+                            <td>
+                                <?=$st['quantity']?><br>
+                                <?=$st['unit']?><br>
                                 
                             </td>
                             <td>
-                               <strong>TIN:&nbsp;</strong> <?=$st['tin_number']?><br>
-                               <strong>VRN:&nbsp;</strong> <?=$st['vrn_number']?>                                
+                                <?=$st['amount']?><br>
                             </td>
                             <td>
-                                <a onclick="view_customer()" data-icon="&#xf06e;"></a>
-                                <a onclick="edit_customer()" data-icon="&#xf044;"></a>
-                                <a onclick="delete_customer()" data-icon="&#xf2ed;"></a>
+                                <a onclick="view_sales()" data-icon="&#xf06e;"></a>
+                                <a onclick="edit_sales()" data-icon="&#xf044;"></a>
+                                <a onclick="delete_sales()" data-icon="&#xf2ed;"></a>
                             </td>
                         </tr>
                         <?php }?>
@@ -77,25 +87,19 @@
         <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{customer_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{customer_email}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{customer_phone_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Address #: </span>{{customer_physical_adress}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Date Registered: </span>{{created_time}}</div>
-            </div>
-        </div>
-        <div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Residence address</span>
-                    <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
-                </div>
+                <div><span style="color: rgb(35, 57, 136);">Sales date: </span>{{sales_date}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Sales number: </span>{{sales_number}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Product sold: </span>{{product_name}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Unit: </span>{{unit}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Quantity: </span>{{quantity}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Amount: </span>{{amount}}</div>
             </div>
         </div>
     </div>
-    <?php include __DIR__.'/add_customer.html';?>
+    <?php include __DIR__.'/add_sales.html';?>
     <form method="post" enctype="multipart/form-data">
         <label>CSV file</label>
-        <input type="file" name="customer_list" accept=".csv" required>
+        <input type="file" name="sales_list" accept=".csv" required>
         <div style="text-align: right;padding-top: 1em;">
             <button type="submit">Save</button>
         </div>
@@ -148,10 +152,10 @@
     }
 </style>
 <script>
-    function add_customer() {
+    function add_sales() {
         let formx = document.querySelector('template').content.cloneNode(true).children[1];
         Swal.fire({
-            title: 'Add customer',
+            title: 'Record sales',
             html: formx,
             customClass: 'mySwalSmallForm',
             showConfirmButton: false
@@ -184,7 +188,7 @@
             );
         }
     }
-    const view_customer = ()=>{
+    const view_sales = ()=>{
         let elem = window.event.target.parentNode.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
@@ -196,12 +200,12 @@
             html: htz
         });
     };
-    const edit_customer = ()=>{
+    const edit_sales = ()=>{
         let elem = window.event.target.parentNode.parentNode,
             htz = document.querySelector('template').content.children[1].cloneNode(true);
         let hin = document.createElement('input');
         hin.type = 'hidden';
-        hin.name = 'customer_id';
+        hin.name = 'sales_id';
         htz.firstElementChild.firstElementChild.appendChild(hin);
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let inpts = htz.querySelectorAll('input'),
@@ -216,7 +220,7 @@
         });
         //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
-            title: `Edit ${jsx.customer_name}`,
+            title: `Edit ${jsx.sales_name}`,
             html: htz,
             customClass: 'mySwalSmallForm',
             showConfirmButton: false
@@ -249,7 +253,7 @@
             );
         }
     };
-    const delete_customer = ()=>{
+    const delete_sales = ()=>{
         let elem = window.event.target.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let name = jsx.full_name,
@@ -263,7 +267,7 @@
         .then(response=>{
         if(response.isConfirmed){
             let userdata = new FormData();
-            userdata.append('delete_customer', uid);
+            userdata.append('delete_sales', uid);
             userdata.append('ajax_request',1);
             ajax(
             window.location.href, 
@@ -303,54 +307,5 @@
             })
         }
         });
-    }
-    const import_customer = ()=>{
-        let htz = document.querySelector('template').content.children[2].cloneNode(true);
-        Swal.fire({
-            title: 'Import customer',
-            html:htz,
-            customClass:'mySwalSmallForm',
-            showConfirmButton:false
-        });
-        let form = document.querySelector('.mySwalSmallForm form');
-        if(form != null){
-            form.addEventListener(
-                'submit',
-                evt=>{
-                    evt.preventDefault();
-                    let fd = new FormData(form);
-                    Swal.fire({
-                        title: 'Working, please wait...',
-                        icon: 'info',
-                        showConfirmButton:false
-                    });
-                    ajax(
-                        window.location.href,
-                        success=>{
-                            if([...success][0] == '{' || [...success][0] == '['){
-                                let jsx = JSON.parse(success);
-                                Swal.fire({
-                                    icon:jsx.status,
-                                    title:jsx.message
-                                })
-                                .then(val=>{
-                                    window.location.reload();
-                                });
-                            }
-                            else{
-                                Swal.fire({
-                                    icon:'error',
-                                    title:success
-                                });
-                            }
-                        },
-                        error=>{
-                            console.log(error);
-                        },
-                        fd
-                    );
-                }
-            );
-        }
     }
 </script>

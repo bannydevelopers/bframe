@@ -1,7 +1,12 @@
 <div class="flex">
     <h3 class="content-small no-pad-top">Invoice</h3>
     <div class="shrink" style="white-space: nowrap;text-align: right;">
-        <button onclick="add_invoice()" value="add" data-form-width="wide" class="round">Create proforma</button>
+        <button onclick="create_invoice()" data-form-width="wide" class="round uppercase">
+            <i class="fa fa-plus-circle"></i>&nbsp;Proforma
+        </button>
+        <button onclick="add_invoice()" class="round uppercase primary">
+            <i class="fa fa-plus-circle"></i>&nbsp;Tax invoice
+        </button>
     </div>
 </div>
 <?php if(isset($msg) && $msg){?>
@@ -21,10 +26,10 @@
                     <input type="radio" name="itab<?=$branch?>" id="class_tab12<?=$branch?>" checked>
                     <label for="class_tab12<?=$branch?>">Proforma</label>
                     <input type="radio" name="itab<?=$branch?>" id="class_tab22<?=$branch?>">
-                    <label for="class_tab22<?=$branch?>">Taxed</label>
+                    <label for="class_tab22<?=$branch?>">Tax</label>
                     <div class="tab-panes" style="text-align: left;">
                         <div class="white flex cards">
-                            <?php foreach($invoices as $item){?>
+                            <?php foreach($invoices['proforma'] as $item){?>
                                 <div class="content rounded">
                                     <div class="content-small grey">
                                         <strong><?=$item['customer_name']?></strong>
@@ -41,37 +46,43 @@
                                         <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
                                     </div>
                                     <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                        <?php if($item['reference_invoice']){?>
+                                        <a data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
+                                        <?php }else{?>
                                         <a data-icon="&#xf06e;" onclick="view_invoice()"></a>
+                                        <?php }?>
                                         <a data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                        <a data-icon="&#xf2ed;" onclick="delete_invoice()"></a>
+                                        <?php if(!$item['reference_invoice']){?>
+                                        <a data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
+                                        <?php }?>
                                     </div>
                                 </div>
-                                <!--pre><?=json_encode($item, JSON_PRETTY_PRINT)?></pre-->
                             <?php } ?>
                         </div>
-                        <div class="white flex cards">
-                            <?php foreach($invoices as $item){if($item['invoice_type'] == 'tax') continue;?>
-                                <div class="content rounded">
-                                    <div class="content-small grey">
-                                        <strong><?=$item['customer_name']?></strong>
+                        <div class="white">
+                            <div class="flex cards">
+                                <?php foreach($invoices['tax'] as $item){?>
+                                    <div class="content rounded">
+                                        <div class="content-small grey">
+                                            <strong><?=$item['customer_name']?></strong>
+                                        </div>
+                                        <div>
+                                            <span>Created: </span>
+                                            <em><?=system::format_time($item['created_time'], 3)?></em>
+                                        </div>
+                                        <div>
+                                            <span>Due: </span>
+                                            <em><?=system::format_time($item['due_date'], 2)?></em>
+                                        </div>
+                                        <div>
+                                            <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
+                                        </div>
+                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                            <a data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span>Created: </span>
-                                        <em><?=system::format_time($item['created_time'], 3)?></em>
-                                    </div>
-                                    <div>
-                                        <span>Due: </span>
-                                        <em><?=system::format_time($item['due_date'], 2)?></em>
-                                    </div>
-                                    <div>
-                                        <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
-                                    </div>
-                                    <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                        <a data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                    </div>
-                                </div>
-                                <!--pre><?=json_encode($item, JSON_PRETTY_PRINT)?></pre-->
-                            <?php } ?>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -81,11 +92,12 @@
     </div>
 </div>
 <template>
-    <?php include __DIR__.'/add_invoice.html';?>
+    <?php include __DIR__.'/create_invoice.html';?>
     <?php include __DIR__.'/invoice_items.html';?>
     <div>
         <?=$invoice_tpl?>
     </div>
+    <?php include __DIR__.'/add_invoice.html';?>
 </template>
 <style>
     .mySwal{
@@ -119,6 +131,9 @@
     }
     .selectsearchbox li:hover{
         font-weight: bold;
+    }
+    .uppercase{
+        text-transform: uppercase;
     }
 </style>
 <script>
@@ -230,6 +245,42 @@
             customClass: 'mySwal'
         });*/
     };
+    const delete_invoice = (invoice_ref)=>{
+        let elem = window.event.target,
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            ref = decToOctal(invoice_ref);
+        Swal.fire({
+            icon: 'question',
+            html: `Delete invoice with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
+            showCancelButton: true
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let dt = new FormData();
+                dt.append('delete_invoice', invoice_ref);
+                dt.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon: 'error',
+                            html: error
+                        });
+                    },
+                    dt
+                );
+            }
+        });
+    };
     const update_price = ()=>{
         let elem = window.event.target.parentNode.parentNode;
         let prc = parseInt(elem.children[3].children[0].value) *  parseInt(elem.children[4].children[0].value);
@@ -256,7 +307,7 @@
         }
         return tmp;
     }
-    function add_invoice() {
+    const create_invoice = ()=>{
         let formx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
             title: 'Add Invoice',
@@ -265,7 +316,44 @@
             showConfirmButton:false
         });
         search_select();
-        let form = document.querySelector('.mySwalSmallForm form');
+        let form = document.querySelector('.mySwal form');
+        if(form != null){
+            form.addEventListener( 
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    fd.append('ajax_request',1);
+                    ajax(
+                        window.location.href,
+                        response=>{
+                            Swal.fire({
+                                html: response,
+                                icon:'info'
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        error=>{
+                            Swal.fire(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    }
+    const add_invoice = ()=>{
+        let formy = document.querySelector('template').content.cloneNode(true).children[3];
+        Swal.fire({
+            title: 'Create tax invoice',
+            html: formy,
+            customClass:'smallSwal',
+            showConfirmButton:false
+        });
+        search_select();
+        let form = document.querySelector('.smallSwal form');
         if(form != null){
             form.addEventListener( 
                 'submit',

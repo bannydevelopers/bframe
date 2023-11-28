@@ -7,17 +7,15 @@ if($me){
         //var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
-            'product'=>$_POST['product'], 
+            'product'=>$_POST['product_name'], 
             'stock_batch'=>$_POST['stock_batch'], 
             'stock_quantity'=>$_POST['stock_quantity'], 
             'buying_price'=>$_POST['buying_price'], 
             'selling_price'=>$_POST['selling_price'], 
             'stock_expenses'=>$_POST['stock_expenses'],
-            'stock_supplier'=>$_POST['stock_supplier'],
-            'stock_receiver'=>$_POST['stock_receiver'],
-            'created_time'=>date('Y-m-d H:i:s')
+            'stock_receiver'=>$me['user_reference'],
+            'stock_supplier'=>$_POST['supplier']
         ];
-        //var_dump($db->error());
         if(isset($_POST['stock_id']) && intval($_POST['stock_id']) > 0){
             $k = intval($_POST['stock_id']);
             $db->update('stock', $data)->where(['stock_id'=>$_POST['stock_id']])->commit();
@@ -29,7 +27,7 @@ if($me){
         }
         else $msg = $db->error()['message']; 
     }
-    
+    //var_dump($db->error());
     if(isset($_POST['delete_stock'])){
         $db->delete('stock')->where(['user_reference'=>intval($_POST['delete_stock'])])->commit();
         if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_stock'])])->commit();
