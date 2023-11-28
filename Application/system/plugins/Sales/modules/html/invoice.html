@@ -250,6 +250,9 @@
                         Swal.fire({
                             icon: 'info',
                             html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
                         });
                     },
                     error=>{

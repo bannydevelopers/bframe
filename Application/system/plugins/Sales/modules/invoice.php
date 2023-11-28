@@ -54,6 +54,18 @@ if($me){
         if($db->error()) die('Saving failed');
         else die('Saved successful');
     }
+    if(isset($_POST['delete_invoice'])){
+        $db->delete('invoice_items')->where(['invoice'=>intval($_POST['delete_invoice'])])->commit();
+        if(!$db->error()){
+            $db->delete('invoice')->where(['invoice_id'=>intval($_POST['delete_invoice'])])->commit();
+            if($db->error()) $msg = $db->error()['message'];
+            else $msg = 'Invoice deleted successful!';
+        }
+        else{
+            $msg = $db->error()['message'];
+        }
+        die($msg);
+    }
     $items_q = "(SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product_name, 'price', price, 'qty', quantity, 'product_id', product_id, 'item_desc', product_description, 'unit_single', product_unit_singular, 'unit_prural', product_unit_plural)) FROM invoice_items JOIN product ON product_id=product
     WHERE invoice_id=invoice) AS invoice_items";
     $qry = "invoice.*, branches.branch_name, customer.*, user_accounts.full_name, {$items_q}";
