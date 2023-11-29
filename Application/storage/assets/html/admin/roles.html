@@ -210,6 +210,9 @@
         });
     }
     const update_checks = ()=>{
-
+        let elem = window.event.target;
+        [...elem.parentNode.nextElementSibling.querySelectorAll('[type=checkbox]')].forEach(bx=>{
+            bx.checked = elem.checked;
+        });
     }
 </script>
