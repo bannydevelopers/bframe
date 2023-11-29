@@ -1,0 +1,28 @@
+<div class="content anychart" id="fillings" style="min-height: 300px;min-width: 63.5%;"></div>
+<div class="content anychart" id="fillingsx"> Graph</div>
+<script>
+    anychart.onDocumentReady(function (){
+        var chart = anychart.bar([
+            ["Grade one", 90],
+            ["Grade two", 93],
+            ["Grade three", 87],
+            ["Grade four", 95],
+            ["Grade five", 86]
+        ]);
+        chart.title("Top scores");
+        chart.container("fillings");
+        chart.draw();
+    });
+    anychart.onDocumentReady(function (){
+        var chart = anychart.pie([
+            ["Grade one", 90],
+            ["Grade two", 93],
+            ["Grade three", 87],
+            ["Grade four", 95],
+            ["Grade five", 86]
+        ]);
+        chart.title("Top scores");
+        chart.container("fillingsx");
+        chart.draw();
+    });
+</script>

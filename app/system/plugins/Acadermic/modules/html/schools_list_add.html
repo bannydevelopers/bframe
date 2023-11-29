@@ -1,0 +1,89 @@
+<form class="content" enctype="multipart/form-data" method="post" style="border-top: 1px solid #999;">                               
+    <div class="flex">
+        <div class="content-small">
+            <label for="school_name">School Name <span class="required">*</span></label>
+            <input  name="school_name"  id="school_name" value="" placeholder="School Name" required="required" type="text" autocomplete="off">
+            <div class="help-block"></div> 
+        </div>
+        <div class="content-small">
+            <label for="school_number">Registration number</label>
+            <input  name="registration_number"  id="school_number" value="" placeholder="School registration code"  type="text" autocomplete="off"> 
+        </div>
+    </div>
+    <div class="flex">
+        <div class="item form-group">
+            <label for="logo">Logo </label>
+            <input type="file" name="logo">
+        </div>
+        <div class="item form-group">
+            <label for="package">Package </label>
+            <select  name="subscription_package" required>
+                <option value="" >Choose...</option>
+                <?php foreach($subs as $s){?>
+                <option value="<?=$s['sub_id']?>"><?=$s['sub_name']?></option>
+                <?php }?>
+            </select>
+        </div>
+    </div>
+    <div class="flex">
+        <div class="content-small">
+            <label for="address">Address <span class="required">*</span></label>
+            <textarea  name="address"  id="address" placeholder="Address" rows="6" autocomplete="off" required></textarea>
+        </div>
+        <div class="content-small">
+            <div>
+                <label for="phone">Phone <span class="required">*</span></label>
+                <input  name="phone"  id="phone" placeholder="Phone" type="tel" autocomplete="off" required>
+            </div>
+            <div class="item form-group">
+                <label for="email">Email <span class="required">*</span></label>
+                <input  class="form-control col-md-7 col-xs-12"  name="email"  id="email" value="" placeholder="Email " required type="email" autocomplete="off">
+            </div>
+        </div>
+    </div>                  
+    
+    <div class="flex">
+        <div class="col-md-3 col-sm-3 col-xs-12">
+            <div class="item form-group">
+                <label for="currency">Currency</label>
+                <input  class="form-control col-md-7 col-xs-12"  name="currency"  id="currency" value="" placeholder="Currency" type="text" autocomplete="off">
+                <div class="help-block"></div> 
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3 col-xs-12">
+            <div class="item form-group">
+                <label for="currency_symbol">Currency Symbol <span class="required">*</span></label>
+                <input  class="form-control col-md-7 col-xs-12"  name="currency_symbol"  id="currency_symbol" value="" placeholder="Currency Symbol " required="required" type="text" autocomplete="off">
+                <div class="help-block"></div> 
+            </div>
+        </div> 
+    </div>
+    
+    
+    <div class="flex">
+            <div class="item form-group">
+                <label for="final_result_type">Exam final result <span class="required">*</span></label>
+                <select  class="form-control col-md-7 col-xs-12"  name="final_result_type" required="required">
+                    <option value="average" >Average of all exams </option>
+                    <option value="only_final" >Only based on final exam </option>
+                </select>
+                <div class="help-block"></div> 
+            </div>
+        <div class="item form-group">
+            <label for="enable_online_admission">Online Admission <span class="required">*</span></label>
+            <select  class="form-control col-md-7 col-xs-12"  name="enable_online_admission" id="enable_online_admission" required="required">
+                <option value="" >--Select--</option>
+                <option value="0" >No</option>
+                <option value="1" >Yes</option>
+            </select>
+        </div>
+        
+   </div> 
+   <hr /> 
+    <div class="content">
+        <div class="col-md-6 col-md-offset-3">
+            <a class="btn btn-primary" onclick="Swal.close()">Cancel</a>
+            <button id="send" type="submit" class="btn btn-success">Save</button>
+        </div>
+    </div>
+    </form> 

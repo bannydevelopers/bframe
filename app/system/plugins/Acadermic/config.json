@@ -1,0 +1,63 @@
+{
+    "name":"Acadermic manager",
+    "description":"Simple yet powerful, modern online manager for acadermic in schools.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Acadermic",
+                "alias":"Acadermic",
+                "href":"#Acadermic",
+                "icon":"f024",
+                "permission":"view_acadermic",
+                "children":[
+                    {
+                        "name":"Classes",
+                        "href":"/plugin/Acadermic/classes",
+                        "icon":"f594",
+                        "permission":"view_school_classes"
+                    },
+                    {
+                        "name":"Subjects",
+                        "href":"/plugin/Acadermic/subjects",
+                        "icon":"f594",
+                        "permission":"view_school_classes"
+                    },
+                    {
+                        "name":"Sylabus",
+                        "href":"/plugin/Acadermic/sylabus",
+                        "icon":"f594",
+                        "permission":"view_school_classes"
+                    },
+                    {
+                        "name":"Study materials",
+                        "href":"/plugin/Acadermic/study_materials",
+                        "icon":"f594",
+                        "permission":"view_school_classes"
+                    },
+                    {
+                        "name":"Assignments",
+                        "href":"/plugin/Acadermic/assignments",
+                        "icon":"f594",
+                        "permission":"view_school_classes"
+                    },
+                    {
+                        "name":"Examinations",
+                        "href":"/plugin/Acadermic/examinations",
+                        "icon":"f594",
+                        "permission":"view_school_classes"
+                    },
+                    {
+                        "name":"Configuration",
+                        "href":"/plugin/Acadermic/configuration",
+                        "icon":"",
+                        "permission":"view_acadermic_configuration"
+                    }
+                ]
+            }
+        ]
+    },
+    "signup_page":"67",
+    "teacher_role":"61",
+    "student_role":"63",
+    "other_staff_role":"60"
+}

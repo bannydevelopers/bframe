@@ -1,0 +1,16 @@
+<form method="post">
+    <label>Subscription title</label>
+    <input type="text" name="sub_name" placeholder="Subscription plan" required>
+    <label>Subscription plan</label>
+    <select name="sub_role" required>
+        <option value="">Choose...</option>
+        <?php foreach($plans as $p){?>
+        <option value="<?=$p['role_id']?>"><?=$p['role_name']?></option>
+        <?php }?>
+    </select>
+    <label>Subscription price</label>
+    <input type="number" name="sub_price" placeholder="Subscription price" min="0" required>
+    <div class="content" style="text-align: right;">
+        <button>Save</button>
+    </div>
+</form>

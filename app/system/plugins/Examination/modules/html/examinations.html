@@ -1,0 +1,151 @@
+<?php if(isset($msg)){?>
+<p class="msg content rounded box-shadow" onclick="this.parentNode.removeChild(this)"><?=$msg?></p>
+<?php }?>
+<h1 class="flex">
+    <span class="content-small">Examination types</span>
+    <button onclick="add_exam_type()" class="flex-shrink">ADD NEW</button>
+</h1>
+
+<div class="white flex cards" style="padding-top: 1em;">
+    <?php foreach($exams as $exam){?>
+    <div class="content-small rounded">
+        <div class="content grey rounded"><strong><?=$exam['exam_name']?></strong></div>
+        <div class="content-small"><em><?=$exam['exam_desc']?></em></div>
+        <div class="content-small" style="text-align: right;">
+            <a onclick="edit_exam()" data-json='<?=json_encode($exam)?>' data-icon="&#xf044;">Edit&nbsp;</a>&nbsp;&nbsp;
+            <a onclick="delete_exam(`<?=$exam['exam_id']?>`,`<?=$exam['exam_name']?>`)" data-icon="&#xf1f8;">Delete</a>
+        </div>
+    </div>
+    <?php }?>
+</div>
+<template>
+    <?php include __DIR__.'/add_exam_type.html';?>
+</template>
+<script>
+    const add_exam_type = ()=>{
+        let htf = document.querySelector('template').content.cloneNode(true).children[0];
+        Swal.fire({
+            title: 'Add exam type',
+            html:htf,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        document.querySelector('.mySwal form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let fd = new FormData(evt.target);
+            fd.append('ajax_request', 1);
+            ajax(
+                window.location.href,
+                response=>{
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title: jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(val=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon:'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire({
+                        html: error
+                    });
+                },
+                fd
+            );
+        });
+    };
+    const delete_exam = (id, name)=>{
+        Swal.fire({
+            title: `Surely, delete ${name}?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sure, delete'
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fd = new FormData();
+                fd.append('delete_exam', id);
+                fd.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        let jsx = JSON.parse(response);
+                        if(jsx){
+                            Swal.fire({
+                                title: jsx.message,
+                                icon: jsx.status
+                            })
+                            .then(val=>{
+                                window.location.reload();
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                icon:'info',
+                                html: response
+                            });
+                        }
+                    },
+                    error=>{
+                        console.log(error);
+                    },
+                    fd
+                );
+            }
+        });
+    };
+    const edit_exam = ()=>{
+        let jsx = JSON.parse(window.event.target.getAttribute('data-json'));
+        let htf = document.querySelector('template').content.cloneNode(true).children[0];
+        htf.querySelector('[name=exam_name]').value = jsx.exam_name;
+        htf.querySelector('[name=exam_desc]').innerText = jsx.exam_desc;
+        Swal.fire({
+            title: 'Add exam type',
+            html:htf,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        document.querySelector('.mySwal form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let fd = new FormData(evt.target);
+            fd.append('ajax_request', 1);
+            fd.append('exam_id', jsx.exam_id);
+            ajax(
+                window.location.href,
+                response=>{
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title: jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(val=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon:'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire({
+                        html: error
+                    });
+                },
+                fd
+            );
+        });
+    }
+</script>

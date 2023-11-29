@@ -1,0 +1,44 @@
+<form method="post" enctype="multipart/form-data">
+    <div class="flexx">        
+        <div class="item form-group">
+            <label for="title">Topic <span class="required">*</span></label>
+            <div>
+                <input  name="materials_topic"  id="title" value="" placeholder="...topic" required="required" type="text" autocomplete="off">
+            </div>
+        </div>               
+                                        
+        <div class="item form-group">
+            <label for="class_id">Class <span class="required">*</span></label>
+            <div>
+                <select  name="materials_class"  id="add_class_id" required>
+                    <option value="">Choose...</option>
+                    <?php foreach($classes as $s){?>
+                    <option value="<?=$s['class_id']?>"><?=$s['class_name']?></option>
+                    <?php }?>                                      
+                </select>
+            </div>
+        </div>
+        
+        <div class="item form-group">
+            <label for="subject_id">Subject <span class="required">*</span></label>
+            <div>
+                <select  name="materials_subject"  id="add_subject_id" required>
+                    <option value="">Choose...</option>
+                    <?php foreach($subjects as $s){?>
+                    <option value="<?=$s['subject_id']?>"><?=$s['subject_name']?></option>
+                    <?php }?>
+                </select>
+            </div>
+        </div>
+    </div>  
+    
+    <div>
+        <label for="note">Attachments</label>
+        <input type="file"  name="material_attachment" accept=".pdf"  id="note">
+    </div>
+   
+    <div style="text-align: right;padding-top: 1em;">
+        <button type="reset">Cancel</button>
+        <button id="send" type="submit">Submit</button>
+    </div>
+    </form> 

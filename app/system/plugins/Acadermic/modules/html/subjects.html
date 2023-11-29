@@ -1,0 +1,175 @@
+<?php if(isset($msg)){?>
+<p class="msg content rounded box-shadow" onclick="this.parentNode.removeChild(this)"><?=$msg?></p>
+<?php }?>
+<h1 class="flex">
+    <span>Subjects management</span>
+    <button class="flex-shrink round" onclick="add_subject()">ADD SUBJECT</button>
+</h1>
+<div class="content">
+    <?php if($subjects){?>
+    <div class="white">
+        <div class="flex cards">
+            <?php foreach($subjects as $cl){?>
+            <div class="content-small rounded">
+                <div class="content-small" style="display: flex;">
+                    <strong style="flex-grow: 1;">
+                        <?=$cl['subject_name']?>&nbsp;<?=$cl['subject_code']?"({$cl['subject_code']})":''?>
+                    </strong>
+                </div>
+                <div class="content-small" style="text-align: right;">
+                    <a onclick="edit_subject(`<?=$cl['subject_id']?>`)" data-icon="&#xf215;"></a>
+                    <a onclick="delete_subject(`<?=$cl['subject_id']?>`)" data-icon="&#xf2ed;"></a>
+                </div>
+            </div>
+            <?php }?>
+        </div>
+    </div>
+    <?php }else{?>
+    <div class="large-text-3x center" style="margin-top: 2em;">
+        <p class="large-text-3x"><span data-icon="&#xf071;" style="color: #FFCB3D;"></span></p>
+        <p class="content">No section registered!</p>
+        <p style="font-size: 16px;">
+            <em>You may not need any, if your every class do not span multiple rooms</em>
+        </p>
+    </div>
+    <?php }?>
+</div>
+<template>
+    <form method="post">
+        <label>Name</label>
+        <input name="subject_name" type="text" placeholder="...name of subject" required>
+        <label>Subject code</label>
+        <input name="subject_code" type="text" placeholder="...subfect code">
+        <label>Type</label>
+        <select name="subject_type" required>
+            <option value="Mandatory">Mandatory</option>
+            <option value="Optional">Optional</option>
+        </select>
+        <div style="text-align: right;" class="content">
+            <button>Save</button>
+        </div>
+    </form>
+    <form method="post">
+        <label>School</label>
+        <select name="owner_school" required>
+            <?php foreach($myschools as $s){?>
+            <option value="<?=$s['page_id']?>"><?=$s['page_name']?></option>
+            <?php }?>
+        </select>
+        <label>Group class</label>
+        <select name="group_class" required>
+            <?php foreach($classes as $cl){?>
+            <option value="<?=$cl['class_id']?>"><?=$cl['class_name']?></option>
+            <?php }?>
+        </select>
+        <label>Group subjects</label>
+        <div class="flex cards">
+            <?php foreach($subjects as $cl){?>
+            <span>
+                <input type="checkbox" name="group_subjects[]" id="check<?=$cl['subject_id']?>" value="<?=$cl['subject_id']?>">
+                <label for="check<?=$cl['subject_id']?>"><?=$cl['subject_name']?></label>
+            </span>
+            <?php }?>
+        </div>
+        <div style="text-align: right;" class="content">
+            <button>Save</button>
+        </div>
+    </form>
+</template>
+<script>
+    const add_subject = ()=>{
+        let htf = document.querySelector('template').content.cloneNode(true).children[0];
+        Swal.fire({
+            title: 'Add subject',
+            html:htf,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+    };
+    const delete_subject = id=>{
+        let elem = window.event.target;
+        Swal.fire({
+            title:'Surely delete this subject?',
+            icon: 'question'
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fd = new FormData();
+                fd.append('delete_subject', id);
+                fd.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    resp=>{
+                        if(resp == 'ok'){
+                            Swal.fire({
+                                title:'Subject deleted successful!',
+                                icon:'success'
+                            })
+                            .then(val=>{
+                                elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                icon:'error',
+                                html: resp
+                            });
+                        }
+                    },
+                    error=>{
+                        console.log(error);
+                    },
+                    fd
+                );
+            }
+        });
+    };
+    
+    const add_subject_group = ()=>{
+        let htf = document.querySelector('template').content.cloneNode(true).children[1];
+        Swal.fire({
+            title: 'Add subject group',
+            html:htf,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+    };
+    const delete_subject_group = id=>{
+        let elem = window.event.target;
+        Swal.fire({
+            title:'Surely delete this subject group?',
+            icon: 'question'
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fd = new FormData();
+                fd.append('delete_subject_group', id);
+                fd.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    resp=>{
+                        if(resp == 'ok'){
+                            Swal.fire({
+                                title:'Subject group deleted successful!',
+                                icon:'success'
+                            })
+                            .then(val=>{
+                                elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                icon:'error',
+                                html: resp
+                            });
+                        }
+                    },
+                    error=>{
+                        console.log(error);
+                    },
+                    fd
+                );
+            }
+        });
+    }
+</script>

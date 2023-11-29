@@ -1,0 +1,114 @@
+<?php if(isset($msg)){?>
+<p class="msg content rounded box-shadow" onclick="this.parentNode.removeChild(this)"><?=$msg?></p>
+<?php }?>
+<h1 class="flex">
+    <span>Study materials</span>
+    <button class="flex-shrink round" onclick="add_materials()">ADD NEW</button>
+</h1>
+<div class="white">
+    <div class="flex cards">
+        <?php foreach($materials as $cl){?>
+        <div class="rounded">
+            <div class="content grey">
+                <strong><?=$cl['materials_topic']?></strong>
+            </div>
+            <div class="content-small">
+                <?=$cl['subject_name']?>,&nbsp;<?=$cl['class_name']?>
+            </div>
+            <div class="content-small">
+                <div style="text-align: right;">
+                    <a class="content-small" onclick="view_materials()" data-icon="&#xf06e;"></a>
+                    <a class="content-small" onclick="delete_study_material(`<?=$cl['materials_id']?>`)" data-icon="&#xf2ed;"></a>
+                </div>
+                <div style="display: none;">
+                    <iframe src="<?=$cl['materials_content']?>" width="100%" style="min-height:80vh"></iframe>
+                </div>
+            </div>
+        </div>
+        <?php }?>
+    </div>
+</div>
+<template>
+    <?php include __DIR__.'/materials_add.html';?>
+</template>
+<style>
+    .wideSwal label, .mySwal label{
+        text-align: left;
+        display: block;
+    }
+    .wideSwal .flex > *, .mySwal .flex > *{
+        flex-basis: 100%;
+    }
+    .wideSwal{
+        min-width: 80%;
+    }
+</style>
+<script>
+    var tinymce_toolbar = 'save | undo redo | bold italic underline strikethrough | fontselect | fontsizeselect '
+                            +'| formatselect | alignleft aligncenter alignright alignjustify | outdent indent '
+                            +'|  numlist bullist table | image media link | ltr rtl '
+                            +'| charmap emoticons fullscreen code';
+    const add_materials = ()=>{
+        let htf = document.querySelector('template').content.cloneNode(true).children[0];
+        Swal.fire({
+            title: 'Add materials',
+            html:htf,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        setTimeout(()=>{
+            tinymce.init({selector: 'textarea.tinymce', menubar: '', plugins: "code", toolbar:tinymce_toolbar});
+        },300);
+        
+        document.querySelector('.mySwal [type=reset]').addEventListener('click', evt=>{Swal.close()});
+    };
+    const view_materials = stitle=>{
+        let sbody = window.event.target.parentNode.nextElementSibling.innerHTML;
+        Swal.fire(
+            {
+                title: stitle,
+                html: sbody,
+                customClass: 'wideSwal'
+            }
+        );
+    }
+    const delete_study_material = id=>{
+        let elem = window.event.target.parentNode.parentNode.parentNode;
+        Swal.fire({
+            title:'Surely delete this study material?',
+            icon: 'question'
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fd = new FormData();
+                fd.append('delete_study_material', id);
+                fd.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    resp=>{
+                        if(resp == 'ok'){
+                            Swal.fire({
+                                title:'Study material deleted successful!',
+                                icon:'success'
+                            })
+                            .then(val=>{
+                                elem.parentNode.removeChild(elem);
+                                console.log(elem);
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                icon:'error',
+                                html: resp
+                            });
+                        }
+                    },
+                    error=>{
+                        console.log(error);
+                    },
+                    fd
+                );
+            }
+        });
+    }
+</script>

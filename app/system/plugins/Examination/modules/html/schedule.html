@@ -1,0 +1,68 @@
+<?php if(isset($msg)){?>
+<p class="msg content rounded box-shadow" onclick="this.parentNode.removeChild(this)"><?=$msg?></p>
+<?php }?>
+<h1 style="padding-bottom: .5em;" class="flex">
+    <span>Examination schedules</span>
+    <button class="flex-shrink" onclick="create_schedule()">Schedule exam</button>
+</h1>
+<div class="tab-view">
+    <?php foreach(array_keys($sortedExams) as $i=>$k){?>
+    <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
+    <label for="class_tab<?=$i?>"><?=$k?></label>
+    <?php }?>
+    <div class="tab-panes">
+        <?php foreach($sortedExams as $pane=>$examx){?>
+        <div class="white">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Subject</th>
+                        <th>Class</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <!--th>Notes</th-->
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $i = 0; foreach($examx as $exam){?>
+                    <tr>
+                        <td><?=++$i?></td>
+                        <td><?=$exam['subject_name']?></td>
+                        <td><?=$exam['class_name']?><?=$exam['section_name'] ? " ({$exam['section_name']})" : ''?></td>
+                        <td><?=system::format_time($exam['schedule_date'])?></td>
+                        <td><?=$exam['schedule_from']?> - <?=$exam['schedule_to']?></td>
+                        <!--td><?=$exam['notes']?></td-->
+                        <td>
+                            <a onclick="edit_grade" data-icon="&#xf044;">Edit&nbsp;</a>&nbsp;&nbsp;
+                            <a onclick="delete_grade" data-icon="&#xf1f8;">Delete</a>
+                        </td>
+                    </tr>
+                    <?php }?>
+                </tbody>
+            </table>
+        </div>
+        <?php }?>
+    </div>
+</div>
+<template>
+    <?php include __DIR__.'/schedule_add.html';?>
+</template>
+<style>
+    .mySwal label{
+        text-align: left;
+        display: block;
+    }
+</style>
+<script>
+    const create_schedule = ()=>{
+        let formx = document.querySelector('template').content.children[0].cloneNode(true);
+        Swal.fire({
+            title: 'Schedule new exam',
+            html: formx,
+            customClass: 'mySwal',
+            showConfirmButton: false
+        })
+    }
+</script>

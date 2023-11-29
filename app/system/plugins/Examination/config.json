@@ -1,0 +1,56 @@
+{
+    "name":"Examination",
+    "description":"Simple yet powerful, modern package manager for examinations.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Examination",
+                "alias":"Examination",
+                "href":"#Examination", 
+                "icon":"f591",
+                "permission":"view_accounts",
+                "children":[
+                    {
+                        "name":"Schedules",
+                        "href":"/plugin/Examination/schedule",
+                        "icon":"f574",
+                        "permission":""
+                    },
+                    {
+                        "name":"Attendance",
+                        "href":"/plugin/Examination/attendance",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Mark sheet",
+                        "href":"/plugin/Examination/mark-sheet",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Results",
+                        "href":"/plugin/Examination/results",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Exam types",
+                        "href":"/plugin/Examination/exams",
+                        "icon":"f574",
+                        "permission":""
+                    },
+                    {
+                        "name":"Configuration",
+                        "href":"/plugin/Examination/configuration",
+                        "icon":"",
+                        "permission":""
+                    }
+                ]
+            }
+        ],
+        "permissions": [
+            "view_accounts"
+        ]
+    }
+}

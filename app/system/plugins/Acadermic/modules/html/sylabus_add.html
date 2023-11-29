@@ -1,0 +1,44 @@
+<form method="post">
+    <div class="flex">        
+        <div class="item form-group">
+            <label for="title">Title <span class="required">*</span></label>
+            <div>
+                <input  name="sylabus_title"  id="title" value="" placeholder="Title" required="required" type="text" autocomplete="off">
+            </div>
+        </div>               
+                                        
+        <div class="item form-group">
+            <label for="class_id">Class <span class="required">*</span></label>
+            <div>
+                <select  name="sylabus_class"  id="add_class_id" required>
+                    <option value="">Choose...</option>
+                    <?php foreach($classes as $s){?>
+                    <option value="<?=$s['class_id']?>"><?=$s['class_name']?></option>
+                    <?php }?>                                      
+                </select>
+            </div>
+        </div>
+        
+        <div class="item form-group">
+            <label for="subject_id">Subject <span class="required">*</span></label>
+            <div>
+                <select  name="sylabus_subject"  id="add_subject_id" required>
+                    <option value="">Choose...</option>
+                    <?php foreach($subjects as $s){?>
+                    <option value="<?=$s['subject_id']?>"><?=$s['subject_name']?></option>
+                    <?php }?>
+                </select>
+            </div>
+        </div>
+    </div>  
+    
+    <div>
+        <label for="note">Content</label>
+        <textarea  name="sylabus_content"  id="note" placeholder="...sylabus content" class="tinymce"></textarea>
+    </div>
+   
+    <div style="text-align: right;padding-top: 1em;">
+        <button type="reset">Cancel</button>
+        <button id="send" type="submit">Submit</button>
+    </div>
+    </form> 

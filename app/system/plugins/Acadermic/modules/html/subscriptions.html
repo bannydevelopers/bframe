@@ -1,0 +1,145 @@
+<?php if(isset($msg)){?>
+<p class="msg content rounded box-shadow" onclick="this.parentNode.removeChild(this)"><?=$msg?></p>
+<?php }?>
+<h1 class="flex">
+    <span>Subscription plans</span>
+    <button class="flex-shrink round" onclick="add_plan()">Add plan</button>
+</h1>
+<div style="padding-top: 1em;">
+    <div class="flex cards">
+    <?php foreach($subs as $sub){?>
+        <div class="rounded">
+            <h2 class="grey center content-small large-txt flex" style="text-align: left;">
+                <span><?=$sub['sub_name']?></span>
+                <span class="flex-shrink" style="font-size: 80%;" data-json='<?=json_encode($sub)?>'>
+                    <!--a data-icon="&#xf044;"></a-->
+                    <a data-icon="&#xf1f8;" onclick="delete_plan()"></a>
+                </span>
+            </h2>
+            <div class="content flex" style="padding-bottom: 0;">
+                <strong class="large-txt">Services</strong>
+                <div class="flex-shrink" style="color: red;">
+                    <?=$config->currency_symbol?>&nbsp;<?=number_format(intval($sub['sub_price']))?>
+                </div>
+            </div>
+            <div class="content-small">
+                <?php foreach($perms as $k=>$perm){?>
+                    <ul class="checks">
+                    <?php if($perm['role_id'] == $sub['sub_role']){ ?>
+                        <li><?=str_replace('_', ' ', $perm['permission_name'])?></li>
+                    <?php 
+                        unset($perms[$k]);
+                    }?>
+                </ul>
+                <?php }?>
+            </div>
+        </div>
+    <?php }?>
+    </div>
+</div>
+<template id="plan_add_form">
+    <?php include(__DIR__.'/subs_plan_add.html')?>
+</template>
+<style>
+    button{
+        text-transform: uppercase;
+    }
+    .wideSwal{
+        min-width: 600px;
+    }
+    .wideSwal label, .wideSwal h3{
+        display: block;
+        text-align: left;
+        padding-top: 1em;
+    }
+    .msg{
+        background-color: #f0e6d2;
+        color: #bd7f03;
+    }
+    h2,h3{
+        text-transform: uppercase;
+        padding: 0;
+        font-weight: normal;
+    }
+    .checks li{
+        padding: .5em;
+    }
+    .checks li::before{
+        font-family: fontawesome;
+        font-size: 80%;
+        content:'\f560';
+        padding-right: 4px;
+    }
+    .center{
+        text-align: center;
+    }
+</style>
+<script>
+    const add_plan = ()=>{
+        let fom = document.getElementById('plan_add_form').content.cloneNode(true).children[0];
+        Swal.fire({
+            title:'Subscription plan',
+            html:fom,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        let subform = document.querySelector('.mySwal form');
+        subform.addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let fd = new FormData(subform);
+            fd.append('ajax_request', 1);
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response == 'success') htx = 'Package created successful!';
+                    else htx = 'Package create failed!';
+                    Swal.fire({
+                        icon:response,
+                        title: htx
+                    })
+                    .then(any=>{
+                        window.location.reload();
+                    });
+                },
+                error=>{
+                    console.log(error);
+                },
+                fd
+            );
+        });
+    }
+    const delete_plan = ()=>{
+        let jsonx = JSON.parse(window.event.target.parentNode.getAttribute('data-json'));
+        Swal.fire({
+            title: `Surely delete '${jsonx.sub_name}'?`,
+            html: '<em>Be reminded: No UNDO once deleted!</em>',
+            showCancelButton:true,
+            confirmButtonText:'Sure, delete'
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fd = new FormData(), htx;
+                fd.append('delete_plan', jsonx.sub_id);
+                fd.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        if(response == 'success') htx = 'Package deleted successful!';
+                        else htx = 'Package deletion failed!';
+                        Swal.fire({
+                            icon:response,
+                            title: htx
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        console.log(error);
+                    },
+                    fd
+                );
+            }
+        });
+    }
+</script>
