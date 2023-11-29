@@ -1,0 +1,38 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+        <div class="flex">
+            <div class="contentx">
+             <div class="white content">
+                <div>
+                    <label for="assignee">Responsible assignee</label>
+                    <select name="assignee" id="assignee" onchange="add_form('assignee')" required>
+                        <option value="">Choose...</option>
+                        <?php foreach($assignee as $user){?>
+                            <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
+                        <?php }?>    
+                    </select>
+                </div><br>
+                <div class="flex">
+                    <div>
+                        <label for="leave_type">Leave type</label>
+                        <input type="text" name="leave_type" value="" required />
+                    </div>
+                    <div>
+                        <label for="leave_start">Leave start</label>
+                        <input type="date" name="leave_start" value="" required />
+                    </div>
+                </div><br>
+                <div class="flex">
+                    <div><label for="leave_length">Leave length</label>
+                     <input type="number" name="leave_length" value="0" required />
+                    </div>
+                    <div><label for="leave_description">Leave description</label>
+                     <input type="text" name="leave_description" value="" required />
+                     </div>   
+                </div><br>
+            </div>
+        </div>
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+        <!--button type="reset">Reset form</button-->
+        <button type="submit" class="primary green">Create</button>
+    </div>
+</form>

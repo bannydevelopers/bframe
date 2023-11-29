@@ -1,0 +1,41 @@
+{
+    "name":"Front desk",
+    "description":"Simple yet powerful, modern online manager for Human resources tasks.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Front desk",
+                "alias":"Front-desk",
+                "href":"#Front-desk", 
+                "icon":"f26c",
+                "permission":"",
+                "children":[
+                    {
+                        "name":"Visitors log",
+                        "href":"/plugin/Front-desk/visitors-log",
+                        "icon":"f594",
+                        "permission":""
+                    },
+                    {
+                        "name":"Enquiries",
+                        "href":"/plugin/Front-desk/enquiries",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Complains",
+                        "href":"/plugin/Front-desk/complains",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Appointments",
+                        "href":"/plugin/Front-desk/appointments",
+                        "icon":"",
+                        "permission":""
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,19 @@
+<div class="flex">
+    <h3 class="content-small no-pad-top">departments</h3>
+    <div class="shrink" style="white-space: nowrap;text-align: right;">
+        <button onclick="create_departments()" value="add" data-form-width="wide" class="round">Create departments</button>
+    </div>
+</div>
+<div>
+    <div class="flex cards">
+        <?php foreach($departments as $dept){?>
+            <div class="content rounded">
+                <h3><?=$dept['dept_name']?></h3>
+                <div style="text-align: right;">
+                    <a onclick="edit_department" data-icon="&#xf056;">&nbsp;</a>
+                    <a onclick="edit_department" data-icon="&#xf1f8;">&nbsp;</a>
+                </div>
+            </div>
+        <?php }?>
+    </div>
+  </div>

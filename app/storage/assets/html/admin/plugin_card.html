@@ -1,8 +1,0 @@
-<div class="<?=(in_array($v, $active)?'green-border':'')?>">
-    <div class="large-txt content grey"><?=$info->name?></div>
-    <div class="content"><?=$info->description?></div>
-    <div class="content large-txt" style="text-align: right;">
-        <a data-icon="&#xf2ed;" onclick="delete_plugin(`<?=$v?>`)"></a>
-        <a data-icon="<?=$icon?>" onclick="update_plugin(`<?=$v?>`)" class="colorify large-txt"></a>
-    </div>
-</div>

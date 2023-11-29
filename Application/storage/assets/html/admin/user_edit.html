@@ -1,0 +1,98 @@
+<div>
+    <div class="content" style="padding-top: 0;">
+        <?=(isset($msg) && $msg?$msg:'')?>
+        <h3 class="content white">Editing <?=$user['full_name']?></h3>
+    </div>
+    <form method="post" class="flex" enctype="multipart/form-data">
+        <input type="hidden" name="user_id" value="<?=$user['user_id']?>" />
+        <div class="contentx">
+            <div class="white content">
+                <label for="full_name">Full name</label>
+                <input type="text" id="full_name" name="full_name" value="<?=$user['full_name']?>" />
+                <!--`user_id`, `full_name`, ``, ``, ``, ``, `role`, `trashed`, `extras`-->
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="<?=$user['email']?>" />
+                <label for="Phone">Phone</label>
+                <input type="number" id="phone" name="phone" value="<?=$user['phone']?>" />
+                <label for="passcode">Password</label>
+                <input type="password" id="passcode" name="passcode" placeholder="Leave blank to keep existing" />
+                <div class="flex">
+                    <div>
+                        <label for="status">Status</label>
+                        <select name="status" id="status">
+                            <option value="">Not set</option>
+                            <option value="active"<?=$user['status'] == 'active' ? ' selected':''?>>Active</option>
+                            <option value="pending"<?=$user['status'] == 'pending' ? ' selected':''?>>Pending</option>
+                            <option value="locked"<?=$user['status'] == 'locked' ? ' selected':''?>>Locked</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="roles">Role</label>
+                        <select name="system_role" id="roles">
+                            <option value="">Not set</option>
+                        <?php foreach($roles as $opt){?>
+                            <option value="<?=$opt['role_id']?>"<?=$user['system_role'] == $opt['role_id'] ? ' selected':''?>><?=$opt['role_name']?></option>
+                        <?php }?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="contentx" style="display: flex;flex-direction: column;">
+            <div class="white content">
+                <label for="extras">Custom fields</label>
+                <div style="display: flex;">
+                    <input type="text" name="extras[name][]" placeholder="Field name" style="flex-grow: 1;">
+                    <input type="text" name="extras[value][]" placeholder="Field value" style="flex-grow: 1;">
+                    <a id="addbtn" data-icon="&#xf0fe;" onclick="addbtn(window.event)"></a>
+                </div>
+            </div>
+            <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+                <button type="reset">Restore</button>
+                <button type="submit" class="green">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    #addbtn,.minusbtn{
+        flex-grow: 0;
+        padding: 0 3px;
+        font-size:2.25em;
+        line-height: .8em;
+        vertical-align: bottom;
+        margin-top: 4px;
+        color: green;
+    }
+    .contentx{
+        padding: 0 1em;
+        flex-basis: 100%;
+    }
+    .contentx > *{
+        border-radius: 3px;
+        box-shadow: 0 0 5px #ccc;
+        flex-basis: 100%;
+    }
+    .contentx input{
+        border:1px solid #eee;
+        width: calc( 100% - 1.8em );
+        margin-top: 6px;
+    }
+    .contentx label{
+        padding-top: .8em;
+    }
+    .contentx select{
+        padding: .4em 1em;
+    }
+    .contentx option{
+        line-height: 1.5em;
+    }
+</style>
+<script>
+    const addbtn = function(evt){
+        let org = evt.target.parentNode;
+        let tmp = org.outerHTML;
+        evt.target.outerHTML = '<a onclick="this.parentNode.outerHTML=\'\'" data-icon="&#xf146;" class="minusbtn"></a>';
+        org.insertAdjacentHTML('afterEnd', tmp);
+    };
+</script>

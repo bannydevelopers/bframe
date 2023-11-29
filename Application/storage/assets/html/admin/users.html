@@ -1,0 +1,211 @@
+<div class="flex" style="display: flex;">
+  <h3>System users</h3>
+  <div class="shrink">
+    <a href="<?=$root?>/add"><button data-icon="&#xf234;">ADD USER</button></a>
+  </div>
+</div>
+<div class="flex cards">
+  <?php foreach($users as $user){?>
+  <div>
+    <h3 class="grey  left" style="font-size: 1.1em;display: flex;padding: 4px 0;">
+      <span style="flex-basis: 100%;" class="content-small"><?=$user['full_name']?></span>
+      <span style="white-space: nowrap;">
+          <a class="content-small" onclick="view_user(`<?=$user['user_id']?>`)" data-icon="&#xf06e;"></a>
+          <a class="content-small" href="<?="{$root}/edit/{$user['user_id']}"?>" data-icon="&#xf044;"></a>
+          <a class="content-small" onclick="delete_user(`<?=$user['user_id']?>`,`<?=$user['full_name']?>`)" data-icon="&#xf2ed;"></a>
+        
+      </span>
+    </h3>
+    <div class="flex">
+      <div class="shrink">
+        <span><img src="<?=user::init()->get_user_avatar($user['user_id'])?>" width="70"></span>
+      </div>
+      <div class="content-small">
+        <div class="content-small" data-icon="&#xf095;">+<?=$user['phone']?></div>
+        <div class="content-small" data-icon="&#xf0e0;"><?=$user['email']?></div>
+      </div>
+      <div class="content-small">
+        <div class="content-small" data-icon="&#xf073;" style="white-space: nowrap;"><?=system::format_time($user['create_date'])?></div>
+        <div class="content-small" data-icon="&#xf3ed;" data-roles="<?=$user['system_role']?>">
+          <a onclick="pop_roles(`<?=$user['role_id']?>`,`<?=$user['role_name']?>`)"><?=$user['role_name']?></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php }?>
+</div>
+<style>
+  .cards{
+    justify-content: left;
+  }
+  .cards > * .left{
+    text-align: left;
+  }
+  .cards > *{
+    min-width: 47%;
+  }
+  .btn{
+    box-shadow: 0 0 3px #999;
+    padding: .4em;
+  }
+</style>
+<script>
+  const request_uri = '<?=$url?>';
+  const pop_roles = function(id,name){
+    Swal.fire({
+      title: `<b>Permissions of ${name}</b>`, 
+      html: "Loading please",  
+      confirmButtonText: "Dismiss", 
+      toast: true
+    });
+  };
+  const userform = function(){
+    
+    Swal.fire({
+      title: '<span data-icon="&#xf234;">&nbsp;Create new user</span>',
+      html: `<input data-icon="&#xf015;" type="text" id="full_name" class="swal2-input" placeholder="Full name">
+      <input type="text" id="phone" class="swal2-input" placeholder="Phone">
+      <input type="text" id="email" class="swal2-input" placeholder="E-mail">
+      <input type="password" id="password" class="swal2-input" placeholder="Password">`,
+      showCancelButton: true,
+      confirmButtonText: '<span data-icon="&#xf0c7;">&nbsp;Save</span>',
+      focusConfirm: false,
+      /* toast: true,Makes the modal small*/
+      preConfirm: () => {
+        const fname = Swal.getPopup().querySelector('#full_name').value;
+        const phone = Swal.getPopup().querySelector('#phone').value;
+        const email = Swal.getPopup().querySelector('#email').value;
+        const pass = Swal.getPopup().querySelector('#password').value;
+        if (!fname || !phone || !email || !pass) {
+          Swal.showValidationMessage(`Please fill every field!`);
+        }
+        /*return { full_name: fname, phone: phone, email: email, passcode: pass };*/
+        let data = new FormData();
+        data.append('full_name', fname);
+        data.append('phone', phone);
+        data.append('email', email);
+        data.append('passcode', pass);
+        return fetch(
+          `/admin/users/?ajax=1`,
+          {method: 'POST', body: data}
+        )
+        .then(response => {
+          if (!response) {
+            throw new Error(response.statusText);
+          }
+          return response.json()
+        })
+        .catch(error => {
+          Swal.showValidationMessage(
+            `Request failed: ${error}`
+          )
+        })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    })
+    .then((result) => {
+      
+      let icon = (result.value.status == 'ok' ? 'success' : 'error');
+      Swal.fire({
+        icon: icon,
+        title: result.value.message.message,
+        showConfirmButton: true,
+        timer: 5000,
+        willClose: () => {
+          window.location.reload();
+        }
+      })
+    });
+  };
+  const add_or_edit_user = function(userdata){
+    if(userdata == undefined) userdata = '{full_name:"", phone:"", email:"", password:""}';
+    user = JSON.parse(userdata);
+    let form = '';
+    for (const key in user) {
+      if (Object.hasOwnProperty.call(user, key)) {
+        let icon = '&#xf015;',
+            type = 'text',
+            label = key.replace('_', ' ').toLocaleUpperCase();
+        form += `<label for="${key}">${label}</label>`;
+        form += `<input data-icon="${icon}" type="${type}" value="${user[key]}" id="${key}" class="swal2-input" placeholder="${label}">`;
+      }
+    }
+    Swal.fire({
+      title:'User form',
+      html:form,
+      confirmButtonText: '<span data-icon="&#xf0c7;">&nbsp;Save</span>',
+      focusConfirm: false,
+      /* toast: true,Makes the modal small*/
+      preConfirm: () => {
+        const fname = Swal.getPopup().querySelector('#full_name').value;
+        const phone = Swal.getPopup().querySelector('#phone').value;
+        const email = Swal.getPopup().querySelector('#email').value;
+        const pass = Swal.getPopup().querySelector('#password').value;
+        if (!fname || !phone || !email || !pass) {
+          Swal.showValidationMessage(`Please fill every field!`);
+        }
+        /*return { full_name: fname, phone: phone, email: email, passcode: pass };*/
+        let data = new FormData();
+        data.append('full_name', fname);
+        data.append('phone', phone);
+        data.append('email', email);
+        data.append('passcode', pass);
+        return fetch(
+          `/admin/users/?ajax=1`,
+          {method: 'POST', body: data}
+        )
+        .then(response => {
+          if (!response) {
+            throw new Error(response.statusText);
+          }
+          return response.json()
+        })
+        .catch(error => {
+          Swal.showValidationMessage(
+            `Request failed: ${error}`
+          )
+        })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    });
+  };
+  const delete_user = (uid, name)=>{
+    var target_elem = window.event.target;
+    Swal.fire({
+      title: `Delete ${name}?`,
+      showCancelButton: true,
+      confirmButtonText:'Sure, delete',
+      html:"No UNDO remember!"
+    })
+    .then(response=>{
+      if(response.isConfirmed){
+        let userdata = new FormData();
+        userdata.append('uid', uid);
+        userdata.append('ajax',1);
+        ajax(
+          request_uri, 
+          res=>{
+            console.log(res);
+            Swal.fire({
+              title:"You made it successful",
+              icon:"success"
+            })
+            .then(whatever=>{
+              target_elem.parentNode.parentNode.parentNode.removeChild(target_elem.parentNode.parentNode);
+            });
+          },
+          error=>{
+            console.log(error);
+          },
+          userdata
+        );
+      }
+      else{
+        Swal.fire({
+          title: "Better for you",
+          icon:"error"
+        })
+      }
+    });
+  }
+</script>

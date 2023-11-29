@@ -1,0 +1,38 @@
+<div class="flex cards">
+    <?=$plugins?>
+</div>
+<style>
+    .green-border{
+        box-shadow: 0 0 5px #0f0;
+    }
+    .green-border .colorify{
+        color: rgb(36, 199, 36);
+    }
+</style>
+<script>
+    function update_plugin(plugin){
+        Swal.fire({
+            icon:'info',
+            title:`Updating status of ${plugin}`
+        });
+        let fd = new FormData();
+        fd.append('update_plugin', plugin);
+        ajax(
+            window.location.href,
+            response=>{
+               //console.log(response);
+               window.location.reload();
+            },
+            error=>{
+                console.log(error);
+            },
+            fd
+        );
+    }
+    function delete_plugin(plugin){
+        Swal.fire({
+            icon: 'info',
+            title: 'Action not available for now!'
+        })
+    }
+</script>

@@ -1,0 +1,65 @@
+{
+    "name":"Purchase & Sale",
+    "description":"Sales customer management, stock, invoicing, purchase orders, products, suppliers, and robust reporting.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Purchase & Sale",
+                "alias":"Sales",
+                "href":"/plugin/Sales", 
+                "icon":"f07a",
+                "permission":"view_purchase_sales",
+                "children":[
+                    {
+                        "name":"Customers",
+                        "href":"/plugin/Sales/customers",
+                        "icon":"f594",
+                        "permission":"view_customers"
+                    },
+                    {
+                        "name":"Stock",
+                        "href":"/plugin/Sales/stock",
+                        "icon":"f011",
+                        "permission":"view_stock"
+                    },
+                    {
+                        "name":"Sales",
+                        "href":"/plugin/Sales/sales",
+                        "icon":"",
+                        "permission":"view_sales"
+                    },
+                    {
+                        "name":"Invoice",
+                        "href":"/plugin/Sales/invoice",
+                        "icon":"",
+                        "permission":"view_invoice"
+                    },
+                    {
+                        "name":"Purchase order",
+                        "href":"/plugin/Sales/purchase_order",
+                        "icon":"",
+                        "permission":"view_purchase_order"
+                    },
+                    {
+                        "name":"Products",
+                        "href":"/plugin/Sales/products",
+                        "icon":"",
+                        "permission":"view_products"
+                    },
+                    {
+                        "name":"Suppliers",
+                        "href":"/plugin/Sales/suppliers",
+                        "icon":"",
+                        "permission":"view_suppliers"
+                    },
+                    {
+                        "name":"Reports",
+                        "href":"/plugin/Sales/reports",
+                        "icon":"",
+                        "permission":"view_reports"
+                    }
+                ]
+            }
+        ]
+    }
+}

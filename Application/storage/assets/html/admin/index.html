@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="Application/storage/assets/html/admin/"
+  data-template="vertical-menu-template"
+>
+  <head data-uri="<?=$url?>">
+    <base href="<?=storage::get_instance()->install_dir?>"/>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <meta property="og:image" content="app/storage/uploads/images/logo.png" />
+    <meta property="og:url" content="https://<?=$_SERVER['HTTP_HOST']?>" />
+    <meta name="description" content="" />
+
+    <title>Dashboard <?=(!empty(trim($title)) ? (" | {$title}") : '')?></title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="app/storage/uploads/images/logo.png">
+
+    <!-- Fonts -->
+    
+    <style>
+      @font-face {
+          font-family: 'FontAwesome';
+          src: url('vendor/components/font-awesome/webfonts/fa-solid-900.eot'),
+              url('vendor/components/font-awesome/webfonts/fa-solid-900.eot?#iefix') format('embedded-opentype'),
+              url('vendor/components/font-awesome/webfonts/fa-solid-900.svg#FontAwesome5Free-Solid') format('svg'),
+              url('vendor/components/font-awesome/webfonts/fa-solid-900.ttf') format('truetype'),
+              url('vendor/components/font-awesome/webfonts/fa-solid-900.woff') format('woff'),
+              url('vendor/components/font-awesome/webfonts/fa-solid-900.woff2') format('woff2');
+          font-weight: normal;
+          font-style: normal;
+          font-display: swap;
+      }
+      [data-icon]:before {
+          font-family: FontAwesome;
+          -webkit-text-rendering: optimizeLegibility;
+          -moz-text-rendering: optimizeLegibility;
+          -ms-text-rendering: optimizeLegibility;
+          -o-text-rendering: optimizeLegibility;
+          text-rendering: optimizeLegibility;
+          -webkit-font-smoothing: antialiased;
+          -moz-font-smoothing: antialiased;
+          -ms-font-smoothing: antialiased;
+          -o-font-smoothing: antialiased;
+          /*font-smoothing: antialiased;*/
+          content:attr(data-icon);
+          margin-right:0.3em;
+          font-size:90%;
+      }
+    </style>
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="vendor/components/font-awesome/css/all.min.css">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="vendor/def/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="vendor/def/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="Application/storage/assets/html/admin/css/demo.css" />
+    <link rel="stylesheet" href="Application/storage/assets/html/admin/css/styles.css">
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="vendor/def/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="vendor/def/js/helpers.js"></script>
+
+    <link rel="stylesheet" href="Application/storage/assets/html/admin/css/tynyMCE.css">
+    <script src="vendor/components/sweetalert/sweetalert2@11.js"></script>
+    <script>
+      var useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var req_uri = document.querySelector('head').getAttribute('data-uri');
+      if ( window.history.replaceState ) {
+          window.history.replaceState( null, null, window.location.href );
+      }
+      
+      function jsprint(html, opts){
+              var printWindow = window.open('', '', 'height=600,width=1200');
+              printWindow.document.write('<html><head><title>Print preview</title>');
+              if(opts != undefined && opts.css != undefined) printWindow.document.write(`<style>${opts.css}</style>`);
+              printWindow.document.write('</head><body >');
+              printWindow.document.write(html);
+              printWindow.document.write('</body></html>');
+              printWindow.document.close();
+              printWindow.print();
+      }
+      const ajax = (url, success, fail, data, method)=>{
+          fetch(
+              url, 
+              {
+                  method: method || 'POST', /* or 'PUT'*/
+                  mode:"no-cors",/*cors, same-origin*/
+                  body: data
+              }
+          )
+          .then(response => response.text())
+          .then(data => {success(data);})
+          .catch((error) => {fail(error);});
+      };
+      const request_service = (event_action, callback, data)=>{
+          let base = document.querySelector('base').getAttribute('href'),
+              url_parts = req_uri.split('/'),
+              dash = [base, url_parts[1], `?ajax_event=${event_action}`].join('/').replace('//','/');
+          ajax(
+              dash,
+              response=>{
+                  callback(response, null);
+              },
+              error=>{
+                  callback(null, error);
+              },
+              data
+          );
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="javascript:void(0);" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <!-- img src="Application/storage/uploads/images/banny-logo.png" height="40" /-->
+              </span>
+              <span class="app-brand-text demo menu-text fw-bolder ms-2"><?=$conf->site_name?></span>
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+              <i class="bx bx-chevron-left bx-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            
+        <?php 
+            foreach($nav as $a){
+            $req = @$address[1] == 'plugin' ? @$address[2] : @$address[1];
+            $state = ($req == trim($a['href'],'/') or (isset($a['alias']) && $req == $a['alias']));
+            if(!user::init()->user_can(trim($a['permission']))) continue;
+            //echo $a['permission'],'...<br>';
+            $admin = $conf->dashboard_url;
+            if(strpos($a['href'], '#') === 0) $href = "{$_SERVER['REQUEST_URI']}{$a['href']}";
+            else $href = "{$admin}{$a['href']}";
+            ?>
+            <?php if(!isset($a['children'])){?>
+            <li class="menu-item <?=$state ? 'active' : ''?>">
+              <a href="<?=$href?>" class="menu-link">
+                <span class="menu-icon" data-icon="&#x<?=$a['icon']?>;"></span>
+                <div data-i18n="Analytics"><?=$a['name']?></div>
+              </a>
+            </li>
+            <?php } 
+            else { ?>
+            <li class="menu-item <?=$state ? 'active open' : ''?>">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <span class="menu-icon" data-icon="&#x<?=$a['icon']?>;"></span>
+                <div data-i18n="Layouts"><?=$a['name']?></div>
+              </a>
+
+              <ul class="menu-sub">
+                <?php 
+                  foreach($a['children'] as $v){
+                    if(!user::init()->user_can(trim($v['permission']))) continue;
+                    if(strpos($v['href'], '#') === 0) $vref = "{$_SERVER['REQUEST_URI']}{$a['href']}";
+                    else $vref = "{$admin}{$v['href']}";
+                  ?>
+                <li class="menu-item">
+                  <a href="<?=$vref?>" class="menu-link">
+                    <div data-i18n="<?=$v['name']?>"><?=$v['name']?></div>
+                  </a>
+                </li>
+                <?php }?>
+              </ul>
+              
+            </li>
+            <?php }}?>
+
+          </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          <nav
+            class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+            id="layout-navbar"
+          >
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <span class="" data-icon="&#xf0c9;"></span>
+              </a>
+            </div>
+
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <!-- Search -->
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item d-flex align-items-center">
+                  <i class="bx bx-search fs-4 lh-0"></i>
+                  <form action="" method="get">
+                    <input
+                      type="search"
+                      class="form-control border-0 shadow-none"
+                      placeholder="Search..."
+                      aria-label="Search..."
+                      name="q"
+                    />
+                  </form>
+                </div>
+              </div>
+              <!-- /Search -->
+
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <!-- Place this tag where you want the button to render. -->
+                <li class="nav-item lh-1 me-3">
+                  <a
+                    class="github-button"
+                    href="javascript:void(0);"
+                    aria-label=""
+                    ></a
+                  >
+                </li>
+
+                <!-- User -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="<?=user::init()->get_user_avatar()?>" alt class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="<?=storage::get_instance()->install_dir?>admin/profile">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="<?=user::init()->get_user_avatar()?>" alt class="w-px-40 h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block"><?=user::init()->get_session_user('full_name')?></span>
+                            <small class="text-muted"><?=user::init()->get_session_user('role_name')?></small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="<?=$url?>?logout">
+                        <i class="bx bx-power-off me-2"></i>
+                        <span class="align-middle">Log Out</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!--/ User -->
+              </ul>
+            </div>
+          </nav>
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-fluid flex-grow-1 container-p-y">
+                <div class="flex" style="display: flex;">
+                    <div class="white content rounded fill-parent">
+                        <?=trim($title) ? "<h3 class='content-small'>{$title}</h3>":''?>
+                        <div class="content-small" style="max-height: 76vh;overflow-y: auto;"><?=$page_content?></div>
+                    </div>
+                </div>
+              
+            </div>
+            <!-- / Content -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <script src="vendor/def/js/bootstrap.js"></script>
+    <script src="vendor/def/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="vendor/def/js/menu.js"></script>
+    <script src="Application/storage/assets/html/admin/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="vendor/tinymce/tinymce/js/tinymce.min.js"></script>
+        <script>
+        const tinyeditor = document.querySelector('textarea.tinymce');
+        if(tinyeditor !== null){
+            document.body.append(document.getElementById('tinymce-filemanager'));
+            var removemypopdiv = function(){
+                document.querySelector('#tinymce-filemanager').style.display = 'none';
+                document.querySelector('#tinymce-filemanager > div > div').innerHTML = 'Loading...';
+            };
+            var uploadPhoto = function(){
+                Swal.init({
+                    title:'Upload..',
+                    content:window.event.target.value
+                });
+            //console.log(window.event.target.value);
+            };
+            //var useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var opts = {doc_root:document.querySelector('base').getAttribute('href'), selector:"page_content", height:420};
+            var tinymce_opts = {
+                selector: 'textarea.tinymce',
+                valid_elements : ""
+                    +"a[accesskey|charset|class|coords|dir<ltr?rtl|href|hreflang|id|lang|name"
+                    +"|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|rel|rev"
+                    +"|shape<circle?default?poly?rect|style|tabindex|title|target|type],"
+                    +"abbr[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"acronym[class|dir<ltr?rtl|id|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"address[class|align|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"applet[align<bottom?left?middle?right?top|alt|archive|class|code|codebase"
+                    +"|height|hspace|id|name|object|style|title|vspace|width],"
+                    +"area[accesskey|alt|class|coords|dir<ltr?rtl|href|id|lang|nohref<nohref"
+                    +"|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup"
+                    +"|shape<circle?default?poly?rect|style|tabindex|title|target],"
+                    +"base[href|target],"
+                    +"basefont[color|face|id|size],"
+                    +"bdo[class|dir<ltr?rtl|id|lang|style|title],"
+                    +"big[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"blockquote[cite|class|dir<ltr?rtl|id|lang|onclick|ondblclick"
+                    +"|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout"
+                    +"|onmouseover|onmouseup|style|title],"
+                    +"body[alink|background|bgcolor|class|dir<ltr?rtl|id|lang|link|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|onunload|style|title|text|vlink],"
+                    +"br[class|clear<all?left?none?right|id|style|title],"
+                    +"button[accesskey|class|dir<ltr?rtl|disabled<disabled|id|lang|name|onblur"
+                    +"|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown"
+                    +"|onmousemove|onmouseout|onmouseover|onmouseup|style|tabindex|title|type"
+                    +"|value],"
+                    +"caption[align<bottom?left?right?top|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"center[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"cite[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"code[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"col[align<center?char?justify?left?right|char|charoff|class|dir<ltr?rtl|id"
+                    +"|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown"
+                    +"|onmousemove|onmouseout|onmouseover|onmouseup|span|style|title"
+                    +"|valign<baseline?bottom?middle?top|width],"
+                    +"colgroup[align<center?char?justify?left?right|char|charoff|class|dir<ltr?rtl"
+                    +"|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown"
+                    +"|onmousemove|onmouseout|onmouseover|onmouseup|span|style|title"
+                    +"|valign<baseline?bottom?middle?top|width],"
+                    +"dd[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"del[cite|class|datetime|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"dfn[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"dir[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"div[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"dl[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"dt[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"em/i[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"fieldset[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"font[class|color|dir<ltr?rtl|face|id|lang|size|style|title],"
+                    +"form[accept|accept-charset|action|class|dir<ltr?rtl|enctype|id|lang"
+                    +"|method<get?post|name|onclick|ondblclick|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onsubmit"
+                    +"|style|title|target],"
+                    +"frame[class|frameborder|id|longdesc|marginheight|marginwidth|name"
+                    +"|noresize<noresize|scrolling<auto?no?yes|src|style|title],"
+                    +"frameset[class|cols|id|onload|onunload|rows|style|title],"
+                    +"h1[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"h2[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"h3[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"h4[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"h5[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"h6[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"head[dir<ltr?rtl|lang|profile],"
+                    +"hr[align<center?left?right|class|dir<ltr?rtl|id|lang|noshade<noshade|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|size|style|title|width],"
+                    +"html[dir<ltr?rtl|lang|version],"
+                    +"iframe[align<bottom?left?middle?right?top|class|frameborder|height|id"
+                    +"|longdesc|marginheight|marginwidth|name|scrolling<auto?no?yes|src|style"
+                    +"|title|width],"
+                    +"img[align<bottom?left?middle?right?top|alt|border|class|dir<ltr?rtl|height"
+                    +"|hspace|id|ismap<ismap|lang|longdesc|name|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|src|style|title|usemap|vspace|width],"
+                    +"input[accept|accesskey|align<bottom?left?middle?right?top|alt"
+                    +"|checked<checked|class|dir<ltr?rtl|disabled<disabled|id|ismap<ismap|lang"
+                    +"|maxlength|name|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onselect"
+                    +"|readonly<readonly|size|src|style|tabindex|title"
+                    +"|type<button?checkbox?file?hidden?image?password?radio?reset?submit?text"
+                    +"|usemap|value],"
+                    +"ins[cite|class|datetime|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"isindex[class|dir<ltr?rtl|id|lang|prompt|style|title],"
+                    +"kbd[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"label[accesskey|class|dir<ltr?rtl|for|id|lang|onblur|onclick|ondblclick"
+                    +"|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout"
+                    +"|onmouseover|onmouseup|style|title],"
+                    +"legend[align<bottom?left?right?top|accesskey|class|dir<ltr?rtl|id|lang"
+                    +"|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"li[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title|type"
+                    +"|value],"
+                    +"link[charset|class|dir<ltr?rtl|href|hreflang|id|lang|media|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|rel|rev|style|title|target|type],"
+                    +"map[class|dir<ltr?rtl|id|lang|name|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"menu[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"meta[content|dir<ltr?rtl|http-equiv|lang|name|scheme],"
+                    +"noframes[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"noscript[class|dir<ltr?rtl|id|lang|style|title],"
+                    +"object[align<bottom?left?middle?right?top|archive|border|class|classid"
+                    +"|codebase|codetype|data|declare|dir<ltr?rtl|height|hspace|id|lang|name"
+                    +"|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|standby|style|tabindex|title|type|usemap"
+                    +"|vspace|width],"
+                    +"ol[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|start|style|title|type],"
+                    +"optgroup[class|dir<ltr?rtl|disabled<disabled|id|label|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"option[class|dir<ltr?rtl|disabled<disabled|id|label|lang|onclick|ondblclick"
+                    +"|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout"
+                    +"|onmouseover|onmouseup|selected<selected|style|title|value],"
+                    +"p[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"param[id|name|type|value|valuetype<DATA?OBJECT?REF],"
+                    +"pre/listing/plaintext/xmp[align|class|dir<ltr?rtl|id|lang|onclick|ondblclick"
+                    +"|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout"
+                    +"|onmouseover|onmouseup|style|title|width],"
+                    +"q[cite|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"s[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"samp[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"script[charset|defer|language|src|type],"
+                    +"select[class|dir<ltr?rtl|disabled<disabled|id|lang|multiple<multiple|name"
+                    +"|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|size|style"
+                    +"|tabindex|title],"
+                    +"small[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"span[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"strike[class|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title],"
+                    +"strong/b[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"style[dir<ltr?rtl|lang|media|title|type],"
+                    +"sub[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"sup[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title],"
+                    +"table[align<center?left?right|bgcolor|border|cellpadding|cellspacing|class"
+                    +"|dir<ltr?rtl|frame|height|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|rules"
+                    +"|style|summary|title|width],"
+                    +"tbody[align<center?char?justify?left?right|char|class|charoff|dir<ltr?rtl|id"
+                    +"|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown"
+                    +"|onmousemove|onmouseout|onmouseover|onmouseup|style|title"
+                    +"|valign<baseline?bottom?middle?top],"
+                    +"td[abbr|align<center?char?justify?left?right|axis|bgcolor|char|charoff|class"
+                    +"|colspan|dir<ltr?rtl|headers|height|id|lang|nowrap<nowrap|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|rowspan|scope<col?colgroup?row?rowgroup"
+                    +"|style|title|valign<baseline?bottom?middle?top|width],"
+                    +"textarea[accesskey|class|cols|dir<ltr?rtl|disabled<disabled|id|lang|name"
+                    +"|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onselect"
+                    +"|readonly<readonly|rows|style|tabindex|title],"
+                    +"tfoot[align<center?char?justify?left?right|char|charoff|class|dir<ltr?rtl|id"
+                    +"|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown"
+                    +"|onmousemove|onmouseout|onmouseover|onmouseup|style|title"
+                    +"|valign<baseline?bottom?middle?top],"
+                    +"th[abbr|align<center?char?justify?left?right|axis|bgcolor|char|charoff|class"
+                    +"|colspan|dir<ltr?rtl|headers|height|id|lang|nowrap<nowrap|onclick"
+                    +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+                    +"|onmouseout|onmouseover|onmouseup|rowspan|scope<col?colgroup?row?rowgroup"
+                    +"|style|title|valign<baseline?bottom?middle?top|width],"
+                    +"thead[align<center?char?justify?left?right|char|charoff|class|dir<ltr?rtl|id"
+                    +"|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown"
+                    +"|onmousemove|onmouseout|onmouseover|onmouseup|style|title"
+                    +"|valign<baseline?bottom?middle?top],"
+                    +"title[dir<ltr?rtl|lang],"
+                    +"tr[abbr|align<center?char?justify?left?right|bgcolor|char|charoff|class"
+                    +"|rowspan|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title|valign<baseline?bottom?middle?top],"
+                    +"tt[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"u[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup"
+                    +"|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],"
+                    +"ul[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown"
+                    +"|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover"
+                    +"|onmouseup|style|title|type],"
+                    +"var[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress"
+                    +"|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style"
+                    +"|title]",
+                plugins: 'print preview paste importcss searchreplace autolink autosave save directionality '
+                        +'code visualchars fullscreen image link media table charmap hr nonbreaking '
+                        +'insertdatetime advlist lists wordcount textpattern noneditable help charmap '
+                        +'quickbars emoticons',
+                menubar: 'file edit view insert format tools help',// table
+                toolbar: 'save | undo redo | bold italic underline strikethrough | fontselect | fontsizeselect '
+                        +'| formatselect | alignleft aligncenter alignright alignjustify | outdent indent '
+                        +'|  numlist bullist table | image media link | ltr rtl | forecolor backcolor removeformat '
+                        +'| charmap emoticons | fullscreen code',//  preview print
+                toolbar_sticky: true,
+                autosave_ask_before_unload: true,
+                autosave_interval: '30s',
+                autosave_prefix: '{path}{query}-{id}-',
+                autosave_restore_when_empty: false,
+                autosave_retention: '2m',
+                image_advtab: true,
+                importcss_append: true,
+                image_title: true,
+                // enable automatic uploads of images represented by blob or data URIs
+                automatic_uploads: true,
+                images_upload_url: opts.doc_root + 'vendor/tinymce/tinymce/filemanager.php',
+                images_reuse_filename: true,
+                file_picker_types: 'image media',
+                /// and here's our custom image picker
+                file_picker_callback: function (cb, value, meta) {
+                    let par = document.querySelector('#tinymce-filemanager');
+                    let poper = document.querySelector('#tinymce-filemanager > div > div');
+                    par.style.display = 'block';
+                    document.getElementById('newmedia').addEventListener('click',function(){
+                    var input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    if(meta.filetype == 'image'){
+                        input.setAttribute('accept', 'image/*');
+                    }
+                    else if(meta.filetype == 'media'){
+                        input.setAttribute('accept', 'video/*');
+                    }
+            
+                    //    Note: In modern browsers input[type="file"] is functional without
+                    //    even adding it to the DOM, but that might not be the case in some older
+                    //    or quirky browsers like IE, so you might want to add it to the DOM
+                    //    just in case, and visually hide it. And do not forget do remove it
+                    //    once you do not need it anymore.
+                    
+                    input.onchange = function () {
+                        var file = this.files[0];
+            
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                        
+                        //    Note: Now we need to register the blob in TinyMCEs image blob
+                        //    registry. In the next release this part hopefully won't be
+                        //    necessary, as we are looking to handle it internally.
+                        
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+            
+                        // call the callback and populate the Title field with the file name *
+                        cb(blobInfo.blobUri(), { title: file.name });
+                        par.style.display = 'none';
+                        poper.innerHTML = 'Loading...';
+                        };
+                        reader.readAsDataURL(file);
+                    };
+            
+                    input.click();
+                    });
+                    datz = new FormData();
+                    datz.append('ftype', meta.filetype);
+                    ajax(
+                    opts.doc_root+'vendor/tinymce/tinymce/filemanager.php',
+                    res=>{
+                        poper.innerHTML = res;
+                        poper.addEventListener('click', evt=>{
+                            if(evt.target.tagName == 'IMG'){
+                                let src = ''+evt.target.getAttribute('src');
+                                cb(src,{title:evt.target.getAttribute('title'),alt:evt.target.getAttribute('alt')});
+                                par.style.display = 'none';
+                                poper.innerHTML = 'Loading...';
+                            }
+                        });
+                    },
+                    error=>{
+                        console.log(error);
+                    },
+                    datz
+                    );
+                },
+                document_base_url: opts.doc_root,
+                height: opts.height,
+                image_caption: true,
+                quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                noneditable_noneditable_class: 'mceNonEditable',
+                toolbar_mode: 'sliding',
+                contextmenu: 'link image table',
+                skin: useDarkMode ? 'oxide-dark' : 'oxide',
+                content_css: useDarkMode ? 'dark' : 'default',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }.flex{display:flex}.flex>*{flex-basis:100%}img{max-width:100%;vertical-align:middle}'
+            };
+            tinymce.init(tinymce_opts);
+        }
+        /* Collapsibles */
+        let cols = document.querySelectorAll('.collapsibles > *, .collapsible');
+        [...cols].forEach(elem=>{
+            elem.children[0].addEventListener('click', evt=>{
+                evt.target.parentNode.classList.toggle('uncollapsed');
+            });
+        });
+        /* Pagination */
+        document.addEventListener('DOMContentLoaded', function () {
+            const contents = document.querySelectorAll('.paginate'); 
+            if(contents !== null){
+                [...contents].forEach(content=>{
+                    let ic = parseInt(content.getAttribute('data-items-per-page'));
+                    const itemsPerPage = ic || 10;
+                    let currentPage = 0;
+                    const items = Array.from(content.getElementsByTagName('tr')).slice(1);
+                    const tables = Array.from(content.getElementsByTagName('table'));
+
+                    function showPage(page) {
+                        const startIndex = page * itemsPerPage;
+                        const endIndex = startIndex + itemsPerPage;
+                        tables.forEach((table, tindex) => {
+                            let tr = table.querySelector('tbody').children;
+                            Array.from(tr).forEach((item, index)=>{
+                                item.classList.toggle('hidden', index < startIndex || index >= endIndex);
+                            });
+                        });
+                        updateActiveButtonStates();
+                    }
+                    function showPage(page) {
+                        const startIndex = page * itemsPerPage;
+                        const endIndex = startIndex + itemsPerPage;
+                        items.forEach((item, index) => {
+                            item.classList.toggle('hidden', index < startIndex || index >= endIndex);
+                        });
+                        updateActiveButtonStates();
+                    }
+
+                    function createPageButtons() {
+                        const totalPages = Math.ceil(items.length / itemsPerPage);
+                        if(totalPages < 2) return;
+                        const paginationContainer = document.createElement('div');
+                        const paginationDiv = document.body.appendChild(paginationContainer);
+                        paginationContainer.classList.add('pagination');
+
+                        // Add page buttons
+                        for (let i = 0; i < totalPages; i++) {
+                            const pageButton = document.createElement('button');
+                            pageButton.textContent = i + 1;
+                            pageButton.addEventListener('click', () => {
+                                currentPage = i;
+                                showPage(currentPage);
+                                updateActiveButtonStates();
+                            });
+
+                            content.appendChild(paginationContainer);
+                            paginationDiv.appendChild(pageButton);
+                        }
+                    }
+
+                    function updateActiveButtonStates() {
+                        const pageButtons = document.querySelectorAll('.pagination button');
+                        pageButtons.forEach((button, index) => {
+                            if (index === currentPage) {
+                                button.classList.add('active');
+                            } else {
+                                button.classList.remove('active');
+                            }
+                        });
+                    }
+
+                    createPageButtons(); // create the page buttons initially
+                    showPage(currentPage);
+                });
+            }
+        });
+       </script>
+  </body>
+</html>

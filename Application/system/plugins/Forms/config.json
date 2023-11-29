@@ -1,0 +1,29 @@
+{
+    "name":"Forms",
+    "description":"Simple yet powerful, modern online forms creator.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Forms",
+                "alias":"Forms",
+                "href":"#Forms", 
+                "icon":"f0db",
+                "permission":"add_page",
+                "children":[
+                    {
+                        "name":"Forms",
+                        "href":"/plugin/Forms/list",
+                        "icon":"f594",
+                        "permission":""
+                    },
+                    {
+                        "name":"Configuration",
+                        "href":"/plugin/Forms/configuration",
+                        "icon":"",
+                        "permission":""
+                    }
+                ]
+            }
+        ]
+    }
+}

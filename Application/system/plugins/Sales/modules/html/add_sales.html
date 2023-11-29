@@ -1,0 +1,55 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="content-small">
+        <div class="white">
+            <div class="flex">
+                <div>
+                <label for="customer_name">Customer name</label>
+                <input type="text" id="customer_name" name="customer_name" value="" required />
+                </div>
+            </div>    
+            <div class="flex">
+                <div>
+                    <label for="sales_date">Sales date</label>
+                    <input type="date" id="sales_date" name="sales_date" value="" required />
+                </div>
+                <div>
+                    <label for="sales_number">Sales number</label>
+                    <input type="number" id="sales_number" name="sales_number" value="0" required />
+                </div>
+            </div> 
+            <div class="flex">
+                <div>
+                    <label for="product_name">Product sold</label>
+                    <select name="product_name" id="product_name" onchange="check_selection('product_name')">
+                        <option value="">Choose...</option>
+                        <?php foreach($product as $pro){?>
+                        <option value="<?=$pro['product_id']?>"><?=$pro['product_name']?></option>
+                        <?php }?>
+                        <option value="">Add product</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex">
+                <div>
+                    <label for="unit">unit</label>
+                    <input type="text" id="unit" name="unit" value="" required />
+                </div>
+                <div>
+                    <label for="quantity">Quantity</label>
+                    <input type="text" id="quantity" name="quantity" value="" required />
+                </div>
+            </div>
+                <div class="flex"> 
+                    
+                    <div>
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" name="amount" value="" required />
+                    </div>
+               </div>
+        </div>
+    </div>
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+        <!--button type="reset">Reset form</button-->
+        <button type="submit" class="primary green">Save</button>
+    </div>
+</form>

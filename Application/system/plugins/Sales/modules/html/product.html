@@ -1,0 +1,206 @@
+<div class="flex">
+    <h3 class="content-small no-pad-top">Product</h3>
+    <div class="shrink" style="white-space: nowrap;text-align: right;">
+        <button onclick="import_staff()" class="round">Import product</button>
+        <button onclick="add_product()" data-form-width="wide" class="round">Add product</button>
+    </div>
+</div>
+<br>
+<div>
+    <div class="tab-view">
+        <?php foreach(array_keys($sortedProducts) as $i=>$k){?>
+        <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
+        <label for="class_tab<?=$i?>"><?=$k?></label>
+        <?php }?>
+        <div class="tab-panes">
+        <?php foreach($sortedProducts as $products){?>
+            <div class="collapsibles" style="font-size: 90%;">
+                <?php foreach($products as $category=>$product){?>
+                <div>
+                    <h3 class="grey content"><?=$category?></h3>
+                    <div>
+                        <div class="flex cards card-4">
+                            <?php foreach($product as $pro){?>
+                            <div class="content-small rounded" style="display: flex;">
+                                <div>
+                                    <div class="content-small"><strong><?=$pro['product_name']?></strong></div>
+                                    <em style="flex-basis: 100%;padding: 0 8px;"><?=$pro['product_description']?></em>
+                                </div>
+                                <div style="flex-basis: auto;box-shadow: 0 0 3px #999">
+                                    <img src="<?=$pro['product_image']?>" alt="img" width="80"><br>
+                                    <div style="text-align: center;padding:0.4em;white-space: nowrap;">
+                                        <a onclick="edit_product()" data-icon="&#xf044;"></a>&nbsp;
+                                        <a onclick="delete_product()" data-icon="&#xf2ed;"></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php }?>
+                        </div>
+                    </div>
+                </div>
+                <?php }?>
+            </div>
+        <?php }?>
+        </div>
+    </div>
+</div>
+<style>.swal2-html-container{overflow: visible;}</style>
+<template>
+    <?php include __DIR__.'/add_product.html';?>
+    <form method="post" enctype="multipart/form-data">
+        <label>CSV file</label>
+        <input type="file" name="staff_list" accept=".csv" required>
+        <div style="text-align: right;padding-top: 1em;">
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</template>
+<style>
+    .mySwalForm{
+        min-width: 80%;
+    }
+    .mySwalForm label, .mySwalSmallForm label{
+        display: block;
+        text-align: left;
+        padding-left: 1em;
+    }
+    .mySwalSmallForm label{
+        padding-left: 0;
+    }
+    /*@media screen and (min-width:1024px) {
+        .card-4 > *{
+            max-width: 23%;
+            margin: 1%;
+        }
+    }*/
+</style>
+<style>
+    .contentx{
+        padding: 0 1em;
+        flex-basis: 100%;
+    }
+    .contentx > *{
+        flex-basis: 100%;
+    }
+    .contentx input,.contentx select{
+        border:1px solid #eee;
+        width: calc( 100% - 1.8em );
+        margin-top: 6px;
+    }
+    .contentx label{
+        padding-top: .8em;
+    }
+    .contentx option{
+        line-height: 1.5em;
+    }
+    button{
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+    .flex > *{
+        flex-basis: 100%;
+    }
+    .vspaced *{
+        line-height: 1.2;
+    }
+    .large-text{
+        font-size: 140%;
+    }
+</style>
+<script>
+    const add_product = ()=>{
+        let tpl = document.querySelector('template').content.cloneNode(true).children[0];
+        Swal.fire({
+            title: 'Add product',
+            html:tpl,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let frm = new FormData(evt.target);
+            frm.append('ajax_request', 1);
+            ajax(
+                window.location.href,
+                response=>{
+                    //console.log(response);
+                    if(response.startsWith('{') || response.startsWith('[')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            title:jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(val=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            title:response,
+                            icon: 'info'
+                        })
+                        .then(val=>{
+                            window.location.reload();
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                frm
+            );
+        });
+    };
+    const import_staff = ()=>{
+        let htz = document.querySelector('template').content.children[2].cloneNode(true);
+        Swal.fire({
+            title: 'Import product',
+            html:htz,
+            customClass:'mySwalSmallForm',
+            showConfirmButton:false
+        });
+        let form = document.querySelector('.mySwalSmallForm form');
+        if(form != null){
+            form.addEventListener(
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    Swal.fire({
+                        title: 'Working, please wait...',
+                        icon: 'info',
+                        showConfirmButton:false
+                    });
+                    ajax(
+                        window.location.href,
+                        success=>{
+                            if([...success][0] == '{' || [...success][0] == '['){
+                                let jsx = JSON.parse(success);
+                                Swal.fire({
+                                    icon:jsx.status,
+                                    title:jsx.message
+                                })
+                                .then(val=>{
+                                    window.location.reload();
+                                });
+                            }
+                            else{
+                                Swal.fire({
+                                    icon:'error',
+                                    title:success
+                                });
+                            }
+                        },
+                        error=>{
+                            console.log(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    };
+    const check_selection = ()=>{
+
+    };
+</script>

@@ -1,0 +1,242 @@
+<div class="white" style="box-shadow: 0 0 6px #999;">
+    <form method="post" class="tabset">
+        <!-- Tab 1 -->
+        <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
+        <label for="tab1">Page body</label>
+        <!-- Tab 2 -->
+        <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
+        <label for="tab2">Page meta</label>
+        <!-- Tab 3 -->
+        <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
+        <label for="tab3">Page extras</label>
+        <span style="float: right;padding: 4px;margin: -4px 6px;">
+            <button type="submit" data-icon="&#xf0c7;" class="plain-btn xl">SAVE</button>
+        </span>
+        <br clear="both"/>
+        <div class="tab-panels">
+            <section id="marzen" class="tab-panel content page-main">
+                <textarea name="page_content" class="tinymce" id="page_content" style="flex-basis: 100%;width:100%"></textarea>
+            </section>
+            <section id="rauchbier" class="tab-panel page-main">
+                <div class="flex" style="flex-basis: 100%;">
+                    <div class="content" style="flex-basis: 100%;">
+                        <p>
+                            <label for="page_name">Page name</label>
+                            <input type="text" name="page_name" id="page_name" value="" placeholder="Aplha-numeric text" required />
+                        </p>
+                        <p>
+                            <label for="page_title">Page title</label>
+                            <input type="text" name="page_title" id="page_title" value="" placeholder="Aplha-numeric text" />
+                        </p>
+                        <p>
+                            <label for="page_type">Page type</label>
+                            <select name="page_type" id="page_type">
+                                <option value="">Default</option>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="page_parent">Page parent</label>
+                            <select name="page_parent" id="page_parent">
+                                <option value="0">No parent</option>
+                                <?php foreach($pages as $p){?>
+                                <option value="<?=$p['page_id']?>"><?=$p['page_name']?></option>
+                                <?php }?>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="page_author">Page author</label>
+                            <input type="text" id="page_author" value="" readonly />
+                        </p>
+                    </div>
+                    <div class="content" style="flex-basis: 100%;">
+                        <div class="flex">
+                            <p>
+                                <label for="page_icon" data-icon="">Page icon</label>
+                                <input type="text" name="page_icon" value="">
+                            </p>&nbsp;
+                            <p>
+                                <label for="page_order">Page order</label>
+                                <input type="text" name="page_order" value="0">
+                            </p>&nbsp;
+                            <p>
+                                <label for="create_date">Create date</label>
+                                <input type="text" value="<?=date('M d, Y @ H:i')?>" readonly>
+                            </p>
+                        </div>
+                        <div>
+                            <label for="page_special">Page special</label>
+                            <div style="display: flex;margin-top: -1em;">
+                                <label for="page_special1" style="flex-grow: 1;">
+                                    <input type="checkbox" name="page_special[home]" value="" id="page_special1">
+                                    Home page
+                                </label>
+                                <label for="page_special2" style="flex-grow: 1;">
+                                    <input type="checkbox" name="page_special[hidden]" value="" id="page_special2">
+                                    Hidden from navigation
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="page_keywords">Page keywords</label>
+                            <textarea name="page_keywords" id="page_keywords"></textarea>
+                        </div>
+                        <div>
+                            <label for="page_desc">Page description</label>
+                            <textarea name="page_desc" id="page_desc"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="dunkles" class="tab-panel page-main">
+                <div class="flex" style="flex-basis: 100%;flex-wrap: wrap;">
+                    <div class="content">
+                        <label for="extra1">Custom fields</label>
+                        <p style="display: flex;padding: 8px 0;">
+                            <input type="text" name="page_extras[name][]" value="" placeholder="Name" />&nbsp;
+                            <input type="text" name="page_extras[value][]" value="" placeholder="Value" />
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+    </form>
+</div>
+<!--
+<script src="vendor/ckeditor/ckeditor/ckeditor.js"></script>
+<script>
+    const editor = document.getElementById('page_content');
+    if(editor){
+      CKEDITOR.config.allowedContent = true;
+      CKEDITOR.config.height = '400';
+      CKEDITOR.config.width = '100%';
+      CKEDITOR.config.baseHref = '/';
+      //CKEDITOR.config.format_tags = 'div;p;h1;h2;h3;section;';
+      CKEDITOR.config.filebrowserBrowseUrl = '/';
+      CKEDITOR.config.filebrowserUploadUrl = '/ajax/uploader';
+      CKEDITOR.config.contentCss = 'app/system/themes/fancy/css/editor.css';
+      CKEDITOR.replace( 
+          'page_content'
+      );
+    }
+</script>
+
+<style>
+    .contentx{
+        flex-basis: unset;
+            padding: 1em 0;
+    }
+    .page-main{
+        min-height: 60vh;
+    }
+    .page-main input, .page-main select, .page-main textarea{
+        padding: .6em 1em;
+        display: inline-block;
+        width: 100%;
+        box-shadow: 0 0 2px #999;
+        box-sizing: border-box;
+        border:3px
+    }
+    .page-main input:focus, .page-main select:focus, .page-main textarea:focus{
+        outline: none;
+        box-shadow: 0 0 6px green inset;
+    }
+    .page-main textarea{
+        height: 5.4em;
+    }
+    .page-main input[type=checkbox],.page-main input[type=radio]{
+        width: auto;
+    }
+    .page-main label{
+        display: block;
+        padding: 1em 0 .3em 0;
+    }
+    @media all and (min-width:900px) {
+        .contentx{
+            padding: 0 1em;
+        }
+        .contentx > *{
+            flex-grow: 1;
+            flex-basis: 100%;
+            box-shadow: 0 0 5px #aaa;
+        }
+        .contentx.widget{
+            flex-basis: 320px;
+            flex-shrink: 1;
+            flex-grow: 0;
+        }
+    }
+
+
+
+    /*
+ CSS for the main interaction
+*/
+.tabset > input[type="radio"] {
+  position: absolute;
+  left: -200vw;
+}
+
+.tabset .tab-panel {
+  display: none;
+  padding: 0;
+}
+
+.tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+.tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+.tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+.tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+.tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+.tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.tabset > label {
+  position: relative;
+  display: inline-block;
+  padding: 8px 13px;
+  margin-top: 2px;
+  margin-left: 2px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  cursor: pointer;
+  font-size: 80%;
+}
+
+
+.tabset > label:hover,
+.tabset > input:focus + label {
+  color: #06c;
+}
+
+.tabset > label:hover::after,
+.tabset > input:focus + label::after,
+.tabset > input:checked + label::after {
+  background: #06c;
+}
+
+.tabset > input:checked + label {
+  border-color: #ccc;
+  border-bottom: 1px solid #fff;
+  margin-bottom: -1px;
+}
+
+.tab-panel {
+  padding: 30px 0;
+  border-top: 1px solid #ccc;
+}
+.highlight{
+    box-shadow: 0 0 3px #999;
+}
+.actions > *{
+    padding: .3em 1em;
+    border-right: 1px solid #ddd;
+    font-size: 90%;
+}
+.actions [data-icon]::before{
+    font-size: 100%;
+}
+</style>
+-->

@@ -1,0 +1,41 @@
+{
+    "name":"Blogs",
+    "description":"Simple yet powerful, modern online manager for Human resources tasks.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Blogs",
+                "alias":"Blogs",
+                "href":"#Blogs", 
+                "icon":"f4ad",
+                "permission":"",
+                "children":[
+                    {
+                        "name":"News updates",
+                        "href":"/plugin/Blogs/news-updates",
+                        "icon":"f594",
+                        "permission":""
+                    },
+                    {
+                        "name":"Notices",
+                        "href":"/plugin/Blogs/notices",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Broadcasts",
+                        "href":"/plugin/Blogs/broadcasts",
+                        "icon":"",
+                        "permission":""
+                    },
+                    {
+                        "name":"Events",
+                        "href":"/plugin/Blogs/events",
+                        "icon":"",
+                        "permission":""
+                    }
+                ]
+            }
+        ]
+    }
+}

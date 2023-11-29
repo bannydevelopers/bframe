@@ -1,0 +1,57 @@
+<div>
+    <h3 class="content-small no-pad-top">Edit Proforma</h3>
+    <form method="post">
+        <table class="paginate" data-items-per-page="10">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th style="white-space: nowrap;">
+                        Item name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th style="white-space: nowrap;">
+                        Unit price
+                    </th>
+                    <th style="white-space: nowrap;">
+                        Amount
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{sn}}</td>
+                    <td>
+                        {{product}}
+                    </td>
+                    <td>
+                        <em>{{item_desc}}</em>
+                    </td>
+                    <td style="white-space: nowrap;">
+                        <input value="{{qty}}" name="qty[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> {{unit}}                
+                    </td>
+                    <td>
+                        <input value="{{price}}" name="price[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required>
+                    </td>
+                    <td>
+                        {{total_price}}
+                    </td>
+                    <td>
+                        <a onclick="view_tool()" data-icon="&#xf06e;"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align: right;padding-top: 1em;">
+            <button type="button">Add item</button>
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,71 @@
+{
+    "name": "Human resources",
+    "description": "Simple yet powerful, modern online manager for Human resources tasks.",
+    "admin": {
+        "navigation": [
+            {
+                "name": "Human resources",
+                "alias": "Human-resources",
+                "href": "#Human_resources",
+                "icon": "f508",
+                "permission": "view_human_resources",
+                "children": [
+                    {
+                        "name": "Staff",
+                        "href": "\/plugin\/Human-resources\/staff",
+                        "icon": "f594",
+                        "permission": "view_staff"
+                    },
+                    {
+                        "name": "Payroll",
+                        "href": "\/plugin\/Human-resources\/payroll",
+                        "icon": "",
+                        "permission": "view_payroll"
+                    },
+                    {
+                        "name": "Salary slip",
+                        "href": "\/plugin\/Human-resources\/salary-slip",
+                        "icon": "",
+                        "permission": "view_salary_slip"
+                    },
+                    {
+                        "name": "Leave",
+                        "href": "\/plugin\/Human-resources\/leave",
+                        "icon": "",
+                        "permission": "view_leave"
+                    },
+                    {
+                        "name": "Work shifts",
+                        "href": "\/plugin\/Human-resources\/work-shifts",
+                        "icon": "",
+                        "permission": "view_work_shifts"
+                    },
+                    {
+                        "name": "Designations",
+                        "href": "\/plugin\/Human-resources\/designations",
+                        "icon": "",
+                        "permission": "view_designations"
+                    },
+                    {
+                        "name": "Departments",
+                        "href": "\/plugin\/Human-resources\/departments",
+                        "icon": "",
+                        "permission": "view_departments"
+                    },
+                    {
+                        "name": "Configuration",
+                        "href": "\/plugin\/Human-resources\/configuration",
+                        "icon": "",
+                        "permission": "view_hr_configuration"
+                    }
+                ]
+            }
+        ]
+    },
+    "headquarters_branch": 1,
+    "leave_approve_flow": [
+        "1",
+        "6",
+        "5"
+    ]
+}
