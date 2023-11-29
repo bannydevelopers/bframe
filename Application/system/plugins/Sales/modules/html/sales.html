@@ -22,10 +22,7 @@
                                 Customer name
                             </th>
                             <th>
-                                Sales date
-                            </th>
-                            <th>
-                                Sales number
+                                Sold date
                             </th>
                             <th>
                                 Product sold
@@ -34,7 +31,10 @@
                                 Quantity
                             </th>
                             <th>
-                                Amount
+                                Unit amount
+                            </th>
+                            <th>
+                                Total amount
                             </th>
                             <th>
                                 &nbsp;
@@ -51,21 +51,20 @@
                                 </span>
                             </td>
                             <td>
-                                <?=$st['sales_date']?><br>  
-                            </td>
-                            <td>
-                                <?=$st['sales_number']?><br>
+                                <?=date('d M, Y', strtotime($st['sales_date']))?><br>  
                             </td>
                             <td>
                                 <?=$st['product_name']?><br>
                             </td>
                             <td>
                                 <?=$st['quantity']?><br>
-                                <?=$st['unit']?><br>
-                                
+                                <?=$st['quantity'] == 1 ? $st['product_unit_singular'] : $st['product_unit_plural']?><br>
                             </td>
                             <td>
-                                <?=$st['amount']?><br>
+                                <?=$st['unit_amount']?><br>
+                            </td>
+                            <td>
+                                <?=$st['total_amount']?><br>
                             </td>
                             <td>
                                 <a onclick="view_sales()" data-icon="&#xf06e;"></a>
@@ -92,7 +91,8 @@
                 <div><span style="color: rgb(35, 57, 136);">Product sold: </span>{{product_name}}</div>
                 <div><span style="color: rgb(35, 57, 136);">Unit: </span>{{unit}}</div>
                 <div><span style="color: rgb(35, 57, 136);">Quantity: </span>{{quantity}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Amount: </span>{{amount}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Unit amount </span>{{unit_amount}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Total amount: </span>{{total_amount}}</div>
             </div>
         </div>
     </div>

@@ -13,12 +13,6 @@
                     <input type="date" id="sales_date" name="sales_date" value="" required />
                 </div>
                 <div>
-                    <label for="sales_number">Sales number</label>
-                    <input type="number" id="sales_number" name="sales_number" value="0" required />
-                </div>
-            </div> 
-            <div class="flex">
-                <div>
                     <label for="product_name">Product sold</label>
                     <select name="product_name" id="product_name" onchange="check_selection('product_name')">
                         <option value="">Choose...</option>
@@ -39,11 +33,14 @@
                     <input type="text" id="quantity" name="quantity" value="" required />
                 </div>
             </div>
-                <div class="flex"> 
-                    
+                <div class="flex">
                     <div>
-                        <label for="amount">Amount</label>
-                        <input type="number" id="amount" name="amount" value="" required />
+                        <label for="unit_amount">Unit amount</label>
+                        <input type="number" id="unit_amount" name="unit_amount" value="" required />
+                    </div>
+                    <div>
+                        <label for="total_amount">Total amount</label>
+                        <input type="number" id="total_amount" name="total_amount" value="" required />
                     </div>
                </div>
         </div>

@@ -3,19 +3,19 @@ $me = human_resources::get_staff();
 if($me){
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
-    if(isset($_POST['sales_number'])){
+    if(isset($_POST['sales_date'])){
         //var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
             'customer_name'=>$_POST['customer_name'], 
             'sales_date'=>$_POST['sales_date'], 
-            'sales_number'=>$_POST['sales_number'], 
-            'amount'=>$_POST['amount'],
+            'total_amount'=>$_POST['total_amount'],
+            'unit_amount'=>$_POST['unit_amount'],
             'product'=>$_POST['product_name'], 
             'unit'=>$_POST['unit'],
             'quantity'=>$_POST['quantity']
         ];
-        //var_dump($db->error());
+        var_dump($db->error());
         if(isset($_POST['sales_id']) && intval($_POST['sales_id']) > 0){
             $k = intval($_POST['sales_id']);
             $db->update('sales', $data)->where(['sales_id'=>$_POST['sales_id']])->commit();
