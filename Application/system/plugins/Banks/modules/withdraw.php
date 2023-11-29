@@ -7,7 +7,8 @@ if($me){
         //var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
-            'payment_to'=>$_POST['payment_to'],   
+            'payment_to'=>$_POST['payment_to'],
+            'payment_method'=>$_POST['payment_method'],   
             'due_date'=>$_POST['due_date'], 
             'amount'=>$_POST['amount'], 
             'mode_of_payment'=>$_POST['mode_of_payment'],

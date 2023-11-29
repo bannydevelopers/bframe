@@ -31,9 +31,6 @@
                                 Quantity
                             </th>
                             <th>
-                                Unit amount
-                            </th>
-                            <th>
                                 Total amount
                             </th>
                             <th>
@@ -57,14 +54,11 @@
                                 <?=$st['product_name']?><br>
                             </td>
                             <td>
-                                <?=$st['quantity']?><br>
+                                <?=$st['quantity']?>&nbsp;
                                 <?=$st['quantity'] == 1 ? $st['product_unit_singular'] : $st['product_unit_plural']?><br>
                             </td>
                             <td>
-                                <?=$st['unit_amount']?><br>
-                            </td>
-                            <td>
-                                <?=$st['total_amount']?><br>
+                                <?=intval($st['quantity'])*intval($st['unit_amount'])?><br>
                             </td>
                             <td>
                                 <a onclick="view_sales()" data-icon="&#xf06e;"></a>
@@ -270,42 +264,47 @@
             userdata.append('delete_sales', uid);
             userdata.append('ajax_request',1);
             ajax(
-            window.location.href, 
-            response=>{
-                let jsx = JSON.parse(response);
-                if(jsx){
-                    Swal.fire({
-                        title: jsx.message,
-                        icon: jsx.status
-                    })
-                    .then(e=>{
-                        if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             //createPageButtons(); // create the page buttons initially
-                            //showPage(currentPage);
-                        }
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: 'Malformed response returned',
-                        icon: 'error',
-                        html:response
-                    });
-                }
-            },
-            error=>{
-                console.log(error);
-            },
-            userdata
+                window.location.href, 
+                response=>{
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title: jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(e=>{
+                            if(jsx.status == 'success'){
+                                elem.parentNode.removeChild(elem);
+                                //createPageButtons(); // create the page buttons initially
+                                //showPage(currentPage);
+                            }
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Malformed response returned',
+                            icon: 'error',
+                            html:response
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                userdata
             );
         }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
-        }
         });
+    }
+    const check_selection = ()=>{
+        let elem = window.event.target,
+            inpt = document.querySelector('[name=unit_amount]');
+        inpt.value = elem.options[elem.options.selectedIndex].getAttribute('data-price');
+
+    }
+    const update_total = ()=>{
+        let qty = parseInt(document.querySelector('[name=quantity]').value),
+            price = parseInt(document.querySelector('[name=unit_amount]').value);
+        if(qty && price) document.querySelector('#total_amount').value = qty * price;
     }
 </script>

@@ -5,14 +5,13 @@ if($me){
     $db = db::get_connection($config);
     if(isset($_POST['sales_date'])){
         //var_dump($_POST);
+        
         $data = [
             'owner_branch'=>$me['work_location'],
             'customer_name'=>$_POST['customer_name'], 
-            'sales_date'=>$_POST['sales_date'], 
-            'total_amount'=>$_POST['total_amount'],
+            'sales_date'=>$_POST['sales_date'],
             'unit_amount'=>$_POST['unit_amount'],
             'product'=>$_POST['product_name'], 
-            'unit'=>$_POST['unit'],
             'quantity'=>$_POST['quantity']
         ];
         var_dump($db->error());
@@ -59,7 +58,7 @@ if($me){
                     ->order_by('sales_id', 'desc')
                     ->fetchAll();
 
-    $product = $db->select('product', 'product_id, product_name')
+    $product = $db->select('product', 'product_id, product_name, product_price')
                   ->where(1)
                   ->fetchAll();
 
