@@ -17,25 +17,30 @@ class Communication{
     }
     public static function load_admin_dashboard($args){
         if(str_replace('-', '_', strtolower($args[0])) == strtolower(__CLASS__)) {
-            $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
-            $registry = storage::init();
-            $myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";
-            $_this = new static();
-            $user = user::init()->get_session_user();
-            $return = ['title'=>"Module '{$args[1]}' not found",'body'=>'Request not supported'];
-            if(is_readable(__DIR__."/modules/{$args[1]}.php")) {
-                include __DIR__."/modules/{$args[1]}.php";
+            $me = human_resources::get_staff();
+            if($me){
+                $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
+                $config = storage::init();
+                $db = db::get_connection($config->system_config->db_configs);
+                $myURL = "{$config->request[0]}/{$config->request[1]}/{$config->request[2]}";
+                $_this = new static();
+                $user = user::init()->get_session_user();
+                $return = ['title'=>"Module '{$args[1]}' not found",'body'=>'Request not supported'];
+                if(is_readable(__DIR__."/modules/{$args[1]}.php")) {
+                    include __DIR__."/modules/{$args[1]}.php";
+                }
+                return $return;
             }
-            return $return;
+            else return ['title'=>'Access denied', 'body'=>'You need to register as staff to continue'];
         }
     }
     public static function load_page($request){
-        $registry = storage::init();
+        $config = storage::init();
         
-        $conf = $registry->system_config;
+        $conf = $config->system_config;
         $db = db::get_connection($conf->db_configs);
         
-        $page = $registry->page;
+        $page = $config->page;
         if(!intval($page['page_id'])) return;
 
         if($page['page_extras'] && is_string($page['page_extras'])) $extras = json_decode($page['page_extras']);
