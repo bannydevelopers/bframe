@@ -730,34 +730,41 @@
                     function createPageButtons() {
                         const totalPages = Math.ceil(items.length / itemsPerPage);
                         if(totalPages < 2) return;
-                        const paginationContainer = document.createElement('div');
+                        const paginationContainer = document.createElement('ul');
+                        paginationContainer.classList.add(
+                          'pagination', 'pt-3', 'px-2' //, 'justify-content-end'
+                          );
                         const paginationDiv = document.body.appendChild(paginationContainer);
-                        paginationContainer.classList.add('pagination');
 
                         // Add page buttons
                         for (let i = 0; i < totalPages; i++) {
-                            const pageButton = document.createElement('button');
-                            pageButton.textContent = i + 1;
-                            pageButton.addEventListener('click', () => {
-                                currentPage = i;
-                                showPage(currentPage);
-                                updateActiveButtonStates();
-                            });
+                            const pageButton = document.createElement('li');
+                            pageButton.classList.add('page-item');
+                            const linkTag = document.createElement('a')
+                            linkTag.classList.add('page-link');
+                            linkTag.href = 'javascript:void(0);';
 
-                            content.appendChild(paginationContainer);
+                            linkTag.textContent = i + 1;
+                            linkTag.addEventListener('click', () => {
+                              currentPage = i;
+                              showPage(currentPage);
+                              updateActiveButtonStates();
+                            });
+                            pageButton.appendChild(linkTag);
                             paginationDiv.appendChild(pageButton);
+                            content.appendChild(paginationContainer);
                         }
                     }
 
                     function updateActiveButtonStates() {
-                        const pageButtons = document.querySelectorAll('.pagination button');
-                        pageButtons.forEach((button, index) => {
-                            if (index === currentPage) {
-                                button.classList.add('active');
-                            } else {
-                                button.classList.remove('active');
-                            }
-                        });
+                      const pageButtons = document.querySelectorAll('.pagination li');
+                      pageButtons.forEach((button, index) => {
+                        if (index === currentPage) {
+                          button.classList.add('active');
+                        } else {
+                          button.classList.remove('active');
+                        }
+                      });
                     }
 
                     createPageButtons(); // create the page buttons initially
