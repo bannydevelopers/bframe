@@ -1,8 +1,5 @@
 <?php
-class accounts{
-    public $name = 'eTours';
-    public $version = 1.0;
-    public $desc = 'Plugin dedicated for complete tours management as a drop in';
+class Communication{
 
     private static $instance = null;
     
@@ -12,22 +9,24 @@ class accounts{
 
     public static function init(){
         // Hook to the system
-        system::add_event_listener('exec_end', 'accounts::load_page', $_SERVER['REQUEST_URI']);
+        system::add_event_listener('exec_end', 'communication::load_page', $_SERVER['REQUEST_URI']);
         // Hook to admin dashboard
-        system::add_event_listener('admin_plugin_load', 'accounts::load_admin_dashboard');
+        system::add_event_listener('admin_plugin_load', 'communication::load_admin_dashboard');
         // Respond to service requests
-        system::add_event_listener('add_bank', 'accounts::service_add_bank');
+        //system::add_event_listener('add_bank', 'communication::service_add_bank');
     }
     public static function load_admin_dashboard($args){
-        if(strtolower($args[0]) == __CLASS__) {
+        if(str_replace('-', '_', strtolower($args[0])) == strtolower(__CLASS__)) {
+            $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
             $registry = storage::init();
             $myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";
             $_this = new static();
             $user = user::init()->get_session_user();
-
-            $title = $args[0];
-            $body = 'Loading...';
-            return ['title'=>$title,'body'=>$body];
+            $return = ['title'=>"Module '{$args[1]}' not found",'body'=>'Request not supported'];
+            if(is_readable(__DIR__."/modules/{$args[1]}.php")) {
+                include __DIR__."/modules/{$args[1]}.php";
+            }
+            return $return;
         }
     }
     public static function load_page($request){
