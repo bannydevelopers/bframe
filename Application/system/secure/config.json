@@ -7,8 +7,9 @@
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
-        "Communication",
+        "Accounts",
         "Office_inventory",
+        "Communication",
         "Sales",
         "Banks",
         "Human_resources",

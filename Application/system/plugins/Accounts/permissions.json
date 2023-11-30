@@ -1,0 +1,19 @@
+[
+    "view_accounts",
+    "add_expenses",
+    "edit_expenses",
+    "view_expenses",
+    "delete_expenses",
+    "add_debts",
+    "edit_debts",
+    "view_debts",
+    "delete_debts",
+    "add_loans",
+    "edit_loans",
+    "view_loans",
+    "delete_loans",
+    "add_business_partner",
+    "edit_business_partner",
+    "view_business_partner",
+    "delete_business_partner"
+]
