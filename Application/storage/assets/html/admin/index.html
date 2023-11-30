@@ -547,10 +547,14 @@
                 <?php 
                   foreach($a['children'] as $v){
                     if(!user::init()->user_can(trim($v['permission']))) continue;
+                    $reqx = @$address[1] == 'plugin' ? @$address[3] : @$address[2];
+                    $exp = explode('/', trim($v['href'],'/'));
+                    $last = end($exp);
+                    $statex = ($reqx == $last or (isset($v['alias']) && $reqx == $v['alias']));
                     if(strpos($v['href'], '#') === 0) $vref = "{$_SERVER['REQUEST_URI']}{$a['href']}";
                     else $vref = "{$admin}{$v['href']}";
                   ?>
-                <li class="menu-item">
+                <li class="menu-item<?=$statex ? ' active' : ''?>">
                   <a href="<?=$vref?>" class="menu-link">
                     <div data-i18n="<?=$v['name']?>"><?=$v['name']?></div>
                   </a>
