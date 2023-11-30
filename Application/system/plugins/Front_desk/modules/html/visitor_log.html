@@ -1,0 +1,32 @@
+<h1 class="content-small no-pad-top flex">
+    <span>Visitors</span>
+        <button onclick="register_visitor()" class="round uppercase primary shrink">
+            Register a visitor
+        </button>
+</h1>
+<?php if(isset($msg) && $msg){?>
+    <p class="content box-shadow msg"><?=$msg?></p>
+<?php }?>
+<div>
+
+</div>
+<style>
+    .mySwal label{
+        text-align: left;
+        display: block;
+    }
+</style>
+<template>
+    <?php include __DIR__.'/register_visitor.html';?>
+</template>
+<script>
+    const register_visitor = ()=>{
+        let vfrm = document.querySelector('template').content.children[0].cloneNode(true);
+        Swal.fire({
+            title: 'Register a visitor',
+            html: vfrm,
+            customClass:'mySwal',
+            showConfirmButton: false
+        });
+    }
+</script>

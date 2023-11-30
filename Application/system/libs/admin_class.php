@@ -61,11 +61,6 @@ class admin{
         $pages = $db->select('pages','page_id,page_name')->where(['page_type'=>0])->fetchAll();
         $pkids = [
                     [
-                        'name'=>'All pages',
-                        'href'=>'/pages',
-                        'permission'=>'view_page'
-                    ],
-                    [
                         'name'=>'Create page',
                         'href'=>'/pages/add',
                         'permission'=>'add_page'
@@ -97,7 +92,6 @@ class admin{
         [
             [
                 'name'=>'Users',
-                'alias'=>'users',
                 'href'=>'#users', 
                 'icon'=>'f509',
                 'permission'=>'view_user',
@@ -116,7 +110,6 @@ class admin{
             ],
             [
                 'name'=>'Pages',
-                'alias'=>'pages',
                 'href'=>'/pages', 
                 'icon'=>'f15c',
                 'permission'=>'view_page',
@@ -153,6 +146,7 @@ class admin{
             ]
         ];
         $nav = array_merge($nav, $settings);
+        //var_dump('<pre>',$nav);
         return $nav;
 
     }
@@ -164,7 +158,7 @@ class admin{
         if($user->user_can('view_user')){
             $_this::$data['admin_widgets']['users'] = $db->select('user_accounts', 'count(user_id) as total')->fetch();
         }
-        if($user->user_can('view_page')){
+        if($user->user_can('view_pages')){
             $_this::$data['admin_widgets']['pages'] = $db->select('pages', 'count(page_id) as total')->fetch();
         }
         if($user->user_can('view_plugins')){
@@ -174,10 +168,10 @@ class admin{
             $_this::$data['admin_widgets']['plugins'] = ['total' => count($plugins_count)];
         }
         
-        $widgets = system::dispatch_event('admin_widgets_load', []);
+        $widgets = system::dispatch_event('admin_profile_load', []);
         if($widgets && $widgets[0]){
             $_this::$data['widgets'] = '';
-            foreach($widgets as $widget) $_this::$data['widgets'] .= $widget;
+            foreach($widgets as $widget) $_this::$data['widgets'] = $widget;
         }
 
         $user = user::init()->get_session_user('full_name');
@@ -189,7 +183,6 @@ class admin{
         if(isset($_POST['delete_page'])){
             $db->delete('pages')->where(['page_id'=>intval($_POST['delete_page'])])->commit();
             if(!$db->error()){
-                system::cache_clear();
                 die(json_encode([
                     'message'=>'Page deleted successful!',
                     'status'=>'success'
@@ -406,6 +399,9 @@ class admin{
             }
             else die('Deletion failed');
         }
+        if(!isset($addr[2])){
+            return $this->display('404', ' ');
+        }
         if(strtolower($addr[2]) == 'permission'){
             $roles = $db->select('role_permission_list')
                         ->join('permissions','permissions.permission_id=role_permission_list.permission_id')
@@ -454,7 +450,6 @@ class admin{
                     unset(storage::init()->system_config->plugins[$key]);
                 }
                 else{
-                    //storage::init()->system_config->plugins[] = $v;
                     // update permissions
                     $perms_file = realpath(__DIR__."/../plugins/{$v}").'/permissions.json';
                     if(is_readable($perms_file)){
@@ -497,7 +492,8 @@ class admin{
         }
         elseif(strtolower($addr[2]) == 'system'){
 
-            if(isset($_POST['system_name'])){
+            if(isset($_POST['site_name'])){
+                $conf = storage::init()->system_config;
                 foreach($_POST as $key=>$value){
                     if(isset($conf->$key)){
                         if(is_object($value)){
@@ -507,9 +503,10 @@ class admin{
                     }
                 }
                 $json = json_encode($conf, JSON_PRETTY_PRINT);
-                $fn = realpath(__DIR__.'/../../config/conf.json');
+                $fn = realpath(__DIR__.'/../secure/').'/config.json';
+                //die($fn);
                 file_put_contents($fn, $json);
-                header("Location: ./");
+                header("Location: {$_SERVER['REQUEST_URI']}");
             }
 
             $conf = storage::init()->system_config;
@@ -615,7 +612,7 @@ class admin{
         $widgets = system::dispatch_event('admin_profile_load', $addr);
         if($widgets && $widgets[0]){
             self::$data['widgets'] = '';
-            foreach($widgets as $widget) self::$data['widgets'] = $widget;
+            foreach($widgets as $widget) self::$data['widgets'] .= $widget;
         }
 
         $db = self::get_db();
