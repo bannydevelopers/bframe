@@ -70,6 +70,7 @@ class admin{
             $pkids[] = [
                 'name'=>$p['page_name'],
                 'href'=>"/pages/edit/{$p['page_id']}",
+                'alias'=>"{$p['page_id']}",
                 'permission'=>'edit_page'
             ];
         }
