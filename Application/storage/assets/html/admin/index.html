@@ -548,6 +548,7 @@
                   foreach($a['children'] as $v){
                     if(!user::init()->user_can(trim($v['permission']))) continue;
                     $reqx = @$address[1] == 'plugin' ? @$address[3] : @$address[2];
+                    if(@$address[1] == 'pages') $reqx = @$address[3];
                     $exp = explode('/', trim($v['href'],'/'));
                     $last = end($exp);
                     $statex = ($reqx == $last or (isset($v['alias']) && $reqx == $v['alias']));
