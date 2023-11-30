@@ -3,7 +3,7 @@
     --green: #25996C;
     --white: #ffffff;
     --yellow: #FFDD44;
-    --light: #F6F8FC;
+    --light: rgb(246, 248, 252, .5);
     --grey:#EAF1FB;
     --dark:#999;
     --primary-bg: #2D4A8A;
@@ -40,10 +40,10 @@ img{
     box-shadow: 0 0 6px #aaa;
     border-radius: 6px;
     font-size: 96%;
-}
-tr:nth-of-type(odd){
+}*/
+tr:nth-of-type(even){
     background-color: var(--light);
-}
+}/*
 tr:hover {
     background-color: var(--grey);
     box-shadow: 0 0 3px #999;
@@ -81,15 +81,14 @@ td{
     white-space: nowrap;
     padding: 0 1em;
 }
-.table > *:nth-of-type(odd){
+.table > tr:nth-of-type(even){
     background-color: #fafafa;
-}
+}*/
 .table > *:first-child{
     background-color: #f1f1f1;
-    box-shadow: 0 -1px 1px #ddd;
     font-size: 1em;
     white-space: nowrap;
-}
+}/*
 .table > * > *{
     display: block;
 } 
