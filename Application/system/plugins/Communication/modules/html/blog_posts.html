@@ -6,55 +6,107 @@
 <p class="box-shadow msg rounded"><?=$msg?></p>
 <?php }?>
 <div class="flex cards">
+    <?php foreach($posts as $p){?>
     <div class="rounded">
-        <h3 style="text-transform: none;">Title</h3>
+        <h3 style="text-transform: none;font-size: 120%;" class="content-small"><?=$p['post_title']?></h3>
         <div class="white flex">
-            <div>image</div>
-            <div>Info</div>
+            <div><?=$p['post_id']?></div>
+            <div><?=$p['post_content']?></div>
         </div>
     </div>
-    <div class="rounded">
-        <h3 style="text-transform: none;font-size: 120%;">Title</h3>
-        <div class="white flex">
-            <div>image</div>
-            <div>Info</div>
-        </div>
-    </div>
-    <div class="rounded">
-        <h3 style="text-transform: none;">Title</h3>
-        <div class="white flex">
-            <div>image</div>
-            <div>Info</div>
-        </div>
-    </div>
+    <?php } ?>
 </div>
 <style>
-    .mySwal label{
+    .mySwal label, .wideSwal label{
         text-align: left;
         display: block;
         padding: 6px;
     }
+    .wideSwal{
+        min-width: 80%;
+    }
+    .flex{
+        display: flex;
+    }
+    .flex > *{
+        flex-basis: 100%;
+    }
+    .flex > .flex-shrink{
+        flex-basis: auto;
+    }
+    button{
+        border: none;
+        white-space: nowrap;
+    }
+    .cards > *{
+        box-shadow: 0 0 5px #999;
+        margin: 1em;
+    }
+    input,select{
+        width: 100%;
+    }
 </style>
 <template>
     <form method="post" class="content-small">
-        <label>Post title</label>
-        <input type="text" name="post_name" placeholder="short and descriptive title">
-        <label>Content</label>
-        <textarea name="post_content" class="tinymce"></textarea>
+        <div class="flex">
+            <div class="content-small">
+                <label>Post title</label>
+                <input type="text" name="post_title" placeholder="short and descriptive title">
+            </div>
+            <div class="content-small">
+                <label>Category</label>
+                <select name="post_category">
+                    <option value="0">General</option>
+                </select>
+            </div>
+            <div class="flex-shrink">
+                <label>&nbsp;</label>
+                <button type="submit" class="content-small">Save</button>
+            </div>
+        </div>
+        <div class="content-small">
+            <label>Content</label>
+            <textarea name="post_content" class="tinymce"></textarea>
+        </div>
     </form>
 </template>
 <script>
-    var tinymce_toolbar = 'save | undo redo | bold italic underline strikethrough | fontselect | fontsizeselect '
-                        +'| formatselect | alignleft aligncenter alignright alignjustify | outdent indent '
-                        +'|  numlist bullist table | image media link | ltr rtl '
-                        +'| charmap emoticons fullscreen code';
     const add_post = ()=>{
         let htz = document.querySelector('template').content.children[0].cloneNode(true);
         Swal.fire({
             title: 'Create blog post',
             html: htz,
-            customClass: 'mySwal',
+            customClass: 'wideSwal',
             showConfirmButton: false
+        });
+        document.querySelector('.wideSwal form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let elem = evt.target;
+            let fdx = new FormData(elem);
+            fdx.append('ajax_request', 1);
+            ajax(
+                window.location.href,
+                response=>{
+                    console.log(response);
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            icon: jsx.status,
+                            html: jsx.message
+                        })
+                        .then(any=>{
+                            /*let inpt = document.createElement('input');
+                            inpt.type = 'hidden';
+                            inpt.name = 'post_id';
+                            elem.appendChild(inpt);*/
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                fdx
+            )
         });
         init_rich_editor();
     }
