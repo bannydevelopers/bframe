@@ -17,14 +17,23 @@
     <?php }?>
 </div>
 <hr>
-<div class="flex cards bg-white p-3 rounded" style="justify-content: left;">
+<div class="ag-format-container bg-white rounded">
     <?php print_r(@$widgets)?>
 </div>
 
 <style>
+    .other-dcard_item {
+        -ms-flex-preferred-size: calc(33.33333% - 20px);
+        flex-basis: calc(33.33333% - 20px);
+        margin: 0 10px 15px;
+        overflow: hidden;
+        box-shadow: 0 0 1px var(--dark);
+        overflow: hidden;
+        box-shadow: 0 28px 10px -25px rgba(65, 51, 183, .25);
+    }
     .ag-format-container {
     width: 100%;
-    max-width: 1142px;
+    max-width: 1442px;
     margin: 0 auto;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -121,32 +130,40 @@
     }*/
 
     @media only screen and (max-width: 979px) {
-    .ag-dcard_item {
-        -ms-flex-preferred-size: calc(50% - 30px);
-        flex-basis: calc(50% - 30px);
-    }
-    .ag-dcard-item_title {
-        font-size: 3rem;
-    }
-    }
+        .other-dcard_item {
+            -ms-flex-preferred-size: calc(50% - 20px);
+            flex-basis: calc(50% - 20px);
+        }
+        .ag-dcard_item {
+            -ms-flex-preferred-size: calc(50% - 30px);
+            flex-basis: calc(50% - 30px);
+        }
+        .ag-dcard-item_title {
+            font-size: 3rem;
+        }
+        }
 
-    @media only screen and (max-width: 767px) {
-    .ag-format-container {
-        width: 96%;
-    }
+        @media only screen and (max-width: 767px) {
+        .ag-format-container {
+            width: 96%;
+        }
 
-    }
-    @media only screen and (max-width: 639px) {
-    .ag-dcard_item {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
-    }
-    .ag-dcard-item_title {
-        line-height: 1;
-        font-size: 2.5rem;
-    }
-    .ag-dcard-footer-box {
-        font-size: 16px;
-    }
+        }
+        @media only screen and (max-width: 639px) {
+        .other-dcard_item {
+            -ms-flex-preferred-size: 100%;
+            flex-basis: 100%;
+        }
+        .ag-dcard_item {
+            -ms-flex-preferred-size: 100%;
+            flex-basis: 100%;
+        }
+        .ag-dcard-item_title {
+            line-height: 1;
+            font-size: 2.5rem;
+        }
+        .ag-dcard-footer-box {
+            font-size: 16px;
+        }
     }
 </style>
