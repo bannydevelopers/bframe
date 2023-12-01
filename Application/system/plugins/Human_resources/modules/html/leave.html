@@ -108,7 +108,7 @@
 </style>
 <script>
     const edit_leave = ()=>{
-        let elem = window.event.target.parentNode.parentNode.parentNode,
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[1].cloneNode(true);
         let hin = document.createElement('input');
@@ -169,7 +169,7 @@
         }
     };
     const delete_leave= ()=>{
-        let elem = window.event.target.parentNode.parentNode.parentNode;
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let name = jsx.full_name,
             uid = jsx.user_id;

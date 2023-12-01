@@ -23,7 +23,7 @@
             </thead>
             <tbody class="table-border-bottom-0">
                 <?php foreach($salary_slip as $ssp){?>
-                <tr data-json='<?=json_encode($st)?>'>
+                <tr data-json='<?=json_encode($ssp)?>'>
                     <td>
                         <input type="checkbox" class="form-check-input" name="staff_id[]" value="<?=$ssp['user_id']?>">
                         <span>
@@ -181,7 +181,7 @@
         }
     };
     const delete_salary_slip = ()=>{
-        let elem = window.event.target.parentNode.parentNode.parentNode;
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));console.log(jsx);
         let name = jsx.full_name,
             uid = jsx.slip_id;
