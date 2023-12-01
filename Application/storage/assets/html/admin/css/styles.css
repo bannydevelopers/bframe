@@ -3,14 +3,11 @@
     --green: #25996C;
     --white: #ffffff;
     --yellow: #FFDD44;
-    --light: #F6F8FC;
+    --light: rgb(246, 248, 252, .5);
     --grey:#EAF1FB;
     --dark:#999;
     --primary-bg: #2D4A8A;
     --primary-txt: #ffffff;
-}
-ul, li {
-    list-style: none;
 }
 
 html {
@@ -27,26 +24,26 @@ body{
     padding: 0;
     margin: 0;
 }
-h1,h2,h3,h4,h5,h6{
+/*h1,h2,h3,h4,h5,h6{
     margin: 0;
 }
 h2 {
     font-weight: normal;
-}
+}*/
 img{
     vertical-align: middle;
     max-width: 100%;
 }
-table{
+/*table{
     width: 100%;
     border-collapse: collapse;
     box-shadow: 0 0 6px #aaa;
     border-radius: 6px;
     font-size: 96%;
-}
-tr:nth-of-type(odd){
+}*/
+tr:nth-of-type(even){
     background-color: var(--light);
-}
+}/*
 tr:hover {
     background-color: var(--grey);
     box-shadow: 0 0 3px #999;
@@ -84,23 +81,22 @@ td{
     white-space: nowrap;
     padding: 0 1em;
 }
-.table > *:nth-of-type(odd){
+.table > tr:nth-of-type(even){
     background-color: #fafafa;
-}
+}*/
 .table > *:first-child{
     background-color: #f1f1f1;
-    box-shadow: 0 -1px 1px #ddd;
     font-size: 1em;
     white-space: nowrap;
-}
+}/*
 .table > * > *{
     display: block;
 } 
 label{
     display: block;
     padding: 12px 0;
-} 
-input,select,textarea,[contenteditable]{
+} */
+/*input,select,textarea,[contenteditable]{
     padding: 10px;
     border: none;
     background: transparent;
@@ -112,20 +108,10 @@ input:focus,select:focus,textarea:focus,[contenteditable]:focus{
     outline: none;
     box-shadow: 0 0 4px #aaa;
 }
-input[type=button],input[type=submit],input[type=reset],button,.btn{
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 0 3px #aaa;
-    padding: 12px 18px;
-    margin: 3px;
-}
-input[type=button],input[type=submit],input[type=reset],button,input[type=checkbox]{
-    display: inline-block;
-    width: auto;
-}
+
 input[type=checkbox] ~ label,input[type=radio] ~ label{
     display: inline-block;
-}
+}*/
 
 .content{
     padding: 16px;
@@ -147,14 +133,14 @@ input[type=checkbox] ~ label,input[type=radio] ~ label{
     background: #f5f5f5;
     color: #111;
 }
-.flex > *, .vertical-flex > *{
+/*.flex > *, .vertical-flex > *{
     flex-grow: 1;
 }
 .flex > .shrink, .vertical-flex > .shrink, .flex > .flex-shrink, .vertical-flex > .flex-shrink{
     flex-grow: 0;
     flex-shrink: 1;
     flex-basis: auto;
-}
+}*/
 .plain-btn{
     border: none;
     background: transparent;
@@ -215,7 +201,7 @@ input[type=checkbox] ~ label,input[type=radio] ~ label{
     display: none;
 }
 /* Pagination*/
-.pagination {
+/*.pagination {
     text-align: center;
     margin: 10px;
     padding: 10px;
@@ -228,7 +214,7 @@ input[type=checkbox] ~ label,input[type=radio] ~ label{
     outline: 1px solid #494a4f;
     border-radius: 1px;
     border: none;
-}
+}*/
 
 .hidden {
     clip: rect(0 0 0 0);
@@ -248,7 +234,19 @@ input[type=checkbox] ~ label,input[type=radio] ~ label{
 
 
 /* CARDS */
-.cards > *, .card{
+.card {
+    flex-direction: column;
+    padding: 8px;
+    justify-content: space-between;
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid rgba(227, 227, 227, 0.402);
+    border-radius: 8px;
+    background-color: #f6f8fc;
+    box-shadow: 0 28px 10px -25px rgba(65, 51, 183, .25);
+    backdrop-filter: blur(15px);
+}
+/*.cards > *, .card{
     border: 4px solid var(--white);
     margin: 16px 8px;
     box-shadow: 1px 1px 3px var(--dark);
@@ -313,7 +311,7 @@ input[type=checkbox] ~ label,input[type=radio] ~ label{
         width: 22%;
         max-width: 22%;
     }
-} 
+} */
 
 
 
@@ -328,13 +326,13 @@ input[type=checkbox] ~ label,input[type=radio] ~ label{
     .fill-parent{
         min-height: calc(100vh - 5em);
     }
-    .flex{
+    /*.flex{
         display: flex;
     }
     .vertical-flex{
         display: flex;
         flex-direction: column;
-    }
+    }*/
 }
 @media print{
     .no-print{

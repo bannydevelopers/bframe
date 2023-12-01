@@ -1,10 +1,15 @@
 <div class="white rounded box-shadow">
     <div class="grey content flex rounded">
-        <div class="shrink content-small">
-            <img src="<?=user::init()->get_user_avatar($me['user_id'])?>" class="rounded" height="70">
+        <div class="shrink" style="width: 90px;text-align: center;">
+            <div class="box-shadow white">
+                <img src="<?=user::init()->get_user_avatar($me['user_id'])?>" width="100%">
+                <a onclick="change_image()" class="hover-shown">
+                    <em style="white-space: nowrap;font-size: 75%;padding: 6px 0;">Change photo</em>
+                </a>
+            </div>
         </div>
         <div class="content-small">
-            <h3><?=$me['full_name']?></h3>
+            <h1><?=$me['full_name']?></h1>
             <div class="content pad-small-left" data-icon="&#xf507;"><?=$me['role_name']?></div>
         </div>
         <div>
@@ -16,11 +21,11 @@
         <div>
             <ul>
                 <li class="content pad-small-left" data-icon="&#xf3ed;">Permissions (<?=count($me['perms'])?>)</li>
-                <li class="content-small" data-icon="&#xf073;"><?=system::format_time($me['create_date'], 3)?></li>
+                <li class="content-small"><a href="./#" class="fa fa-cog"></a></li>
             </ul>
         </div>
     </div>
-    <div class="content flex cards">
+    <div class="flex cards">
         <?php print_r(@$widgets)?>
     </div>
 </div>
@@ -30,5 +35,15 @@
     }
     .pad-small-left{
         padding-left: .6em;
+    }
+    .hover-shown{
+        visibility: hidden;
+        margin-top: -1.5em;
+        position: relative;
+        display: block;
+        background-color: #fff;
+    }
+    *:hover > .hover-shown{
+        visibility: visible;
     }
 </style>

@@ -1,0 +1,34 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1">Visitors</h3>
+    <div>
+        <button type="button" onclick="register_visitor()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Visitor</button>
+    </div>
+</div>
+<br>
+
+<?php if(isset($msg) && $msg){?>
+    <p class="content box-shadow msg"><?=$msg?></p>
+<?php }?>
+<div>
+
+</div>
+<style>
+    .mySwal label{
+        text-align: left;
+        display: block;
+    }
+</style>
+<template>
+    <?php include __DIR__.'/register_visitor.html';?>
+</template>
+<script>
+    const register_visitor = ()=>{
+        let vfrm = document.querySelector('template').content.children[0].cloneNode(true);
+        Swal.fire({
+            title: 'Register a visitor',
+            html: vfrm,
+            customClass:'mySwal',
+            showConfirmButton: false
+        });
+    }
+</script>

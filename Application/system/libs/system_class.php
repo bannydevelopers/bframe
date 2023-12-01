@@ -170,7 +170,9 @@ class system{
         return date($formats[$selected], $ts);
     }
     public static function clear_cache($target = null){
-        $root = realpath(__DIR__.'/../cache');
+        $root = realpath(__DIR__.'/../');
+        $root = "{$root}/cache";
+        if(!is_readable($root)) mkdir($root);
         $files = [];
         if($target && is_writable("{$root}/{$target}")){
             $tmp = scandir("{$root}/{$target}");

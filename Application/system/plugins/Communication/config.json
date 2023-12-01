@@ -12,13 +12,13 @@
                 "children":[
                     {
                         "name":"Blog posts",
-                        "href":"/plugin/Communication/blog-posts",
+                        "href":"/plugin/Communication/blogs",
                         "icon":"f574",
                         "permission":"view_blog_posts"
                     },
                     {
                         "name":"Events",
-                        "href":"/plugin/Communication/eventst",
+                        "href":"/plugin/Communication/events",
                         "icon":"f574",
                         "permission":""
                     },
