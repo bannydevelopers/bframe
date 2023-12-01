@@ -25,18 +25,14 @@
                 <?php foreach($salary_slip as $ssp){?>
                 <tr data-json='<?=json_encode($st)?>'>
                     <td>
-                        <input type="checkbox" class="form-check-input" name="basic_salary[]" value="<?=$st['basic_salary']?>">
+                        <input type="checkbox" class="form-check-input" name="staff_id[]" value="<?=$ssp['user_id']?>">
                         <span>
                             <strong><?=ucwords($ssp['full_name'])?></strong><br>
                                 <em><?=$ssp['branch_name']?></em>
                         </span>
                     </td>
-                    <td>
-                        <?=number_format($ssp['basic_salary'])?>
-                    </td>
-                    <td>
-                        <?=number_format($ssp['allowance'])?>
-                    </td>
+                    <td><?=number_format($ssp['basic_salary'])?></td>
+                    <td><?=number_format($ssp['allowance'])?></td>
                     <td><?=number_format($ssp['bonus'])?></td>
                     <td><?=number_format(array_sum([$ssp['basic_salary'],$ssp['allowance'],$ssp['bonus']]))?></td>
                     <td><?=number_format(array_sum([$ssp['health_insurance_fund'],$ssp['payee'] 
@@ -113,7 +109,7 @@
 </style>
 <script>
     const edit_salary_slip = ()=>{
-        let elem = window.event.target.parentNode.parentNode.parentNode,
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[0].cloneNode(true);
         let hin = document.createElement('input');
