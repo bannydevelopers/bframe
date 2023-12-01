@@ -20,8 +20,8 @@
                         <tr>
                             <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Date</th>
                             <th>Type</th>
-                            <th>Debtor</th>
                             <th>Description</th>
+                            <th>Amount</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -29,15 +29,17 @@
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
                             <td>
-                                <input type="checkbox" class="form-check-input" name="debt_name[]" value="<?=$st['debt_name']?>" style="max-width:13px;max-height:13px">
+                                <input type="checkbox" class="form-check-input" name="debt_date]" value="<?=$st['debt_date']?>" style="max-width:13px;max-height:13px">
                                 <span>
                                     &nbsp;<strong><?=$st['debt_date']?></strong><br>
                                 </span>
                             </td>
-                            <td><?=$st['debt_description']?></td>
-                            <td>
-                                <?=$st['debt_amount']?><br>
-                            </td>
+                            <td><?=$st['debt_party_type']?>
+                                <?=$st['debt_party_id']?> </td>
+                                <td><?=$st['debt_description']?></td>
+                                <td>
+                                    <?=$st['debt_amount']?><br>
+                                </td>
                             <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -82,6 +84,9 @@
     <div>
         <div id="tpl-staff">
             <option value="">Choose...</option>
+            <?php foreach($staff as $c){?>
+            <option value="<?=$c['user_id']?>"><?=$c['full_name']?></option>
+            <?php } ?>
         </div>
         <div id="tpl-customers">
             <option value="">Choose...</option>
