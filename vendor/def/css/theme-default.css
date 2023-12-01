@@ -1,4 +1,24 @@
 @charset "UTF-8";
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  }
+  /* Track */
+  ::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 5px;
+  }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+  background: #c4cbd2; 
+  border-radius: 5px;
+  }
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+  background: #7e8c9d; 
+}
 .layout-navbar-fixed .layout-wrapper:not(.layout-horizontal) .layout-page:before {
   content: "";
   width: 100%;

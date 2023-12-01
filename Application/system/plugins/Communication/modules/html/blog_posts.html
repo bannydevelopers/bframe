@@ -1,7 +1,12 @@
-<div class="flex content" style="display: flex;">
-    <h1>Blog posts</h1>
-    <button class="flex-shrink round" onclick="add_post()">ADD POST</button>
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1">Blog posts</h3>
+    <div>
+        <button type="button" onclick="add_post()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Post</button>
+    </div>
 </div>
+<br>
+
+
 <?php if(isset($msg) && $msg){?>
 <p class="box-shadow msg rounded"><?=$msg?></p>
 <?php }?>
