@@ -10,7 +10,7 @@
 <?php if(isset($msg) && $msg){?>
 <p class="box-shadow msg rounded"><?=$msg?></p>
 <?php }?>
-<div class="card bg-white">
+<div class="bg-white">
     <div class="tab-view">
         <?php foreach(array_keys($sortedPosts) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
