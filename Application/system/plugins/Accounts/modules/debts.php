@@ -3,38 +3,40 @@ $me = human_resources::get_staff();
 if($me){
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
-    if(isset($_POST['sales_date'])){
-        //var_dump($_POST);
+    
+    if(isset($_POST['debt_date'])){
+        var_dump($_POST);
         
         $data = [
-            'owner_branch'=>$me['work_location'],
-            'customer_name'=>$_POST['customer_name'], 
-            'sales_date'=>$_POST['sales_date'],
-            'unit_amount'=>$_POST['unit_amount'],
-            'product'=>$_POST['product_name'], 
-            'quantity'=>$_POST['quantity']
+        
+            'debt_date'=>$_POST['debt_date'], 
+            'debt_description'=>$_POST['debt_description'], 
+            'debt_amount'=>$_POST['debt_amount'], 
+            'debt_party_type'=>$_POST['debt_Party_type'],
+            'debt_type'=>$_POST['debt_type'],
+            'debt_party_id'=>$_POST['debt_party_id']
         ];
         var_dump($db->error());
-        if(isset($_POST['sales_id']) && intval($_POST['sales_id']) > 0){
-            $k = intval($_POST['sales_id']);
-            $db->update('sales', $data)->where(['sales_id'=>$_POST['sales_id']])->commit();
+        if(isset($_POST['debt_id']) && intval($_POST['debt_id']) > 0){
+            $k = intval($_POST['debt_id']);
+            $db->update('debts', $data)->where(['debt_id'=>$_POST['debt_id']])->commit();
         }
-        else $k = $db->insert('sales', $data);
+        else $k = $db->insert('debts', $data);
         $ok = 'error';
         if(!$db->error() && $k) {
-            $msg = 'sales saved successful';
+            $msg = 'debt saved successful';
             $ok ='success';
         }
         else $msg = $db->error()['message']; 
         if(isset($_POST['ajax_request'])) die($msg);
     }
     
-    if(isset($_POST['delete_sales'])){
-        $k = $db->delete('sales')->where(['sales_id'=>intval($_POST['delete_sales'])])->commit();
+    if(isset($_POST['delete_debt'])){
+        $k = $db->delete('debt')->where(['debt_id'=>intval($_POST['delete_debt'])])->commit();
         if(!$db->error() && $k){
             $msg = [
                 'status'=>'success',
-                'message'=>'sales deleted successful'
+                'message'=>'debt deleted successful'
             ];
         }
         else{
@@ -51,26 +53,26 @@ if($me){
     else{
         $whr = ['owner_branch'=>$me['work_location']];
     }
-    $sales = $db->select('sales')
+    $debt = $db->select('debts')
                     ->join('branches', 'branch_id=owner_branch')
-                    ->join('product', 'product_id=product')
                     ->where($whr)
-                    ->order_by('sales_id', 'desc')
+                    ->order_by('debt_id', 'desc')
                     ->fetchAll();
-
-    $product = $db->select('product', 'product_id, product_name, product_price')
-                  ->where(1)
-                  ->fetchAll();
-
-    $sortedSales = [];
-    foreach($sales as $st){
-        if(!isset($sortedSales[$st['branch_name']])) $sortedSales[$st['branch_name']] = [];
-        $sortedSales[$st['branch_name']][] = $st;
+//var_dump($db->error());
+    $sortedDebt = [];
+    foreach($debt as $st){
+        if(!isset($sortedDebt[$st['branch_name']])) $sortedDebt[$st['branch_name']] = [];
+        $sortedDebt[$st['branch_name']][] = $st;
     }
+
+    $customer = $db->select('customer', 'customer_id, customer_name')->fetchAll();
+    $supplier = $db->select('supplier', 'supplier_id, supplier_name')->fetchAll();
+    $staff = $db->select('staff', 'customer_id, customer_name')->fetchAll();
+    $partiner = $db->select('business_partner', 'business_partiner_id, business_partiner_name')->fetchAll();
 
     $body = '';
     ob_start();
-    include __DIR__.'/html/sales.html';
+    include __DIR__.'/html/debts.html';
     $body = ob_get_clean();
     $return = ['title'=>' ','body'=>$body];
 }
