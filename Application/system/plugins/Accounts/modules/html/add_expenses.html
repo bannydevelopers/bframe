@@ -1,0 +1,66 @@
+<form method="post" enctype="multipart/form-data">
+    <div class="white content">
+            <div class="flex">
+                <div>
+                    <label for="expenses_model">Expenses date</label>
+                    <input type="date" id="expenses_model" name="expenses_model" required />
+                </div>
+                <div>
+                    <label for="expenses_category">Category</label>
+                    <select name="expenses_category" id="expenses_category" onchange="check_selection('expenses_category')">
+                        <option value="">Choose...</option>
+                        <?php foreach($expensesCategory as $cat){?>
+                        <option value="<?=$cat['category_id']?>"><?=$cat['category_name']?></option>
+                        <?php }?>
+                        <option value="">Add category</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex">
+                <div>
+                    <label for="expenses_price">Items numbers</label>
+                    <input type="number" min="0" id="expenses_price" name="expenses_price" required />
+                </div>
+                <div>
+                    <label for="expenses_price">Amount</label>
+                    <input type="number" min="0" id="expenses_price" name="expenses_price" required />
+                </div>
+            </div>    
+            <div class="flex">
+                <div>
+                    <label for="employee">Approved by</label>
+                    <select name="employee" id="employee" onchange="add_form('employee')" required>
+                        <option value="">Choose...</option>
+                        <?php foreach($employees as $user){?>
+                            <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
+                        <?php }?>    
+                    </select>
+                </div><br>
+                <div>
+                    <label for="employee">Purchased by</label>
+                    <select name="employee" id="employee" onchange="add_form('employee')" required>
+                        <option value="">Choose...</option>
+                        <?php foreach($employees as $user){?>
+                            <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
+                        <?php }?>    
+                    </select>
+                </div><br>
+            </div>
+            <div class="flex">
+                <div>
+                    <label for="expenses_price">Description</label>
+                    <input type="text" id="expenses_price" name="expenses_price" required />
+                </div>
+            </div>
+            <div class="flex">
+                <div>
+                    <label for="expenses_image">expenses receipt</label>
+                    <input  type="file" name="expenses_image" accept=".jpg, .jpeg, .png, .gif" id="expenses_image">
+                </div>
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <button type="submit">Save</button>
+        </div>
+    </div>
+</form>

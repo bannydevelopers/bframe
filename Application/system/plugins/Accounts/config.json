@@ -1,0 +1,41 @@
+{
+    "name":"Accounts",
+    "description":"Accounts customer management, stock.",
+    "admin":{
+        "navigation":[
+            {
+                "name":"Accounts",
+                "alias":"Accounts",
+                "href":"/plugin/accounts", 
+                "icon":"f07a",
+                "permission":"view_accounts",
+                "children":[
+                    {
+                        "name":"Expenses",
+                        "href":"/plugin/Accounts/expenses",
+                        "icon":"f594",
+                        "permission":"view_expenses"
+                    },
+                    {
+                        "name":"Debts",
+                        "href":"/plugin/Accounts/debts",
+                        "icon":"f011",
+                        "permission":"view_debts"
+                    },
+                    {
+                        "name":"Loans",
+                        "href":"/plugin/Accounts/loans",
+                        "icon":"",
+                        "permission":"view_loans"
+                    },
+                    {
+                        "name":"Business_partners",
+                        "href":"/plugin/Accounts/business partners",
+                        "icon":"",
+                        "permission":"view_business_partner"
+                    }
+                ]
+            }
+        ]
+    }
+}

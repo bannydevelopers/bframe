@@ -13,7 +13,11 @@ class Communication{
         // Hook to admin dashboard
         system::add_event_listener('admin_plugin_load', 'communication::load_admin_dashboard');
         // Respond to service requests
+<<<<<<< HEAD
+        system::add_event_listener('add_bank', 'communication::service_add_bank');
+=======
         //system::add_event_listener('add_bank', 'communication::service_add_bank');
+>>>>>>> 7ad5bc4fd04c8d8b1aeb35d0b9809ac3950dbaca
     }
     public static function load_admin_dashboard($args){
         if(str_replace('-', '_', strtolower($args[0])) == strtolower(__CLASS__)) {
@@ -40,6 +44,9 @@ class Communication{
         $conf = $config->system_config;
         $db = db::get_connection($conf->db_configs);
         
+<<<<<<< HEAD
+        $page = $registry->page;
+=======
         $page = $config->page;
         if(!intval($page['page_id'])) return;
 
@@ -63,6 +70,7 @@ class Communication{
             $page['page_content'] = str_replace($searches, $replacement, $page['page_content']);
             storage::init()->page = $page;
         }
+>>>>>>> 7ad5bc4fd04c8d8b1aeb35d0b9809ac3950dbaca
     }
     public static function service_add_bank(){
         return '<form>Adding bank<button>Send</button></form>';
