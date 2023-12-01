@@ -110,8 +110,6 @@
     .mySwalSmallForm label{
         padding-left: 0;
     }
-</style>
-<style>
     .contentx{
         padding: 0 1em;
         flex-basis: 100%;
@@ -155,7 +153,7 @@
         });
     }
     const view_stock = ()=>{
-        let elem = window.event.target.parentNode.parentNode,
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         //console.log(jsx);
@@ -167,7 +165,7 @@
         });
     };
     const edit_stock = ()=>{
-        let elem = window.event.target.parentNode.parentNode,
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[1].cloneNode(true);
         let hin = document.createElement('input');
         hin.type = 'hidden';
@@ -228,7 +226,7 @@
         }
     };
     const delete_stock = ()=>{
-        let elem = window.event.target.parentNode.parentNode;
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let name = jsx.full_name,
             uid = jsx.user_id;
