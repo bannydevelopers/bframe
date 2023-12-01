@@ -24,10 +24,26 @@ if(isset($_POST['post_title'])){
         die(json_encode(['status'=>$icon, 'message'=>$msg]));
     }
 }
-$posts = $db->select('blog_posts')
+$posts = $db->select('blog_posts', 'blog_posts.*, user_accounts.full_name,branches.*, count(comment_id) as comments')
+            ->join('blog_post_comments', 'blog_post_comments.post = blog_posts.post_id', 'LEFT')
+            ->join('user_accounts', 'post_author=user_id')
+            ->join('branches', 'owner_branch=branch_id')
             ->where(['owner_branch'=>$me['work_location']])
+            ->group_by('blog_posts.post_id')
+            ->order_by('create_date', 'DESC')
             ->fetchAll();
 
+$headquarters = human_resources::get_headquarters_branch();
+$isheadquarter = $headquarters == $me['work_location'] ? true : false;
+$sortedPosts = [];
+foreach($posts as $post){
+    if(!isset($sortedPosts[$post['branch_name']])) $sortedPosts[$post['branch_name']] = [];
+
+    preg_match('/src="([^"]*)"/', $post['post_content'], $matches);
+    $post['preview'] = @$matches[1] ? $matches[1] : 'Application/storage/uploads/products/product_thumb_0.jpg';
+
+    $sortedPosts[$post['branch_name']][] = $post;
+}
 ob_start();
 include __DIR__.'/html/blog_posts.html';
 $body = ob_get_clean();

@@ -75,10 +75,6 @@
     </form>
 </template>
 <script>
-    var tinymce_toolbar = 'save | undo redo | bold italic underline strikethrough | fontselect | fontsizeselect '
-                        +'| formatselect | alignleft aligncenter alignright alignjustify | outdent indent '
-                        +'|  numlist bullist table | image media link | ltr rtl '
-                        +'| charmap emoticons fullscreen code';
     function add_snippet(wid){
         let htz = '<form name="snippet_form" class="content">';
         htz += '<p><label>Name</label><input name="name" placeholder="..."></p>'
@@ -348,6 +344,6 @@
                 );
             }
         });
-        tinymce.init({selector: 'textarea.tinymce',menubar: '',plugins: "code",toolbar:tinymce_toolbar});
+        init_rich_editor();
     }
 </script>

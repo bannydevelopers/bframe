@@ -5,81 +5,56 @@
     </div>
 </div>
 <br>
-<div>
+
+<div class="card bg-white">
     <div class="tab-view">
         <?php foreach(array_keys($sortedWithdraw) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
-        <label for="class_tab<?=$i?>"><?=$k?></label>
+        <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
         <?php }?>
         <div class="tab-panes">
             <?php foreach($sortedWithdraw as $v){?>
-            <div class="white content-small">
-                <table class="paginate" data-items-per-page="10">
+            <div class="table-responsive text-nowrap" >
+                <table class="table table-hover paginate" data-items-per-page="10">
                     <thead>
                         <tr>
-                            <th>
-                                <input type="checkbox" onclick="upadte_checks()">
-                                Bank
-                            </th>
-                            <th>
-                                Payment to
-                            </th>
-                            <th>
-                                Due date
-                            </th>
-                            <th>
-                                Amount
-                            </th>
-                            <th>
-                                Payment mode
-                            </th>
-                            <th>
-                                Payment Purpose
-                            </th>
-                            <th>
-                                Approver
-                            </th>
-                            <th>
-                                &nbsp;
-                            </th>
+                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Bank</th>
+                            <th>Payment to</th>
+                            <th>Due date</th>
+                            <th>Amount</th>
+                            <th>Payment mode</th>
+                            <th>Payment Purpose</th>
+                            <th>Approver</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-border-bottom-0">
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
-                            <td class="flex" style="display: flex;">
-                                <input type="checkbox" name="bank_name[]" value="<?=$st['bank_name']?>" style="max-width:13px;max-height:13px">
+                            <td>
+                                <input type="checkbox" class="form-check-input" name="bank_name[]" value="<?=$st['bank_name']?>">
                                 <span>
-                                    <?=$st['bank_name']?><br>
+                                    &nbsp;<strong><?=$st['bank_name']?></strong>
                                 </span>
                             </td>
+                            <td><?=$st['payment_to']?></td>
+                            <td><?=date('d M, Y', strtotime($st['due_date']))?></td>
+                            <td><?=$st['amount']?></td>
+                            <td><?=$st['payment_method']?></td>
+                            <td><?=$st['mode_of_payment']?></td>
+                            <td><?=$st['full_name']?></td>
                             <td>
-                                <?=$st['payment_to']?><br>
-                                
-                            </td> 
-                            <td>
-                                <?=date('d M, Y', strtotime($st['due_date']))?><br>   
-                            </td>
-                            <td>
-                                <?=$st['amount']?><br>
-                                
-                            </td>
-                            <td>
-                                <?=$st['payment_method']?><br>
-                                
-                            </td>
-                            <td>
-                                <?=$st['mode_of_payment']?><br>
-                                
-                            </td>
-                            <td>
-                                <?=$st['full_name']?><br>
-                                
-                            </td>
-                            <td>
-                                <a onclick="view_withdraw()" data-icon="&#xf06e;"></a>
-                                <a onclick="edit_withdraw()" data-icon="&#xf044;"></a>
-                                <a onclick="delete_withdraw()" data-icon="&#xf2ed;"></a>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
+                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                <a onclick="view_withdraw()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                <a onclick="edit_withdraw()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                <a onclick="delete_withdraw()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                </div>
+                            </div>
                             </td>
                         </tr>
                         <?php }?>
@@ -90,6 +65,7 @@
         </div>
     </div>
 </div>
+
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
@@ -119,8 +95,6 @@
     .mySwalSmallForm label{
         padding-left: 0;
     }
-</style>
-<style>
     .contentx{
         padding: 0 1em;
         flex-basis: 100%;
@@ -191,7 +165,7 @@
         }
     }
     const view_withdraw = ()=>{
-        let elem = window.event.target.parentNode.parentNode,
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         //console.log(jsx);
@@ -203,7 +177,7 @@
         });
     };
     const edit_withdraw = ()=>{
-        let elem = window.event.target.parentNode.parentNode,
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[1].cloneNode(true);
         let hin = document.createElement('input');
         hin.type = 'hidden';
@@ -256,7 +230,7 @@
         }
     };
     const delete_withdraw = ()=>{
-        let elem = window.event.target.parentNode.parentNode;
+        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let name = jsx.full_name,
             uid = jsx.user_id;

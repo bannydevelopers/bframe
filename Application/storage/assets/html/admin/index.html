@@ -14,14 +14,14 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-    <meta property="og:image" content="app/storage/uploads/images/logo.png" />
+    <meta property="og:image" content="Application/storage/uploads/images/logo.png" />
     <meta property="og:url" content="https://<?=$_SERVER['HTTP_HOST']?>" />
     <meta name="description" content="" />
 
     <title>Dashboard <?=(!empty(trim($title)) ? (" | {$title}") : '')?></title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/png" href="app/storage/uploads/images/logo.png">
+    <link rel="shortcut icon" type="image/png" href="Application/storage/uploads/images/logo.png">
 
     <!-- Fonts -->
     
@@ -85,14 +85,14 @@
                 document.querySelector('#tinymce-filemanager > div > div').innerHTML = 'Loading...';
             };
             var uploadPhoto = function(){
-                Swal.init({
+                Swal.fire({
                     title:'Upload..',
-                    content:window.event.target.value
+                    html:window.event.target.value
                 });
             //console.log(window.event.target.value);
             };
             //var useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            var opts = {doc_root:document.querySelector('base').getAttribute('href'), selector:"page_content", height:420};
+            var opts = {doc_root:document.querySelector('base').getAttribute('href'), selector:"tinymce", height:420};
             var tinymce_opts = {
                 selector: 'textarea.tinymce',
                 valid_elements : ""
@@ -363,7 +363,7 @@
                 autosave_ask_before_unload: true,
                 autosave_interval: '30s',
                 autosave_prefix: '{path}{query}-{id}-',
-                autosave_restore_when_empty: false,
+                autosave_restore_when_empty: true,
                 autosave_retention: '2m',
                 image_advtab: true,
                 importcss_append: true,
@@ -675,7 +675,23 @@
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
-
+    <!-- TinyMCE file manager -->
+    <div id="tinymce-filemanager">
+      <div>
+          <h3 style="background: #f3f3f3;display: flex;">
+          <span style="padding:12px 18px;flex-basis:100%"><img src="Application/storage/uploads/images/logo.png" height="25"> 
+              &nbsp; File manager
+          </span>
+          <button type="button" id="newmedia">&plus;</button>
+          <input type="file" name="newmedia" accept="image/*" style="display: none;">
+          <button type="button" onclick="removemypopdiv()">&times;</button>
+          </h3>
+          <div style="padding: 12px;max-height: 300px;overflow-y: auto;background: #fff;">
+          Loading...
+          </div>
+      </div>
+    </div>
+    <!-- end -->
     <!-- Core JS -->
     <script src="vendor/def/js/bootstrap.js"></script>
     <script src="vendor/def/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
