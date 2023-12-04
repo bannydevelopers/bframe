@@ -12,7 +12,7 @@ if($me){
             'debt_date'=>$_POST['debt_date'], 
             'debt_description'=>$_POST['debt_description'], 
             'debt_amount'=>$_POST['debt_amount'], 
-            'debt_party_type'=>$_POST['debt_Party_type'],
+            'debt_party'=>$_POST['debt_party'],
             'debt_type'=>$_POST['debt_type'],
             'debt_party_id'=>$_POST['debt_party_id']
         ];
@@ -56,7 +56,7 @@ if($me){
     $debt = $db->select('debts')
                     ->join('branches', 'branch_id=owner_branch')
                     ->join('customer','customer_id=debt_party_id', 'left')
-                    ->join('business_partner','business_partner_id=debt_party_id', 'left')
+                    ->join('business_partiner','business_partiner_id=debt_party_id', 'left')
                     ->join('supplier','supplier_id=debt_party_id', 'left')
                     ->join('user_accounts','user_id=debt_party_id', 'left')
                     ->where($whr)
@@ -74,7 +74,7 @@ var_dump($db->error());
     $staff = $db->select('user_accounts', 'user_id, full_name')
                 ->join('staff', 'user_id=user_reference')
                 ->fetchAll();
-    $partiner = $db->select('business_partner', 'business_partiner_id, business_partiner_name')->fetchAll();
+    $partiner = $db->select('business_partiner', 'business_partiner_id, business_partiner_name')->fetchAll();
 
     $body = '';
     ob_start();
