@@ -55,10 +55,14 @@ if($me){
     }
     $debt = $db->select('debts')
                     ->join('branches', 'branch_id=owner_branch')
+                    ->join('customer','customer_id=debt_party_id', 'left')
+                    ->join('business_partner','business_partner_id=debt_party_id', 'left')
+                    ->join('supplier','supplier_id=debt_party_id', 'left')
+                    ->join('user_accounts','user_id=debt_party_id', 'left')
                     ->where($whr)
                     ->order_by('debt_id', 'desc')
                     ->fetchAll();
-//var_dump($db->error());
+var_dump($db->error());
     $sortedDebt = [];
     foreach($debt as $st){
         if(!isset($sortedDebt[$st['branch_name']])) $sortedDebt[$st['branch_name']] = [];
@@ -67,7 +71,9 @@ if($me){
 
     $customer = $db->select('customer', 'customer_id, customer_name')->fetchAll();
     $supplier = $db->select('supplier', 'supplier_id, supplier_name')->fetchAll();
-    $staff = $db->select('staff', 'customer_id, customer_name')->fetchAll();
+    $staff = $db->select('user_accounts', 'user_id, full_name')
+                ->join('staff', 'user_id=user_reference')
+                ->fetchAll();
     $partiner = $db->select('business_partner', 'business_partiner_id, business_partiner_name')->fetchAll();
 
     $body = '';
