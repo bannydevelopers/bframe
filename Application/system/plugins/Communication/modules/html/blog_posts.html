@@ -5,8 +5,6 @@
     </div>
 </div>
 <br>
-
-
 <?php if(isset($msg) && $msg){?>
 <p class="box-shadow msg rounded"><?=$msg?></p>
 <?php }?>
@@ -19,7 +17,7 @@
         <div class="tab-panes">
             <?php foreach($sortedPosts as $posts){?>
             <div>
-                <div class="flex">
+                <div class="flex cards">
                     <?php foreach($posts as $p){?>
                     <div class="rounded card" style="margin: 6px;">
                         <h3 style="text-transform: none;font-size: 120%;" class="content-small"><?=$p['post_title']?></h3>
@@ -33,9 +31,9 @@
                                     <li>Hits: <em><?=$p['post_hits']?></em></li>
                                 </ul>
                                 <div style="text-align: right;" class="content-small">
-                                    <a onclick="view_post()" class="fa fa-eye content-small"></a>
+                                    <a href="<?=$p['post_url']?>" class="fa fa-eye content-small"></a>
                                     <a onclick="edit_post()" class="fa fa-edit content-small"></a>
-                                    <a onclick="delete_post()" class="fa fa-trash content-small"></a>
+                                    <a onclick="delete_post(`<?=$p['post_id']?>`)" class="fa fa-trash content-small"></a>
                                 </div>
                             </div>
                         </div>
@@ -69,9 +67,13 @@
         border: none;
         white-space: nowrap;
     }
+    .cards{
+        flex-wrap: wrap;
+    }
     .cards > *{
         box-shadow: 0 0 5px #999;
-        margin: 1em;
+        margin: 1%;
+        max-width: 31.3%;
     }
     input,select{
         width: 100%;
@@ -140,5 +142,38 @@
             )
         });
         init_rich_editor();
+    }
+    const delete_post = idx=>{
+        Swal.fire({
+            icon: 'question',
+            html: 'Surely delete this post?',
+            showCancelButton: true
+        })
+        .then(prompt=>{
+            if(promp.isConfirmed){
+                let fdx = new FormData();
+                fdx.append('delete_post', idx);
+                fdx.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        if(response.startsWith('{')){
+                            let jsx = JSON.parse(response);
+                            Swal.fire({
+                                icon: jsx.status,
+                                html: jsx.message
+                            });
+                        }
+                        else{
+                            Swal.fire(response);
+                        }
+                    },
+                    error=>{
+                        Swal.fire(error);
+                    },
+                    fdx
+                );
+            }
+        });
     }
 </script>

@@ -1,0 +1,124 @@
+<div class="flex">
+    <div>
+        <h1>
+            <?=$post['post_title']?>
+        </h1>
+        <div class="content-small">
+            <p><?=stripslashes($post['post_content'])?></p>
+            <div style="text-align: right;" class="content">
+                <span style="margin-right: 1em;">
+                    <strong>Comments:</strong><em>&nbsp;<?=count($comms)?></em>
+                </span>
+                <span style="margin-right: 1em;">
+                    <strong>Views:</strong><em>&nbsp;<?=$post['post_hits']?></em>
+                </span>
+                <span>
+                    <strong>Author:</strong><em>&nbsp;<?=$post['full_name']?></em>
+                </span>
+            </div>
+            <h3>Comments (<?=count($comms)?>)</h3><hr>
+            <ul>
+            <?php foreach($comms as $c){?>
+                <li>
+                    <div>
+                        <span>
+                            <i class="fa fa-user-circle">&nbsp;</i><strong><?=$c['full_name']?></strong> 
+                        </span>
+                        <span style="float: right;">
+                            <?php if($c['approval']){?>
+                            <a onclick="update_approval(`<?=$c['comment_id']?>`, false)" class="fa fa-check-circle"></a>
+                            <?php }else{?>
+                            <a onclick="update_approval(`<?=$c['comment_id']?>`, true)" class="fa fa-ban"></a>
+                            <?php }?>
+                            &nbsp;<a onclick="delete_comment(`<?=$c['comment_id']?>`)" class="fa fa-trash"></a>
+                        </span>
+                    </div>
+                    <p class="content-small box-shadow point-top rounded white">
+                        <?=$c['comment_content']?>
+                    </p>
+                </li>
+            <?php } ?>
+            </ul>
+        </div>
+    </div>
+    <div class="flex-shrink">
+        <?php foreach($sortedPosts as $branch=>$v){?>
+        <h3><?=$branch?></h3>
+        <ul>
+            <?php foreach($v as $ps){?>
+            <li class="card" style="margin-bottom: 6px;">
+                <a href="<?=$ps['post_url']?>" style="white-space: nowrap;">
+                    <img src="<?=$ps['preview']?>" height="40">
+                    <span>
+                        <?=$ps['post_title']?><br>
+                        <em>Comments: <?=$ps['comments']?></em>
+                    </span>
+                </a>
+            </li>
+            <?php } ?>
+        </ul>
+        <?php } ?>
+    </div>
+</div>
+<style>
+    a{
+        cursor: pointer;
+    }
+    .flex{
+        display: flex;
+    }
+    .flex > *{
+        flex-basis: 100%;
+    }
+    .flex > .flex-shrink{
+        flex-basis: auto;
+        min-width: 240px;
+    }
+    a,span{
+        display: inline-block;
+    }
+    img{
+        vertical-align: top;
+    }
+    ul{
+        list-style: none;
+        padding: 0;
+    }
+    ul li{
+        margin: 0;
+    }
+    .box-shadow{
+        box-shadow: 0 0 5px #ccc;
+    }
+    .point-top{
+        position: relative;
+        margin-top: 8px;
+    }
+    .point-top::before{
+        position: absolute;
+        top: -17px;
+        left: 2px;
+        content: '';
+        border-width: 8px 8px;
+        border-style: solid;
+        border-color: transparent transparent #ddd transparent;
+    }
+    .point-top::after{
+        position: absolute;
+        top: -16px;
+        left: 4px;
+        content: '';
+        border-width: 8px 6px;
+        border-style: solid;
+        border-color: transparent transparent #fff transparent;
+    }
+</style>
+<script>
+    const delete_comment = idx=>{
+        Swal.fire({
+            icon: 'question',
+            html: 'Surely delete this comment?',
+            showCancelButton: true
+        });
+    }
+</script>
