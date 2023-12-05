@@ -1,0 +1,61 @@
+<form method="post" autocomplete="off">
+    <div class="content-small">
+        <div class="white">
+            <div class="flex">
+                <input type="hidden" name="invoice_type" value="proforma">
+                <div>
+                    <label for="supplier">Supplier name</label>
+                    <select name="supplier" id="supplier" onchange="check_selection('supplier')">
+                        <option value="">Choose...</option>
+                        <?php foreach($supplier as $cus){?>
+                        <option value="<?=$cus['supplier_id']?>"><?=$cus['supplier_name']?></option>
+                        <?php }?>
+                        <option value="add">Add supplier</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="purchase_no">Purchase no</label>
+                    <input type="number" name="purchase_no" id="purchase_no" placeholder="order number if any">
+                </div>
+            </div>
+            <div class="flex">
+                <div>
+                    <label for="purchase_date">Purchase date</label>
+                    <input type="date" name="purchase_date" id="purchase_date" value="<?=date('Y-m-d', time())?>">
+                </div>
+            </div><br>
+            <div class="content" style="text-align: center;"><br>
+            ITEMS PURCHASE
+            </div><hr>     
+            <div class="flex content">
+                <div>
+                    <label for="item_name">Items name</label>
+                    <input type="text" name="item_name" id="item_name" value="">
+                </div>
+                <div>
+                    <label for="quantity">Quantity</label>
+                    <input type="number" name="quantity[]" value="0">
+                </div>
+                <div>
+                    <label for="price">Price per item</label>
+                    <input type="number" name="price[]" value="0">
+                </div>
+                <div>
+                    <label>Total price</label>
+                    <input type="number" value="0" readonly>
+                </div>
+                <div>
+                    <label>&nbsp;</label>
+                    <div style="white-space: nowrap;">
+                        <button type="button"" onclick="replicate_items()" data-icon="&#xf067;">&nbsp;</button>
+                        <button type="button"" onclick="delete_item()" data-icon="&#xf1f8;">&nbsp;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+        <button type="submit" class="primary green">Save</button>
+    </div>
+</form>
+ 
