@@ -96,7 +96,7 @@ label{
     display: block;
     padding: 12px 0;
 } */
-/*input,select,textarea,[contenteditable]{
+input,select,textarea,[contenteditable]{
     padding: 10px;
     border: none;
     background: transparent;
@@ -108,10 +108,6 @@ input:focus,select:focus,textarea:focus,[contenteditable]:focus{
     outline: none;
     box-shadow: 0 0 4px #aaa;
 }
-
-input[type=checkbox] ~ label,input[type=radio] ~ label{
-    display: inline-block;
-}*/
 
 .content{
     padding: 16px;
