@@ -12,9 +12,9 @@
     <h3 class="grey  left" style="font-size: 1.1em;display: flex;padding: 4px 0;">
       <span style="flex-basis: 100%;" class="content-small"><?=$user['full_name']?></span>
       <span style="white-space: nowrap;">
-          <a class="content-small" onclick="view_user(`<?=$user['user_id']?>`)" data-icon="&#xf06e;"></a>
-          <a class="content-small" href="<?="{$root}/edit/{$user['user_id']}"?>" data-icon="&#xf044;"></a>
-          <a class="content-small" onclick="delete_user(`<?=$user['user_id']?>`,`<?=$user['full_name']?>`)" data-icon="&#xf2ed;"></a>
+          <a class="text-primary" onclick="view_user(`<?=$user['user_id']?>`)" data-icon="&#xf06e;"></a>
+          <a class="text-primary" href="<?="{$root}/edit/{$user['user_id']}"?>" data-icon="&#xf044;"></a>
+          <a class="text-danger" onclick="delete_user(`<?=$user['user_id']?>`,`<?=$user['full_name']?>`)" data-icon="&#xf2ed;"></a>
         
       </span>
     </h3>

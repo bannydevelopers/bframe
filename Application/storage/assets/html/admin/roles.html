@@ -1,27 +1,26 @@
 <div id="roles-perms" data-roles='<?=json_encode($permissions)?>'>
-    <div class="flex">
-        <p class="border-bottom-white" style="padding-bottom: 1em;">
-            <em>System permission for roles</em>
+    <div class="d-flex justify-content-between">
+        <p class="border-bottom-white">
+            System permission for roles
         </p>
-        <span class="shrink"><button onclick="add_role()">Add role</button></span>
+        <button class="btn btn-primary rounded-pill" onclick="add_role()"><i class="fa fa-plus-circle me-1"></i>Add role</button>
     </div>
-    <ul>
-    <?php $legends = array_keys($roles);
-    foreach($legends as $role){ ?>
-        <li style="box-shadow: 0 0 3px #999;margin: 14px;">
-            <div style="display: flex;" class="content grey" data-json='<?=json_encode($roles[$role])?>'>
-                <b style="flex-grow: 1;"><?=$role?></b>
-                <a data-icon="&#xf2ed;" onclick="delete_role('<?=$role?>')" style="margin-right: 1em;"></a>
-                <a data-icon="&#xf044;" onclick="edit_permission('<?=$role?>')"></a>
+    <ul class="list-group bg-white mt-2">
+    <?php $legends = array_keys($roles); foreach($legends as $role){ ?>
+        <li class="list-group-item list-group-item-action">
+            <div class="d-flex" data-json='<?=json_encode($roles[$role])?>'>
+                <h5 style="flex-grow: 1;" class="fw-bold"><?=$role?></h5>
+                <a data-icon="&#xf2ed;" onclick="delete_role('<?=$role?>')" class="btn-sm text-danger"></a>
+                <a data-icon="&#xf044;" onclick="edit_permission('<?=$role?>')" class="btn-sm text-primary"></a>
             </div>
-            <ul>
+            <ul class="list-group list-group-flush">
                 <?php foreach($roles[$role] as $legend=>$permission){?>
-                    <li>
+                    <li class="list-group-item">
                         <br>
                         <div><strong><?=$legend?></strong></div>
-                        <div class="flex cards cards-4">
+                        <div class="d-flex flex-wrap">
                         <?php foreach($permission as $v){?>
-                            <div class="content-small" data-icon="&#xf058;">
+                            <div class="p-2" data-icon="&#xf058;">
                                 <?=$v['permission_name']?>
                             </div>
                         <?php }?>

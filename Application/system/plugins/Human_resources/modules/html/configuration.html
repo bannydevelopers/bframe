@@ -17,13 +17,13 @@
                         <option value="<?=$r['role_id']?>"<?=$mr['role_id'] == $r['role_id']?' selected':''?>><?=$r['role_name']?></option>
                         <?php }?>
                     </select>
-                    <button type="button" onclick="appendInput()">+</button>
-                    <button type="button" onclick="delInput()">x</button>
+                    <button type="button" class="btn btn-primary btn-sm rounded-xl" onclick="appendInput()">+</button>
+                    <button type="button" class="btn btn-danger btn-sm rounded-xl" onclick="delInput()">x</button>
                 </div>
                 <?php }?>
             </div>
             <div style="text-align: right;" class="content">
-                <button type="submit">Save</button>
+                <button type="submit" class="btn btn-primary btn-sm rounded-pill">Save</button>
             </div>
         </form>
         <form method="post" style="min-width: 46%;">
@@ -38,7 +38,7 @@
                 </select>
             </div>
             <div style="text-align: right;" class="content">
-                <button type="submit">Save</button>
+                <button type="submit" class="btn btn-primary btn-sm rounded-pill">Save</button>
             </div>
         </form>
     </div>

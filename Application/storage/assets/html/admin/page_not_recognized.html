@@ -1,3 +1,21 @@
-<div style="padding: 3em 0;">
-    Sorry! No plugin active to handle page of type <b><?=$page_type?></b>
+<base href="<?=storage::get_instance()->install_dir?>"/>
+<link rel="stylesheet" href="Application/storage/assets/html/admin/css/page-misc.css" />
+<link rel="stylesheet" href="vendor/def/css/core.css" class="template-customizer-core-css" />
+
+<div class="container-xxl container-p-y">
+  <div class="misc-wrapper">
+    <h2 class="mb-2 mx-2">Page Not Recognized :(</h2>
+    <p class="mb-4 mx-2">Oops! 😖 The requested URL was not found on this server.</p>
+    <a href="javascript:void(0);" class="btn btn-primary">Back to home</a>
+    <div class="mt-3">
+      <img
+        src="Application/storage/assets/html/admin/img/error.png"
+        alt=""
+        width="500"
+        class="img-fluid"
+        data-app-dark-img="error.png"
+        data-app-light-img="error.png"
+      />
+    </div>
+  </div>
 </div>

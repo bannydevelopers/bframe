@@ -41,12 +41,12 @@
                 <div style="display: flex;">
                     <input type="text" name="extras[name][]" placeholder="Field name" style="flex-grow: 1;">
                     <input type="text" name="extras[value][]" placeholder="Field value" style="flex-grow: 1;">
-                    <a id="addbtn" data-icon="&#xf0fe;" onclick="addbtn(window.event)"></a>
+                    <a id="addbtn" class="btn btn-sm text-success" data-icon="&#xf0fe;" onclick="addbtn(window.event)"></a>
                 </div>
             </div>
             <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
-                <button type="reset">Restore</button>
-                <button type="submit" class="green">Save</button>
+                <button type="reset" class="btn btn-sm btn-secondary rounded-pill">Restore</button>
+                <button type="submit" class="btn btn-sm btn-primary rounded-pill">Save</button>
             </div>
         </div>
     </form>
