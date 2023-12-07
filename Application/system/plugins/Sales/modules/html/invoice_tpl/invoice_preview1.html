@@ -16,12 +16,12 @@
               </div>
             </div>
             <div style="text-align: right;flex-basis: 100%">
-              <div style="font-size: 120%;"><?=$company->company_legal_name?></div>
-              <pre style="font-family: inherit;"><?=$company->company_address?></pre>
-              <div><?=$company->email?></div>
-              <div><?=$company->phone_number?></div>
-              <div>TIN: <?=$company->TIN_number?></div>
-              <div>VRN: <?=$company->VRN_number?></div>
+              <div style="font-size: 120%;"><?=$company[0]->company_legal_name?></div>
+              <pre style="font-family: inherit;"><?=$company[0]->company_address?></pre>
+              <div><?=$company[0]->email?></div>
+              <div><?=$company[0]->phone_number?></div>
+              <div>TIN: <?=$company[0]->TIN_number?></div>
+              <div>VRN: <?=$company[0]->VRN_number?></div>
             </div>
           </div>
         </td>
@@ -108,15 +108,15 @@
           <div style="display: flex;">
             <div>
               <b>Payment terms</b><br>
-              <pre style="font-family: inherit;"><?=$company->payment_terms?></pre>
+              <pre style="font-family: inherit;"><?=$company[0]->payment_terms?></pre>
             </div>
             <div style="margin: 0 2em;">
               <b>Primary payment account</b><br>
-              <pre style="font-family: inherit;"><?=$company->primary_payment_account?></pre>
+              <pre style="font-family: inherit;"><?=$company[0]->primary_payment_account?></pre>
             </div>
             <div>
               <b>Auxilliary payment account</b><br>
-              <pre style="font-family: inherit;"><?=$company->aux_payment_account?></pre>
+              <pre style="font-family: inherit;"><?=$company[0]->aux_payment_account?></pre>
             </div>
           </div>
         </td>

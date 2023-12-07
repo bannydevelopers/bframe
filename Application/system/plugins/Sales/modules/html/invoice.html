@@ -131,11 +131,28 @@
     .uppercase{
         text-transform: uppercase;
     }
+    .numbered-table {
+        counter-reset: row-num -1;
+    }
+    .numbered-table tr {
+        counter-increment: row-num;
+    }
+    .numbered-table tr td:first-child::before {
+        content: counter(row-num) " ";
+    }
 </style>
 <script>
     const check_selection = (name)=>{
-        let elem = window.event.target,
-            price = elem.children[window.event.target.options.selectedIndex].getAttribute('data-price');
+        let elem = window.event.target;
+        if(elem.parentNode.tagName == 'TD'){
+            let opt = elem.options[elem.options.selectedIndex];
+            console.log(opt);
+            elem.parentNode.parentNode.children[2].innerHTML = opt.getAttribute('data-desc');
+            elem.parentNode.parentNode.children[3].children[1].innerHTML = opt.getAttribute('data-unit');
+            elem.parentNode.parentNode.children[4].children[0].value = opt.getAttribute('data-price');
+            return;
+        }
+        let price = elem.children[window.event.target.options.selectedIndex].getAttribute('data-price');
         if(elem.name == 'product[]'){
             elem.parentNode.nextElementSibling.nextElementSibling.children[1].value = price;
         }
@@ -145,6 +162,7 @@
             frm = document.querySelector('template').content.cloneNode(true).children[1],
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
+            frm.querySelector('[name=invoice]').value = jsx.invoice_id;
         let tmp = '', sn = 0;
         [...jsx.invoice_items].forEach(item=>{
             item.sn = ++sn;
@@ -282,6 +300,11 @@
         let prc = parseInt(elem.children[3].children[0].value) *  parseInt(elem.children[4].children[0].value);
         elem.children[5].innerText = prc;
     };
+    const update_total_price = ()=>{
+        let elem = window.event.target.parentNode.parentNode;
+        let price = parseInt(elem.children[1].children[1].value) *  parseInt(elem.children[2].children[1].value);
+        elem.children[3].children[1].value = price;
+    };
     const decToOctal = (n)=>{
         
         // array to store octal number
@@ -385,6 +408,33 @@
     function delete_item() {
         let btn = window.event.target.parentNode.parentNode.parentNode;
         let html = btn.parentNode.removeChild(btn);
+    }
+    const delete_item_row = idx=>{
+        let elem = window.event.target;
+        elem.className = 'fa fa-spinner fa-spin';
+        let fdx = new FormData();
+        fdx.append('delete_item', idx);
+        ajax(
+            window.location.href,
+            response=>{
+                if(response == 'ok') {
+                    elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
+                    // TO DO: re-arrange numbers
+                }
+                else elem.className = 'fa fa-trash-alt';
+            },
+            error=>{
+                Swal.fire(error);
+            },
+            fdx
+        );
+    };
+    const add_item_row = ()=>{
+        let elem = window.event.target;
+        let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[0].children[2].children[0].children[1];
+        let tr = `<tr><td></td><td>${sel.outerHTML}</td><td>N/A</td><td><input name="qtyx[]" style="width: 72px;" value="0" onchange="update_price()" onkeyup="update_price()"><span>?</span></td><td><input name="prcx[]" style="width: 72px;" onchange="update_price()" onkeyup="update_price()"></td><td>0</td><td><a onclick="remove_item_row" class="fa fa-trash"></a></td></tr>`;
+        elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
+        //console.log(sel);
     }
     const search_select = ()=>{
         let sels = document.querySelectorAll('select');

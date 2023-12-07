@@ -5,7 +5,7 @@
                 <input type="hidden" name="invoice_type" value="proforma">
                 <div>
                     <label for="customer">Customer</label>
-                    <select name="customer" id="customer" onchange="check_selection('customer')">
+                    <select name="customer" id="customer" onchange="check_selection('customer')" required>
                         <option value="">Choose...</option>
                         <?php foreach($customer as $cus){?>
                         <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
@@ -32,31 +32,31 @@
             <div class="flex content">
                 <div>
                     <label for="product">Items</label>
-                    <select name="product[]" id="product" onchange="check_selection('customer')">
+                    <select name="product[]" id="product" onchange="check_selection()" required>
                         <option value="">Choose...</option>
                         <?php foreach($product as $pro){?>
-                        <option value="<?=$pro['product_id']?>" title="<?=$pro['product_description']?>" data-price="<?=$pro['product_price']?>"><?=$pro['product_name']?></option>
+                        <option value="<?=$pro['product_id']?>" title="<?=$pro['product_description']?>" data-price="<?=$pro['product_price']?>" data-desc="<?=$pro['product_description']?>" data-unit="<?=$pro['product_unit_plural']?>"><?=$pro['product_name']?></option>
                         <?php }?>
                         <option value="add">Add product</option>
                     </select>
                 </div>
                 <div>
                     <label for="quantity">Quantity</label>
-                    <input type="number" name="quantity[]" value="0">
+                    <input type="number" name="quantity[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()" required>
                 </div>
                 <div>
                     <label for="price">Price per item</label>
-                    <input type="number" name="price[]" value="0">
+                    <input type="number" name="price[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()" required>
                 </div>
                 <div>
                     <label>Total price</label>
-                    <input type="number" value="0" readonly>
+                    <input type="text" value="0" readonly>
                 </div>
                 <div>
                     <label>&nbsp;</label>
                     <div style="white-space: nowrap;">
-                        <button type="reset" class="btn rounded-xl btn-secondary btn-sm" onclick="replicate_items()" data-icon="&#xf067;"></button>
-                        <button type="submit" class="btn rounded-xl btn-primary btn-sm" onclick="delete_item()" data-icon="&#xf1f8;"></button>
+                        <button type="button" class="btn rounded-xl btn-secondary btn-sm" onclick="replicate_items()" data-icon="&#xf067;"></button>
+                        <button type="button" class="btn rounded-xl btn-primary btn-sm" onclick="delete_item()" data-icon="&#xf1f8;"></button>
                     </div>
                 </div>
             </div>
@@ -66,5 +66,6 @@
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
+    <style>.flex{display: flex;}.flex>*{flex-basis: 100%;}</style>
 </form>
  

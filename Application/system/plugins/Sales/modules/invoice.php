@@ -10,6 +10,11 @@ if($me['work_location'] == human_resources::get_headquarters_branch()) {
 else{
     $whr = "invoice.owner_branch={$me['work_location']}";
 }
+if(isset($_POST['delete_item'])){
+    $db->delete('invoice_items')->where(['item_id'=>intval($_POST['delete_item'])])->commit();
+    if($db->error()) die('error');
+    else die('ok');
+}
 if(isset($_POST['due_date'])){
     $inv_data = [
         'due_date'=>addslashes($_POST['due_date']),
@@ -19,6 +24,7 @@ if(isset($_POST['due_date'])){
         'owner_branch'=>intval($me['work_location']),
         'created_time'=>addslashes($_POST['created_time'])
     ];
+
     $inv_items_qry = [];
     $inv_id = $db->insert('invoice', $inv_data);
     if($inv_id){
@@ -49,7 +55,7 @@ if(isset($_POST['local_purchase_order'])){
     }
     if(isset($_POST['ajax_request'])) die($msg);
 }
-if(isset($_POST['qty'])){
+if(isset($_POST['qty']) or isset($_POST['qtyx'])){
     /*
         //INSERT INTO table_users (cod_user, date, user_rol, cod_office) VALUES
         //('622057', '12082014', 'student', '17389551'),
@@ -59,9 +65,17 @@ if(isset($_POST['qty'])){
         //cod_user=VALUES(cod_user), date=VALUES(date)
     */
     $tmp = [];
-    foreach($_POST['qty'] as $id=>$qty){
-        $tmp[] = "({$id}, {$_POST['price'][$id]}, 8, 8, $qty)";
+    if(isset($_POST['qty']) && is_array($_POST['qty'])){
+        foreach($_POST['qty'] as $id=>$qty){
+            $tmp[] = "({$id}, {$_POST['price'][$id]}, 8, 8, $qty)";
+        }
     }
+    if(isset($_POST['qtyx']) && is_array($_POST['qtyx'])){
+        foreach($_POST['qtyx'] as $idx=>$qtyx){
+            $tmp[] = "(NULL, {$_POST['prcx'][$idx]}, {$_POST['product'][$idx]}, {$_POST['invoice']}, $qtyx)";
+        }
+    }
+    //var_dump('<pre>',$tmp);die('</pre>');
     $tmp = implode(',', $tmp);
     $qry = "INSERT INTO invoice_items (item_id, price, product, invoice, quantity) VALUES "
             . " {$tmp} ON DUPLICATE KEY UPDATE item_id = VALUES(item_id), price=VALUES(price), quantity=VALUES(quantity)";
@@ -122,9 +136,9 @@ else{
     $whr = ["branch_id"=>$me['work_location']];
 }
 
-$default = storage::get_data('system_config')->company_profile;
-$branches = $db->select('branches', 'branch_id,branch_profile')->where($whr)->fetchAll();
 $company = [];
+$company[] = storage::get_data('system_config')->company_profile;
+$branches = $db->select('branches', 'branch_id,branch_profile')->where($whr)->fetchAll();
 foreach($branches as $b){
     if(!$b['branch_profile']) $company[$b['branch_id']] = $default;
     else $company[$b['branch_id']] = json_decode($b['branch_profile']);
