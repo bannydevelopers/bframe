@@ -8,7 +8,7 @@ if($me['work_location'] == human_resources::get_headquarters_branch()) {
     $whr = 1;
 }
 else{
-    $whr = "purchase.owner_branch={$me['work_location']}";
+    $whr = "owner_branch={$me['work_location']}";
 }
 if(isset($_POST['purchase_date'])){
     $purch_data = [
@@ -16,7 +16,7 @@ if(isset($_POST['purchase_date'])){
         'supplier'=>intval($_POST['supplier']),
         'owner_branch'=>intval($me['work_location']),
         'purchase_no'=>addslashes($_POST['purchase_no']),
-        'created_by'=>addslashes($_POST['created_by'])
+        'created_by'=>addslashes($me['work_location'])
     ];
     $purch_items_qry = [];
     $purch_id = $db->insert('purchase', $purch_data);
@@ -106,11 +106,12 @@ $items_q = "(
                 JOIN purchase ON purchase_id=purchase_item_reference WHERE purchase_id=purchase_item_reference
             ) AS purchase_items";
 
-$qry = "purchase.*, branches.branch_name, user_accounts.full_name, {$items_q}";
+$qry = "purchase.*, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
 
 $purchase = $db->select('purchase', $qry)
                 ->join('branches','branch_id=owner_branch')
                 ->join('user_accounts', 'user_id=created_by')
+                ->join('supplier', 'supplier_id=supplier')
                 ->where($whr)
                 ->order_by('purchase_id', 'desc')
                 ->fetchAll();                   
@@ -128,7 +129,7 @@ foreach($purchase as $prod){
     $sortedPurchase[$prod['branch_name']][] = $prod;
 }
 
-//var_dump($db->error(),$purchoice);
+//var_dump($db->error(), $sortedPurchase);
 
 //var_dump('<pre>',$sortedpurchase);die;
 ob_start();
