@@ -8,12 +8,24 @@
     <p class="content box-shadow msg"><?=$msg?></p>
 <?php }?>
 <br>
+<div>
+    <div class="tab-view">
+        <?php foreach(array_keys($sortedPurchase) as $i=>$k){?>
+        <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
+        <label for="class_tab<?=$i?>"><?=$k?></label>
+        <?php }?>
+        <div class="tab-panes">
+            <?php foreach($sortedPurchase as $branch=>$invoices){?>
+            <div>
+                <pre><?php var_dump($invoices)?></pre>
+            </div>
+            <?php }?>
+        </div>
+    </div>
+</div>
 <template>
     <?php include __DIR__.'/add_purchase_order.html';?>
     <?php include __DIR__.'/purchase_items.html';?>
-    <div>
-        <?=$purchase_tpl?>
-    </div>
     <?php include __DIR__.'/add_purchase.html';?>
 </template>
 <style>
@@ -52,7 +64,16 @@
     .uppercase{
         text-transform: uppercase;
     }
-</style>
+    .flex{
+        display: flex;
+    }
+    .flex > *{
+        flex-basis: 100%;
+    }
+    .flex > .flex-shrink{
+        flex-basis: auto;
+    }
+ </style>
 <script>
     const check_selection = (name)=>{
         let elem = window.event.target,
@@ -60,7 +81,12 @@
         if(elem.name == 'product[]'){
             elem.parentNode.nextElementSibling.nextElementSibling.children[1].value = price;
         }
-    }
+    };
+    const update_total_price = ()=>{
+        let prc = document.querySelector('#price'),
+            qty = document.querySelector('#quantity');
+        document.querySelector('#total_price').value = parseInt(prc.value) * parseInt(qty.value);
+    };
     const view_purchase = ()=>{
         let elem = window.event.target,
             frm = document.querySelector('template').content.cloneNode(true).children[1],
@@ -203,27 +229,6 @@
         let prc = parseInt(elem.children[3].children[0].value) *  parseInt(elem.children[4].children[0].value);
         elem.children[5].innerText = prc;
     };
-    const decToOctal = (n)=>{
-        
-        // array to store octal number
-        let octalNum = new Array(100);
-
-        // counter for octal number array
-        let i = 0;
-        while (n != 0) {
-
-            // storing remainder in octal array
-            octalNum[i] = n % 8;
-            n = Math.floor(n / 8);
-            i++;
-        }
-        let tmp = '';
-        // printing octal number array in reverse order
-        for (let j = i - 1; j >= 0; j--){
-            tmp += octalNum[j];
-        }
-        return tmp;
-    }
     const create_purchase = ()=>{
         let formx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({

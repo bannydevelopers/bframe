@@ -11,21 +11,24 @@ else{
     $whr = "purchase.owner_branch={$me['work_location']}";
 }
 if(isset($_POST['purchase_date'])){
-    $inv_data = [
+    $purch_data = [
         'purchase_date'=>addslashes($_POST['purchase_date']),
-        'supplier'=>addslashes($_POST['supplier']),
+        'supplier'=>intval($_POST['supplier']),
         'owner_branch'=>intval($me['work_location']),
-        'item_name'=>intval($me['item_name']),
-        'created_time'=>addslashes($_POST['created_time'])
+        'purchase_no'=>addslashes($_POST['purchase_no']),
+        'created_by'=>addslashes($_POST['created_by'])
     ];
     $purch_items_qry = [];
     $purch_id = $db->insert('purchase', $purch_data);
-    if($purch_id){
-        foreach($_POST['product'] as $k=>$p){
-            $purch_items_qry[] = "({$p}, {$purch_id}, {$_POST['price'][$k]}, {$_POST['quantity'][$k]})";
+    if($purch_id && !$db->error()){
+        foreach($_POST['item_name'] as $k=>$p){
+            $purch_items_qry[] = "('{$p}', {$purch_id}, {$_POST['price'][$k]}, {$_POST['quantity'][$k]})";
         }
         $purch_items_qry = implode(',', $purch_items_qry);
-        $db->query("INSERT INTO purchase_items (product, purchase, price, quantity) VALUES {$purch_items_qry}");
+        $db->query("INSERT INTO purchase_items (purchase_item_name, purchase_item_reference, purchase_item_price, purchase_item_quantity) VALUES {$purch_items_qry}");
+        if($db->error()){
+            $db->delete('purchase')->where(['purchase_id'=>purch_id])->commit();
+        }
     }
     if($db->error()) $msg = $db->error()['message'];
     else $msg = 'Saved successful';
@@ -87,13 +90,42 @@ $Purchase = $db->select('product')
                     ->where($whr)
                     ->fetchAll();
 
+if($me['work_location'] == human_resources::get_headquarters_branch()) {
+    $whr = 1;
+}
+else{
+    $whr = "purchase.owner_branch={$me['work_location']}";
+}
+$items_q = "(
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'id', purchase_item_id, 'item_name',purchase_item_name, 'purchase', purchase_item_reference, 'price', purchase_item_price, 'qty', purchase_item_quantity
+                    )
+                ) 
+                FROM purchase_items
+                JOIN purchase ON purchase_id=purchase_item_reference WHERE purchase_id=purchase_item_reference
+            ) AS purchase_items";
+
+$qry = "purchase.*, branches.branch_name, user_accounts.full_name, {$items_q}";
+
+$purchase = $db->select('purchase', $qry)
+                ->join('branches','branch_id=owner_branch')
+                ->join('user_accounts', 'user_id=created_by')
+                ->where($whr)
+                ->order_by('purchase_id', 'desc')
+                ->fetchAll();                   
+//var_dump($db->error(), $purchase);
+
+
+$supplier = $db ->select('supplier','supplier_id, supplier_name')
+                ->where($whr)
+                ->fetchAll();
+
 
 $sortedPurchase = [];
-foreach($Purchase as $prod){
+foreach($purchase as $prod){
     if(!isset($sortedPurchase[$prod['branch_name']])) $sortedPurchase[$prod['branch_name']] = [];
-    if(!isset($sortedPurchase[$prod['branch_name']][$prod['category_name']])){
-        $sortedPurchase[$prod['branch_name']][$prod['category_name']] = [];
-    }
+    $sortedPurchase[$prod['branch_name']][] = $prod;
 }
 
 //var_dump($db->error(),$purchoice);

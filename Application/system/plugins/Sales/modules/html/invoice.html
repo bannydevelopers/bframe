@@ -236,7 +236,7 @@
             json.total += item_total;
         }
         //console.log(tmp[sn]);
-        json.VAT = (json.total * 0.05);
+        json.VAT = (json.total * 0.18);
         json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
         json.VAT = json.VAT.toLocaleString('en-US');
         json.total = json.total.toLocaleString('en-US');
