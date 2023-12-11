@@ -37,7 +37,7 @@
                             <td><?=$st['debt_party_id']?><br>
                                 <?=$st['debt_party_type']?>
                             </td>
-                                <td><?=$st['debt_type']?>
+                                <td>
                                     <?=$st['debt_description']?></td>
                                 <td>
                                     <?=$st['debt_amount']?><br>
@@ -77,13 +77,6 @@
         </div>
     </div>
     <?php include __DIR__.'/add_loans.html';?>
-    <form method="post" enctype="multipart/form-data">
-        <label>CSV file</label>
-        <input type="file" name="debt_list" accept=".csv" required>
-        <div style="text-align: right;padding-top: 1em;">
-            <button type="submit">Save</button>
-        </div>
-    </form>
     <div>
         <div id="tpl-staff">
             <option value="">Choose...</option>

@@ -29,8 +29,8 @@
                         "permission":"view_loans"
                     },
                     {
-                        "name":"Business_partners",
-                        "href":"/plugin/Accounts/business partners",
+                        "name":"Business partners",
+                        "href":"/plugin/Accounts/business_partners",
                         "icon":"",
                         "permission":"view_business_partner"
                     }
