@@ -1,12 +1,12 @@
 {
-    "name":"Office_inventory",
+    "name":"Office inventory",
     "description":"Office_inventory customer management, stock, invoicing, purchase orders, products, suppliers, and robust reporting.",
     "admin":{
         "navigation":[
             {
-                "name":"Office_inventory",
-                "alias":"Office_inventory",
-                "href":"#Office_inventory", 
+                "name":"Office inventory",
+                "alias":"Office inventory",
+                "href":"#Office inventory", 
                 "icon":"f54f",
                 "permission":"view_inventory",
                 "children":[

@@ -4,7 +4,7 @@ if($me){
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
     if(isset($_POST['amount'])){
-        var_dump($_POST);
+        //var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
             'per_invoice_no'=>$_POST['per_invoice_no'],   

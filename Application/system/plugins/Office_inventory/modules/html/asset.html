@@ -1,26 +1,26 @@
 <div class="d-flex justify-content-between align-items-center">
-    <h3 class="pt-1">Store</h3>
+    <h3 class="pt-1">Asset</h3>
     <div>
-        <button type="button" onclick="add_store()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Store</button>
+        <button type="button" onclick="add_asset()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Asset</button>
     </div>
 </div>
 <br>
 
 <div class="card bg-white">
     <div class="tab-view">
-        <?php foreach(array_keys($sortedStore) as $i=>$k){?>
+        <?php foreach(array_keys($sortedAsset) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
         <?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedStore as $v){?>
+            <?php foreach($sortedAsset as $v){?>
             <div class="table-responsive text-nowrap" >
                 <table class="table table-hover paginate" data-items-per-page="10">
                     <thead>
                         <tr>
-                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Store Name</th>
-                            <th>Store Location</th>
-                            <th>Store Keeper</th>
+                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Asset Name</th>
+                            <th>Asset number</th>
+                            <th>Asset status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -28,22 +28,22 @@
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
                             <td>
-                                <input type="checkbox" class="form-check-input" name="store[]" value="<?=$st['store_name']?>">
+                                <input type="checkbox" class="form-check-input" name="asset[]" value="<?=$st['asset_name']?>">
                                 <span>
-                                    &nbsp;<strong><?=$st['store_name']?></strong>
+                                    &nbsp;<strong><?=$st['asset_name']?></strong>
                                 </span>
                             </td>
-                            <td><?=$st['store_location']?></td>
-                            <td><?=$st['full_name']?></td>
+                            <td><?=$st['asset_no']?></td>
+                            <td><?=$st['asset_status']?></td>
                             <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                 <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                <a onclick="view_store()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_store()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_store()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                <a onclick="view_asset()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                <a onclick="edit_asset()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                <a onclick="delete_asset()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
                                 </div>
                             </div>
                             </td>
@@ -62,21 +62,16 @@
     <div class="vspaced" style="text-align: left;">
         <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
-                <h3 style="padding-bottom: .6em;" class="large-text">{{store_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">Batch: </span>{{store_batch}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Quantity: </span>{{store_quantity}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Buying price #: </span>{{buying_price}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Selling price: </span>{{selling_price}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Expenses #: </span>{{store_expenses}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Supplier: </span>{{store_supplier}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Received By #: </span>{{store_receiver}}</div>
+                <h3 style="padding-bottom: .6em;" class="large-text">{{asset_name}}</h3>
+                <div><span style="color: rgb(35, 57, 136);">Asset number: </span>{{asset_no}}</div>
+                <div><span style="color: rgb(35, 57, 136);">Asset status: </span>{{asset_status}}</div>
             </div>
         </div>
     </div>
-    <?php include __DIR__.'/add_store.html';?>
+    <?php include __DIR__.'/add_asset.html';?>
     <form method="post" enctype="multipart/form-data">
         <label>CSV file</label>
-        <input type="file" name="store_list" accept=".csv" required>
+        <input type="file" name="asset_list" accept=".csv" required>
         <div style="text-align: right;padding-top: 1em;">
             <button type="submit">Save</button>
         </div>
@@ -127,16 +122,16 @@
     }
 </style>
 <script>
-    function add_store() {
+    function add_asset() {
         let formx = document.querySelector('template').content.cloneNode(true).children[1];
         Swal.fire({
-            title: 'Add store',
+            title: 'Add asset',
             html: formx,
             customClass: 'mySwalSmallForm',
             showConfirmButton: false
         });
     }
-    const view_store = ()=>{
+    const view_asset = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
@@ -145,7 +140,7 @@
             html: htz
         });
     };
-    const edit_store = ()=>{
+    const edit_asset = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[1].cloneNode(true);
         let hin = document.createElement('input');
@@ -165,7 +160,7 @@
         });
         //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
-            title: `Edit ${jsx.store_name}`,
+            title: `Edit ${jsx.asset_name}`,
             html: htz,
             customClass: 'mySwalSmallForm',
             showConfirmButton: false
@@ -178,7 +173,7 @@
                     evt.preventDefault();
                     let fd = new FormData(form);
                     request_service(
-                        'add_store',
+                        'add_asset',
                         response => {
                             console.log(response);
                             let res_json = JSON.parse(response);
@@ -206,7 +201,7 @@
             );
         }
     };
-    const delete_store = ()=>{
+    const delete_asset = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let name = jsx.full_name,
@@ -220,7 +215,7 @@
         .then(response=>{
         if(response.isConfirmed){
             let userdata = new FormData();
-            userdata.append('delete_store', uid);
+            userdata.append('delete_asset', uid);
             userdata.append('ajax',1);
             ajax(
             window.location.href, 
@@ -263,10 +258,10 @@
         }
         });
     }
-    const import_store = ()=>{
+    const import_asset = ()=>{
         let htz = document.querySelector('template').content.children[2].cloneNode(true);
         Swal.fire({
-            title: 'Import store',
+            title: 'Import asset',
             html:htz,
             customClass:'mySwalSmallForm',
             showConfirmButton:false

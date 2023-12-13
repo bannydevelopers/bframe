@@ -21,12 +21,6 @@
                         "href":"/plugin/Banks/withdraw",
                         "icon":"",
                         "permission":"view_withdraw"
-                    },
-                    {
-                        "name":"Share",
-                        "href":"/plugin/Banks/pont-to-share",
-                        "icon":"",
-                        "permission":"view_deposit_info"
                     }
                 
                 ]

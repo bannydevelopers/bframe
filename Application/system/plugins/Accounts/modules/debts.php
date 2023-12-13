@@ -8,7 +8,6 @@ if($me){
         var_dump($_POST);
         
         $data = [
-        
             'debt_date'=>addslashes($_POST['debt_date']), 
             'debt_description'=>addslashes($_POST['debt_description']), 
             'debt_amount'=>addslashes($_POST['debt_amount']), 
@@ -32,7 +31,7 @@ if($me){
     }
     
     if(isset($_POST['delete_debt'])){
-        $k = $db->delete('debt')->where(['debt_id'=>intval($_POST['delete_debt'])])->commit();
+        $k = $db->delete('debts')->where(['debt_id'=>intval($_POST['delete_debt'])])->commit();
         if(!$db->error() && $k){
             $msg = [
                 'status'=>'success',
