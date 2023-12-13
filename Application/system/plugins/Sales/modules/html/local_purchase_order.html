@@ -1,8 +1,7 @@
 <div class="d-flex justify-content-between align-items-center">
-    <h3 class="pt-1">Invoice</h3>
+    <h3 class="pt-1">local purchase order</h3>
     <div class="">
-        <button type="button" onclick="create_invoice()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Proforma</button>
-        <button type="button" onclick="add_invoice()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Tax invoice</button>
+        <button type="button" onclick="create_lpo()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Create LPO</button>
     </div>
 </div>
 <?php if(isset($msg) && $msg){?>
@@ -11,12 +10,12 @@
 <br>
 <div>
     <div class="tab-view">
-        <?php foreach(array_keys($sortedInvoice) as $i=>$k){?>
+        <?php foreach(array_keys($sortedLpo) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedInvoice as $branch=>$invoices){?>
+            <?php foreach($sortedLpo as $branch=>$lpo){?>
             <div>
                 <div class="tab-view" style="text-align: right;">
                     <input type="radio" name="itab<?=$branch?>" id="class_tab12<?=$branch?>" checked>
@@ -25,18 +24,11 @@
                     <label for="class_tab22<?=$branch?>">Tax</label>
                     <div class="tab-panes" style="text-align: left;">
                         <div class="white flex cards">
-                            <?php foreach($invoices['proforma'] as $item){?>
+                            <?php foreach($invoices['local purchase order'] as $item){?>
                                 <div class="content rounded">
-                                    <div class="content-small grey">
-                                        <strong><?=$item['customer_name']?></strong>
-                                    </div>
                                     <div>
                                         <span>Created: </span>
                                         <em><?=system::format_time($item['created_time'], 3)?></em>
-                                    </div>
-                                    <div>
-                                        <span>Due: </span>
-                                        <em><?=system::format_time($item['due_date'], 2)?></em>
                                     </div>
                                     <div>
                                         <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
@@ -55,31 +47,6 @@
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="white">
-                            <div class="flex cards">
-                                <?php foreach($invoices['tax'] as $item){?>
-                                    <div class="content rounded">
-                                        <div class="content-small grey">
-                                            <strong><?=$item['customer_name']?></strong>
-                                        </div>
-                                        <div>
-                                            <span>Created: </span>
-                                            <em><?=system::format_time($item['created_time'], 3)?></em>
-                                        </div>
-                                        <div>
-                                            <span>Due: </span>
-                                            <em><?=system::format_time($item['due_date'], 2)?></em>
-                                        </div>
-                                        <div>
-                                            <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
-                                        </div>
-                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                            <a data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -88,12 +55,11 @@
     </div>
 </div>
 <template>
-    <?php include __DIR__.'/create_invoice.html';?>
-    <?php include __DIR__.'/invoice_items.html';?>
+    <?php include __DIR__.'/create_lpo.html';?>
     <div>
-        <?=$invoice_tpl?>
+        <?=$lpo_tpl?>
     </div>
-    <?php include __DIR__.'/add_invoice.html';?>
+    <?php include __DIR__.'/create_lpo.html';?>
 </template>
 <style>
     .mySwal{
@@ -326,10 +292,10 @@
         }
         return tmp;
     }
-    const create_invoice = ()=>{
+    const create_lpo = ()=>{
         let formx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
-            title: 'Add Invoice',
+            title: 'Create LPO',
             html: formx,
             customClass:'mySwal',
             showConfirmButton:false

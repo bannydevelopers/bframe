@@ -57,6 +57,12 @@
                         "href":"/plugin/Sales/reports",
                         "icon":"",
                         "permission":"view_reports"
+                    },
+                    {
+                        "name":"Local purchase order",
+                        "href":"/plugin/Sales/local_purchase_order",
+                        "icon":"",
+                        "permission":"view_local_purchase_order"
                     }
                 ]
             }

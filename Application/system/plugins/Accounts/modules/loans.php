@@ -5,16 +5,18 @@ if($me){
     $db = db::get_connection($config);
     
     if(isset($_POST['debt_date'])){
-        var_dump($_POST);
+        //var_dump($_POST);
         
         $data = [
         
-            'debt_date'=>$_POST['debt_date'], 
-            'debt_description'=>$_POST['debt_description'], 
-            'debt_amount'=>$_POST['debt_amount'], 
-            'debt_party_id'=>$_POST['debt_party_id']
+            'debt_date'=>addslashes($_POST['debt_date']), 
+            'debt_description'=>addslashes($_POST['debt_description']), 
+            'debt_amount'=>addslashes($_POST['debt_amount']), 
+            'debt_party_type'=>addslashes($_POST['debt_party_type']),
+            'debt_party_id'=>intval($_POST['debt_party']),
+            'owner_branch'=>intval($me['work_location'])
         ];
-        var_dump($db->error());
+        //var_dump($db->error());
         if(isset($_POST['debt_id']) && intval($_POST['debt_id']) > 0){
             $k = intval($_POST['debt_id']);
             $db->update('debts', $data)->where(['debt_id'=>$_POST['debt_id']])->commit();
@@ -58,9 +60,10 @@ if($me){
                     ->join('supplier','supplier_id=debt_party_id', 'left')
                     ->join('user_accounts','user_id=debt_party_id', 'left')
                     ->where($whr)
+                    ->and(['debt_type'=>'loan'])
                     ->order_by('debt_id', 'desc')
                     ->fetchAll();
-var_dump($db->error());
+//var_dump($db->error());
     $sortedDebt = [];
     foreach($debt as $st){
         if(!isset($sortedDebt[$st['branch_name']])) $sortedDebt[$st['branch_name']] = [];
@@ -72,16 +75,7 @@ var_dump($db->error());
     $staff = $db->select('user_accounts', 'user_id, full_name')
                 ->join('staff', 'user_id=user_reference')
                 ->fetchAll();
-
-    $partiner = $db->select('business_partiner', 'business_partiner_id, business_partiner_name')
-                   ->fetchAll();
-
-    $debt = $db->select('debts')->where(['debt_type'=>'lend'])->order_by('debt_id', 'desc')
-               ->fetchAll();
-
-    $debt = $db->select('debts')->where(['debt_type'=>'loan'])->order_by('debt_id', 'desc')
-               ->fetchAll();
-
+    $partiner = $db->select('business_partiner', 'business_partiner_id, business_partiner_name')->fetchAll();
     $body = '';
     ob_start();
     include __DIR__.'/html/loans.html';

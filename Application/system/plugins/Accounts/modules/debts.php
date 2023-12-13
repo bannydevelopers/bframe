@@ -9,12 +9,12 @@ if($me){
         
         $data = [
         
-            'debt_date'=>$_POST['debt_date'], 
-            'debt_description'=>$_POST['debt_description'], 
-            'debt_amount'=>$_POST['debt_amount'], 
-            'debt_party'=>$_POST['debt_party'],
-            'debt_type'=>$_POST['debt_type'],
-            'debt_party_id'=>$_POST['debt_party_id']
+            'debt_date'=>addslashes($_POST['debt_date']), 
+            'debt_description'=>addslashes($_POST['debt_description']), 
+            'debt_amount'=>addslashes($_POST['debt_amount']), 
+            'debt_party_type'=>addslashes($_POST['debt_party_type']),
+            'debt_party_id'=>intval($_POST['debt_party']),
+            'owner_branch'=>intval($me['work_location'])
         ];
         var_dump($db->error());
         if(isset($_POST['debt_id']) && intval($_POST['debt_id']) > 0){
@@ -60,6 +60,7 @@ if($me){
                     ->join('supplier','supplier_id=debt_party_id', 'left')
                     ->join('user_accounts','user_id=debt_party_id', 'left')
                     ->where($whr)
+                    ->and(['debt_type'=>'lend'])
                     ->order_by('debt_id', 'desc')
                     ->fetchAll();
 var_dump($db->error());
@@ -75,7 +76,6 @@ var_dump($db->error());
                 ->join('staff', 'user_id=user_reference')
                 ->fetchAll();
     $partiner = $db->select('business_partiner', 'business_partiner_id, business_partiner_name')->fetchAll();
-
     $body = '';
     ob_start();
     include __DIR__.'/html/debts.html';

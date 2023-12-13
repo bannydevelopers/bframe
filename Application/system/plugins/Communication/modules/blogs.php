@@ -14,6 +14,7 @@ if(isset($_POST['post_title'])){
         $db->update('blog_posts', $data)->where(['post_id'=>intval($_POST['post_id'])])->commit();
     }
     else{
+        //var_dump($data);die;
         $k = $db->insert('blog_posts', $data);
     }
     if(!$db->error()) $msg = 'Post saved successful';

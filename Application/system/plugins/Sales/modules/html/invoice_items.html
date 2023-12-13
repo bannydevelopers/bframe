@@ -1,7 +1,8 @@
 <div>
     <h3 class="content-small no-pad-top">Edit Proforma</h3>
     <form method="post">
-        <table class="paginate" data-items-per-page="10">
+        <input type="hidden" name="invoice" value="0">
+        <table class="paginate numbered-table" data-items-per-page="10">
             <thead>
                 <tr>
                     <th>#</th>
@@ -27,7 +28,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{sn}}</td>
+                    <td></td>
                     <td>
                         {{product}}
                     </td>
@@ -44,13 +45,13 @@
                         {{total_price}}
                     </td>
                     <td>
-                        <a onclick="view_tool()" data-icon="&#xf06e;"></a>
+                        <a onclick="delete_item_row(`{{id}}`)" class="fa fa-trash-alt"></a>
                     </td>
                 </tr>
             </tbody>
         </table>
         <div style="text-align: right;padding-top: 1em;">
-            <button type="button">Add item</button>
+            <button type="button" onclick="add_item_row()">Add item</button>
             <button type="submit">Save</button>
         </div>
     </form>

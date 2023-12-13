@@ -28,5 +28,9 @@
     "add_reports",
     "edit_reports",
     "view_reports",
-    "delete_reports"
+    "delete_reports",
+    "view_local_purchase_order",
+    "add_local_purchase_order",
+    "edit_local_purchase_order",
+    "delete_local_purchase_order"
 ]

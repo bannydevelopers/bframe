@@ -8,8 +8,8 @@
     "locale": "sw-TZ",
     "plugins": [
         "Accounts",
-        "Office_inventory",
         "Communication",
+        "Office_inventory",
         "Sales",
         "Banks",
         "Human_resources",

@@ -12,10 +12,11 @@ else{
 }
 if(isset($_POST['purchase_date'])){
     $purch_data = [
-        'purchase_date'=>addslashes($_POST['purchase_date']),
+        'created_date'=>addslashes($_POST['created_date']),
         'supplier'=>intval($_POST['supplier']),
         'owner_branch'=>intval($me['work_location']),
-        'purchase_no'=>addslashes($_POST['purchase_no']),
+        'proforma_no'=>addslashes($_POST['purchase_no']),
+        'lpo_no'=>addslashes($_POST['lpo_no']),
         'created_by'=>addslashes($me['work_location'])
     ];
     $purch_items_qry = [];
@@ -84,7 +85,7 @@ if(isset($_POST['delete_purchase'])){
     die($msg);
 }
 
-$Purchase = $db->select('product')
+$Lpo = $db->select('product')
                     ->join('product_category', 'category_id=product_category', 'LEFT')
                     ->join('branches', 'branch_id=owner_branch', 'LEFT')
                     ->where($whr)
@@ -108,7 +109,7 @@ $items_q = "(
 
 $qry = "purchase.*, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
 
-$purchase = $db->select('purchase', $qry)
+$lpo = $db->select('local_purchase_order', $qry)
                 ->join('branches','branch_id=owner_branch')
                 ->join('user_accounts', 'user_id=created_by')
                 ->join('supplier', 'supplier_id=supplier')
@@ -117,22 +118,21 @@ $purchase = $db->select('purchase', $qry)
                 ->fetchAll();                   
 //var_dump($db->error(), $purchase);
 
-
 $supplier = $db ->select('supplier','supplier_id, supplier_name')
                 ->where($whr)
                 ->fetchAll();
 
 
-$sortedPurchase = [];
-foreach($purchase as $prod){
-    if(!isset($sortedPurchase[$prod['branch_name']])) $sortedPurchase[$prod['branch_name']] = [];
-    $sortedPurchase[$prod['branch_name']][] = $prod;
+$sortedLpo = [];
+foreach($lpo as $prod){
+    if(!isset($sortedLpo[$prod['branch_name']])) $sortedLpo[$prod['branch_name']] = [];
+    $sortedLpo[$prod['branch_name']][] = $prod;
 }
 
-//var_dump($db->error(), $sortedPurchase);
+//var_dump($db->error(), $sortedLpo);
 
 //var_dump('<pre>',$sortedpurchase);die;
 ob_start();
-include __DIR__.'/html/purchase_order.html';
+include __DIR__.'/html/local_purchase_order.html';
 $body = ob_get_clean();
 $return = ['title'=>' ','body'=>$body];
