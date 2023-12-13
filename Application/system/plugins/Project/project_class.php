@@ -32,6 +32,9 @@ class Project{
                 $_this = new static();
                 $user = user::init()->get_session_user();
                 $return = ['title'=>"Module '{$args[1]}' not found",'body'=>'Request not supported'];
+                
+                $db = db::get_connection($registry->system_config->db_configs);
+
                 if(is_readable(__DIR__."/modules/{$args[1]}.php")) {
                     include __DIR__."/modules/{$args[1]}.php";
                 }
