@@ -11,7 +11,7 @@
                 "permission":"view_project",
                 "children":[
                     {
-                        "name":"projects",
+                        "name":"Projects",
                         "href":"/plugin/Project/projects",
                         "icon":"f594",
                         "permission":"view_projects"
