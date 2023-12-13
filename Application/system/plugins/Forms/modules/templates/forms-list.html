@@ -1,17 +1,21 @@
-<h1 class="content-small">Forms</h1>
+<div class="d-flex justify-content-between align-items-center">
+  <h3 class="pt-1">Forms</h3>
+</div>
+<br>
+
 <div class="flex">
   <div>
     <div class="flex cards">
       <?php foreach($pages as $p){?>
-        <div class="rounded">
-          <div class="content grey"><b data-icon="<?=$p['page_icon']?>"></b><?=$p['page_name']?></div>
-          <div class="content-small">
+        <div class="">
+          <div class="grey p-3 rounded"><b data-icon="<?=$p['page_icon']?>"></b><?=$p['page_name']?></div>
+          <div class="p-2">
             <small><?=$p['page_title']?></small>
           </div>
-          <div class="content-small" style="text-align: right;">
-            <!--span class="rounded content-small box-shadow" data-icon="<?=(intval($p['page_special'])<2)?'&#xf06e;':'&#xf070;'?>"></span-->
-            <a href="<?=$my_url?>/<?=$p['page_id']?>" class="rounded content-small box-shadow" data-icon="&#xf044;"></a>
-            <a href="javascript:delete_page(`<?=$p['page_id']?>`)" class="rounded content-small box-shadow" data-icon="&#xf2ed;"></a>
+          <div class="text-end">
+            <!--span class="rounded btn-sm" data-icon="<?=(intval($p['page_special'])<2)?'&#xf06e;':'&#xf070;'?>"></span-->
+            <a href="<?=$my_url?>/<?=$p['page_id']?>" class="rounded btn-sm" data-icon="&#xf044;"></a>
+            <a href="javascript:delete_page(`<?=$p['page_id']?>`)" class="rounded btn-sm" data-icon="&#xf2ed;"></a>
           </div>
         </div>
       <?php }?>

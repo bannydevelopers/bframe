@@ -9,14 +9,14 @@
             <div class="content-small">
                 <b><em id="<?="config_{$key}_{$k}"?>"><?=ucwords($k)?></em></b>
                 <div class="content-small">
-                    <input type="text" name="<?="{$key}[{$k}]"?>" value="<?=$v?>" />
+                    <input type="text" class="form-control" name="<?="{$key}[{$k}]"?>" value="<?=$v?>" />
                 </div>
             </div>
             <?php }?>
         </div>
         <?php } else {?>
         <div>
-        <input type="text" name="<?=$key?>" value="<?=$val?>" />
+            <input type="text" class="form-control" name="<?=$key?>" value="<?=$val?>" />
         </div>
         <?php }?>
     </div>
@@ -24,7 +24,7 @@
     </div>
     <hr />
     <div>
-        <button type="submit">Save</button>
+        <button class="btn-sm btn-primary rounded" type="submit">Save</button>
     </div>
 </form>
 <style>

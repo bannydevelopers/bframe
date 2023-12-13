@@ -8,6 +8,7 @@
     "locale": "sw-TZ",
     "plugins": [
         "Accounts",
+        "Forms",
         "Communication",
         "Office_inventory",
         "Sales",
