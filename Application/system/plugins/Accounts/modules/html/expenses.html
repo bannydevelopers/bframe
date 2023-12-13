@@ -1,10 +1,11 @@
-<div class="flex">
-    <h3 class="content-small no-pad-top">Expenses</h3>
-    <div class="shrink" style="white-space: nowrap;text-align: right;">
-        <button onclick="add_expenses()" value="add" data-form-width="wide" class="round">Add expenses</button>
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1">Expenses</h3>
+    <div class="">
+        <button type="button" onclick="add_expenses()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary">Add expenses</button>
     </div>
 </div>
 <br>
+
 <div>
     <table class="paginate" data-items-per-page="10">
         <thead>
@@ -93,8 +94,6 @@
     .mySwalSmallForm label{
         padding-left: 0;
     }
-</style>
-<style>
     .contentx{
         padding: 0 1em;
         flex-basis: 100%;

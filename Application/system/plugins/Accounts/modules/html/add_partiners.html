@@ -1,31 +1,27 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="content-small">
-        <div class="white"> 
-            <label for="partiner_name">Partiner name</label>
-            <input type="text" id="partiner_name" name="partiner_name" value="" required />
-            <div class="flex">
-                <div>
-                    <label for="partiner_details">Partiners details</label>
-                    <input type="text" id="partiner_details" name="partiner_details" required />
-                </div>
-                <div>
-                    <label for="partiner_email">E-mail</label>
-                    <input type="email" id="partiner_email" name="partiner_email" value="" required />
-                </div>
-                <div>
-                    <label for="partiner_phone_number">Phone Number</label>
-                    <input type="tel" id="partiner_phone_number" name="partiner_phone_number" value="" minlength="10" maxlength="14" required />
-                </div>
-            </div>        
-            <div class="flex">
-                <div>
-                    <label for="partiner_physical_adress">Residence address</label>
-                    <textarea id="text" name="partiner_physical_adress" rows="5"></textarea>
-                </div>
-            </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="partiner_name" class="form-label">Partiner name</label>
+            <input type="text" class="form-control" id="partiner_name" name="partiner_name" placeholder="Partiner name..." required />
+        </div>
+        <div class="mb-3">
+            <label for="partiner_details" class="form-label">Partiners details</label>
+            <textarea id="partiner_details" class="form-control" rows="2" name="partiner_details" placeholder="Partiner details..."></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="partiner_email" class="form-label">Partiner email</label>
+            <input type="email" class="form-control" id="partiner_email" name="partiner_email" placeholder="Eartiner email..." required />
+        </div>
+        <div class="mb-3">
+            <label for="partiner_phone_number" class="form-label">Partiner phone number</label>
+            <input type="tel" class="form-control" id="partiner_phone_number" name="partiner_phone_number" minlength="10" maxlength="14" placeholder="Eartiner email..." required />
+        </div>
+        <div class="mb-3">
+            <label for="partiner_physical_adress" class="form-label">Residence address</label>
+            <textarea id="partiner_physical_adress" class="form-control" rows="3" name="partiner_physical_adress" placeholder="Residence address"></textarea>
         </div>
     </div>
-    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>

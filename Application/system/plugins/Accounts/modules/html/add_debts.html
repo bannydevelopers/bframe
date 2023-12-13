@@ -1,37 +1,35 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="content-small">
-        <div class="white">
-            <label for="debt_date">Date</label>
-            <input type="date" id="debt_date" name="debt_date" value="" required />
-            <div class="flex">
-                <div>
-                    <label for="debt_party_type">Party Type</label>
-                    <select id="debt_party_type" onchange="update_parties()" name="debt_party_type" required>
-                        <option value="">Choose...</option>
-                        <option value="staff">Staff</option>
-                        <option value="customer">Customers</option>
-                        <option value="supplier">Suppliers</option>
-                        <option value="business_partner">Business Partners</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="debt_party">Dept party</label>
-                    <select id="debt_party" name="debt_party" required>
-                        <option value="" disabled selected>Choose...</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="debt_description">Description</label>
-                    <input type="text" id="debt_description" name="debt_description" value="" required />
-                </div>
-                <div>
-                    <label for="debt_amount">Amount</label>
-                    <input type="number" id="debt_amount" name="debt_amount" value="" required />
-                </div>
-            </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="debt_date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="debt_date" name="debt_date" placeholder="Debt date..." required />
+        </div>
+        <div class="mb-3">
+          <label for="debt_party_type" class="form-label">Debt party type</label>
+          <select name="debt_party_type" id="debt_party_type" onchange="update_parties()" class="form-select">
+            <option value="" selected>Choose...</option>
+            <option value="staff">Staff</option>
+            <option value="customer">Customers</option>
+            <option value="supplier">Suppliers</option>
+            <option value="business_partner">Business Partners</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="debt_party" class="form-label">Debt party</label>
+          <select name="debt_party" id="debt_party" class="form-select">
+            <option value="" selected>Choose...</option>
+          </select>
+        </div>
+        <div class="mb-3">
+            <label for="debt_description" class="form-label">Description</label>
+            <textarea id="debt_description" class="form-control" rows="3" name="debt_description" placeholder="Debt description"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="debt_amount" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="debt_amount" name="debt_amount" placeholder="Amount..." required />
         </div>
     </div>
-    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
