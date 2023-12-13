@@ -81,20 +81,22 @@
 </style>
 <template>
     <form method="post" class="content-small">
-        <div class="flex">
-            <div class="content-small">
-                <label>Post title</label>
-                <input type="text" name="post_title" placeholder="short and descriptive title">
+        <div class="d-flex justify-content-between w-100">
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="basic-default-name">Post title</label>
+                <div class="col-sm-9">
+                  <input type="text" name="post_title" placeholder="Short and descriptive title" class="form-control" id="basic-default-name"/>
+                </div>
             </div>
-            <div class="content-small">
-                <label>Category</label>
-                <select name="post_category">
+            <div class="flex mb-3">
+                <label for="largeSelect" class="col-form-label">Category</label>
+                <select style="min-width: 270px;" id="largeSelect" class="form-select form-select" name="post_category">
+                    <option value="" selected>Choose...</option>
                     <option value="0">General</option>
                 </select>
             </div>
             <div class="flex-shrink">
-                <label>&nbsp;</label>
-                <button type="submit" class="content-small">Save</button>
+                <button type="submit" class="btn btn-primary rounded">Save</button>
             </div>
         </div>
         <div class="content-small">
