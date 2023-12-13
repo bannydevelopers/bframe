@@ -1,0 +1,26 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="content-small">
+        <div class="white">
+            <label for="asset_name">Asset name</label>
+            <input type="text" id="asset_name" name="asset_name" value="" required />
+            <div class="flex">
+                <div>
+                    <label for="asset_no">Asset number</label>
+                    <input type="text" id="asset_no" name="asset_no" value="" required />
+                </div>
+                <div>
+                    <label for="asset_status">Status</label>
+                    <select id="asset_status" name="asset_status">
+                        <option value="active">Active</option>
+                        <option value="defective">Defective</option>
+                        <option value="retired">Retired</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
+        <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
+    </div>
+</form>

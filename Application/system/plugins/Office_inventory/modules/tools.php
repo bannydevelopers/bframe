@@ -10,9 +10,7 @@ if($me){
             'tool_name'=>$_POST['tool_name'], 
             'tool_description'=>$_POST['tool_description'], 
             'tool_group'=>$_POST['tool_group'], 
-            'tool_atatus'=>$_POST['tool_status'], 
-            'tool_date_purchased'=>$_POST['tool_date_purchased'],  
-            'created_time'=>date('Y-m-d H:i:s')
+            'tool_status'=>$_POST['tool_status']
         ];
         if(isset($_POST['tool_id']) && intval($_POST['tool_id']) > 0){
             $k = intval($_POST['tool_id']);
@@ -47,9 +45,15 @@ if($me){
     } 
     $tool = $db->select('tools')
                     ->join('branches', 'branch_id=owner_branch', 'left')
+                    ->join('tools_category', 'tool_category_id=tool_group', 'left')
                     ->where(1)
                     ->fetchAll();
-        
+    var_dump($db->error());  
+
+    $group = $db ->select('tools_category','tool_category_id, tool_category_name')
+                  ->where(1)
+                  ->fetchAll();
+
     $qry = "SELECT * FROM tools LEFT JOIN tools_out ON tools_out.tool_reference = tools.tool_id 
             WHERE (tools_out.tool_out_id = ( SELECT MAX(tool_out_id) FROM tools_out WHERE tools_out.borrow_status 
             IN ('rejected','returned') ) OR tool_reference is NULL) AND tool_status = 'active' ORDER BY tool_id DESC";

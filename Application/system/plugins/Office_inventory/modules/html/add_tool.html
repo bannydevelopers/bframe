@@ -6,14 +6,20 @@
             <div class="flex">
                 <div>
                     <label for="tool_group">Tool group</label>
-                    <select id="tool_group" name="tool_group">
+                    <select name="tool_group" id="tool_group" onchange="add_form('tool_group')">
                         <option value="">Choose...</option>
+                        <?php foreach($group as $gp){?>
+                        <option value="<?=$gp['tool_category_id']?>"><?=$gp['tool_category_name']?></option>
+                        <?php }?>
+                        <option value="add">Add tool group</option>
                     </select>
                 </div>
                 <div>
                     <label for="tool_status">Status</label>
                     <select id="tool_status" name="tool_status">
                         <option value="active">Active</option>
+                        <option value="defective">Defective</option>
+                        <option value="retired">Retired</option>
                     </select>
                 </div>
             </div>

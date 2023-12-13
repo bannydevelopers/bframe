@@ -3,15 +3,15 @@ $me = human_resources::get_staff();
 if($me){
     $config = storage::get_data('system_config')->db_configs;
     $db = db::get_connection($config);
-    if(isset($_POST['business_partiner_name'])){
+    if(isset($_POST['partiner_name'])){
         //var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
-            'business_partiner_name'=>$_POST['business_partiner_name'], 
-            'business_partiner_phone_number'=>$_POST['business_partiner_phone_number'], 
-            'business_partiner_email'=>$_POST['business_partiner_email'],
-            'business_partiner_details'=>$_POST['business_partiner_details'],
-            'business_partiner_physical_adress'=>$_POST['business_partiner_physical_adress']
+            'business_partiner_name'=>$_POST['partiner_name'], 
+            'business_partiner_phone_number'=>$_POST['partiner_phone_number'], 
+            'business_partiner_email'=>$_POST['partiner_email'],
+            'business_partiner_details'=>$_POST['partiner_details'],
+            'business_partiner_physical_adress'=>$_POST['partiner_physical_adress']
         ];
         //var_dump($db->error());
         if(isset($_POST['business_partiner_id']) && intval($_POST['business_partiner_id']) > 0){

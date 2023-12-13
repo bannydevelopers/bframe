@@ -7,12 +7,12 @@ if($me){
     $status = 'error';
     if(isset($_POST['expenses_date'])){
         $data = [
-            'expenses_date'=>intval($_POST['expenses_date']),
-            'expenses_number_item'=>addslashes($_POST['expenses_number_item']),
+            'expenses_date'=>addslashes($_POST['expenses_date']),
             'expenses_description'=>addslashes($_POST['expenses_description']),
-            'expenses_amount'=>addslashes($_POST['expenses_amount']),
+            'expenses_amount'=>addslashes($_POST['expenses_price']),
             'purchased_by'=>addslashes($_POST['purchased_by']),
             'approved_by'=>addslashes($_POST['approved_by']),
+            'expenses_category'=>addslashes($_POST['expenses_category']),
             'owner_branch'=>intval($me['work_location'])
         ];
         if(isset($_POST['expenses_id'])){
@@ -36,6 +36,7 @@ if($me){
             file_put_contents("{$dir}/tmp.jpg", file_get_contents($bp));
             $thumb = system::upload_image("{$dir}/tmp.jpg", "{$dir}/expenses_thumb_{$k}.jpg", ['width'=>200, 'height'=>170]);
         }
+        var_dump($db->error());
         if(!$db->error() && $k) {
             $msg = 'Saved successful';
             $status = 'success';
