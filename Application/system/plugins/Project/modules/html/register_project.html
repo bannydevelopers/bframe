@@ -1,22 +1,22 @@
 <form method="post">
     <h3>Register project</h3>
     <div>
-        <label>Project name</label>
-        <input type="text" name="project_name" placeholder="project name" required>
+        <label class="form-label">Project name</label>
+        <input type="text" class="form-control" name="project_name" placeholder="project name" required>
     </div>
-    <div class="flex">
-        <div>
-            <label>Client</label>
-            <select name="project_client" required>
+    <div class="row">
+        <div class="col-md-6" >
+            <label class="form-label">Client</label>
+            <select class="form-control" name="project_client" required>
                 <option value="">Choose...</option>
                 <?php foreach($customer as $cl){?>
                 <option value="<?=$cl['customer_id']?>"><?=$cl['customer_name']?></option>
                 <?php }?>
             </select>
         </div>
-        <div>
-            <label>Project manager</label>
-            <select name="project_manager" required>
+        <div class="col-md-6">
+            <label class="form-label">Project manager</label>
+            <select  class="form-control" name="project_manager" required>
                 <option value="">Choose...</option>
                 <?php foreach($managers as $mn){?>
                 <option value="<?=$mn['user_id']?>"><?=$mn['full_name']?></option>
@@ -24,31 +24,32 @@
             </select>
         </div>
     </div>
-    <div class="flex">
-        <div>
-            <label>Budget</label>
-            <input type="number" name="project_budget" min="0" placeholder="project budget" required>
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Budget</label>
+            <input type="number" class="form-control" name="project_budget" min="0" placeholder="project budget" required>
         </div>
-        <div>
-            <label>Location</label>
-            <input type="text" name="project_location" placeholder="project location" required>
+        <div class="col-md-6">
+            <label class="form-label" >Location</label>
+            <input type="text" class="form-control" name="project_location" placeholder="project location" required>
         </div>
     </div>
-    <div class="flex">
-        <div>
-            <label>Start date</label>
-            <input type="date" name="project_start" placeholder="project start date" required>
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Start date</label>
+            <input type="date" class="form-control" name="project_start" placeholder="project start date" required>
         </div>
-        <div>
-            <label>End date</label>
-            <input type="date" name="project_end" placeholder="project end date" required>
+        <div class="col-md-6">
+            <label class="form-label">End date</label>
+            <input type="date" class="form-control" name="project_end" placeholder="project end date" required>
         </div>
     </div>
     <div>
-        <label>Description</label>
-        <textarea name="project_desc" rows="4" placeholder="...description"></textarea>
+        <label class="form-label" >Description</label>
+        <textarea  class="form-control" name="project_desc" rows="4" placeholder="...description"></textarea>
     </div>
-    <div style="text-align: right;" class="content">
-        <button type="submit" class="btn btn-outline-secondary">Save</button>
+    <div class="text-end mt-3">
+        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
+        <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
 </form>
