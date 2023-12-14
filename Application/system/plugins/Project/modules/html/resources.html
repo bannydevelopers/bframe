@@ -297,8 +297,8 @@
     const update_resources = ()=>{
         let evt = window.event,
             tpl = document.querySelector('template').content.children[1].cloneNode(true),
-            opts = 0;//tpl.getElementById(evt.target.value);
-            console.log(tpl);
+            opts = tpl.querySelector(`#${evt.target.value}`);
+            console.log(typeof tpl);
         if(opts){
             document.querySelector('[name=resource_reference]').innerHTML = opts.innerHTML;
         }
