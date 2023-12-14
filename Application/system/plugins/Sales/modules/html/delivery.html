@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center">
-    <h3 class="pt-1">Delivery</h3>
+    <h3 class="pt-1">Delivery note</h3>
     <div class="">
         <button type="button" onclick="create_delivery()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Delivery note</button>
     </div>
@@ -19,12 +19,10 @@
             <div>
                 <div class="tab-view" style="text-align: right;">
                     <input type="radio" name="itab<?=$branch?>" id="class_tab12<?=$branch?>" checked>
-                    <label for="class_tab12<?=$branch?>">Proforma</label>
                     <input type="radio" name="itab<?=$branch?>" id="class_tab22<?=$branch?>">
-                    <label for="class_tab22<?=$branch?>">Tax</label>
                     <div class="tab-panes" style="text-align: left;">
                         <div class="white flex cards">
-                            <?php foreach($deliverys['proforma'] as $item){?>
+                            <?php foreach($deliverys as $item){?>
                                 <div class="content rounded">
                                     <div class="content-small grey">
                                         <strong><?=$item['customer_name']?></strong>
@@ -34,50 +32,16 @@
                                         <em><?=system::format_time($item['created_time'], 3)?></em>
                                     </div>
                                     <div>
-                                        <span>Due: </span>
-                                        <em><?=system::format_time($item['due_date'], 2)?></em>
-                                    </div>
-                                    <div>
                                         <span>Reference: </span><em><?=decoct($item['delivery_id'])?></em>
                                     </div>
                                     <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                        <?php if($item['reference_delivery']){?>
-                                        <a data-icon="&#xf0c5;" onclick="copy_delivery()"></a>
-                                        <?php }else{?>
                                         <a data-icon="&#xf06e;" onclick="view_delivery()"></a>
-                                        <?php }?>
                                         <a data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                        <?php if(!$item['reference_delivery']){?>
                                         <a data-icon="&#xf2ed;" onclick="delete_delivery(`<?=$item['delivery_id']?>`)"></a>
-                                        <?php }?>
+                                        
                                     </div>
                                 </div>
                             <?php } ?>
-                        </div>
-                        <div class="white">
-                            <div class="flex cards">
-                                <?php foreach($deliverys['tax'] as $item){?>
-                                    <div class="content rounded">
-                                        <div class="content-small grey">
-                                            <strong><?=$item['customer_name']?></strong>
-                                        </div>
-                                        <div>
-                                            <span>Created: </span>
-                                            <em><?=system::format_time($item['created_time'], 3)?></em>
-                                        </div>
-                                        <div>
-                                            <span>Due: </span>
-                                            <em><?=system::format_time($item['due_date'], 2)?></em>
-                                        </div>
-                                        <div>
-                                            <span>Reference: </span><em><?=decoct($item['delivery_id'])?></em>
-                                        </div>
-                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                            <a data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,7 +130,6 @@
         [...jsx.delivery_items].forEach(item=>{
             item.sn = ++sn;
             item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
-            item.total_price = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
         frm.querySelector('tbody tr').outerHTML = tmp;
@@ -365,7 +328,7 @@
     const add_delivery = ()=>{
         let formy = document.querySelector('template').content.cloneNode(true).children[3];
         Swal.fire({
-            title: 'Create tax delivery',
+            title: 'Create delivery',
             html: formy,
             customClass:'smallSwal',
             showConfirmButton:false
