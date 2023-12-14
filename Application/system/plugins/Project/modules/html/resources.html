@@ -230,14 +230,6 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <?php include __DIR__.'/request_resource.html';?>
-    <div>
-        <select id="staff">
-        <option value="">Choose...</option>
-        <?php foreach($staff as $st){?>
-            <option value="<?=$st['user_id']?>"><?=$st['full_name']?></option>
-        <?php }?>
-        </select>
-    </div>
 </template>
 <style>
     .mySwalForm{
@@ -293,15 +285,5 @@
                 fdx
             );
         });
-    }
-    const update_resources = ()=>{
-        let evt = window.event,
-            tpl = document.querySelector('template').content.children[1].cloneNode(true),
-            opts = tpl.querySelector(`#${evt.target.value}`);
-            console.log(typeof tpl);
-        if(opts){
-            document.querySelector('[name=resource_reference]').innerHTML = opts.innerHTML;
-        }
-        //else console.log(evt.target.value);
     }
 </script>
