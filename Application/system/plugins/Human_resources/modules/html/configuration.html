@@ -11,7 +11,7 @@
                 <label class="form-label">Roles</label>
                 <?php foreach($myroles as $k => $mr){?>
                 <div class="row">
-                    <div class="mb-3 col-md-9">
+                    <div class="mb-lg-3 col-lg-9">
                         <select class="form-select" name="leave_approve_flow[]">
                             <option value="">Not set</option>
                             <?php foreach($roles as $r){?>
@@ -19,7 +19,7 @@
                             <?php }?>
                         </select>
                     </div>
-                    <div class="col-md-3 text-end">
+                    <div class="col-lg-3 mt-1 mb-3 mb-lg-0 text-end">
                         <button type="button" class="btn btn-primary btn-sm rounded-xl" onclick="appendInput()">+</button>
                         <button type="button" class="btn btn-danger btn-sm rounded-xl" onclick="delInput()">x</button>
                     </div>
@@ -32,7 +32,7 @@
         </form>
         <form method="post" class="col-md-6">
             <h4 class="pb-1" style="border-bottom: 1px solid #ddd;">General settings</h4>
-            <div class="content">
+            <div class="py-3">
                 <label class="form-label">Headquarters branch</label>
                 <select class="form-select" name="headquarters_branch">
                     <option value="">Not set</option>
