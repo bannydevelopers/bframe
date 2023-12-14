@@ -1,10 +1,16 @@
 <form method="post">
-    <h1 class="content-small">New department</h1><hr>
-    <label>Department name</label>
-    <input type="text" name="dept_name" placeholder="department name..." required>
-    <label>Department description</label>
-    <textarea name="dept_desc" rows="6" placeholder="department description..."></textarea>
-    <div class="content" style="text-align: right;">
+    <h1 class="py-3 text-center">New department</h1><hr>
+    <div class="row">
+        <div class="mb-3 col-md-12">
+            <label class="form-label" for="dept_name">Department name</label>
+            <input type="text" id="dept_name" name="dept_name" placeholder="Department name..." required>
+        </div>
+        <div class="mb-3 col-md-12">
+            <label class="form-label" for="dept_desc">Department description</label>
+            <textarea class="form-control" name="dept_desc" id="dept_desc" rows="6" placeholder="Department description..."></textarea>
+        </div>
+    </div>
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>

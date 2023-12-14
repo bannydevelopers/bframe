@@ -1,10 +1,14 @@
 <form method="post" autocomplete="off">
-    <h1 class="content-small">New designation</h1><hr>
-    <div class="white content">
-        <label for="designation_name">Designation name</label>
-        <input type="text" id="designation_name" name="designation_name" required />
-        <label for="designation_description">Description</label>
-        <textarea id="designation_description" name="designation_description" rows="4"></textarea>
+    <h1 class="py-3 text-center">New designation</h1><hr>
+    <div class="row">
+        <div class="mb-3 col-md-12">
+            <label class="form-label" for="designation_name">Designation name</label>
+            <input class="form-control" type="text" id="designation_name" name="designation_name" required />
+        </div>
+        <div class="mb-3 col-md-12">
+            <label class="form-label" for="designation_description">Description</label>
+            <textarea class="form-control" id="designation_description" name="designation_description" rows="4"></textarea>
+        </div>
     </div>
     <div style="text-align: right;">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>

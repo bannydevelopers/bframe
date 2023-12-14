@@ -1,17 +1,27 @@
 <form method="post">
-    <h1 class="content-small">New branch</h1><hr>
-    <label>Branch name</label>
-    <input type="text" name="branch_name" placeholder="branch name..." required>
-    <label>Is it headquarters?</label>
-    <select name="is_headquarters" required>
-        <option value="0">No.</option>
-        <option value="1">Yes.</option>
-    </select>
-    <label>Branch location</label>
-    <input type="text" name="branch_location" placeholder="branch location..." required>
-    <label>Branch address</label>
-    <textarea name="branch_address" rows="6" placeholder="branch address..."></textarea>
-    <div class="content" style="text-align: right;">
+    <h3 class="py-3 text-center">New branch</h3>
+    <div class="row">
+        <div class="mb-3 col-md-6">
+            <label class="form-data" for="branch_name">Branch name</label>
+            <input class="form-control" id="branch_name" type="text" name="branch_name" placeholder="branch name..." required>
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-select" for="is_headquarters">Is it headquarters?</label>
+            <select name="is_headquarters" id="is_headquarters" required>
+                <option value="0">No.</option>
+                <option value="1">Yes.</option>
+            </select>
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-data" for="branch_location">Branch location</label>
+            <input class="form-control" id="branch_location" type="text" name="branch_location" placeholder="branch location..." required>
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-data" for="branch_address">Branch address</label>
+            <textarea class="form-control" name="branch_address" id="branch_address" rows="6" placeholder="branch address..."></textarea>
+        </div>
+    </div>
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>

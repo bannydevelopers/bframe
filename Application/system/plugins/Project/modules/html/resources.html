@@ -18,53 +18,209 @@
         <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
         <?php }}?>
         <div class="tab-panes">
-            <?php foreach($sortedProjects as $v){?>
-            <div class="table-responsive text-nowrap bg-white" >
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Project</th>
-                            <th>Client</th>
-                            <th>Duration</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($v as $sn=>$st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td><?=++$sn?></td>
-                            <td>
-                                <?=$st['project_name']?><br>
-                                <strong>Under: </strong><em style="font-family: 'Times New Roman', Times, serif;"><?=$st['manager']?></em>
-                            </td>
-                            <td>
-                                <?=$st['customer_name']?><br>
-                                <?=$st['customer_phone_number']?>
-                            </td>
-                            <td style="white-space: nowrap;">
-                                From: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_start'],3)?></em><br>
-                                To: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_end'],3)?></em>
-                            </td>
-                            <td><?=$st['project_desc']?></td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
-                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
+            <?php foreach($sortedProjects as $key=>$v){?>
+            <div>
+                <div class="tab-view" style="text-align: right;">
+                    <input type="radio" name="tab_<?=$key?>" id="class_tab_tools_<?=$key?>" checked>
+                    <label for="class_tab_tools_<?=$key?>">Tools</label>
+                    <input type="radio" name="tab_<?=$key?>" id="class_tab_people_<?=$key?>">
+                    <label for="class_tab_people_<?=$key?>">People</label>
+                    <input type="radio" name="tab_<?=$key?>" id="class_tab_products_<?=$key?>">
+                    <label for="class_tab_products_<?=$key?>">Deliverables</label>
+                    <input type="radio" name="tab_<?=$key?>" id="class_tab_money_<?=$key?>">
+                    <label for="class_tab_money_<?=$key?>">Money</label>
+                    <div class="tab-panes" style="text-align: left;">
+                        <div class="table-responsive text-nowrap bg-white">
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tool name</th>
+                                        <th>Quantity</th>
+                                        <th>Activity</th>
+                                        <th>Status</th>
+                                        <th>Requested</th>
+                                        <th>Approval</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($v as $sn=>$st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td><?=++$sn?></td>
+                                        <td>
+                                            <?=$st['project_name']?><br>
+                                            <strong>Under: </strong><em style="font-family: 'Times New Roman', Times, serif;"><?=$st['manager']?></em>
+                                        </td>
+                                        <td>
+                                            <?=$st['customer_name']?><br>
+                                            <?=$st['customer_phone_number']?>
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            From: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_start'],3)?></em><br>
+                                            To: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_end'],3)?></em>
+                                        </td>
+                                        <td><?=$st['project_desc']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
+                                                <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive text-nowrap bg-white">
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Project</th>
+                                        <th>Client</th>
+                                        <th>Duration</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($v as $sn=>$st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td><?=++$sn?></td>
+                                        <td>
+                                            <?=$st['project_name']?><br>
+                                            <strong>Under: </strong><em style="font-family: 'Times New Roman', Times, serif;"><?=$st['manager']?></em>
+                                        </td>
+                                        <td>
+                                            <?=$st['customer_name']?><br>
+                                            <?=$st['customer_phone_number']?>
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            From: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_start'],3)?></em><br>
+                                            To: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_end'],3)?></em>
+                                        </td>
+                                        <td><?=$st['project_desc']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
+                                                <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive text-nowrap bg-white">
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Project</th>
+                                        <th>Client</th>
+                                        <th>Duration</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($v as $sn=>$st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td><?=++$sn?></td>
+                                        <td>
+                                            <?=$st['project_name']?><br>
+                                            <strong>Under: </strong><em style="font-family: 'Times New Roman', Times, serif;"><?=$st['manager']?></em>
+                                        </td>
+                                        <td>
+                                            <?=$st['customer_name']?><br>
+                                            <?=$st['customer_phone_number']?>
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            From: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_start'],3)?></em><br>
+                                            To: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_end'],3)?></em>
+                                        </td>
+                                        <td><?=$st['project_desc']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
+                                                <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive text-nowrap bg-white">
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Project</th>
+                                        <th>Client</th>
+                                        <th>Duration</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($v as $sn=>$st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td><?=++$sn?></td>
+                                        <td>
+                                            <?=$st['project_name']?><br>
+                                            <strong>Under: </strong><em style="font-family: 'Times New Roman', Times, serif;"><?=$st['manager']?></em>
+                                        </td>
+                                        <td>
+                                            <?=$st['customer_name']?><br>
+                                            <?=$st['customer_phone_number']?>
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            From: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_start'],3)?></em><br>
+                                            To: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_end'],3)?></em>
+                                        </td>
+                                        <td><?=$st['project_desc']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
+                                                <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_staff()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <?php }?>
         </div>
@@ -73,7 +229,15 @@
 
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
-    <?php include __DIR__.'/register_project.html';?>
+    <?php include __DIR__.'/request_resource.html';?>
+    <div>
+        <select id="staff">
+        <option value="">Choose...</option>
+        <?php foreach($staff as $st){?>
+            <option value="<?=$st['user_id']?>"><?=$st['full_name']?></option>
+        <?php }?>
+        </select>
+    </div>
 </template>
 <style>
     .mySwalForm{
@@ -94,7 +258,7 @@
     }
 </style>
 <script>
-    const register_project = (name)=>{
+    const request_resource = (name)=>{
         let fx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
             html: fx,
@@ -129,5 +293,15 @@
                 fdx
             );
         });
+    }
+    const update_resources = ()=>{
+        let evt = window.event,
+            tpl = document.querySelector('template').content.children[1].cloneNode(true),
+            opts = 0;//tpl.getElementById(evt.target.value);
+            console.log(tpl);
+        if(opts){
+            document.querySelector('[name=resource_reference]').innerHTML = opts.innerHTML;
+        }
+        //else console.log(evt.target.value);
     }
 </script>
