@@ -21,6 +21,7 @@ if(isset($_POST['created_date'])){
         'd_n_number'=>addslashes($_POST['d_n_number']),
         't_i_number'=>addslashes($_POST['t_i_number']),
         'customer'=>addslashes($_POST['customer']),
+        'prepaired_by'=>intval($me['user_reference']),
         'owner_branch'=>intval($me['work_location'])
     ];
 
@@ -96,7 +97,7 @@ if(isset($_POST['delete_delivery'])){
 $items_q = "(SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'delivery',delivery, 'product', product_name, 'qty', quantity, 'product_id', product_id, 'item_desc', product_description, 'unit_single', product_unit_singular, 'unit_prural', product_unit_plural)) FROM delivery_items JOIN product ON product_id=product
 WHERE delivery_id=delivery) AS delivery_items";
     //FROM delivery JOIN  ON  JOIN  ON ";
-$proforma = $db->select('delivery',"delivery.*, {$items_q}")
+$delivery = $db->select('delivery',"delivery.*, {$items_q}, branches.*, customer.*,user_accounts.full_name")
                 ->join('branches','branch_id=owner_branch')
                 ->join('customer', 'customer_id=customer')
                 ->join('user_accounts', 'user_id=prepaired_by')
@@ -106,10 +107,10 @@ $proforma = $db->select('delivery',"delivery.*, {$items_q}")
 
 //var_dump($db->error(),$delivery);
 $sortedDelivery = [];
-foreach($proforma as $delv){
-    if(!isset($sortedDelivery[$delv['branch_name']])) $sortedDelivery[$delv['branch_name']] = ['proforma'=>[]];
+foreach($delivery as $delv){
+    if(!isset($sortedDelivery[$delv['branch_name']])) $sortedDelivery[$delv['branch_name']] = [];
     $delv['delivery_items'] = $delv['delivery_items'] ? json_decode($delv['delivery_items'],true) : [];
-    $sortedDelivery[$delv['branch_name']]['proforma'][] = $delv;
+    $sortedDelivery[$delv['branch_name']][] = $delv;
 }
 if($me['work_location'] == human_resources::get_headquarters_branch()) {
     $whr = 1;
@@ -141,7 +142,7 @@ else{
 }
 $product = $db->select('product')->where($whr)->fetchAll();
 $customer = $db->select('customer')->where($whr)->fetchAll();
-//$proforma = $db->select('delivery')->where(1)->fetchAll();
+$delivery = $db->select('delivery')->where(1)->fetchAll();
 //var_dump('<pre>',$sortedDelivery);die;
 ob_start();
 include __DIR__.'/html/delivery.html';
