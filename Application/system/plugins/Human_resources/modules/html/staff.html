@@ -28,16 +28,18 @@
                     </thead>
                     <tbody class="table-border-bottom-0">
                         <?php foreach($v as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
+                        <tr data-json='<?=json_encode($st)?>' class="text-start">
+                            <td class="d-flex">
                                 <input type="checkbox" class="form-check-input" name="bank_name[]" value="<?=$st['bank_name']?>">
-                                <span style="max-width: 40px;">
-                                    <img src="<?=user::init()->get_user_avatar($st['user_id'])?>" width="70px" style="border-radius: 4em;">
-                                </span>
-                                <span>
-                                    &nbsp;<strong><?=$st['full_name']?></strong><br>
-                                    &nbsp;<em><?=$st['branch_name']?></em>
-                                </span>
+                                <div class="d-flex">
+                                    <span style="width: 60px; max-width: 60px;">
+                                        <img src="<?=user::init()->get_user_avatar($st['user_id'])?>" width="70px" style="border-radius: 4em;">
+                                    </span>
+                                    <span class="py-1">
+                                        &nbsp;<strong><?=$st['full_name']?></strong><br>
+                                        &nbsp;<em><?=$st['branch_name']?></em>
+                                    </span>
+                                </div>
                             </td>
                             <td>
                                 <?=$st['email']?><br>
