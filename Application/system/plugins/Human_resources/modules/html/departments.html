@@ -7,13 +7,17 @@
 <br>
 
 <div>
-    <div class="flex cards">
+    <div class="row">
         <?php foreach($departments as $dept){?>
-            <div class="content rounded">
-                <h4><?=$dept['dept_name']?></h4>
-                <div style="text-align: right;">
-                    <a onclick="edit_department" data-icon="&#xf056;">&nbsp;</a>
-                    <a onclick="edit_department" data-icon="&#xf1f8;">&nbsp;</a>
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-none bg-transparent border border-primary mb-3">
+                    <div class="card-body">
+                        <h5  class="card-title"><?=$dept['dept_name']?></h5>
+                        <div class="text-end">
+                            <a class="btn-sm text-primary" onclick="edit_department()" data-icon="&#xf056;">&nbsp;</a>
+                            <a class="btn-sm text-danger" onclick="delete_department()" data-icon="&#xf1f8;">&nbsp;</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php }?>
