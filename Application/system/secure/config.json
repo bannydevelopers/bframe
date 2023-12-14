@@ -7,11 +7,11 @@
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
+        "Sales",
         "Accounts",
         "Forms",
         "Communication",
         "Office_inventory",
-        "Sales",
         "Banks",
         "Human_resources",
         "Project",
@@ -43,7 +43,6 @@
         "primary_payment_account": "A\/C name: Banny Company T Ltd\r\nBank name: NCBA\r\nA\/C number: 118 688 100 015\r\nBranch: Clock tower branch",
         "aux_payment_account": "A\/C name: Banny Company Limited\r\nBank name: CRDB\r\nA\/C number: 0150560102100\r\nBranch: TRA Samora",
         "TERMS_AND_CONDITIONS": "Your invoice should be submitted together with the original of the LPO. \r\nThe purchase order number should be quoted on all communications relevant to this order."
-
     },
     "db_configs": {
         "dbdriver": "mysql",

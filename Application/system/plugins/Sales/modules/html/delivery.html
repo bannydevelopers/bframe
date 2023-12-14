@@ -1,0 +1,477 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1">Delivery</h3>
+    <div class="">
+        <button type="button" onclick="create_delivery()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Delivery note</button>
+    </div>
+</div>
+<?php if(isset($msg) && $msg){?>
+    <p class="content box-shadow msg"><?=$msg?></p>
+<?php }?>
+<br>
+<div>
+    <div class="tab-view">
+        <?php foreach(array_keys($sortedDelivery) as $i=>$k){?>
+        <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
+        <label for="class_tab<?=$i?>"><?=$k?></label>
+        <?php }?>
+        <div class="tab-panes">
+            <?php foreach($sortedDelivery as $branch=>$deliverys){?>
+            <div>
+                <div class="tab-view" style="text-align: right;">
+                    <input type="radio" name="itab<?=$branch?>" id="class_tab12<?=$branch?>" checked>
+                    <label for="class_tab12<?=$branch?>">Proforma</label>
+                    <input type="radio" name="itab<?=$branch?>" id="class_tab22<?=$branch?>">
+                    <label for="class_tab22<?=$branch?>">Tax</label>
+                    <div class="tab-panes" style="text-align: left;">
+                        <div class="white flex cards">
+                            <?php foreach($deliverys['proforma'] as $item){?>
+                                <div class="content rounded">
+                                    <div class="content-small grey">
+                                        <strong><?=$item['customer_name']?></strong>
+                                    </div>
+                                    <div>
+                                        <span>Created: </span>
+                                        <em><?=system::format_time($item['created_time'], 3)?></em>
+                                    </div>
+                                    <div>
+                                        <span>Due: </span>
+                                        <em><?=system::format_time($item['due_date'], 2)?></em>
+                                    </div>
+                                    <div>
+                                        <span>Reference: </span><em><?=decoct($item['delivery_id'])?></em>
+                                    </div>
+                                    <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                        <?php if($item['reference_delivery']){?>
+                                        <a data-icon="&#xf0c5;" onclick="copy_delivery()"></a>
+                                        <?php }else{?>
+                                        <a data-icon="&#xf06e;" onclick="view_delivery()"></a>
+                                        <?php }?>
+                                        <a data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                        <?php if(!$item['reference_delivery']){?>
+                                        <a data-icon="&#xf2ed;" onclick="delete_delivery(`<?=$item['delivery_id']?>`)"></a>
+                                        <?php }?>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="white">
+                            <div class="flex cards">
+                                <?php foreach($deliverys['tax'] as $item){?>
+                                    <div class="content rounded">
+                                        <div class="content-small grey">
+                                            <strong><?=$item['customer_name']?></strong>
+                                        </div>
+                                        <div>
+                                            <span>Created: </span>
+                                            <em><?=system::format_time($item['created_time'], 3)?></em>
+                                        </div>
+                                        <div>
+                                            <span>Due: </span>
+                                            <em><?=system::format_time($item['due_date'], 2)?></em>
+                                        </div>
+                                        <div>
+                                            <span>Reference: </span><em><?=decoct($item['delivery_id'])?></em>
+                                        </div>
+                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                            <a data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php }?>
+        </div>
+    </div>
+</div>
+<template>
+    <?php include __DIR__.'/create_delivery.html';?>
+    <?php include __DIR__.'/delivery_items.html';?>
+    <div>
+        <?=$delivery_tpl?>
+    </div>
+    <?php include __DIR__.'/add_delivery.html';?>
+</template>
+<style>
+    .mySwal{
+        min-width: 80%;
+    }
+    .mySwal table, .mySwal tr, .mySwal th, .mySwal tr:hover{
+        background-color: #fff;
+        box-shadow: none;
+        border: none;
+    }
+    .mySwal label, .smallSwal label{
+        text-align: left;
+        display: block;
+    }
+    .selectsearchbox{
+        position: absolute;
+        left: 0;
+        background-color: #fff;
+        display: inline-block;
+        width: 100%;
+        text-align: left;
+        z-index: 4;
+    }
+    .selectsearchbox ul{
+        box-shadow: 0 0 3px #999;
+    }
+    .selectsearchbox li{
+        background-color: #fff;
+        padding: .2em .6em;
+        cursor: pointer;
+    }
+    .selectsearchbox li:hover{
+        font-weight: bold;
+    }
+    .uppercase{
+        text-transform: uppercase;
+    }
+    .numbered-table {
+        counter-reset: row-num -1;
+    }
+    .numbered-table tr {
+        counter-increment: row-num;
+    }
+    .numbered-table tr td:first-child::before {
+        content: counter(row-num) " ";
+    }
+</style>
+<script>
+    const check_selection = (name)=>{
+        let elem = window.event.target;
+        if(elem.parentNode.tagName == 'TD'){
+            let opt = elem.options[elem.options.selectedIndex];
+            console.log(opt);
+            elem.parentNode.parentNode.children[2].innerHTML = opt.getAttribute('data-desc');
+            elem.parentNode.parentNode.children[3].children[1].innerHTML = opt.getAttribute('data-unit');
+            elem.parentNode.parentNode.children[4].children[0].value = opt.getAttribute('data-price');
+            return;
+        }
+        let price = elem.children[window.event.target.options.selectedIndex].getAttribute('data-price');
+        if(elem.name == 'product[]'){
+            elem.parentNode.nextElementSibling.nextElementSibling.children[1].value = price;
+        }
+    }
+    const view_delivery = ()=>{
+        let elem = window.event.target,
+            frm = document.querySelector('template').content.cloneNode(true).children[1],
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            htz = frm.querySelector('tbody tr');
+            frm.querySelector('[name=delivery]').value = jsx.delivery_id;
+        let tmp = '', sn = 0;
+        [...jsx.delivery_items].forEach(item=>{
+            item.sn = ++sn;
+            item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
+            item.total_price = parseInt(item.qty) * parseInt(item.price);
+            tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
+        });
+        frm.querySelector('tbody tr').outerHTML = tmp;
+        Swal.fire({
+            html: frm,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        document.querySelector('.mySwal form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let fd = new FormData(evt.target);
+            //fd.append('save_delivery_items',1)
+            ajax(
+                window.location.href,
+                response=>{
+                    Swal.fire({
+                        html: response,
+                        icon:'info'
+                    })
+                    .then(any=>{
+                        window.location.reload();
+                    });
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fd
+            );
+        });
+    };
+    const print_preview = ()=>{
+        let elem = window.event.target,
+            tplx = document.querySelector('template').content.cloneNode(true).children[2],
+            json = JSON.parse(elem.parentNode.getAttribute('data-json'));
+        
+        let temp = tplx.querySelector(`#branch_${json.owner_branch}`);
+        if(!temp) temp = tplx.querySelector('#branch_0');
+        tplx = temp;
+        /* copy */
+        //let json = JSON.parse(elem.getAttribute('data-json'));
+
+        json.total = 0;
+        json.grand_total = 0;
+
+        let tmp = '', sn = 0;
+        let reli = json.delivery_items;
+        for(x in reli) {
+            let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
+                itotal = item_total.toLocaleString('en-US'),
+                price = reli[x].price.toLocaleString('en-US'),
+                xyz = '';
+            if(reli[x].unit == 'People') {
+                reli[x].unit = 'LUMPSUM';
+                xyz = '';
+            }
+            else xyz = reli[x].qty;
+            if(reli[x].qty == 1) reli[x].unit = reli[x].unit_single;
+            else reli[x].unit = reli[x].unit_prural;
+            
+            tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
+                <td>${reli[x].product}</td>
+                <td>${reli[x].item_desc}</td>
+                <td>${xyz} ${reli[x].unit}</td>
+                <td>${price}</td>
+                <td style="text-align: right;">${itotal}</td></tr>`;
+            json.total += item_total;
+        }
+        //console.log(tmp[sn]);
+        json.VAT = (json.total * 0.18);
+        json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
+        json.VAT = json.VAT.toLocaleString('en-US');
+        json.total = json.total.toLocaleString('en-US');
+        json.order_id = 6891+parseInt(json.delivery_id);
+        //let tpl = document.getElementById('delivery-tpl').content.cloneNode(true);
+        tplx.querySelector('#items_list').outerHTML = tmp;
+
+        json.created_time = json.created_time.slice(0, 10);
+        json.due_date = json.due_date.slice(0, 10);
+
+        htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
+        Swal.fire({
+            html:htmlContent,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        /* end */
+        /*Swal.fire({
+            html: tmp,
+            customClass: 'mySwal'
+        });*/
+    };
+    const delete_delivery = (delivery_ref)=>{
+        let elem = window.event.target,
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            ref = decToOctal(delivery_ref);
+        Swal.fire({
+            icon: 'question',
+            html: `Delete delivery with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
+            showCancelButton: true
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let dt = new FormData();
+                dt.append('delete_delivery', delivery_ref);
+                dt.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon: 'error',
+                            html: error
+                        });
+                    },
+                    dt
+                );
+            }
+        });
+    };
+    const update_price = ()=>{
+        let elem = window.event.target.parentNode.parentNode;
+        let prc = parseInt(elem.children[3].children[0].value) *  parseInt(elem.children[4].children[0].value);
+        elem.children[5].innerText = prc;
+    };
+    const update_total_price = ()=>{
+        let elem = window.event.target.parentNode.parentNode;
+        let price = parseInt(elem.children[1].children[1].value) *  parseInt(elem.children[2].children[1].value);
+        elem.children[3].children[1].value = price;
+    };
+    const decToOctal = (n)=>{
+        
+        // array to store octal number
+        let octalNum = new Array(100);
+
+        // counter for octal number array
+        let i = 0;
+        while (n != 0) {
+
+            // storing remainder in octal array
+            octalNum[i] = n % 8;
+            n = Math.floor(n / 8);
+            i++;
+        }
+        let tmp = '';
+        // printing octal number array in reverse order
+        for (let j = i - 1; j >= 0; j--){
+            tmp += octalNum[j];
+        }
+        return tmp;
+    }
+    const create_delivery = ()=>{
+        let formx = document.querySelector('template').content.cloneNode(true).children[0];
+        Swal.fire({
+            title: 'Add Delivery',
+            html: formx,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        search_select();
+        let form = document.querySelector('.mySwal form');
+        if(form != null){
+            form.addEventListener( 
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    fd.append('ajax_request',1);
+                    ajax(
+                        window.location.href,
+                        response=>{
+                            Swal.fire({
+                                html: response,
+                                icon:'info'
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        error=>{
+                            Swal.fire(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    }
+    const add_delivery = ()=>{
+        let formy = document.querySelector('template').content.cloneNode(true).children[3];
+        Swal.fire({
+            title: 'Create tax delivery',
+            html: formy,
+            customClass:'smallSwal',
+            showConfirmButton:false
+        });
+        search_select();
+        let form = document.querySelector('.smallSwal form');
+        if(form != null){
+            form.addEventListener( 
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    fd.append('ajax_request',1);
+                    ajax(
+                        window.location.href,
+                        response=>{
+                            Swal.fire({
+                                html: response,
+                                icon:'info'
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        error=>{
+                            Swal.fire(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    }
+    function replicate_items() {
+        let btn = window.event.target.parentNode.parentNode.parentNode;
+        btn.insertAdjacentHTML('afterEnd', btn.cloneNode(true).outerHTML);
+        search_select();
+    }
+    function delete_item() {
+        let btn = window.event.target.parentNode.parentNode.parentNode;
+        let html = btn.parentNode.removeChild(btn);
+    }
+    const delete_item_row = idx=>{
+        let elem = window.event.target;
+        elem.className = 'fa fa-spinner fa-spin';
+        let fdx = new FormData();
+        fdx.append('delete_item', idx);
+        ajax(
+            window.location.href,
+            response=>{
+                if(response == 'ok') {
+                    elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
+                    // TO DO: re-arrange numbers
+                }
+                else elem.className = 'fa fa-trash-alt';
+            },
+            error=>{
+                Swal.fire(error);
+            },
+            fdx
+        );
+    };
+    const add_item_row = ()=>{
+        let elem = window.event.target;
+        let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[0].children[2].children[0].children[1];
+        let tr = `<tr><td></td><td>${sel.outerHTML}</td><td>N/A</td><td><input name="qtyx[]" style="width: 72px;" value="0" onchange="update_price()" onkeyup="update_price()"><span>?</span></td><td><input name="prcx[]" style="width: 72px;" onchange="update_price()" onkeyup="update_price()"></td><td>0</td><td><a onclick="remove_item_row" class="fa fa-trash"></a></td></tr>`;
+        elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
+        //console.log(sel);
+    }
+    const search_select = ()=>{
+        let sels = document.querySelectorAll('select');
+        if(!sels) return;
+        let sbx = '<div class="selectsearchbox"><input type="search" placeholder="Search..."></div>';
+        [...sels].forEach(sel=>{
+            sel.addEventListener('click', evt=>{
+                evt.target.parentNode.style.position = 'relative';
+                evt.target.insertAdjacentHTML('afterEnd', sbx);
+                sel.nextElementSibling.children[0].focus();
+                sel.nextElementSibling.children[0].addEventListener('blur', ev=>{
+                    setTimeout(fn=>{
+                        ev.target.parentNode.outerHTML = '';
+                    }, 400);
+                });
+                let opts = sel.innerHTML.replaceAll('option','li');
+                sel.nextElementSibling.insertAdjacentHTML('beforeEnd', `<ul>${opts}</ul>`);
+                let ul = sel.nextElementSibling.querySelector('ul');
+                ul.addEventListener('click', e=>{
+                    sel.value = e.target.getAttribute('value');
+                    sel.dispatchEvent(new Event('change'));
+                });
+                sel.nextElementSibling.children[0].addEventListener('keyup', evx=>{
+                    let li = evx.target.nextElementSibling.querySelectorAll('li');
+
+                    let filter = evx.target.value.toUpperCase();
+                    for (i = 0; i < li.length; i++) {
+                        txtValue = li[i].textContent || li[i].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            li[i].style.display = "";
+                        } else {
+                            li[i].style.display = "none";
+                        }
+                    }
+                });
+            });
+        });
+
+    }
+    search_select();
+</script>

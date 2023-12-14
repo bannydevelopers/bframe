@@ -63,6 +63,11 @@
                         "href":"/plugin/Sales/local_purchase_order",
                         "icon":"",
                         "permission":"view_local_purchase_order"
+                    }, {
+                        "name":"Delivery",
+                        "href":"/plugin/Sales/delivery",
+                        "icon":"",
+                        "permission":"view_delivery"
                     }
                 ]
             }
