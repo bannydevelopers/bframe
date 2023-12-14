@@ -1,0 +1,33 @@
+<form method="post">
+    <h3>Request resource</h3>
+    <div class="flex">
+        <div>
+            <label>Resource type</label>
+            <select name="resource_type" onchange="update_resources()">
+                <option value="">Choose...</option>
+                <option value="staff">Staff</option>
+                <option value="tools">Tool</option>
+                <option value="products">Deliverable</option>
+                <option value="money">Money</option>
+            </select>
+        </div>
+        <div>
+            <label>Quantity</label>
+            <input type="number" name="resource_quantity" placeholder="...quantity">
+        </div>
+    </div>
+    <div>
+        <label>Resource</label>
+        <select name="resource_reference">
+        </select>
+    </div>
+    <div>
+        <label>Project</label>
+        <select name="resource_activity">
+            <option value="">Choose...</option>
+            <?php foreach($projects as $pr){?>
+            <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
+            <?php }?>
+        </select>
+    </div>
+</form>
