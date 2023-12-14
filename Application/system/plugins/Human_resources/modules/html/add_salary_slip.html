@@ -1,62 +1,53 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="flex">
-            <div class="contentx">
-             <div class="white content">
-                <div>
-                    <label for="employee">Employee name</label>
-                    <select name="employee" id="employee" onchange="add_form('employee')" required>
-                        <option value="">Choose...</option>
-                        <?php foreach($employees as $user){?>
-                            <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
-                        <?php }?>    
-                    </select>
-                </div><br>
-                <div class="flex">
-                    <div>
-                        <label for="basic_salary">Basic salary</label>
-                        <input type="number" name="basic_salary" value="0" required />
-                    </div>
-                    <div>
-                        <label for="allowance">Allowance</label>
-                        <input type="number" name="allowance" value="0" required />
-                    </div>
-                </div><br>
-                <div class="flex">
-                    <div><label for="bonus">Bonus</label>
-                     <input type="number" name="bonus" value="0" required />
-                    </div>
-                    <div><label for="payee">Payee</label>
-                     <input type="number" name="payee" value="0" required />
-                     </div>   
-                </div><br>
-                <div class="flex">
-                    <div>
-                        <label for="health_insurance_fund">Health insurance fund</label>
-                        <input type="number" name="health_insurance_fund" value="0" required />
-                    </div><br>
-                    <div>
-                        <label for="social_security_fund">Social security fund</label>
-                        <input type="number" name="social_security_fund" value="0" required />
-                    </div>
-                </div><br>
-                <div class="flex">
-                    <div>
-                        <label for="worker_compasion_fund">Worker compasion fund</label>
-                        <input type="number" name="worker_compasion_fund" value="0" required />
-                    </div>
-                    <div>
-                        <label for="Education fund">Education fund</label>
-                        <input type="number" name="education_fund" value="0" required />
-                    </div>
-                </div><br>
-                <label for="other_deductions">Other deductions</label>
-                <input type="number" name="other_deduction" value="0" required />
 
-            </div>
+    <div class="card-body row">
+        <div class="mb-3 col-md-6">
+            <label for="employee" class="form-label">Employee name</label>
+            <select name="employee" class="form-select" id="employee" onchange="add_form('employee')" required>
+                <option value="">Choose...</option>
+                <?php foreach($employees as $user){?>
+                    <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
+                <?php }?>    
+            </select>
         </div>
-
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="basic_salary">Basic salary</label>
+            <input class="form-control" type="number" name="basic_salary" value="0" required />
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="allowance">Allowance</label>
+            <input class="form-control" type="number" name="allowance" value="0" required />
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="bonus">Bonus</label>
+            <input class="form-control" type="number" name="bonus" value="0" required />
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="payee">Payee</label>
+            <input class="form-control" type="number" name="payee" value="0" required /> 
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="health_insurance_fund">Health insurance fund</label>
+            <input class="form-control" type="number" name="health_insurance_fund" value="0" required />
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="social_security_fund">Social security fund</label>
+            <input class="form-control" type="number" name="social_security_fund" value="0" required />
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="worker_compasion_fund">Worker compasion fund</label>
+            <input class="form-control" type="number" name="worker_compasion_fund" value="0" required />
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="Education fund">Education fund</label>
+            <input class="form-control" type="number" name="education_fund" value="0" required />
+        </div>
+        <div class="mb-3 col-md-6">
+            <label class="form-label" for="other_deductions">Other deductions</label>
+            <input class="form-control" type="number" name="other_deduction" value="0" required />
+        </div>
     </div>
-    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>

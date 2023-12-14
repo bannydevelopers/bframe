@@ -7,14 +7,16 @@
 <br>
 
   <div>
-    <div class="flex cards">
+    <div class="row">
         <?php foreach($designations as $desn){?>
-            <div class="content rounded">
-                <h4><?=$desn['designation_name']?></h4>
-                <div><?=$desn['designation_description']?></div>
-                <div style="text-align: right;">
-                    <a onclick="edit_designation()" data-icon="&#xf056;"></a>
-                    <a onclick="edit_designation()" data-icon="&#xf1f8;"></a>
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="card shadow-none bg-transparent border border-primary mb-3">
+                    <h5 class="card-title"><?=$desn['designation_name']?></h5>
+                    <div class="card-text"><?=$desn['designation_description']?></div>
+                    <div class="text-end">
+                        <a class="btn-sm text-primary" onclick="edit_designation()" data-icon="&#xf056;"></a>
+                        <a class="btn-sm text-danger" onclick="delete_designation()" data-icon="&#xf1f8;"></a>
+                    </div>
                 </div>
             </div>
         <?php }?>

@@ -2,7 +2,7 @@
     <h3 class="pt-1">Staff</h3>
     <div class="">
         <button type="button" onclick="import_staff()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary">Import staff</button>
-        <button type="button" onclick="add_form()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Register staff</button>
+        <button type="button" onclick="add_form('staff')" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Register staff</button>
     </div>
 </div>
 <br>
@@ -28,16 +28,18 @@
                     </thead>
                     <tbody class="table-border-bottom-0">
                         <?php foreach($v as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
+                        <tr data-json='<?=json_encode($st)?>' class="text-start">
+                            <td class="d-flex">
                                 <input type="checkbox" class="form-check-input" name="bank_name[]" value="<?=$st['bank_name']?>">
-                                <span style="max-width: 40px;">
-                                    <img src="<?=user::init()->get_user_avatar($st['user_id'])?>" width="70px" style="border-radius: 4em;">
-                                </span>
-                                <span>
-                                    &nbsp;<strong><?=$st['full_name']?></strong><br>
-                                    &nbsp;<em><?=$st['branch_name']?></em>
-                                </span>
+                                <div class="d-flex">
+                                    <span style="width: 60px; max-width: 60px;">
+                                        <img src="<?=user::init()->get_user_avatar($st['user_id'])?>" width="70px" style="border-radius: 4em;">
+                                    </span>
+                                    <span class="py-1">
+                                        &nbsp;<strong><?=$st['full_name']?></strong><br>
+                                        &nbsp;<em><?=$st['branch_name']?></em>
+                                    </span>
+                                </div>
                             </td>
                             <td>
                                 <?=$st['email']?><br>
@@ -127,10 +129,12 @@
     </div>
     <?php include __DIR__.'/add_staff.html';?>
     <form method="post" enctype="multipart/form-data">
-        <label>CSV file</label>
-        <input type="file" name="staff_list" accept=".csv" required>
-        <div style="text-align: right;padding-top: 1em;">
-            <button type="submit">Save</button>
+        <div class="mb-3">
+            <label for="staff_list" class="form-label">CSV file</label>
+            <input type="file" id="staff_list" class="form-control" name="staff_list" accept=".csv" required>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill">Save</button>
         </div>
     </form>
 </template>

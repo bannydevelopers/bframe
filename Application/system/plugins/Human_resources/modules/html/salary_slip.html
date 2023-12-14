@@ -7,7 +7,7 @@
 <br>
 
 <div class="card bg-white">
-    <div class="table-responsive text-nowrap" >
+    <div class="table-responsive text-nowrap">
         <table class="table table-hover paginate" data-items-per-page="10">
             <thead>
                 <tr>
@@ -24,9 +24,9 @@
             <tbody class="table-border-bottom-0">
                 <?php foreach($salary_slip as $ssp){?>
                 <tr data-json='<?=json_encode($ssp)?>'>
-                    <td>
+                    <td class="d-flex">
                         <input type="checkbox" class="form-check-input" name="staff_id[]" value="<?=$ssp['user_id']?>">
-                        <span>
+                        <span class="ms-2">
                             <strong><?=ucwords($ssp['full_name'])?></strong><br>
                                 <em><?=$ssp['branch_name']?></em>
                         </span>

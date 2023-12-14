@@ -1,4 +1,4 @@
-<form method="post" enctype="multipart/form-data">
+<!--form method="post" enctype="multipart/form-data">
     <div class="white content">
         <label for="product_name">Product name</label>
         <input type="text" id="product_name" name="product_name" placeholder="...name" required />
@@ -39,5 +39,51 @@
             <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
         </div>
+    </div>
+</form> -->
+
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="card-body">
+            <div class="mb-3">
+                <label for="product_name" class="form-label">Product name</label>
+                <input type="text" class="form-control" id="product_name" name="product_name" placeholder="product name..." required />
+            </div>
+            <div class="mb-3">
+                <label for="product_model" class="form-label">Product model</label>
+                <input type="text" class="form-control" id="product_model" name="product_model" placeholder="product model..." required />
+            </div>
+      <div class="d-flex justify-content-between me-3">
+        <div>
+            <label for="product_category" class="form-label">Category</label>
+            <select name="product_category" class="form-select id="product_category" onchange="check_selection('product_category')">
+                <option value="">Choose...</option>
+                <?php foreach($productCategory as $cat){?>
+                <option value="<?=$cat['category_id']?>"><?=$cat['category_name']?></option>
+                <?php }?>
+                <option value="">Add category</option>
+            </select>
+        </div><br>
+        <div class="mb-3">
+            <label for="product_price" class="form-label">Product price</label>
+            <input type="number" min="0" class="form-control" id="product_price" name="product_price" placeholder="product price..." required />
+        </div>
+      </div>
+        <div class="mb-3">
+            <label for="product_image" class="form-label">Product image</label>
+            <input type="file" class="form-control" id="product_image" name="product_image"accept=".jpg, .jpeg, .png, .gif" placeholder="product image..." required />
+        </div>
+        <div class="mb-3">
+            <label for="product_description" class="form-label">Product discription</label>
+            <input type="text" class="form-control" id="product_description" name="product_description" placeholder="clarification of product..." required />
+        </div>
+        <label for="product_unit"class="form-label">Units</label>
+        <div class="d-flex justify-content-between">
+            <input type="text" class="form-control me-3" name="product_unit_singular" placeholder="Singular..." required />
+            <input type="text" class="form-control" name="product_unit_plural" placeholder="Plural..." required />
+        </div>
+    </div>
+    <div class="text-end">
+        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
+        <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
 </form>

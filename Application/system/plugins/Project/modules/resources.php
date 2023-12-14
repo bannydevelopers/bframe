@@ -4,16 +4,15 @@ $is_headquarters = $me['work_location'] == human_resources::get_headquarters_bra
 $whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
 if(isset($_POST['project_name'])){
     $data = [
-        'project_name'=>addslashes($_POST['project_name']),
-        'owner_branch'=>intval($me['work_location']),
-        'project_client'=>intval($_POST['project_client']),
-        'project_manager'=>intval($_POST['project_manager']),
-        'project_budget'=>intval($_POST['project_budget']),
-        'project_location'=>addslashes($_POST['project_location']),
-        'project_start'=>addslashes($_POST['project_start']),
-        'project_end'=>addslashes($_POST['project_end']),
-        'project_desc'=>addslashes($_POST['project_desc']),
-        'created_by'=>$me['user_reference']
+        `resource_type`, 
+        `resource_reference`, 
+        `resource_quantity`, 
+        `resource_requester`, 
+        `resource_activity`, 
+        `resource_status`, 
+        `resource_approver`, 
+        `request_date`, 
+        `approve_date`
     ];
     if(isset($_POST['project_id']))
       $db->update('projects', $data)->where(['project_id'=>intval($_POST['project_id'])])->commit();
@@ -34,7 +33,7 @@ $customer = $db->select('customer')->where($whr)->fetchAll();
 
 $whr = $is_headquarters ? 1 : ['work_location'=>$me['work_location']];
 
-$managers = $db->select('staff', 'user_accounts.full_name, user_accounts.user_id')
+$staff = $db->select('staff', 'user_accounts.full_name, user_accounts.user_id')
                 ->join('user_accounts', 'user_reference=user_id')
                 ->where($whr)
                 ->and(['system_role'=>$moduleconfig->project_manager_role])
@@ -42,21 +41,15 @@ $managers = $db->select('staff', 'user_accounts.full_name, user_accounts.user_id
 
 
 $whr = $is_headquarters ? 1 : "projects.owner_branch={$me['work_location']}";
-$projects = $db->select('projects', 'projects.*, user_accounts.full_name as manager, branches.*, customer.*, uc.full_name as creator')
-                ->join('user_accounts','user_accounts.user_id=projects.project_manager')
-                ->join('branches','owner_branch=branch_id')
-                ->join('customer','project_client=customer_id')
-                ->join('user_accounts as uc','uc.user_id=projects.created_by')
-                ->where($whr)
-                ->fetchAll();
-
+$projects = $db->select('projects')->where($whr)->fetchAll();
+                
 $sortedProjects = [];
-foreach($projects as $proj){
+/*foreach($projects as $proj){
     if(!isset($sortedProjects[$proj['branch_name']])) $sortedProjects[$proj['branch_name']] = [];
     $sortedProjects[$proj['branch_name']][] = $proj;
-}
+}*/
 
 ob_start();
-include __DIR__.'/html/projects.html';
+include __DIR__.'/html/resources.html';
 $body = ob_get_clean();
 $return = ['title'=>' ','body'=>$body];
