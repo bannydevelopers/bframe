@@ -4,47 +4,59 @@
         <h3 class="content white" style="box-shadow:0 0 4px #ccc">Create new user</h3>
     </div>
     <form method="post" class="flex" enctype="multipart/form-data">
-        <div class="contentx">
-            <div class="white content">
-                <label for="full_name">Full name</label>
-                <input type="text" id="full_name" name="full_name" placeholder="Full name" />
-                <!--`user_id`, `full_name`, ``, ``, ``, ``, `role`, `trashed`, `extras`-->
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="E-mail" />
-                <label for="Phone">Phone</label>
-                <input type="number" id="phone" name="phone" placeholder="Phone" />
-                <label for="passcode">Password</label>
-                <input type="password" id="passcode" name="passcode" placeholder="Password" />
-                <div class="flex">
-                    <div>
-                        <label for="status">Status</label>
-                        <select name="status" id="status">
-                            <option value="active">Active</option>
-                            <option value="pending">Pending</option>
-                            <option value="locked">Locked</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="roles">Role</label>
-                        <select name="system_role" id="roles">
-                        <?php foreach($roles as $opt){?>
-                            <option value="<?=$opt['role_id']?>"><?=$opt['role_name']?></option>
-                        <?php }?>
-                        </select>
-                    </div>
+        <div class="card bg-white">
+            <div class="row">
+                <div class="mb-3">
+                    <label class="form-label" for="full_name">Full name</label>
+                    <input class="form-control" type="text" id="full_name" name="full_name" placeholder="Full name" />
+                </div>
+                    <!--`user_id`, `full_name`, ``, ``, ``, ``, `role`, `trashed`, `extras`-->
+                <div class="mb-3">
+                    <label class="form-label" for="email">E-mail</label>
+                    <input class="form-control" type="email" id="email" name="email" placeholder="E-mail" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="Phone">Phone</label>
+                    <input class="form-control" type="number" id="phone" name="phone" placeholder="Phone" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="passcode">Password</label>
+                    <input class="form-control" type="password" id="passcode" name="passcode" placeholder="Password" />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="status">Status</label>
+                    <select class="form-select" name="status" id="status">
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="locked">Locked</option>
+                    </select>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="roles">Role</label>
+                    <select class="form-select" name="system_role" id="roles">
+                    <?php foreach($roles as $opt){?>
+                        <option value="<?=$opt['role_id']?>"><?=$opt['role_name']?></option>
+                    <?php }?>
+                    </select>
                 </div>
             </div>
         </div>
-        <div class="contentx" style="display: flex;flex-direction: column;">
-            <div class="white content">
-                <label for="extras">Custom fields</label>
-                <div style="display: flex;">
-                    <input type="text" class="form-control" name="extras[name][]" placeholder="Field name" style="flex-grow: 1;">
-                    <input type="text" class="form-control" name="extras[value][]" placeholder="Field value" style="flex-grow: 1;">
-                    <a id="addbtn" class="btn btn-sm text-success" data-icon="&#xf0fe;" onclick="addbtn(window.event)"></a>
+        <div class="card bg-white">
+            <div class="rowt">
+                <label class="form-label" for="extras">Custom fields</label>
+                <div class="row">
+                    <div class="col-md-5">
+                        <input class="form-control" type="text" class="form-control" name="extras[name][]" placeholder="Field name" style="flex-grow: 1;">
+                    </div>
+                    <div class="col-md-5">
+                        <input class="form-control" type="text" class="form-control" name="extras[value][]" placeholder="Field value" style="flex-grow: 1;">
+                    </div>
+                    <div class="col-md-2 pt-1">
+                        <a id="addbtn" class="btn btn-sm text-success" data-icon="&#xf0fe;" onclick="addbtn(window.event)"></a>
+                    </div>
                 </div>
             </div>
-            <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+            <div class="text-end">
                 <button type="reset" class="btn btn-sm btn-secondary rounded-pill">Restore</button>
                 <button type="submit" class="btn btn-sm btn-primary rounded-pill">Save</button>
             </div>

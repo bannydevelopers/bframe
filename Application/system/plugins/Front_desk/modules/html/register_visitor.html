@@ -8,21 +8,22 @@
             <label class="form-label">Phone number</label>
             <input type="text" class="form-control" name="visitor_phone" placeholder="...valid phone number">
         </div>
-    <div class="mb-6">
-        <label class="form-label">Host</label>
-        <select  class="form-control mb-3" name="visitor_host">
-            <option value="">Choose...</option>
-        </select>
+        <div class="mb-3">
+            <label class="form-label">Host</label>
+            <select  class="form-control mb-3" name="visitor_host">
+                <option value="">Choose...</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea class="form-control" name="visitor_address" placeholder="...physical address" rows="4"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Visity intension</label>
+            <textarea  class="form-control" name="visitor_intension" placeholder="reason for visiting..." rows="4"></textarea>
+        </div>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Address</label>
-        <textarea class="form-control" name="visitor_address" placeholder="...physical address" rows="4"></textarea>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Visity intension</label>
-        <textarea  class="form-control" name="visitor_intension" placeholder="reason for visiting..." rows="4"></textarea>
-    </div>
-    <div style="text-align: right;">
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
