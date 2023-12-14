@@ -1,33 +1,33 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
     <div class="content-small">
-        <div class="white">
-            <label for="supplier_name">Supplier name</label>
-            <input type="text" id="supplier_name" name="supplier_name" value="" required />
-            <div class="flex">
-                <div>
-                    <label for="supplier_email">E-mail</label>
-                    <input type="email" id="supplier_email" name="supplier_email" value="" required />
+            <div  class="mb-3">
+                <label for="supplier_name" class="form-label">Supplier name</label>
+            <input type="text" id="supplier_name" class="form-control" name="supplier_name" value="" required />
+            </div>
+            <div class=" mb-3">
+                <div >
+                    <label for="supplier_email" class="form-label">E-mail</label>
+                    <input type="email"  class="form-control" id="supplier_email" name="supplier_email" value="" required />
                 </div>
             </div>
-            <div class="flex">
+            <div class=" mb-3">
                 <div>
-                    <label for="supplier_phone_number">Phone Number</label>
-                    <input type="tel" id="supplier_phone_number" name="supplier_phone_number" value="" minlength="10" maxlength="14" required />
+                    <label for="supplier_phone_number" class="form-label">Phone Number</label>
+                    <input type="tel" id="supplier_phone_number" class="form-control" name="supplier_phone_number" value="" minlength="10" maxlength="14" required />
                 </div>
             </div>    
-            <div class="flex">
+            <div class=" mb-3">
                 <div>
-                    <label for="supplier_details">Description</label>
-                    <input type="text" id="supplier_details" name="supplier_details" value="" required />
+                    <label for="supplier_details" class="form-label">Description</label>
+                    <input type="text" id="supplier_details"  class="form-control" name="supplier_details" value="" required />
                 </div>
             </div>          
-            <div class="flex">
+            <div class="mb-3">
                 <div>
-                    <label for="supplier_physical_adress">Residence address</label>
-                    <textarea id="text" name="supplier_physical_adress" rows="5"></textarea>
+                    <label for="supplier_physical_adress"class="form-label" >Residence address</label>
+                    <textarea id="text"  class="form-control" name="supplier_physical_adress" rows="5"></textarea>
                 </div>
             </div>
-        </div>
     </div>
     <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
