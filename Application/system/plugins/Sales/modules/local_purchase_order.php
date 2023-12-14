@@ -108,13 +108,26 @@ $lpo = $db->select('local_purchase_order', $qry)
 $supplier = $db ->select('supplier','supplier_id, supplier_name')
                 ->where($whr)
                 ->fetchAll();
-
-
+                
 $sortedLpo = [];
 foreach($lpo as $prod){
     if(!isset($sortedLpo[$prod['branch_name']])) $sortedLpo[$prod['branch_name']] = [];
     $sortedLpo[$prod['branch_name']][] = $prod;
 }
+$company = [];
+$company[] = storage::get_data('system_config')->company_profile;
+$branches = $db->select('branches', 'branch_id,branch_profile')->where($whr)->fetchAll();
+foreach($branches as $b){
+    if(!$b['branch_profile']) $company[$b['branch_id']] = $default;
+    else $company[$b['branch_id']] = json_decode($b['branch_profile']);
+}
+
+ob_start();
+$dir = realpath(__DIR__.'/html/lpo_tpl');
+foreach(scandir($dir) as $filename){
+    if(pathinfo("{$dir}/{$filename}", PATHINFO_EXTENSION) == 'html') include "{$dir}/{$filename}";
+}
+$lpo_tpl = ob_get_clean();
 
 //var_dump($db->error(), $sortedLpo);
 

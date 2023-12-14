@@ -32,5 +32,9 @@
     "view_local_purchase_order",
     "add_local_purchase_order",
     "edit_local_purchase_order",
-    "delete_local_purchase_order"
+    "delete_local_purchase_order",
+    "add_delivery",
+    "edit_delivery",
+    "view_delivery",
+    "delete_delivery"
 ]

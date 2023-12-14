@@ -1,27 +1,26 @@
 <form method="post">
-    <div class="flex">
-        <div>
-            <label>Visitor name</label>
-            <input type="text" name="visitor_name" placeholder="...visitor's real name" onkeyup="search_visitors()">
+    <div class="row">
+        <div class="mb-3 col-md-6" >
+            <label class="form-label">Visitor name</label>
+            <input type="text" class="form-control" name="visitor_name" placeholder="...visitor's real name" onkeyup="search_visitors()">
         </div>
-        <div>
-            <label>Phone number</label>
-            <input type="text" name="visitor_phone" placeholder="...valid phone number">
+        <div class="mb-3 col-md-6">
+            <label class="form-label">Phone number</label>
+            <input type="text" class="form-control" name="visitor_phone" placeholder="...valid phone number">
         </div>
-    </div>
-    <div>
-        <label>Host</label>
-        <select name="visitor_host">
+    <div class="mb-6">
+        <label class="form-label">Host</label>
+        <select  class="form-control mb-3" name="visitor_host">
             <option value="">Choose...</option>
         </select>
     </div>
-    <div>
-        <label>Address</label>
-        <textarea name="visitor_address" placeholder="...physical address" rows="4"></textarea>
+    <div class="mb-3">
+        <label class="form-label">Address</label>
+        <textarea class="form-control" name="visitor_address" placeholder="...physical address" rows="4"></textarea>
     </div>
-    <div>
-        <label>Visity intension</label>
-        <textarea name="visitor_intension" placeholder="reason for visiting..." rows="4"></textarea>
+    <div class="mb-3">
+        <label class="form-label">Visity intension</label>
+        <textarea  class="form-control" name="visitor_intension" placeholder="reason for visiting..." rows="4"></textarea>
     </div>
     <div style="text-align: right;">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
