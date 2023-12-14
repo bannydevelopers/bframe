@@ -49,7 +49,7 @@ $projects = $db->select('projects', 'projects.*, user_accounts.full_name as mana
                 ->join('user_accounts as uc','uc.user_id=projects.created_by')
                 ->where($whr)
                 ->fetchAll();
-
+                
 $sortedProjects = [];
 foreach($projects as $proj){
     if(!isset($sortedProjects[$proj['branch_name']])) $sortedProjects[$proj['branch_name']] = [];
@@ -57,6 +57,6 @@ foreach($projects as $proj){
 }
 
 ob_start();
-include __DIR__.'/html/projects.html';
+include __DIR__.'/html/resources.html';
 $body = ob_get_clean();
 $return = ['title'=>' ','body'=>$body];
