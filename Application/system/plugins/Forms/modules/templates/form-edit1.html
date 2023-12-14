@@ -2,18 +2,14 @@
     <div class="flex">
         <h1 class="content-small"><?=@$page['page_name']?></h1>
         <span style="flex-grow: 0;">
-            <button type="submit" data-icon="&#xf0c7;" class="btn btn-primary rounded">SAVE</button>
+            <button type="submit" data-icon="&#xf0c7;" class="plain-btn xl">SAVE</button>
         </span>
     </div>
     <div  class="tab-view">
-        <input type="radio" name="tabx" id="tab_1" checked>
-        <label for="tab_1"><h5 class="card-header">Form details</h5></label>
-        <input type="radio" name="tabx" id="tab_2">
-        <label for="tab_2"><h5 class="card-header">Form fields</h5></label>
-        <input type="radio" name="tabx" id="tab_3">
-        <label for="tab_3"><h5 class="card-header">Form configs</h5></label>
-        <input type="radio" name="tabx" id="tab_4">
-        <label for="tab_4"><h5 class="card-header">Submit message</h5></label>
+        <input type="radio" name="tabx" id="tab_1" checked><label for="tab_1">Form details</label>
+        <input type="radio" name="tabx" id="tab_2"><label for="tab_2">Form fields</label>
+        <input type="radio" name="tabx" id="tab_3"><label for="tab_3">Form configs</label>
+        <input type="radio" name="tabx" id="tab_4"><label for="tab_4">Submit message</label>
         <div class="tab-panes">
             <div>
                 <div>
@@ -23,26 +19,24 @@
             </div>
             <div id="form-fields-panel">
                 <div class="flex">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="pt-1"></h3>
-                        </div>
+                    <div class="content" style="order: 2;flex-basis: 100%;">
+                        <h3>Form elements</h3>
                         <div id="drag-pane" class="flex">
-                            <h5 class="card border border-secondary">
+                            <h3 class="highlight">
                                 Heading
-                            </h5>
-                            <p class="card border border-secondary">
+                            </h3>
+                            <p class="highlight">
                                 Text paragraph
                             </p>
-                            <div class="form-element card border border-secondary">
+                            <div class="form-element highlight">
                                 <label>Text box</label>
                                 <input type="text" name="text" placeholder="Text box" />
                             </div>
-                            <div class="form-element card border border-secondary">
+                            <div class="form-element highlight">
                                 <label>Textarea</label>
                                 <textarea name="textarea" placeholder="Textarea"></textarea>
                             </div>
-                            <div class="form-element card border border-secondary">
+                            <div class="form-element highlight">
                                 <label>Select</label>
                                 <select name="select">
                                     <option value="">Choose...</option>
@@ -50,23 +44,23 @@
                                     <option value="option2">Option 2</option>
                                 </select>
                             </div>
-                            <div class="form-element card border border-secondary">
+                            <div class="form-element highlight">
                                 <label>Date picker</label>
                                 <input type="date" name="date" />
                             </div>
-                            <div class="form-element card border border-secondary">
+                            <div class="form-element highlight">
                                 <label>E-mail</label>
                                 <input type="email" name="email" placeholder="E-mail" />
                             </div>
-                            <div class="form-element card border border-secondary">
+                            <div class="form-element highlight">
                                 <label>Number</label>
                                 <input type="number" name="number" placeholder="Number" />
                             </div>
-                            <div class="form-element card border border-secondary">
+                            <div class="form-element highlight">
                                 <label>Telephone</label>
                                 <input type="tel" name="phone" placeholder="Phone number" />
                             </div>
-                            <div class="flex drop-zone card border border-secondary">
+                            <div class="flex drop-zone highlight">
                                 <div class="drop-zone highlight">
                                     <p class="dummy">Col 1</p>
                                 </div>
@@ -74,8 +68,8 @@
                                     <p class="dummy">Col 2</p>
                                 </div>
                             </div>
-                            <div class="card border border-secondary text-end">
-                                <button type="submit" class="btn btn-sm btn-primary" style="width: 100px;">Send</button>
+                            <div class="highlight" style="text-align: right;">
+                                <button type="submit">Send</button>
                             </div>
                         </div>
                     </div>
@@ -84,59 +78,72 @@
                     </div>
                 </div>
             </div>
-            <div class="container-fluid">
-                <div class="col-md my-3">
-                    <lable class="fw-bold d-block form-label">Form action</lable>
-                    <div class="form-check form-check-inline mt-3">
-                        <input class="form-check-input" type="checkbox" name="page_extras[form_send_as_email]" id="inlineCheckbox1" />
-                        <label class="form-check-label" for="form_send_as_email"  for="inlineCheckbox1">Send as e-mail</label>
+            <div class="content">
+                <div>
+                    <label for="page_title">Form action</label>
+                    <div class="flex content">
+                        <span>
+                            <input name="page_extras[form_send_as_email]" id="form_send_as_email" type="checkbox">
+                            Send as e-mail
+                        </span>
+                        <span>
+                            <input name="page_extras[form_save_to_db]" id="form_send_as_email" type="checkbox">
+                            Save to database
+                        </span>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" name="page_extras[form_save_to_db]" id="form_send_as_email" type="checkbox" />
-                        <label class="form-check-label" for="form_send_as_email">Save to database</label>
+                </div>
+                <div class="flex">
+                    <div>
+                        <label for="page_name">E-mail for alert</label>
+                        <input type="text" name="page_name" id="page_name" value="<?=@$page['page_name']?>" placeholder="Aplha-numeric text" />
+                    </div>
+                    <div>
+                        <label for="page_parent">Page parent</label>
+                        <select name="page_parent" id="page_parent">
+                            <option value="0">No parent</option>
+                            <?php foreach($pages as $p){?>
+                            <option value="<?=@$p['page_id']?>"<?=($page['page_parent'] == $p['page_id'] ? ' selected' : '')?>><?=@$p['page_name']?></option>
+                            <?php }?>
+                        </select>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="page_name" class="form-label">E-mail for alert</label>
-                    <input type="text" class="form-control" id="page_name" name="page_name"  placeholder="Aplha-numeric text" value="<?=@$page['page_name']?>" />
+                <div class="flex">
+                    <p>
+                        <label for="page_title">Page name</label>
+                        <input type="text" name="page_title" id="page_title" value="<?=@$page['page_title']?>" placeholder="Aplha-numeric text" />
+                    </p>
+                    <p>
+                        <label for="page_name">Page address(URL)</label>
+                        <input type="text" name="page_name" id="page_name" value="<?=@$page['page_name']?>" placeholder="Aplha-numeric text" />
+                    </p>
                 </div>
-                <div class="mb-3">
-                  <label for="page_parent" class="form-label">Page parent</label>
-                  <select name="page_parent" id="page_parent" onchange="update_parties()" class="form-select">
-                    <option value="0">No parent</option>
-                    <?php foreach($pages as $p){?>
-                    <option value="<?=@$p['page_id']?>"<?=($page['page_parent'] == $p['page_id'] ? ' selected' : '')?>><?=@$p['page_name']?></option>
-                    <?php }?>
-                  </select>
+                <div class="flex">
+                    <p>
+                        <label for="page_icon" data-icon="<?=@$page['page_icon']?>">Form icon</label>
+                        <input type="text" name="page_icon" value="<?=@$page['page_icon']?>" onchange="this.previousElementSibling.setAttribute('data-icon', this.value)">
+                    </p>&nbsp;
+                    <p>
+                        <label for="page_order">Navigation order</label>
+                        <input type="number" name="page_order" value="<?=intval(@$page['page_order'])?>" min="0">
+                    </p>&nbsp;
                 </div>
-                <div class="mb-3">
-                    <label for="page_title" class="form-label">Page name</label>
-                    <input type="text" class="form-control" id="page_title" name="page_title"  value="<?=@$page['page_title']?>" placeholder="Aplha-numeric text" />
+                <div class="flex">
+                    <div>
+                        <label for="page_desc">Form intro</label>
+                        <textarea name="page_desc" id="page_desc" rows="6"></textarea>
+                    </div>
+                    <div>
+                        <label for="page_keywords">SEO keywords</label>
+                        <textarea name="page_keywords" id="page_keywords" rows="6"></textarea>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="page_address" class="form-label">Page address(URL)</label>
-                    <input type="text" class="form-control" id="page_address" name="page_address"  placeholder="Aplha-numeric text" value="<?=@$page['page_name']?>" />
-                </div>
-                <div class="mb-3">
-                    <label for="page_icon" class="form-label">Form icon</label>
-                    <input type="text" class="form-control" id="page_icon" name="page_icon"  value="<?=@$page['page_icon']?>" data-icon="<?=@$page['page_icon']?>" placeholder="Aplha-numeric text" onchange="this.previousElementSibling.setAttribute('data-icon', this.value)"/>
-                </div>
-                <div class="mb-3">
-                    <label for="page_order" class="form-label">Navigation order</label>
-                    <input type="number" class="form-control" id="page_order" name="page_order"  placeholder="Aplha-numeric text" value="<?=intval(@$page['page_order'])?>" min="0"/>
-                </div>
-                <div class="mb-3">
-                    <label for="page_desc" class="form-label">Form intro</label>
-                    <textarea id="page_desc" class="form-control" rows="6" name="page_desc" placeholder="Debt description"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="page_keywords" class="form-label">SEO keywords</label>
-                    <textarea id="page_keywords" class="form-control" rows="6" name="page_keywords" placeholder="Debt description"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="debt_description" class="form-label">Message after submit</label>
-                    <textarea id="debt_description" class="form-control" rows="6" name="page_extras[thanks_msg]" placeholder="Debt description"><?=htmlspecialchars_decode(@$page['page_extras']['thanks_msg'].'')?></textarea>
-                </div>
+            </div>
+            <div>
+                <p>
+                    <label>Message after submit</label>
+                    <textarea name="page_extras[thanks_msg]" class="tinymce"><?=htmlspecialchars_decode(@$page['page_extras']['thanks_msg'].'')?></textarea>
+                </p>
+            </div>
         </div>
     </div>
 </form>

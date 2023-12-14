@@ -1,0 +1,24 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="asset_name" class="form-label">Asset name</label>
+            <input type="text" class="form-control" id="asset_name" name="asset_name" required />
+        </div>
+        <div class="mb-3">
+            <label for="asset_no" class="form-label">Asset number</label>
+            <input type="text" class="form-control" id="asset_no" name="asset_no" required />
+        </div>
+        <div class="mb-3">
+          <label for="asset_status" class="form-label">Status</label>
+          <select id="asset_status" name="asset_status" class="form-select">
+            <option value="active">Active</option>
+            <option value="defective">Defective</option>
+            <option value="retired">Retired</option>
+          </select>
+        </div>
+    </div>
+    <div class="text-end">
+        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
+        <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
+    </div>
+</form>

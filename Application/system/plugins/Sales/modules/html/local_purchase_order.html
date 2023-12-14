@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center">
-    <h3 class="pt-1">local purchase order</h3>
+    <h3 class="pt-1">Local purchase order</h3>
     <div class="">
         <button type="button" onclick="create_lpo()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Create LPO</button>
     </div>
@@ -15,40 +15,46 @@
         <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedLpo as $branch=>$lpo){?>
-            <div>
-                <div class="tab-view" style="text-align: right;">
-                    <input type="radio" name="itab<?=$branch?>" id="class_tab12<?=$branch?>" checked>
-                    <label for="class_tab12<?=$branch?>">Proforma</label>
-                    <input type="radio" name="itab<?=$branch?>" id="class_tab22<?=$branch?>">
-                    <label for="class_tab22<?=$branch?>">Tax</label>
-                    <div class="tab-panes" style="text-align: left;">
-                        <div class="white flex cards">
-                            <?php foreach($invoices['local purchase order'] as $item){?>
-                                <div class="content rounded">
-                                    <div>
-                                        <span>Created: </span>
-                                        <em><?=system::format_time($item['created_time'], 3)?></em>
-                                    </div>
-                                    <div>
-                                        <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
-                                    </div>
-                                    <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                        <?php if($item['reference_invoice']){?>
-                                        <a data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
-                                        <?php }else{?>
-                                        <a data-icon="&#xf06e;" onclick="view_invoice()"></a>
-                                        <?php }?>
-                                        <a data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                        <?php if(!$item['reference_invoice']){?>
-                                        <a data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
-                                        <?php }?>
-                                    </div>
+            <?php foreach($sortedLpo as $branch=>$invoices){?>
+            <div class="table-responsive text-nowrap" >
+                <table class="table table-hover paginate" data-items-per-page="10">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Lpo number</th>
+                            <th>Proforma no</th>
+                            <th>Created date</th>
+                            <th>Supplier</th>
+                            <th>Prepared by</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <?php foreach($invoices as $kx=>$st){?>
+                        <tr data-json='<?=json_encode($st)?>'>
+                            <td><?=++$kx?></td>
+                            <td><?=$st['lpo_no']?></td>
+                            <td><?=$st['proforma_no']?></td>
+                            <td><?=system::format_time($st['created_date'])?></td>
+                            <td><?=$st['supplier_name']?></td>
+                            <td><?=$st['full_name']?></td>
+                            <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
+                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                <a onclick="view_lpo_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View items</a>
+                                <a onclick="edit_lpo()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit lpo</a>
+                                <a onclick="delete_lpo()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete lpo</a>
                                 </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
+                            </div>
+                            </td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
             </div>
             <?php }?>
         </div>
@@ -123,7 +129,7 @@
             elem.parentNode.nextElementSibling.nextElementSibling.children[1].value = price;
         }
     }
-    const view_invoice = ()=>{
+    const view_lpo_items = ()=>{
         let elem = window.event.target,
             frm = document.querySelector('template').content.cloneNode(true).children[1],
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
@@ -225,10 +231,10 @@
             customClass: 'mySwal'
         });*/
     };
-    const delete_invoice = (invoice_ref)=>{
+    const delete_lpo = (lpo_ref)=>{
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
-            ref = decToOctal(invoice_ref);
+            ref = decToOctal(lpo_ref);
         Swal.fire({
             icon: 'question',
             html: `Delete invoice with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
@@ -237,7 +243,7 @@
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let dt = new FormData();
-                dt.append('delete_invoice', invoice_ref);
+                dt.append('delete_lpo', lpo_ref);
                 dt.append('ajax_request', 1);
                 ajax(
                     window.location.href,
