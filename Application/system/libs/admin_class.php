@@ -176,7 +176,9 @@ class admin{
         }
 
         $user = user::init()->get_session_user('full_name');
-        return $this->display('dashboard',"Howdy, {$user}!");
+        $greetings = ['Howdy', 'Hello', 'Hi', 'Hey'];
+        shuffle($greetings);
+        return $this->display('dashboard',"{$greetings[0]}, {$user}!");
     }
     public function load_pages($addr){
         $obj = new static();
