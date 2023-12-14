@@ -16,11 +16,6 @@
             <input type="number" class="form-control" name="resource_quantity" placeholder="...quantity">
         </div>
         <div class="mb-3">
-            <label class="form-label">Resource</label>
-            <select  class="form-control" name="resource_reference">
-            </select>
-        </div>
-        <div class="mb-3">
             <label class="form-label">Project</label>
             <select class="form-control" name="resource_activity">
                 <option value="">Choose...</option>
@@ -29,16 +24,12 @@
                 <?php }?>
             </select>
         </div>
-        <div class="text-end mt-3">
-            <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
-            <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
-        </div>
     </div>
     <div>
         <label>Description</label>
         <textarea name="request_desc" placeholder="...little description about the requested resource" rows="4"></textarea>
     </div>
-    <div style="text-align: right;">
-        <button type="submit" class="btn">Submit</button>
+    <div class="text-end mt-3">
+        <button type="submit" class="btn rounded-pill btn-primary">Save</button>
     </div>
 </form>
