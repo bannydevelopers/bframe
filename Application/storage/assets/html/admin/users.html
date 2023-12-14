@@ -6,10 +6,10 @@
 </div>
 <br>
 
-<div class="flex cards">
+<div class="row">
   <?php foreach($users as $user){?>
-  <div>
-    <h3 class="grey  left" style="font-size: 1.1em;display: flex;padding: 4px 0;">
+  <div class="col-md-6 col-lg-4">
+    <h3 class="grey left" style="font-size: 1.1em;display: flex;padding: 4px 0;">
       <span style="flex-basis: 100%;" class="content-small"><?=$user['full_name']?></span>
       <span style="white-space: nowrap;">
           <a class="text-primary" onclick="view_user(`<?=$user['user_id']?>`)" data-icon="&#xf06e;"></a>
@@ -36,17 +36,6 @@
   </div>
   <?php }?>
 </div>
-<style>
-  .cards{
-    justify-content: left;
-  }
-  .cards > * .left{
-    text-align: left;
-  }
-  .cards > *{
-    min-width: 47%;
-  }
-</style>
 <script>
   const request_uri = '<?=$url?>';
   const pop_roles = function(id,name){
