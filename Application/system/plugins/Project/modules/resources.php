@@ -39,8 +39,10 @@ $staff = $db->select('staff', 'user_accounts.full_name, user_accounts.user_id')
                 ->and(['system_role'=>$moduleconfig->project_manager_role])
                 ->fetchAll();
 
+$whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
 
-$whr = $is_headquarters ? 1 : "projects.owner_branch={$me['work_location']}";
+$products = $db->select('product')->where($whr)->fetchAll();
+var_dump($db->error());
 $projects = $db->select('projects')->where($whr)->fetchAll();
                 
 $sortedProjects = [];
