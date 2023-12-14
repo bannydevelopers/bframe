@@ -28,10 +28,10 @@
                     <tbody class="table-border-bottom-0">
                         <?php foreach($v as $st){?>
                         <tr data-json='<?=json_encode($st)?>'>
-                            <td>
+                            <td class="d-flex">
                                 <input type="checkbox" class="form-check-input" name="customer_name[]" value="<?=$st['customer_name']?>">
-                                <span>
-                                    &nbsp;<strong><?=$st['customer_name']?></strong><br>
+                                <span class="ms-2">
+                                    <strong><?=$st['customer_name']?></strong><br>
                                     <i class="fa fa-calendar">&nbsp;</i><em><?=system::format_time($st['created_time'],3)?></em>
                                 </span>
                             </td>
