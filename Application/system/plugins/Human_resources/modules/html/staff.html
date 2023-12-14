@@ -127,10 +127,12 @@
     </div>
     <?php include __DIR__.'/add_staff.html';?>
     <form method="post" enctype="multipart/form-data">
-        <label>CSV file</label>
-        <input type="file" name="staff_list" accept=".csv" required>
-        <div style="text-align: right;padding-top: 1em;">
-            <button type="submit">Save</button>
+        <div class="mb-3">
+            <label for="staff_list" class="form-label">CSV file</label>
+            <input type="file" id="staff_list" class="form-control" name="staff_list" accept=".csv" required>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill">Save</button>
         </div>
     </form>
 </template>

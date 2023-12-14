@@ -1,51 +1,43 @@
-<form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="content-small">
-        <div class="white">
-            <div>
-                <label for="customer_name">Received from</label>
-                <select name="customer_name" id="customer_name" onchange="check_selection('customer_name')">
-                    <option value="">Choose...</option>
-                    <?php foreach($customer as $cus){?>
-                    <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
-                    <?php }?>
-                    <option value="">Add customer</option>
-                </select>
-            </div>
-            <div class="flex">
-                <div>
-                    <label for="per_invoice_no">Per invoice no</label>
-                    <input type="number" id="per_invoice_no" name="per_invoice_no" value="" required />
-                </div>
-                <div>
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" value="" required />
-                </div>
-            </div>    
-            <div class="flex">
-                <div>
-                    <label for="amount">Amount</label>
-                    <input type="number" id="amount" name="amount" value="0" required />
-                </div>
-                <div>
-                    <label for="bank">Bank</label>
-                    <select name="bank" id="bank" onchange="add_form('bank')">
-                        <option value="">Choose...</option>
-                        <?php foreach($banks as $bank){?>
-                        <option value="<?=$bank['bank_id']?>"><?=$bank['bank_name']?></option>
-                        <?php }?>
-                        <option value="add">Add bank</option>
-                    </select>
-                </div>
-            </div>          
-            <div class="flex">
-                <div>
-                    <label for="cheque_no">Cheque no</label>
-                    <input type="text" id="cheque_no" name="cheque_no" value="" required />
-                </div>
-            </div>
+<form method="post" enctype="multipart/form-data" autocomplete="off">    
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="customer_name" class="form-label">Received from</label>
+            <select name="customer_name" id="customer_name" onchange="check_selection('customer_name')" class="form-select">
+                <option value="">Choose...</option>
+                <?php foreach($customer as $cus){?>
+                <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
+                <?php }?>
+                <option value="">Add customer</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="per_invoice_no" class="form-label">Per invoice no</label>
+            <input type="number" class="form-control" id="per_invoice_no" name="per_invoice_no" placeholder="Per invoice no..." required />
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" name="date" placeholder="Debt date..." required />
+        </div>
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" min="0" required />
+        </div>
+        <div class="mb-3">
+          <label for="bank" class="form-label">Debt party</label>
+          <select name="bank" id="bank" class="form-select" onchange="add_form('bank')">
+            <option value="">Choose...</option>
+            <?php foreach($banks as $bank){?>
+            <option value="<?=$bank['bank_id']?>"><?=$bank['bank_name']?></option>
+            <?php }?>
+            <option value="add">Add bank</option>
+          </select>
+        </div>
+        <div class="mb-3">
+            <label for="cheque_no" class="form-label">Cheque no</label>
+            <input type="text" class="form-control" id="cheque_no" name="cheque_no" placeholder="Cheque no..." required />
         </div>
     </div>
-    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
