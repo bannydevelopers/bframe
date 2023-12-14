@@ -15,18 +15,19 @@
             <label class="form-label">Quantity</label>
             <input type="number" class="form-control" name="resource_quantity" placeholder="...quantity">
         </div>
-    <div>
-        <label class="form-label">Resource</label>
-        <select  class="form-control" name="resource_reference">
-        </select>
-    </div>
-    <div>
-        <label class="form-label">Project</label>
-        <select class="form-control" name="resource_activity">
-            <option value="">Choose...</option>
-            <?php foreach($projects as $pr){?>
-            <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
-            <?php }?>
-        </select>
+        <div>
+            <label class="form-label">Resource</label>
+            <select  class="form-control" name="resource_reference">
+            </select>
+        </div>
+        <div>
+            <label class="form-label">Project</label>
+            <select class="form-control" name="resource_activity">
+                <option value="">Choose...</option>
+                <?php foreach($projects as $pr){?>
+                <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
+                <?php }?>
+            </select>
+        </div>
     </div>
 </form>
