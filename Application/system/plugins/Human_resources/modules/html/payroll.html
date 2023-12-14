@@ -9,16 +9,16 @@
 <?php foreach($payroll as $pay){?>
     <div class="col-md-6 col-xl-4">
         <div class="card shadow-none bg-transparent border border-primary mb-3">
-        <div class="card-body">
-            <h4 class="card-title"><?=$pay['payroll_name']?></h4>
-            <div class="">
-                <div class="card-text"><?=system::format_time($pay['create_date'])?></div>
-                <div class="text-end">
-                    <a class="btn-sm text-primary" onclick="view_roll()" data-json='<?=$pay['payment_slips']?>' data-icon="&#xf06e;"></a>
-                    <a class="btn-sm text-danger" onclick="delete_payroll(`<?=$pay['payroll_id']?>`,`<?=$pay['payroll_name']?>`)" data-icon="&#xf1f8;"></a>
+            <div class="card-body">
+                <h4 class="card-title"><?=$pay['payroll_name']?></h4>
+                <div class="">
+                    <div class="card-text"><?=system::format_time($pay['create_date'])?></div>
+                    <div class="text-end">
+                        <a class="btn-sm text-primary" onclick="view_roll()" data-json='<?=$pay['payment_slips']?>' data-icon="&#xf06e;"></a>
+                        <a class="btn-sm text-danger" onclick="delete_payroll(`<?=$pay['payroll_id']?>`,`<?=$pay['payroll_name']?>`)" data-icon="&#xf1f8;"></a>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 <?php }?>
