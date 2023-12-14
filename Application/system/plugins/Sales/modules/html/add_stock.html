@@ -1,55 +1,48 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="content-small">
-        <div class="white">
-            <div class="mb-3">
-                <div>
-                    <label for="product_name" class="form-label">Product Name</label>
-                    <select name="product_name" class="form-control" id="product_name" onchange="check_selection('product_name')">
-                        <option value="">Choose...</option>
-                        <?php foreach($product as $pro){?>
-                        <option value="<?=$pro['product_id']?>"><?=$pro['product_name']?></option>
-                        <?php }?>
-                        <option value="">Add product</option>
-                    </select>
-                </div>
-            </div>    
-                <div class="mb-3">
-                    <label for="stock_batch" class="form-label">Stock Batch</label>
-                    <input type="text" id="stock_batch" class="form-control"name="stock_batch" value="" required />
-                </div>
-                <div>
-                    <label for="stock_quantity" class="form-label">Quantity</label>
-                    <input type="number"  class="form-control" id="stock_quantity" name="stock_quantity" value="0" required />
-                </div>
-          
-                <div class="mb-3">
-                    <label for="buying_price" class="form-label">Buying price</label>
-                    <input type="text" id="buying_price"class="form-control" name="buying_price" value="" required />
-                </div>
-                <div class="mb-3">
-                    <label for="stock_expenses" class="form-label">Expenses</label>
-                    <input type="text" class="form-control"name="stock_expenses" value="" required />
-                </div>
-    
-                <div class="mb-3">
-                    <label for="selling_price" class="form-label">Selling price</label>
-                    <input type="text" id="selling_price" class="form-control"name="selling_price" value="" required />
-                </div>       
-                <div>
-                    <label for="supplier" class="form-label">Supplier</label>
-                    <select name="supplier" class="form-control"id="supplier" onchange="check_selection('supplier')">
-                        <option value="">Choose...</option>
-                        <?php foreach($supplier as $sup){?>
-                        <option value="<?=$sup['supplier_id']?>"><?=$sup['supplier_name']?></option>
-                        <?php }?>
-                        <option value="">Add supplier</option>
-                    </select>
-                </div>
-
+    <div class="">
+        <div class="mb-3">
+            <label for="product_name" class="form-label">Product Name</label>
+            <select name="product_name" class="form-control" id="product_name" onchange="check_selection('product_name')">
+                <option value="">Choose...</option>
+                <?php foreach($product as $pro){?>
+                <option value="<?=$pro['product_id']?>"><?=$pro['product_name']?></option>
+                <?php }?>
+                <option value="">Add product</option>
+            </select>
+        </div>    
+        <div class="mb-3">
+            <label for="stock_batch" class="form-label">Stock Batch</label>
+            <input type="text" id="stock_batch" class="form-control"name="stock_batch" value="" required />
+        </div>
+        <div class="mb-3">
+            <label for="stock_quantity" class="form-label">Quantity</label>
+            <input type="number"  class="form-control" id="stock_quantity" name="stock_quantity" value="0" required />
+        </div>
+        <div class="mb-3">
+            <label for="buying_price" class="form-label">Buying price</label>
+            <input type="text" id="buying_price"class="form-control" name="buying_price" value="" required />
+        </div>
+        <div class="mb-3">
+            <label for="stock_expenses" class="form-label">Expenses</label>
+            <input type="text" class="form-control"name="stock_expenses" value="" required />
+        </div>
+        <div class="mb-3">
+            <label for="selling_price" class="form-label">Selling price</label>
+            <input type="text" id="selling_price" class="form-control"name="selling_price" value="" required />
+        </div>       
+        <div class="mb-3">
+            <label for="supplier" class="form-label">Supplier</label>
+            <select name="supplier" class="form-control"id="supplier" onchange="check_selection('supplier')">
+                <option value="">Choose...</option>
+                <?php foreach($supplier as $sup){?>
+                <option value="<?=$sup['supplier_id']?>"><?=$sup['supplier_name']?></option>
+                <?php }?>
+                <option value="">Add supplier</option>
+            </select>
         </div>
     </div>
     
-    <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
+    <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>

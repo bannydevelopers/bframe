@@ -1,9 +1,9 @@
 <form method="post">
-    <h3>Request resource</h3>
-    <div class="flex">
-        <div>
-            <label>Resource type</label>
-            <select name="resource_type">
+    <h3 class="py-3">Request resource</h3>
+    <div class="row">
+        <div class="mb-3 col-md-6">
+            <label class="form-label">Resource type </label>
+            <select class="form-control" name="resource_type" onchange="update_resources()">
                 <option value="">Choose...</option>
                 <option value="staff">Staff</option>
                 <option value="tools">Tools</option>
@@ -11,24 +11,28 @@
                 <option value="money">Money</option>
             </select>
         </div>
-        <div>
-            <label>Quantity</label>
-            <input type="number" name="resource_quantity" placeholder="...quantity">
+        <div class="mb-3 col-md-6">
+            <label class="form-label">Quantity</label>
+            <input type="number" class="form-control" name="resource_quantity" placeholder="...quantity">
         </div>
-    </div>
-    <!--div>
-        <label>Resource</label>
-        <select name="resource_reference">
-        </select>
-    </div-->
-    <div>
-        <label>Project</label>
-        <select name="resource_activity">
-            <option value="">Choose...</option>
-            <?php foreach($projects as $pr){?>
-            <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
-            <?php }?>
-        </select>
+        <div class="mb-3">
+            <label class="form-label">Resource</label>
+            <select  class="form-control" name="resource_reference">
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Project</label>
+            <select class="form-control" name="resource_activity">
+                <option value="">Choose...</option>
+                <?php foreach($projects as $pr){?>
+                <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
+                <?php }?>
+            </select>
+        </div>
+        <div class="text-end mt-3">
+            <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
+            <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
+        </div>
     </div>
     <div>
         <label>Description</label>

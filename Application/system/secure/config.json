@@ -7,11 +7,11 @@
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
+        "Sales",
         "Accounts",
         "Forms",
         "Communication",
         "Office_inventory",
-        "Sales",
         "Banks",
         "Human_resources",
         "Project",
@@ -35,13 +35,14 @@
         "company_slogan": "Customer and quality is our priority",
         "phone_number": "255 755 049 955",
         "email": "info@banny.co.tz",
-        "TIN_number": "127-234-789",
-        "VRN_number": "543257",
+        "TIN_number": "122-781-437",
+        "VRN_number": "40024207.Z",
         "company_address": "Samora avenue, \r\nNHC House,\r\nP. O. Box 22429,\r\nDar es Salaam",
         "company_logo": "banny logo.png",
         "payment_terms": "The PI valid for 30 days including the issue date.\r\nFull payment or 40% deposit is necessary to confirm PI.\r\nDelivery period is 5 to 7 within working days after confirmation.",
         "primary_payment_account": "A\/C name: Banny Company T Ltd\r\nBank name: NCBA\r\nA\/C number: 118 688 100 015\r\nBranch: Clock tower branch",
-        "aux_payment_account": "A\/C name: Banny Company Limited\r\nBank name: CRDB\r\nA\/C number: 0150560102100\r\nBranch: TRA Samora"
+        "aux_payment_account": "A\/C name: Banny Company Limited\r\nBank name: CRDB\r\nA\/C number: 0150560102100\r\nBranch: TRA Samora",
+        "TERMS_AND_CONDITIONS": "Your invoice should be submitted together with the original of the LPO. \r\nThe purchase order number should be quoted on all communications relevant to this order."
     },
     "db_configs": {
         "dbdriver": "mysql",

@@ -1,8 +1,7 @@
 <div class="d-flex justify-content-between align-items-center">
-    <h3 class="pt-1">Invoice</h3>
+    <h3 class="pt-1">Delivery</h3>
     <div class="">
-        <button type="button" onclick="create_invoice()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Proforma</button>
-        <button type="button" onclick="add_invoice()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Tax invoice</button>
+        <button type="button" onclick="create_delivery()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Delivery note</button>
     </div>
 </div>
 <?php if(isset($msg) && $msg){?>
@@ -11,59 +10,57 @@
 <br>
 <div>
     <div class="tab-view">
-        <?php foreach(array_keys($sortedInvoice) as $i=>$k){?>
+        <?php foreach(array_keys($sortedDelivery) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
-        <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
+        <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedInvoice as $branch=>$invoices){?>
+            <?php foreach($sortedDelivery as $branch=>$deliverys){?>
             <div>
-                <div class="tab-view px-2">
+                <div class="tab-view" style="text-align: right;">
                     <input type="radio" name="itab<?=$branch?>" id="class_tab12<?=$branch?>" checked>
                     <label for="class_tab12<?=$branch?>">Proforma</label>
                     <input type="radio" name="itab<?=$branch?>" id="class_tab22<?=$branch?>">
                     <label for="class_tab22<?=$branch?>">Tax</label>
-                    <div class="tab-panes text-start">
-                        <div class="row">
-                            <?php foreach($invoices['proforma'] as $item){?>
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="card-header grey">
+                    <div class="tab-panes" style="text-align: left;">
+                        <div class="white flex cards">
+                            <?php foreach($deliverys['proforma'] as $item){?>
+                                <div class="content rounded">
+                                    <div class="content-small grey">
                                         <strong><?=$item['customer_name']?></strong>
                                     </div>
-                                    <div class="card-body">
-                                        <div>
-                                            <span>Created: </span>
-                                            <em><?=system::format_time($item['created_time'], 3)?></em>
-                                        </div>
-                                        <div>
-                                            <span>Due: </span>
-                                            <em><?=system::format_time($item['due_date'], 2)?></em>
-                                        </div>
-                                        <div>
-                                            <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
-                                        </div>
-                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                            <?php if($item['reference_invoice']){?>
-                                            <a class="btn-sm text-primary" data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
-                                            <?php }else{?>
-                                            <a class="btn-sm text-primary" data-icon="&#xf06e;" onclick="view_invoice()"></a>
-                                            <?php }?>
-                                            <a class="btn-sm text-primary" data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                            <?php if(!$item['reference_invoice']){?>
-                                            <a class="btn-sm text-danger" data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
-                                            <?php }?>
-                                        </div>
+                                    <div>
+                                        <span>Created: </span>
+                                        <em><?=system::format_time($item['created_time'], 3)?></em>
+                                    </div>
+                                    <div>
+                                        <span>Due: </span>
+                                        <em><?=system::format_time($item['due_date'], 2)?></em>
+                                    </div>
+                                    <div>
+                                        <span>Reference: </span><em><?=decoct($item['delivery_id'])?></em>
+                                    </div>
+                                    <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                        <?php if($item['reference_delivery']){?>
+                                        <a data-icon="&#xf0c5;" onclick="copy_delivery()"></a>
+                                        <?php }else{?>
+                                        <a data-icon="&#xf06e;" onclick="view_delivery()"></a>
+                                        <?php }?>
+                                        <a data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                        <?php if(!$item['reference_delivery']){?>
+                                        <a data-icon="&#xf2ed;" onclick="delete_delivery(`<?=$item['delivery_id']?>`)"></a>
+                                        <?php }?>
                                     </div>
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="row">
-                            <?php foreach($invoices['tax'] as $item){?>
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="card-header grey">
-                                        <strong><?=$item['customer_name']?></strong>
-                                    </div>
-                                    <div class="card-body">
+                        <div class="white">
+                            <div class="flex cards">
+                                <?php foreach($deliverys['tax'] as $item){?>
+                                    <div class="content rounded">
+                                        <div class="content-small grey">
+                                            <strong><?=$item['customer_name']?></strong>
+                                        </div>
                                         <div>
                                             <span>Created: </span>
                                             <em><?=system::format_time($item['created_time'], 3)?></em>
@@ -73,14 +70,14 @@
                                             <em><?=system::format_time($item['due_date'], 2)?></em>
                                         </div>
                                         <div>
-                                            <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
+                                            <span>Reference: </span><em><?=decoct($item['delivery_id'])?></em>
                                         </div>
-                                        <div class="text-end" data-json='<?=json_encode($item)?>'>
-                                            <a class="btn-sm text-secondary" data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                            <a data-icon="&#xf02f;" onclick="print_preview()"></a>
                                         </div>
                                     </div>
-                                </div>
-                            <?php } ?>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -90,12 +87,12 @@
     </div>
 </div>
 <template>
-    <?php include __DIR__.'/create_invoice.html';?>
-    <?php include __DIR__.'/invoice_items.html';?>
+    <?php include __DIR__.'/create_delivery.html';?>
+    <?php include __DIR__.'/delivery_items.html';?>
     <div>
-        <?=$invoice_tpl?>
+        <?=$delivery_tpl?>
     </div>
-    <?php include __DIR__.'/add_invoice.html';?>
+    <?php include __DIR__.'/add_delivery.html';?>
 </template>
 <style>
     .mySwal{
@@ -159,14 +156,14 @@
             elem.parentNode.nextElementSibling.nextElementSibling.children[1].value = price;
         }
     }
-    const view_invoice = ()=>{
+    const view_delivery = ()=>{
         let elem = window.event.target,
             frm = document.querySelector('template').content.cloneNode(true).children[1],
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
-            frm.querySelector('[name=invoice]').value = jsx.invoice_id;
+            frm.querySelector('[name=delivery]').value = jsx.delivery_id;
         let tmp = '', sn = 0;
-        [...jsx.invoice_items].forEach(item=>{
+        [...jsx.delivery_items].forEach(item=>{
             item.sn = ++sn;
             item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
             item.total_price = parseInt(item.qty) * parseInt(item.price);
@@ -181,7 +178,7 @@
         document.querySelector('.mySwal form').addEventListener('submit', evt=>{
             evt.preventDefault();
             let fd = new FormData(evt.target);
-            //fd.append('save_invoice_items',1)
+            //fd.append('save_delivery_items',1)
             ajax(
                 window.location.href,
                 response=>{
@@ -215,7 +212,7 @@
         json.grand_total = 0;
 
         let tmp = '', sn = 0;
-        let reli = json.invoice_items;
+        let reli = json.delivery_items;
         for(x in reli) {
             let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
                 itotal = item_total.toLocaleString('en-US'),
@@ -242,8 +239,8 @@
         json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
         json.VAT = json.VAT.toLocaleString('en-US');
         json.total = json.total.toLocaleString('en-US');
-        json.order_id = 6891+parseInt(json.invoice_id);
-        //let tpl = document.getElementById('invoice-tpl').content.cloneNode(true);
+        json.order_id = 6891+parseInt(json.delivery_id);
+        //let tpl = document.getElementById('delivery-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
 
         json.created_time = json.created_time.slice(0, 10);
@@ -261,19 +258,19 @@
             customClass: 'mySwal'
         });*/
     };
-    const delete_invoice = (invoice_ref)=>{
+    const delete_delivery = (delivery_ref)=>{
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
-            ref = decToOctal(invoice_ref);
+            ref = decToOctal(delivery_ref);
         Swal.fire({
             icon: 'question',
-            html: `Delete invoice with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
+            html: `Delete delivery with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
             showCancelButton: true
         })
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let dt = new FormData();
-                dt.append('delete_invoice', invoice_ref);
+                dt.append('delete_delivery', delivery_ref);
                 dt.append('ajax_request', 1);
                 ajax(
                     window.location.href,
@@ -328,10 +325,10 @@
         }
         return tmp;
     }
-    const create_invoice = ()=>{
+    const create_delivery = ()=>{
         let formx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
-            title: 'Add Invoice',
+            title: 'Add Delivery',
             html: formx,
             customClass:'mySwal',
             showConfirmButton:false
@@ -365,10 +362,10 @@
             );
         }
     }
-    const add_invoice = ()=>{
+    const add_delivery = ()=>{
         let formy = document.querySelector('template').content.cloneNode(true).children[3];
         Swal.fire({
-            title: 'Create tax invoice',
+            title: 'Create tax delivery',
             html: formy,
             customClass:'smallSwal',
             showConfirmButton:false
