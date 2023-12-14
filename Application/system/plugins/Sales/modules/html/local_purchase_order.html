@@ -132,17 +132,18 @@
     const view_lpo_items = ()=>{
         let elem = window.event.target,
             frm = document.querySelector('template').content.cloneNode(true).children[1],
-            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            jsx = JSON.parse(elem.parentNode.parentNode.parentNode.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
-            frm.querySelector('[name=invoice]').value = jsx.invoice_id;
+            //frm.querySelector('[name=invoice]').value = jsx.invoice_id;
+
         let tmp = '', sn = 0;
-        [...jsx.invoice_items].forEach(item=>{
+        [...jsx.lpo_item].forEach(item=>{
             item.sn = ++sn;
-            item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
+            //item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
             item.total_price = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
-        frm.querySelector('tbody tr').outerHTML = tmp;
+        //frm.querySelector('tbody tr').outerHTML = tmp;
         Swal.fire({
             html: frm,
             customClass:'mySwal',

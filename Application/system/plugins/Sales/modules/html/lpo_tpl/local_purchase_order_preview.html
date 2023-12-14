@@ -1,5 +1,5 @@
 <div id="branch_0">
-    <div style="padding: 1.2em;">
+  <div style="padding: 1.2em;">
       <table style="width: 100%;font-family: Verdana, Geneva, Tahoma, sans-serif;line-height: 1.4;font-size: 13px;color: #060c67;">
         <tr class="white">
           <td colspan="3">
@@ -51,7 +51,7 @@
         <tr class="white">
           <td colspan="3">
             <div style="text-align: center;">
-              <b style="text-transform: uppercase;font-size: 140%;">{{invoice_type}} INVOICE</b>
+              <b style="text-transform: uppercase;font-size: 140%;">LOCAL PURCHASE ORDER</b>
             </div>
             
             <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
@@ -68,7 +68,7 @@
               <tr style="border-top: 1px solid #222;" class="white">
                 <td colspan="4">&nbsp;</td>
                 <th style="text-align: right;">Total</th> 
-                <th style="text-align: right;">{{total}}</th>
+                <th style="text-align: right;">{{total_price}}</th>
               </tr>
               <tr class="white">
                 <td colspan="4">&nbsp;</td>
@@ -104,7 +104,7 @@
             <div style="display: flex;">
               <div>
                 <b>Terms and conditions</b><br>
-                <pre style="font-family: inherit;"><?=$company[0]->payment_terms?></pre>
+                <pre style="font-family: inherit;"><?=$company[0]->TERMS_AND_CONDITIONS?></pre>
               </div>
             </div>
           </td>
@@ -128,5 +128,5 @@
         }
       </style>
   </div>
-  </div>
+</div>
   
