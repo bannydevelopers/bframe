@@ -443,10 +443,8 @@
             <td>${sel.outerHTML}</td>
             <td>N/A</td>
             <td class="text-nowrap">
-                <div class="d-flex">
-                    <input class="form-control" value="{{qty}}" name="qtyx[]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> 
-                    <span class="ms-2 pt-2">?</span>
-                </div> 
+                <input class="form-control" value="0" name="qtyx[]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> 
+                <span class="ms-2 pt-2">?</span>
             </td>
             <td>
                 <input name="prcx[]" class="form-control" style="width: 72px;" onchange="update_price()" onkeyup="update_price()">
