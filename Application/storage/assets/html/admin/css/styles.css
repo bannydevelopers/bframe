@@ -95,7 +95,7 @@ td{
 label{
     display: block;
     padding: 12px 0;
-} */
+} 
 input,select,textarea,[contenteditable]{
     padding: 7px;
     border: none;
@@ -118,7 +118,7 @@ input:focus,select:focus,textarea:focus,[contenteditable]:focus{
 .white{
     background-color: var(--white);
     color: var(--primary-bg);
-}
+}*/
 .grey{
     background-color: var(--grey);
 }
