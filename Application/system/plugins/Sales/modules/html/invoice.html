@@ -27,31 +27,33 @@
                         <div class="row">
                             <?php foreach($invoices['proforma'] as $item){?>
                                 <div class="col-md-6 col-lg-4">
-                                    <div class="card-header grey">
-                                        <strong><?=$item['customer_name']?></strong>
-                                    </div>
-                                    <div class="card-body">
-                                        <div>
-                                            <span>Created: </span>
-                                            <em><?=system::format_time($item['created_time'], 3)?></em>
+                                    <div class="bg-white mb-3">
+                                        <div class="card-header grey">
+                                            <strong><?=$item['customer_name']?></strong>
                                         </div>
-                                        <div>
-                                            <span>Due: </span>
-                                            <em><?=system::format_time($item['due_date'], 2)?></em>
-                                        </div>
-                                        <div>
-                                            <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
-                                        </div>
-                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                            <?php if($item['reference_invoice']){?>
-                                            <a class="btn-sm text-primary" data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
-                                            <?php }else{?>
-                                            <a class="btn-sm text-primary" data-icon="&#xf06e;" onclick="view_invoice()"></a>
-                                            <?php }?>
-                                            <a class="btn-sm text-primary" data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                            <?php if(!$item['reference_invoice']){?>
-                                            <a class="btn-sm text-danger" data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
-                                            <?php }?>
+                                        <div class="card-body">
+                                            <div>
+                                                <span>Created: </span>
+                                                <em><?=system::format_time($item['created_time'], 3)?></em>
+                                            </div>
+                                            <div>
+                                                <span>Due: </span>
+                                                <em><?=system::format_time($item['due_date'], 2)?></em>
+                                            </div>
+                                            <div>
+                                                <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
+                                            </div>
+                                            <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                                <?php if($item['reference_invoice']){?>
+                                                <a class="btn-sm text-primary" data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
+                                                <?php }else{?>
+                                                <a class="btn-sm text-primary" data-icon="&#xf06e;" onclick="view_invoice()"></a>
+                                                <?php }?>
+                                                <a class="btn-sm text-primary" data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                                <?php if(!$item['reference_invoice']){?>
+                                                <a class="btn-sm text-danger" data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
+                                                <?php }?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

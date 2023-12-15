@@ -1,12 +1,12 @@
 <div>
-    <h3 class="content-small no-pad-top">Edit Proforma</h3>
+    <h3 class="py-3">Edit Proforma</h3>
     <form method="post">
         <input type="hidden" name="invoice" value="0">
-        <table class="paginate numbered-table" data-items-per-page="10">
+        <table class="table table-hover text-start">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th style="white-space: nowrap;">
+                    <th>
                         Item name
                     </th>
                     <th>
@@ -15,10 +15,10 @@
                     <th>
                         Quantity
                     </th>
-                    <th style="white-space: nowrap;">
+                    <th>
                         Unit price
                     </th>
-                    <th style="white-space: nowrap;">
+                    <th class="text-end">
                         Amount
                     </th>
                     <th>
@@ -35,13 +35,16 @@
                     <td>
                         <em>{{item_desc}}</em>
                     </td>
-                    <td style="white-space: nowrap;">
-                        <input value="{{qty}}" name="qty[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> {{unit}}                
+                    <td>
+                        <div class="d-flex">
+                            <input class="form-control" value="{{qty}}" name="qty[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> 
+                            <span class="ms-2 pt-2">{{unit}} </span>
+                        </div>               
                     </td>
                     <td>
-                        <input value="{{price}}" name="price[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required>
+                        <input class="form-control" value="{{price}}" name="price[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required>
                     </td>
-                    <td>
+                    <td class="text-end">
                         {{total_price}}
                     </td>
                     <td>
@@ -51,8 +54,8 @@
             </tbody>
         </table>
         <div style="text-align: right;padding-top: 1em;">
-            <button type="button" onclick="add_item_row()">Add item</button>
-            <button type="submit">Save</button>
+            <button type="button"class="btn rounded-pill btn-secondary btn-sm" onclick="add_item_row()">Add item</button>
+            <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
         </div>
     </form>
 </div>
