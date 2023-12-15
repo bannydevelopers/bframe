@@ -1,63 +1,63 @@
 <form method="post" autocomplete="off">
     <div class="card-body row">
-                <input type="hidden" name="invoice_type" value="proforma">
-                <div class="mb-3 col-md-3">
-                    <label for="customer" class="form-label">Customer</label>
-                    <select name="customer"  class="form-control" id="customer" onchange="check_selection('customer')" required>
-                        <option value="">Choose...</option>
-                        <?php foreach($customer as $cus){?>
-                        <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
-                        <?php }?>
-                        <option value="add">Add customer</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-md-3">
-                    <label for="order_number" class="form-label">Order number</label>
-                    <input type="text" class="form-control" name="order_number" id="order_number" placeholder="order number if any">
-                </div>
-                <div class="mb-3 col-md-3">
-                    <label for="created_time" class="form-label">Create date</label>
-                    <input type="date" name="created_time" class="form-control" id="created_time" value="<?=date('Y-m-d', time())?>">
-                </div>
-                <div class="mb-3 col-md-3">
-                    <label for="due_date" class="form-label">Due date</label>
-                    <input type="date" name="due_date" class="form-control" id="due_date" value="<?=date('Y-m-d', (time()+(3600*24*29)))?>">
-                </div>
+        <input type="hidden" name="invoice_type" value="proforma">
+        <div class="mb-3 col-md-3">
+            <label for="customer" class="form-label">Customer</label>
+            <select name="customer"  class="form-control" id="customer" onchange="check_selection('customer')" required>
+                <option value="">Choose...</option>
+                <?php foreach($customer as $cus){?>
+                <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
+                <?php }?>
+                <option value="add">Add customer</option>
+            </select>
+        </div>
+        <div class="mb-3 col-md-3">
+            <label for="order_number" class="form-label">Order number</label>
+            <input type="text" class="form-control" name="order_number" id="order_number" placeholder="order number if any">
+        </div>
+        <div class="mb-3 col-md-3">
+            <label for="created_time" class="form-label">Create date</label>
+            <input type="date" name="created_time" class="form-control" id="created_time" value="<?=date('Y-m-d', time())?>">
+        </div>
+        <div class="mb-3 col-md-3">
+            <label for="due_date" class="form-label">Due date</label>
+            <input type="date" name="due_date" class="form-control" id="due_date" value="<?=date('Y-m-d', (time()+(3600*24*29)))?>">
+        </div>
            
-            <div class="content" style="text-align: left;">
-            ITEMS
-            </div>      
-            <div class="row">
-                <div class="mb-3 col-md-3">
-                    <label for="product" class="form-label">Items</label>
-                    <select name="product[]" class="form-control" id="product" onchange="check_selection()" required>
-                        <option value="">Choose...</option>
-                        <?php foreach($product as $pro){?>
-                        <option value="<?=$pro['product_id']?>" title="<?=$pro['product_description']?>" data-price="<?=$pro['product_price']?>" data-desc="<?=$pro['product_description']?>" data-unit="<?=$pro['product_unit_plural']?>"><?=$pro['product_name']?></option>
-                        <?php }?>
-                        <option value="add">Add product</option>
-                    </select>
-                </div>
-                <div class="mb-3 col-md-3">
-                    <label for="quantity" class="form-label">Quantity</label>
-                    <input type="number" class="form-control" name="quantity[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()" required>
-                </div>
-                <div class="mb-3 col-md-3">
-                    <label for="price" class="form-label">Price per item</label>
-                    <input type="number" class="form-control" name="price[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()" required>
-                </div>
-                <div class="mb-3 col-md-2">
-                    <label class="form-label">Total price</label>
-                    <input class="text form-control"value="0" readonly>
-                </div>
-                <div class="mb-3 col-md-1">
-                    <label>&nbsp;</label>
-                    <div  style="white-space: nowrap;">
-                        <button type="button" class="btn rounded-xl btn-secondary btn-sm" onclick="replicate_items()" data-icon="&#xf067;"></button>
-                        <button type="button" class="btn rounded-xl btn-primary btn-sm" onclick="delete_item()" data-icon="&#xf1f8;"></button>
-                    </div>
+        <div class="content" style="text-align: left;">
+        ITEMS
+        </div>      
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label for="product" class="form-label">Items</label>
+                <select name="product[]" class="form-control" id="product" onchange="check_selection()" required>
+                    <option value="">Choose...</option>
+                    <?php foreach($product as $pro){?>
+                    <option value="<?=$pro['product_id']?>" title="<?=$pro['product_description']?>" data-price="<?=$pro['product_price']?>" data-desc="<?=$pro['product_description']?>" data-unit="<?=$pro['product_unit_plural']?>"><?=$pro['product_name']?></option>
+                    <?php }?>
+                    <option value="add">Add product</option>
+                </select>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" name="quantity[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()" required>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label for="price" class="form-label">Price per item</label>
+                <input type="number" class="form-control" name="price[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()" required>
+            </div>
+            <div class="mb-3 col-md-2">
+                <label class="form-label">Total price</label>
+                <input class="text form-control"value="0" readonly>
+            </div>
+            <div class="mb-3 col-md-1">
+                <label>&nbsp;</label>
+                <div  style="white-space: nowrap;">
+                    <button type="button" class="btn rounded-xl btn-secondary btn-sm" onclick="replicate_items()" data-icon="&#xf067;"></button>
+                    <button type="button" class="btn rounded-xl btn-primary btn-sm" onclick="delete_item()" data-icon="&#xf1f8;"></button>
                 </div>
             </div>
+        </div>
     </div>
     <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>

@@ -391,8 +391,21 @@
     };
     const add_item_row = ()=>{
         let elem = window.event.target;
-        let sel = document.querySelector('template').content.cloneNode(true).children[0].children[1].children[1].children[1].children[0].children[3];
-        let tr = `<tr><td></td><td>${sel.outerHTML}</td><td>N/A</td><td><input name="qtyx[]" style="width: 72px;" value="0" onchange="update_price()" onkeyup="update_price()"><span>?</span></td><td><input name="prcx[]" style="width: 72px;" onchange="update_price()" onkeyup="update_price()"></td><td>0</td><td><a onclick="remove_item_row" class="fa fa-trash"></a></td></tr>`;
+        let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[6].children[0].children[1];
+        let tr = `<tr>
+            <td></td>
+            <td>${sel.outerHTML}</td>
+            <td>N/A</td>
+            <td class="text-nowrap">
+                <input class="form-control" value="0" name="qtyx[]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> 
+                <span class="ms-2 pt-2">?</span>
+            </td>
+            <td>
+                <input name="prcx[]" class="form-control" style="width: 72px;" onchange="update_price()" onkeyup="update_price()">
+            </td>
+            <td class="text-end">0</td>
+            <td><a onclick="delete_item_row('{{id}}')" class="fa fa-trash-alt"></a></td>
+        </tr>`;
         elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
         //console.log(sel);
     }
