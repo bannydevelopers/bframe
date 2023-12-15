@@ -31,7 +31,7 @@
                                         <img src="<?=$pro['product_image']?>" alt="img" style="width: 60px; min-width: 60px;" />
                                         <div class="text-center">
                                             <a onclick="edit_product()" data-icon="&#xf044;"></a>&nbsp;
-                                            <a onclick="delete_product()" data-icon="&#xf2ed;"></a>
+                                            <a onclick="delete_product(`<?=$pro['product_id']?>`)" data-icon="&#xf2ed;"></a>
                                         </div>
                                     </div>
                                 </div>
@@ -68,43 +68,6 @@
     }
     .mySwalSmallForm label{
         padding-left: 0;
-    }
-    /*@media screen and (min-width:1024px) {
-        .card-4 > *{
-            max-width: 23%;
-            margin: 1%;
-        }
-    }*/
-    .contentx{
-        padding: 0 1em;
-        flex-basis: 100%;
-    }
-    .contentx > *{
-        flex-basis: 100%;
-    }
-    .contentx input,.contentx select{
-        border:1px solid #eee;
-        width: calc( 100% - 1.8em );
-        margin-top: 6px;
-    }
-    .contentx label{
-        padding-top: .8em;
-    }
-    .contentx option{
-        line-height: 1.5em;
-    }
-    button{
-        text-transform: uppercase;
-        white-space: nowrap;
-    }
-    .flex > *{
-        flex-basis: 100%;
-    }
-    .vspaced *{
-        line-height: 1.2;
-    }
-    .large-text{
-        font-size: 140%;
     }
 </style>
 <script>
@@ -151,56 +114,42 @@
             );
         });
     };
-    const import_staff = ()=>{
-        let htz = document.querySelector('template').content.children[2].cloneNode(true);
+    const delete_product = idx=>{
         Swal.fire({
-            title: 'Import product',
-            html:htz,
-            customClass:'mySwalSmallForm',
-            showConfirmButton:false
-        });
-        let form = document.querySelector('.mySwalSmallForm form');
-        if(form != null){
-            form.addEventListener(
-                'submit',
-                evt=>{
-                    evt.preventDefault();
-                    let fd = new FormData(form);
-                    Swal.fire({
-                        title: 'Working, please wait...',
-                        icon: 'info',
-                        showConfirmButton:false
-                    });
-                    ajax(
-                        window.location.href,
-                        success=>{
-                            if([...success][0] == '{' || [...success][0] == '['){
-                                let jsx = JSON.parse(success);
-                                Swal.fire({
-                                    icon:jsx.status,
-                                    title:jsx.message
-                                })
-                                .then(val=>{
-                                    window.location.reload();
-                                });
-                            }
-                            else{
-                                Swal.fire({
-                                    icon:'error',
-                                    title:success
-                                });
-                            }
-                        },
-                        error=>{
-                            console.log(error);
-                        },
-                        fd
-                    );
-                }
-            );
-        }
+            icon: 'question',
+            html:'Surely, delete this product?'
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fdx = new FormData();
+                fdx.append('delete_product', idx);
+                fdx.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon:'info',
+                            html:error
+                        });
+                    },
+                    fdx
+                );
+            }
+        })
     };
     const check_selection = ()=>{
 
+    };
+    const edit_product = ()=>{
+        window.event.target.style.opacity = 0;
     };
 </script>

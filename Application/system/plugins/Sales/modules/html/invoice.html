@@ -101,52 +101,6 @@
     </div>
     <?php include __DIR__.'/add_invoice.html';?>
 </template>
-<style>
-    .mySwal{
-        min-width: 80%;
-    }
-    .mySwal table, .mySwal tr, .mySwal th, .mySwal tr:hover{
-        background-color: #fff;
-        box-shadow: none;
-        border: none;
-    }
-    .mySwal label, .smallSwal label{
-        text-align: left;
-        display: block;
-    }
-    .selectsearchbox{
-        position: absolute;
-        left: 0;
-        background-color: #fff;
-        display: inline-block;
-        width: 100%;
-        text-align: left;
-        z-index: 4;
-    }
-    .selectsearchbox ul{
-        box-shadow: 0 0 3px #999;
-    }
-    .selectsearchbox li{
-        background-color: #fff;
-        padding: .2em .6em;
-        cursor: pointer;
-    }
-    .selectsearchbox li:hover{
-        font-weight: bold;
-    }
-    .uppercase{
-        text-transform: uppercase;
-    }
-    .numbered-table {
-        counter-reset: row-num -1;
-    }
-    .numbered-table tr {
-        counter-increment: row-num;
-    }
-    .numbered-table tr td:first-child::before {
-        content: counter(row-num) " ";
-    }
-</style>
 <script>
     const check_selection = (name)=>{
         let elem = window.event.target;
