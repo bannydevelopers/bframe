@@ -21,13 +21,15 @@ if(isset($_POST['product_name'])){
     }
     else{
         $chk = $db->select('product', 'product_name')
-                    ->where(['product_name'=>$data['product_name'], 'owner_branch'=>$data['owner_branch']])
+                    ->where(['product_name'=>$data['product_name']])
+                    ->and(['owner_branch'=>$data['owner_branch']])
                     ->limit(1)
-                    ->fetchAll();
+                    ->fetch();
 
         if(!$chk) $k = $db->insert('product', $data);
         else $k = 0;
     }
+
     if(isset($_FILES['product_image']) && is_readable($_FILES['product_image']['tmp_name']) && $k){
         $dir = realpath(__DIR__.'/../../../../storage/uploads/products/');
         $source = $_FILES['product_image']['tmp_name'];//product_thumb_0.jpg
@@ -36,28 +38,41 @@ if(isset($_POST['product_name'])){
         file_put_contents("{$dir}/tmp.jpg", file_get_contents($bp));
         $thumb = system::upload_image("{$dir}/tmp.jpg", "{$dir}/product_thumb_{$k}.jpg", ['width'=>200, 'height'=>170]);
     }
-    if(!$db->error() && $k) {
+    if($k) {
         $msg = 'Saved successful';
         $status = 'success';
     }
     else{
         $err = $db->error();
-        $msg = $k == 0 ? 'Product exists' : $err['message'];
+        $msg = $k == 0 && $err ? 'Error saving product' : $err['message'];
     }
     if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
 }
-if($me['work_location'] == human_resources::get_headquarters_branch()) {
-    $whr = 1;
+if(isset($_POST['delete_product'])){
+    $idx = intval($_POST['delete_product']);
+    $db->delete('product')->where(['product_id'=>$idx])->commit();
+    $chk = $db->select('product')->where(['product_id'=>$idx])->limit(1)->fetch();
+    if($db->error()) $msg = $db->error()['message'];
+    else {
+        $msg = $chk ? 'Product delete failed' : 'Product deleted successful';
+        $root = realpath(__DIR__.'/../../../../');
+        $pic = "{$root}/storage/uploads/products/product_{$idx}.jpg";
+        $thumb = "{$root}/storage/uploads/products/product_thumb_{$idx}.jpg";
+        @unlink($pic);
+        @unlink($thumb);
+    }
+    if(isset($_POST['ajax_request'])){
+        die($msg);
+    }
 }
-else{
-    $whr = ['owner_branch'=>$me['work_location']];
-}
+if($me['work_location'] == $hq) $whr = 1;
+else $whr = ['owner_branch'=>$me['work_location']];
+
 $productCategory = $db->select('product_category', 'category_id, category_name')
                     ->where($whr)
                     ->fetchAll();
 
-if($me['work_location'] == $hq) $whr = 1;
-else $whr = ['owner_branch'=>$me['work_location']];
+
 
 $columns = "product.*, IFNULL(category_name, 'General') as category_name, IFNULL(branch_name, 'Headquarters') as branch_name";
 $Products = $db->select('product', $columns)
