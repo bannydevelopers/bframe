@@ -225,12 +225,13 @@
         }
         });
     }
-    const create_slip = ()=>{
+    const create_leave = ()=>{
         let cform = document.querySelector('template').content.children[0].cloneNode(true);
         let opts = {
             title: 'Add leave',
             html:cform,
-            customClass:'mySwalSmallForm'
+            customClass:'mySwalSmallForm',
+            showConfirmButton: false
         }
         Swal.fire(opts);
         let frm = document.querySelector('.mySwalSmallForm form');

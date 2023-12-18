@@ -62,52 +62,6 @@
     <?php include __DIR__.'/purchase_items.html';?>
     <?php include __DIR__.'/add_purchase.html';?>
 </template>
-<style>
-    .mySwal{
-        min-width: 80%;
-    }
-    .mySwal table, .mySwal tr, .mySwal th, .mySwal tr:hover{
-        background-color: #fff;
-        box-shadow: none;
-        border: none;
-    }
-    .mySwal label, .smallSwal label{
-        text-align: left;
-        display: block;
-    }
-    .selectsearchbox{
-        position: absolute;
-        left: 0;
-        background-color: #fff;
-        display: inline-block;
-        width: 100%;
-        text-align: left;
-        z-index: 4;
-    }
-    .selectsearchbox ul{
-        box-shadow: 0 0 3px #999;
-    }
-    .selectsearchbox li{
-        background-color: #fff;
-        padding: .2em .6em;
-        cursor: pointer;
-    }
-    .selectsearchbox li:hover{
-        font-weight: bold;
-    }
-    .uppercase{
-        text-transform: uppercase;
-    }
-    .flex{
-        display: flex;
-    }
-    .flex > *{
-        flex-basis: 100%;
-    }
-    .flex > .flex-shrink{
-        flex-basis: auto;
-    }
- </style>
 <script>
     const check_selection = (name)=>{
         let elem = window.event.target,

@@ -14,7 +14,7 @@
                         "name":"Forms",
                         "href":"/plugin/Forms/list",
                         "icon":"f594",
-                        "permission":""
+                        "permission":"view_page"
                     },
                     {
                         "name":"Configuration",
