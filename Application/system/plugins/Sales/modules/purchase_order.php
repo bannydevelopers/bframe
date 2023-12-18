@@ -62,12 +62,13 @@ if(isset($_POST['qty'])){
     */
     $tmp = [];
     foreach($_POST['qty'] as $id=>$qty){
-        $tmp[] = "({$id}, {$_POST['price'][$id]}, 8, 8, $qty)";
+        $tmp[] = "({$id}, '{$_POST['item_name'][$id]}', 0, $qty, {$_POST['price'][$id]})";
     }
     $tmp = implode(',', $tmp);
-    $qry = "INSERT INTO purchase_items (item_id, price, product, purchase, quantity) VALUES "
-            . " {$tmp} ON DUPLICATE KEY UPDATE item_id = VALUES(item_id), price=VALUES(price), quantity=VALUES(quantity)";
+    $qry = "INSERT INTO purchase_items (purchase_item_id, purchase_item_name, purchase_item_reference, purchase_item_quantity, purchase_item_price) VALUES "
+            . " {$tmp} ON DUPLICATE KEY UPDATE purchase_item_name = VALUES(purchase_item_name), purchase_item_price=VALUES(purchase_item_price), purchase_item_quantity=VALUES(purchase_item_quantity)";
     $db->query($qry);
+    var_dump($db->error());
     if($db->error()) die('Saving failed');
     else die('Saved successful');
 }
@@ -84,11 +85,11 @@ if(isset($_POST['delete_purchase'])){
     die($msg);
 }
 
-$Purchase = $db->select('product')
+/*$Purchase = $db->select('product')
                     ->join('product_category', 'category_id=product_category', 'LEFT')
                     ->join('branches', 'branch_id=owner_branch', 'LEFT')
                     ->where($whr)
-                    ->fetchAll();
+                    ->fetchAll();*/
 
 if($me['work_location'] == human_resources::get_headquarters_branch()) {
     $whr = 1;
@@ -102,8 +103,7 @@ $items_q = "(
                         'id', purchase_item_id, 'item_name',purchase_item_name, 'purchase', purchase_item_reference, 'price', purchase_item_price, 'qty', purchase_item_quantity
                     )
                 ) 
-                FROM purchase_items
-                JOIN purchase ON purchase_id=purchase_item_reference WHERE purchase_id=purchase_item_reference
+                FROM purchase_items WHERE purchase_item_reference=purchase_id
             ) AS purchase_items";
 
 $qry = "purchase.*, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
@@ -114,8 +114,7 @@ $purchase = $db->select('purchase', $qry)
                 ->join('supplier', 'supplier_id=supplier')
                 ->where($whr)
                 ->order_by('purchase_id', 'desc')
-                ->fetchAll();                   
-//var_dump($db->error(), $purchase);
+                ->fetchAll();   
 
 
 $supplier = $db ->select('supplier','supplier_id, supplier_name')
@@ -129,9 +128,13 @@ foreach($purchase as $prod){
     $sortedPurchase[$prod['branch_name']][] = $prod;
 }
 
-//var_dump($db->error(), $sortedPurchase);
+ob_start();
+$dir = realpath(__DIR__.'/html/purchase_tpl');
+foreach(scandir($dir) as $filename){
+    if(pathinfo("{$dir}/{$filename}", PATHINFO_EXTENSION) == 'html') include "{$dir}/{$filename}";
+}
+$purchase_tpl = ob_get_clean();
 
-//var_dump('<pre>',$sortedpurchase);die;
 ob_start();
 include __DIR__.'/html/purchase_order.html';
 $body = ob_get_clean();
