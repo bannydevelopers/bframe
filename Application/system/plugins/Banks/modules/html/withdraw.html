@@ -69,17 +69,17 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
+        <!-- <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;"> -->
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{bank_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">Payment to: </span>{{payment_to}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Due date: </span>{{due_date}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Amount: </span>{{amount}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Payment mode: </span>{{payment_method}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Payment Purpose: </span>{{mode_of_payment}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Approver: </span>{{approved_by}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Payment to: </span>{{payment_to}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Due date: </span>{{due_date}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Amount: </span>{{amount}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Payment mode: </span>{{payment_method}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Payment Purpose: </span>{{mode_of_payment}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Approver: </span>{{approved_by}}</div>
             </div>
-        </div>
+        <!-- </div> -->
     </div>
     <?php include __DIR__.'/add_withdraw.html';?>
 </template>
