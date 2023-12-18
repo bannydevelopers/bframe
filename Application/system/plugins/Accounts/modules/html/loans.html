@@ -104,52 +104,6 @@
         </div>
     </div>
 </template>
-<style>
-    .mySwalForm{
-        min-width: 80%;
-    }
-    .mySwalForm label, .mySwalSmallForm label{
-        display: block;
-        text-align: left;
-        padding-left: 1em;
-    }
-    .mySwalSmallForm label{
-        padding-left: 0;
-    }
-</style>
-<style>
-    .contentx{
-        padding: 0 1em;
-        flex-basis: 100%;
-    }
-    .contentx > *{
-        flex-basis: 100%;
-    }
-    .contentx input,.contentx select{
-        border:1px solid #eee;
-        width: calc( 100% - 1.8em );
-        margin-top: 6px;
-    }
-    .contentx label{
-        padding-top: .8em;
-    }
-    .contentx option{
-        line-height: 1.5em;
-    }
-    button{
-        text-transform: uppercase;
-        white-space: nowrap;
-    }
-    .flex > *{
-        flex-basis: 100%;
-    }
-    .vspaced *{
-        line-height: 1.2;
-    }
-    .large-text{
-        font-size: 140%;
-    }
-</style>
 <script>
     function add_loan() {
         let formx = document.querySelector('template').content.cloneNode(true).children[1];
