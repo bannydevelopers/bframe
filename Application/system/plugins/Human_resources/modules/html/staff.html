@@ -76,56 +76,43 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
-            <div class="card" style="box-shadow: none;">
-                <img src="{{img}}" width="100%">
-            </div>
-            <div class="content-small">
+        <!-- <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;"> -->
+            <div class="rounded-2 text-center">
+                <img src="{{img}}" style="width: 20%;">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{full_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{email}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{phone}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Regstration #: </span>{{registration_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Employed: </span>{{date_employed}}</div>
             </div>
-        </div>
-        <div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Residence address</span>
-                    <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
-                </div>
-                <div>
-                    <div class="content-small">
-                        <span style="color: rgb(35, 57, 136);">Designation: </span><br>
-                        {{designation_name}}
-                    </div>
-                    <div class="content-small">
-                        <span style="color: rgb(35, 57, 136);">Role: </span><br>
-                        {{role_name}}
-                    </div>
-                </div>
+            <div class="content-small row">
+                <div class="mb-2 col-md-6"><span style="color: #696cff;">E-mail: </span>{{email}}</div>
+                <div class=" mb-2 col-md-6"><span style="color: #696cff;">Phone: </span>{{phone}}</div>
+                <div class=" mb-2 col-md-6"><span style="color: #696cff;">Regstration #: </span>{{registration_number}}</div>
+                <div class=" mb-2 col-md-6"><span style="color: #696cff;">Employed: </span>{{date_employed}}</div>
+                <div class=" mb-2 col-md-6"><span style="color: #696cff;">Residence address: </span>{{residence_address}}</div>
+                <div class=" mb-2 col-md-6"><span style="color: #696cff;">Designation: </span>{{designation_name}}</div>
+                <div class=" mb-2 col-md-6"><span style="color: #696cff;">Role: </span> {{role_name}}</div>
             </div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Work location: </span><br>
+        <!-- </div> -->
+        
+            <div class="row">
+                <div class="mb-2 col-md-6">
+                    <span style="color: #696cff;">Work location: </span>
                     {{branch_name}}
                 </div>
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Department: </span><br>
+                <div class="mb-2 col-md-6">
+                    <span style="color: #696cff;">Department: </span>
                     {{dept_name}}
                 </div>
             </div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Bank: </span><br>
+            <div class="row">
+                <div class="mb-2 col-md-6">
+                    <span style="color: #696cff;">Bank: </span>
                     {{bank_name}}
                 </div>
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Account #: </span><br>
+                <div class="mb-2 col-md-6">
+                    <span style="color: #696cff;">Account #: </span>
                     {{bank_account_number}}
                 </div>
             </div>
-        </div>
+        
     </div>
     <?php include __DIR__.'/add_staff.html';?>
     <form method="post" enctype="multipart/form-data">
