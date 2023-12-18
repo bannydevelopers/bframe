@@ -61,9 +61,7 @@ figure.image {
   .tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
   .tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
   .tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
-  .tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
-      display: block;
-  }
+  .tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {display: block;}
   .tabset > label {
       position: relative;
       display: inline-block;
@@ -115,39 +113,69 @@ figure.image {
   }
   .tab-panes > *{
       grid-area: 1 / 1;
-      transition: all .3s;
+      transition: all .0s;
       visibility: hidden;
       z-index: -1;
       padding-top: 4px;
   }
   .tab-view > input:nth-child(1):checked ~ .tab-panes > *:nth-child(1){
       visibility: visible;
-      transition: all .3s;
+      transition: all .0s;
       z-index: 1;
   }
   .tab-view > input:nth-child(3):checked ~ .tab-panes > *:nth-child(2){
       visibility: visible;
-      transition: all .3s;
+      transition: all .0s;
       z-index: 1;
   }
   .tab-view > input:nth-child(5):checked ~ .tab-panes > *:nth-child(3){
       visibility: visible;
-      transition: all .3s;
+      transition: all .0s;
       z-index: 1;
   }
   .tab-view > input:nth-child(7):checked ~ .tab-panes > *:nth-child(4){
       visibility: visible;
-      transition: all .3s;
+      transition: all .0s;
       z-index: 1;
   }
   .tab-view > input:nth-child(9):checked ~ .tab-panes > *:nth-child(5){
       visibility: visible;
-      transition: all .3s;
+      transition: all .0s;
       z-index: 1;
   }
   .tab-view > input:nth-child(11):checked ~ .tab-panes > *:nth-child(6){
       visibility: visible;
-      transition: all .3s;
+      transition: all .0s;
+      z-index: 1;
+  }
+  .tab-view > input:nth-child(13):checked ~ .tab-panes > *:nth-child(7){
+      visibility: visible;
+      transition: all .0s;
+      z-index: 1;
+  }
+  .tab-view > input:nth-child(15):checked ~ .tab-panes > *:nth-child(8){
+      visibility: visible;
+      transition: all .0s;
+      z-index: 1;
+  }
+  .tab-view > input:nth-child(17):checked ~ .tab-panes > *:nth-child(9){
+      visibility: visible;
+      transition: all .0s;
+      z-index: 1;
+  }
+  .tab-view > input:nth-child(19):checked ~ .tab-panes > *:nth-child(10){
+      visibility: visible;
+      transition: all .0s;
+      z-index: 1;
+  }
+  .tab-view > input:nth-child(21):checked ~ .tab-panes > *:nth-child(11){
+      visibility: visible;
+      transition: all .0s;
+      z-index: 1;
+  }
+  .tab-view > input:nth-child(23):checked ~ .tab-panes > *:nth-child(13){
+      visibility: visible;
+      transition: all .0s;
       z-index: 1;
   }
   /* end tabs*/
