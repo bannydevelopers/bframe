@@ -13,6 +13,7 @@ if($me){
             'debt_amount'=>addslashes($_POST['debt_amount']), 
             'debt_party_type'=>addslashes($_POST['debt_party_type']),
             'debt_party_id'=>intval($_POST['debt_party']),
+            'debt_type'=>'loan',
             'owner_branch'=>intval($me['work_location'])
         ];
         var_dump($db->error());

@@ -5,7 +5,7 @@ if($me){
     $db = db::get_connection($config);
     
     if(isset($_POST['debt_date'])){
-        var_dump($_POST);
+        //var_dump($_POST);
         
         $data = [
             'debt_date'=>addslashes($_POST['debt_date']), 
@@ -13,9 +13,10 @@ if($me){
             'debt_amount'=>addslashes($_POST['debt_amount']), 
             'debt_party_type'=>addslashes($_POST['debt_party_type']),
             'debt_party_id'=>intval($_POST['debt_party']),
+            'debt_type'=>'lend',
             'owner_branch'=>intval($me['work_location'])
         ];
-        var_dump($db->error());
+        //var_dump($db->error());
         if(isset($_POST['debt_id']) && intval($_POST['debt_id']) > 0){
             $k = intval($_POST['debt_id']);
             $db->update('debts', $data)->where(['debt_id'=>$_POST['debt_id']])->commit();
@@ -62,7 +63,7 @@ if($me){
                     ->and(['debt_type'=>'lend'])
                     ->order_by('debt_id', 'desc')
                     ->fetchAll();
-var_dump($db->error());
+//var_dump($db->error());
     $sortedDebt = [];
     foreach($debt as $st){
         if(!isset($sortedDebt[$st['branch_name']])) $sortedDebt[$st['branch_name']] = [];
