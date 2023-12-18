@@ -66,23 +66,14 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{supplier_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{supplier_email}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{supplier_phone_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Address #: </span>{{supplier_physical_adress}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Description: </span>{{supplier_details}}</div>
+                <div class="mb-2"><span style="color:#696cff;">E-mail: </span>{{supplier_email}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Phone: </span>{{supplier_phone_number}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Address #: </span>{{supplier_physical_adress}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Description: </span>{{supplier_details}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Residence address: </span>{{supplier_physical_adress}}</div>
             </div>
-        </div>
-        <div>
-            <div class="flex">
-                <div class="content-small">
-                    <span style="color: rgb(35, 57, 136);">Residence address</span>
-                    <pre style="font-family: inherit;margin: 0;padding: 0;">{{supplier_physical_adress}}</pre>
-                </div>
-            </div>
-        </div>
     </div>
     <?php include __DIR__.'/add_supplier.html';?>
     <form method="post" enctype="multipart/form-data">

@@ -67,23 +67,24 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
+        <!-- <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;"> -->
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{business_partiner_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">E-mail: </span>{{business_partiner_email}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Phone: </span>{{business_partiner_phone_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Address #: </span>{{business_partiner_physical_adress}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Date Registered: </span>{{created_time}}</div>
+                <div class="mb-2"><span style="color:#696cff;">E-mail: </span>{{business_partiner_email}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Phone: </span>{{business_partiner_phone_number}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Address #: </span>{{business_partiner_physical_adress}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Date Registered: </span>{{created_time}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Date Registered: </span>{{residence_address}}</div>
             </div>
-        </div>
-        <div>
+        <!-- </div> -->
+        <!-- <div>
             <div class="flex">
                 <div class="content-small">
                     <span style="color: rgb(35, 57, 136);">Residence address</span>
                     <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <?php include __DIR__.'/add_partiners.html';?>
 </template>
