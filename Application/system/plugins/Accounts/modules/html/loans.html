@@ -67,14 +67,12 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{debt_date}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">Desbt type </span>{{debt_type}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Description </span>{{debt_description}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Loan amount: </span>{{debt_amount}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Desbt type </span>{{debt_type}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Description </span>{{debt_description}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Loan amount: </span>{{debt_amount}}</div>
             </div>
-        </div>
     </div>
     <?php include __DIR__.'/add_loans.html';?>
     <div>
