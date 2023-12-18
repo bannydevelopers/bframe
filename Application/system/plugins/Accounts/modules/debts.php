@@ -63,10 +63,16 @@ if($me){
                     ->and(['debt_type'=>'lend'])
                     ->order_by('debt_id', 'desc')
                     ->fetchAll();
-//var_dump($db->error());
+
     $sortedDebt = [];
     foreach($debt as $st){
         if(!isset($sortedDebt[$st['branch_name']])) $sortedDebt[$st['branch_name']] = [];
+        $st['partiner_name'] = '';
+        if($st['full_name']) $st['partiner_name'] = $st['full_name'];
+        elseif($st['supplier_name']) $st['partiner_name'] = $st['supplier_name'];
+        elseif($st['customer_name']) $st['partiner_name'] = $st['customer_name'];
+        elseif($st['business_partiner_name']) $st['partiner_name'] = $st['business_partiner_name'];
+
         $sortedDebt[$st['branch_name']][] = $st;
     }
 

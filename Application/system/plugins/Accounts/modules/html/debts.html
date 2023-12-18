@@ -31,10 +31,10 @@
                             <td>
                                 <input type="checkbox" class="form-check-input" name="debt_date]" value="<?=$st['debt_date']?>" style="max-width:13px;max-height:13px">
                                 <span>
-                                    &nbsp;<strong><?=$st['debt_date']?></strong><br>
+                                    &nbsp;<strong><?=system::format_time($st['debt_date'],3)?></strong><br>
                                 </span>
                             </td>
-                            <td><?=$st['debt_party_id']?><br>
+                            <td><?=$st['partiner_name']?><br>
                                 <?=$st['debt_party_type']?>
                             </td>
                                 <td><?=$st['debt_description']?></td>
