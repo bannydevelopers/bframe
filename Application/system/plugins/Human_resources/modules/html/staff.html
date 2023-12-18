@@ -11,7 +11,7 @@
     <div class="tab-view">
         <?php foreach(array_keys($sortedStaff) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
-        <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
+        <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php }?>
         <div class="tab-panes">
             <?php foreach($sortedStaff as $v){?>
