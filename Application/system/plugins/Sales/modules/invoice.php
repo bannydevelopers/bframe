@@ -95,8 +95,16 @@ if(isset($_POST['delete_invoice'])){
     }
     die($msg);
 }
-$items_q = "(SELECT JSON_ARRAYAGG(JSON_OBJECT('id', item_id, 'invoice',invoice, 'product', product_name, 'price', price, 'qty', quantity, 'product_id', product_id, 'item_desc', product_description, 'unit_single', product_unit_singular, 'unit_prural', product_unit_plural)) FROM invoice_items JOIN product ON product_id=product
-WHERE invoice_id=invoice) AS invoice_items";
+$items_q = "(
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'id', item_id, 'invoice',invoice, 'product', product_name, 'price', price, 'qty', quantity, 
+                        'product_id', product_id, 'item_desc', product_description, 'unit_single', 
+                        product_unit_singular, 'unit_prural', product_unit_plural
+                    )
+                ) 
+                FROM invoice_items JOIN product ON product_id=product WHERE invoice_id=invoice
+            ) AS invoice_items";
 $qry = "invoice.*, branches.branch_name, customer.*, user_accounts.full_name, {$items_q}, tax_invoice.*";
     //FROM invoice JOIN  ON  JOIN  ON ";
 $proforma = $db->select('invoice',$qry)
