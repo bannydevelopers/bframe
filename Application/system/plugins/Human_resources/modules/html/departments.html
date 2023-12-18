@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center">
     <h3 class="pt-1">Departments</h3>
     <div>
-        <button type="button" onclick="create_departments()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Department</button>
+        <button type="button" onclick="create_department()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Department</button>
     </div>
 </div>
 <br>
@@ -14,12 +14,85 @@
                     <div class="card-body">
                         <h5  class="card-title"><?=$dept['dept_name']?></h5>
                         <div class="text-end">
-                            <a class="btn-sm text-primary" onclick="edit_department()" data-icon="&#xf056;">&nbsp;</a>
-                            <a class="btn-sm text-danger" onclick="delete_department()" data-icon="&#xf1f8;">&nbsp;</a>
+                            <!--a class="btn-sm text-primary" onclick="edit_department()" data-icon="&#xf056;">&nbsp;</a-->
+                            <a class="btn-sm text-danger" onclick="delete_department(`<?=$dept['dept_id']?>`)" data-icon="&#xf1f8;">&nbsp;</a>
                         </div>
                     </div>
                 </div>
             </div>
         <?php }?>
     </div>
-  </div>
+</div>
+<script>
+    const create_department = ()=>{
+        request_service(
+            'add_department',
+            resp=>{
+                let jsx = JSON.parse(resp);
+                Swal.fire({
+                    html: jsx.response,
+                    showConfirmButton: false,
+                    customClass: 'mySwal'
+                });
+                let frm = document.querySelector('.mySwal form');
+                if(frm){
+                    frm.addEventListener('submit', evt=>{
+                        evt.preventDefault();
+                        let fdx = new FormData(evt.target);
+                        request_service(
+                            'add_department',
+                            response=>{
+                                let jsy = JSON.parse(response);
+                                jsy.response = JSON.parse(jsy.response);
+                                Swal.fire({
+                                    html:jsy.response.message,
+                                    icon: jsy.response.status
+                                })
+                                .then(any=>{
+                                    window.location.reload();
+                                });
+                            },
+                            fdx
+                        );
+                    });
+                }
+            }
+        );
+    }
+    const edit_department = ()=>{
+        //
+    }
+    const delete_department = idx=>{
+        Swal.fire({
+            icon: 'question',
+            html: 'Surely, delete this department?',
+            showCancelButton: true
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let depid = new FormData();
+                depid.append('delete_department', idx);
+                depid.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: error
+                        });
+                    },
+                    depid
+                )
+            }
+        });
+    }
+</script>

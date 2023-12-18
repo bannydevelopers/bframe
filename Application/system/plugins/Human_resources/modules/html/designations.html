@@ -14,11 +14,84 @@
                     <h5 class="card-title"><?=$desn['designation_name']?></h5>
                     <div class="card-text"><?=$desn['designation_description']?></div>
                     <div class="text-end">
-                        <a class="btn-sm text-primary" onclick="edit_designation()" data-icon="&#xf056;"></a>
-                        <a class="btn-sm text-danger" onclick="delete_designation()" data-icon="&#xf1f8;"></a>
+                        <!--a class="btn-sm text-primary" onclick="edit_designation()" data-icon="&#xf056;"></a-->
+                        <a class="btn-sm text-danger" onclick="delete_designation(`<?=$desn['designation_id']?>`)" data-icon="&#xf1f8;"></a>
                     </div>
                 </div>
             </div>
         <?php }?>
     </div>
   </div>
+  <script>
+    const create_designation = ()=>{
+        request_service(
+            'add_designation',
+            resp=>{
+                let jsx = JSON.parse(resp);
+                Swal.fire({
+                    html: jsx.response,
+                    showConfirmButton: false,
+                    customClass: 'mySwal'
+                });
+                let frm = document.querySelector('.mySwal form');
+                if(frm){
+                    frm.addEventListener('submit', evt=>{
+                        evt.preventDefault();
+                        let fdx = new FormData(evt.target);
+                        request_service(
+                            'add_designation',
+                            response=>{
+                                let jsy = JSON.parse(response);
+                                jsy.response = JSON.parse(jsy.response);
+                                Swal.fire({
+                                    html:jsy.response.message,
+                                    icon: jsy.response.status
+                                })
+                                .then(any=>{
+                                    window.location.reload();
+                                });
+                            },
+                            fdx
+                        );
+                    });
+                }
+            }
+        );
+    }
+    const edit_designation = ()=>{
+        //
+    }
+    const delete_designation = idx=>{
+        Swal.fire({
+            icon: 'question',
+            html: 'Surely, delete this department?',
+            showCancelButton: true
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let depid = new FormData();
+                depid.append('delete_designation', idx);
+                depid.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: error
+                        });
+                    },
+                    depid
+                )
+            }
+        });
+    }
+</script>

@@ -251,7 +251,7 @@
             img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        console.log(jsx);
+
         //console.log(elem.getAttribute('data-json'));
         htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
         htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
@@ -263,10 +263,7 @@
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             img = elem.querySelector('img');
             htz = document.querySelector('template').content.children[1].cloneNode(true);
-        let hin = document.createElement('input');
-        hin.type = 'hidden';
-        hin.name = 'user_id';
-        htz.firstElementChild.firstElementChild.appendChild(hin);
+
         let jsx = JSON.parse(elem.getAttribute('data-json'));
         let inpts = htz.querySelectorAll('input'),
             selec = htz.querySelectorAll('select'),
@@ -291,6 +288,7 @@
                 evt=>{
                     evt.preventDefault();
                     let fd = new FormData(form);
+                    fd.append('user_id', jsx.user_id);
                     request_service(
                         'add_staff',
                         response => {
@@ -368,12 +366,6 @@
             },
             userdata
             );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
         }
         });
     }

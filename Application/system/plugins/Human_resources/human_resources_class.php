@@ -142,8 +142,8 @@ class human_resources{
                 $data = [
                     'designation_name'=>addslashes( $_POST['designation_name'] ),
                     'designation_description'=>addslashes( $_POST['designation_description'] ),
-                    'created_by'=>user::init()->get_session_user('user_id'),
-                    'create_date'=>date('Y-m-d')
+                    //'created_by'=>user::init()->get_session_user('user_id'),
+                    //'create_date'=>date('Y-m-d')
                 ];
                 $db->insert('designations', $data);
                 if(!$db->error()) return json_encode(['status'=>'success', 'message'=>'Designation added successful']);
