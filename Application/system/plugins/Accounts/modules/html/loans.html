@@ -31,10 +31,10 @@
                             <td>
                                 <input type="checkbox" class="form-check-input" name="debt_date]" value="<?=$st['debt_date']?>" style="max-width:13px;max-height:13px">
                                 <span>
-                                    &nbsp;<strong><?=$st['debt_date']?></strong><br>
+                                    &nbsp;<strong><?=system::format_time($st['debt_date'],3)?></strong><br>
                                 </span>
                             </td>
-                            <td><?=$st['debt_party_id']?><br>
+                            <td><?=$st['partiner_name']?><br>
                                 <?=$st['debt_party_type']?>
                             </td>
                                 <td>
@@ -84,19 +84,19 @@
             <option value="<?=$c['user_id']?>"><?=$c['full_name']?></option>
             <?php } ?>
         </div>
-        <div id="tpl-customers">
+        <div id="tpl-customer">
             <option value="">Choose...</option>
             <?php foreach($customer as $c){?>
             <option value="<?=$c['customer_id']?>"><?=$c['customer_name']?></option>
             <?php } ?>
         </div>
-        <div id="tpl-suppliers">
+        <div id="tpl-supplier">
             <option value="">Choose...</option>
             <?php foreach($supplier as $s){?>
             <option value="<?=$s['supplier_id']?>"><?=$s['supplier_name']?></option>
             <?php } ?>
         </div>
-        <div id="tpl-business_partners">
+        <div id="tpl-business_partner">
             <option value="">Choose...</option>
             <?php foreach($Partners as $p){?>
             <option value="<?=$p['business_partiner_id']?>"><?=$p['business_partiner_name']?></option>
@@ -261,59 +261,10 @@
         }
         });
     }
-    const import_debt = ()=>{
-        let htz = document.querySelector('template').content.children[2].cloneNode(true);
-        Swal.fire({
-            title: 'Import debt',
-            html:htz,
-            customClass:'mySwalSmallForm',
-            showConfirmButton:false
-        });
-        let form = document.querySelector('.mySwalSmallForm form');
-        if(form != null){
-            form.addEventListener(
-                'submit',
-                evt=>{
-                    evt.preventDefault();
-                    let fd = new FormData(form);
-                    Swal.fire({
-                        title: 'Working, please wait...',
-                        icon: 'info',
-                        showConfirmButton:false
-                    });
-                    ajax(
-                        window.location.href,
-                        success=>{
-                            if([...success][0] == '{' || [...success][0] == '['){
-                                let jsx = JSON.parse(success);
-                                Swal.fire({
-                                    icon:jsx.status,
-                                    title:jsx.message
-                                })
-                                .then(val=>{
-                                    window.location.reload();
-                                });
-                            }
-                            else{
-                                Swal.fire({
-                                    icon:'error',
-                                    title:success
-                                });
-                            }
-                        },
-                        error=>{
-                            console.log(error);
-                        },
-                        fd
-                    );
-                }
-            );
-        }
-    }
     
-const update_parties = ()=>{
-    let elem = window.event.target,
-        tpl = document.querySelector('template').content.children[3].querySelector(`#tpl-${elem.value}`);
-    document.querySelector('#debt_party').innerHTML = tpl.innerHTML;
-}
+    const update_parties = ()=>{
+        let elem = window.event.target,
+            tpl = document.querySelector('template').content.children[2].querySelector(`#tpl-${elem.value}`);
+        document.querySelector('#debt_party').innerHTML = tpl.innerHTML;
+    }
 </script>
