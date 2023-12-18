@@ -8,31 +8,31 @@
                 "alias":"Front-desk",
                 "href":"#Front-desk", 
                 "icon":"f26c",
-                "permission":"",
+                "permission":"view_front",
                 "children":[
                     {
                         "name":"Visitors log",
                         "href":"/plugin/Front-desk/visitors-log",
                         "icon":"f594",
-                        "permission":""
+                        "permission":"view_visitors_log"
                     },
                     {
                         "name":"Enquiries",
                         "href":"/plugin/Front-desk/enquiries",
                         "icon":"",
-                        "permission":""
+                        "permission":"view_enquiries"
                     },
                     {
                         "name":"Complains",
                         "href":"/plugin/Front-desk/complains",
                         "icon":"",
-                        "permission":""
+                        "permission":"view_complains"
                     },
                     {
                         "name":"Appointments",
                         "href":"/plugin/Front-desk/appointments",
                         "icon":"",
-                        "permission":""
+                        "permission":"view_appointments"
                     }
                 ]
             }

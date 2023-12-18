@@ -1,0 +1,19 @@
+[
+    "view_front",
+    "add_visitors_log",
+    "edit_visitors_log",
+    "view_visitors_log",
+    "delete_visitors_log",
+    "add_enquiries",
+    "edit_enquiries",
+    "view_enquiries",
+    "delete_enquiries",
+    "add_complains",
+    "edit_complains",
+    "view_complains",
+    "delete_complains",
+    "add_appointments",
+    "edit_appointments",
+    "view_appointments",
+    "delete_appointments"
+]
