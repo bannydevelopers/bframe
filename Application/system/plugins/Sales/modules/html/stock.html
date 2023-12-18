@@ -76,17 +76,15 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded form-control modal-dialog modal-dialog-centered" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
-            <div class="content-small">
-                <h3 style="padding-bottom: .6em;" class="large-text">{{product_name}}</h3>
-                <div><span style="color: #7066e0;">Batch: </span>{{stock_batch}}</div>
-                <div><span style="color: #7066e0;">Quantity: </span>{{stock_quantity}}</div>
-                <div><span style="color: #7066e0;">Buying price #: </span>{{buying_price}}</div>
-                <div><span style="color: #7066e0;">Selling price: </span>{{selling_price}}</div>
-                <div><span style="color: #7066e0;">Expenses #: </span>{{stock_expenses}}</div>
-                <div><span style="color: #7066e0;">Supplier: </span>{{stock_supplier}}</div>
-                <div><span style="color: #7066e0;">Received By #: </span>{{stock_receiver}}</div>
-            </div>
+        <div class="content-small">
+            <h3 style="padding-bottom: .6em;" class="large-text">{{product_name}}</h3>
+            <div><span style="color: #7066e0;">Batch: </span>{{stock_batch}}</div>
+            <div><span style="color: #7066e0;">Quantity: </span>{{stock_quantity}}</div>
+            <div><span style="color: #7066e0;">Buying price #: </span>{{buying_price}}</div>
+            <div><span style="color: #7066e0;">Selling price: </span>{{selling_price}}</div>
+            <div><span style="color: #7066e0;">Expenses #: </span>{{stock_expenses}}</div>
+            <div><span style="color: #7066e0;">Supplier: </span>{{stock_supplier}}</div>
+            <div><span style="color: #7066e0;">Received By #: </span>{{stock_receiver}}</div>
         </div>
     </div>
     <?php include __DIR__.'/add_stock.html';?>
