@@ -1,7 +1,7 @@
-<div class="<?=(in_array($v, $active)?'green-border':'')?>">
-    <div class="large-txt-2x content grey"><?=$info->name?></div>
-    <div class="content"><?=$info->description?></div>
-    <div class="content large-txt" style="text-align: right;">
+<div class="mb-2 border <?=(in_array($v, $active)?'border-success':'border-secondary')?>">
+    <div class="p-2 grey"><?=$info->name?></div>
+    <div class="p-2"><?=$info->description?></div>
+    <div class="text-end">
         <a data-icon="&#xf2ed;" onclick="delete_plugin(`<?=$v?>`)" class="text-danger text-lg btn btn-sm"></a>
         <a data-icon="<?=$icon?>" onclick="update_plugin(`<?=$v?>`)" class="text-primary btn btn-sm"></a>
     </div>
