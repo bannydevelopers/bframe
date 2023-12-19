@@ -294,6 +294,32 @@
         let btn = window.event.target.parentNode.parentNode.parentNode;
         let html = btn.parentNode.removeChild(btn);
     }
+    const add_item_row = ()=>{
+        let elem = window.event.target;
+        //let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[6].children[0].children[1];
+        let tr = `<tr>
+            <td></td>
+            <td class="text-nowrap">
+                <input class="form-control" value="" name="item_namex[]">
+            </td>
+            <td class="text-nowrap">
+                <div class="d-flex">
+                    <input class="form-control" value="" name="qtyx[]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> 
+                </div>               
+            </td>
+            <td>
+                <input class="form-control" value="" name="pricex[]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required>
+            </td>
+            <td class="text-end">
+                
+            </td>
+            <td>
+                <a onclick="delete_this_row()" class="fa fa-trash-alt"></a>
+            </td>
+        </tr>`;
+        elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
+        //console.log(sel);
+    }
     const search_select = ()=>{
         let sels = document.querySelectorAll('select');
         if(!sels) return;
@@ -332,5 +358,5 @@
         });
 
     }
-    search_select();
+    //search_select();
 </script>
