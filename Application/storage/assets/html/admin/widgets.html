@@ -1,19 +1,19 @@
-<div class="flex">
-    <div style="flex-basis: 400%;">
-        <div class="content-small" data-pages='<?=json_encode($pages)?>'>
+<div class="row">
+    <div >
+        <div class="p-2" data-pages='<?=json_encode($pages)?>'>
             <?=$widgets?>
         </div>
     </div>
-    <div class="content-small" style="flex-basis: 100%;">
-        <div class="cardx">
-            <h3 class="flex content grey">
-                <b style="flex-basis: 100%;white-space: nowrap;">Active Widgets</b>&nbsp;<a data-icon="&#xf055;"></a>
+    <div class="p-2">
+        <div class="">
+            <h3 class="row">
+                <b >Active Widgets</b>&nbsp;<a data-icon="&#xf055;"></a>
             </h3>
-            <ul>
+            <ul class="list-group list-group-flush">
                 <?=($active_widgets ? '' : '<li>No widget found</li>')?>
                 <?php foreach($active_widgets as $name){ ?>
-                    <li class="flex content-small">
-                        <b style="flex-basis: 100%;" data-icon="&#xf0da;"><?=$name?></b><a data-icon="&#xf044;"></a>
+                    <li class="list-group-item">
+                        <b  data-icon="&#xf0da;"><?=$name?></b><a data-icon="&#xf044;"></a>
                     </li>
                 <?php }?>
             </ul>

@@ -61,6 +61,9 @@
     .box-shadow{
         box-shadow: 0 0 5px #aaa;
     }
+    .wideSwal{
+        min-width: 80%;
+    }
 </style>
 <script>
     const add_role = ()=>{
@@ -128,15 +131,15 @@
         });
         for(legend in tpljson){
             let id = (legend+' ').replace(' ', '_');
-            tpl += `<br><h3 class="content-small align-left grey round box-shadow">`
-                + `&nbsp;<input type="checkbox" onchange="update_checks()" id="${id}">`
+            tpl += `<br><h3 class="text-start fs-4 p-2 grey rounded">`
+                + `&nbsp;<input type="checkbox" class="form-check-input" style="width:20px;height:20px" onchange="update_checks()" id="${id}">`
                 + `<label for="${id}" style="padding:0">&nbsp;${legend}</label></h3>`
-                + `<div class="flex cards">`;
+                + `<div class="row">`;
             tpljson[legend].forEach(perm => {
                 let check = '';
                 if(perm_list.includes(perm.permission_name.trim())) check = ' checked';
-                tpl += '<p style="white-space: nowrap;box-shadow:none;">'
-                        +`<input type="checkbox" name="permission[]" id="${perm.permission_name}" value="${perm.permission_id}"${check}>`
+                tpl += '<p class="col-6 col-sm-4 col-lg-3 text-nowrap text-start">'
+                        +`<input type="checkbox" class="form-check-input" style="width:15px;height:15px" name="permission[]" id="${perm.permission_name}" value="${perm.permission_id}"${check}>`
                         +`<label for="${perm.permission_name}" title="${perm.permission_name}" style="padding:0 6px">${perm.permission_name}</label>`
                         +'</p>';
             });
@@ -147,7 +150,8 @@
             title:`Permissions of ${role}<hr>`,
             showCancelButton: true,
             confirmButtonText: 'Update permissions',
-            html: tpl
+            html: tpl,
+            customClass: "wideSwal"
         })
         .then(result=>{
             if(result.isConfirmed){
