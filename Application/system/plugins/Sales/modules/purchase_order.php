@@ -128,6 +128,14 @@ foreach($purchase as $prod){
     $sortedPurchase[$prod['branch_name']][] = $prod;
 }
 
+$company = [];
+$company[] = storage::get_data('system_config')->company_profile;
+$branches = $db->select('branches', 'branch_id,branch_profile')->where($whr)->fetchAll();
+foreach($branches as $b){
+    if(!$b['branch_profile']) $company[$b['branch_id']] = $default;
+    else $company[$b['branch_id']] = json_decode($b['branch_profile']);
+}
+
 ob_start();
 $dir = realpath(__DIR__.'/html/purchase_tpl');
 foreach(scandir($dir) as $filename){

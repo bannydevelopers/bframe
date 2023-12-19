@@ -138,27 +138,25 @@
                 itotal = item_total.toLocaleString('en-US'),
                 price = reli[x].price.toLocaleString('en-US');
 
-            if(reli[x].qty == 1) reli[x].unit = reli[x].unit_single;
-            else reli[x].unit = reli[x].unit_prural;
-            
+            console.log(reli[x]);
             tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
-                <td>${reli[x].product}</td>
-                <td>${reli[x].item_desc}</td>
+                <td>${reli[x].item_name}</td>
+                <td>${reli[x].qty}</td>
                 <td>${price}</td>
                 <td style="text-align: right;">${itotal}</td></tr>`;
             json.total += item_total;
         }
         //console.log(tmp[sn]);
-        /*json.VAT = (json.total * 0.05);
-        //json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
+        json.VAT = (json.total * 0.18);
+        json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
         json.VAT = json.VAT.toLocaleString('en-US');
         json.total = json.total.toLocaleString('en-US');
         json.order_id = 6891+parseInt(json.purchase_id);
         //let tpl = document.getElementById('purchase-tpl').content.cloneNode(true);
-        //tplx.querySelector('#items_list').outerHTML = tmp;
+        tplx.querySelector('#items_list').outerHTML = tmp;
 
-        json.created_time = json.created_time.slice(0, 10);
-        json.due_date = json.due_date.slice(0, 10);*/
+        json.create_time = json.create_time.slice(0, 10);
+        //json.due_date = json.due_date.slice(0, 10);
 
         htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
         Swal.fire({

@@ -16,16 +16,16 @@
         <?php foreach($sortedProducts as $products){?>
             <div class="collapsibles">
                 <?php foreach($products as $category=>$product){?>
-                <div class="">
+                <div>
                     <h3 class="p-1 rounded" style="background-color: #ddd;"><?=$category?></h3>
                     <div class="">
                         <div class="row">
                             <?php foreach($product as $pro){?>
                             <div class="col-sm-6 col-lg-4">
-                                <div class="d-flex justify-content-between bg-white rounded p-3 m-1">
+                                <div class="d-flex justify-content-between bg-white rounded p-3 m-1" style="box-shadow: 0 2px 5px #999;">
                                     <div>
                                         <div class=""><strong><?=$pro['product_name']?></strong></div>
-                                        <em class="d-inline-block text-truncate" style="max-width: 150px;"><?=$pro['product_description']?></em>
+                                        <em class="d-inline-block text-truncate" style="max-width: 190px;"><?=$pro['product_description']?></em>
                                     </div>
                                     <div>
                                         <img src="<?=$pro['product_image']?>" alt="img" style="width: 60px; min-width: 60px;" />
