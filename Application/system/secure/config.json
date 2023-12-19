@@ -1,7 +1,7 @@
 {
     "session_name": "userdata",
     "site_name": "CMIS v2",
-    "theme": "Default",
+    "theme": "default",
     "dashboard_url": "admin",
     "currency": "TZS",
     "currency_symbol": "TSH",
