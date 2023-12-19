@@ -1,3 +1,4 @@
 ._*
 Application/system/cache/*
 Application/storage/uploads/*
+Application/system/secure/config.json
