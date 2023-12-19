@@ -39,13 +39,19 @@ $whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
 
 $products = $db->select('product')->where($whr)->fetchAll();
 
-$projects = $db->select('project_resources')->where($whr)->fetchAll();
-                
+$project_resources = $db->select('project_resources')
+                        ->join('projects', 'project_id=resource_project')
+                        ->join('branches', 'branch_id=projects.owner_branch')
+                        ->join('user_accounts', 'user_id=resource_requester')
+                        ->where($whr)->fetchAll();
+
 $sortedProjects = [];
-/*foreach($projects as $proj){
-    if(!isset($sortedProjects[$proj['branch_name']])) $sortedProjects[$proj['branch_name']] = [];
-    $sortedProjects[$proj['branch_name']][] = $proj;
-}*/
+foreach($project_resources as $proj){
+    if(!isset($sortedProjects[$proj['branch_name']])) {
+        $sortedProjects[$proj['branch_name']] = ['requested'=>[], 'approved'=>[], 'issued'=>[], 'returned'=>[]];
+    }
+    $sortedProjects[$proj['branch_name']][$proj['resource_status']][] = $proj;
+}
 
 ob_start();
 include __DIR__.'/html/resources.html';
