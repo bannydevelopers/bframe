@@ -265,6 +265,7 @@
             ajax(
                 window.location.href,
                 response=>{
+                    console.log(response);
                     if(response.startsWith('{')){
                         let jsx = JSON.parse(response);
                         Swal.fire({

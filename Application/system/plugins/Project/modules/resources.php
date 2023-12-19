@@ -2,22 +2,20 @@
 $is_headquarters = $me['work_location'] == human_resources::get_headquarters_branch();
 
 $whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
-if(isset($_POST['project_name'])){
+if(isset($_POST['resource_project'])){
     $data = [
-        `resource_type`, 
-        `resource_reference`, 
-        `resource_quantity`, 
-        `resource_requester`, 
-        `resource_activity`, 
-        `resource_status`, 
-        `resource_approver`, 
-        `request_date`, 
-        `approve_date`
+        'resource_type'=>addslashes($_POST['resource_type']), 
+        'resource_quantity'=>intval($_POST['resource_quantity']), 
+        'resource_requester'=>$me['user_reference'], 
+        'request_description'=>addslashes($_POST['request_desc']),
+        'resource_project'=>intval($_POST['resource_project']), 
+        'resource_status'=>'requested', 
+        'request_date'=>date('Y-m-d H:i:s')
     ];
     if(isset($_POST['project_id']))
-      $db->update('projects', $data)->where(['project_id'=>intval($_POST['project_id'])])->commit();
+      $db->update('project_resources', $data)->where(['project_id'=>intval($_POST['project_id'])])->commit();
     else
-        $db->insert('projects', $data);
+        $db->insert('project_resources', $data);
 
     if(!$db->error()) $msg = 'Saved successfully';
     else $msg = $db->error();
@@ -28,8 +26,6 @@ if(isset($_POST['project_name'])){
     }
 }
 
-
-$customer = $db->select('customer')->where($whr)->fetchAll();
 
 $whr = $is_headquarters ? 1 : ['work_location'=>$me['work_location']];
 
@@ -42,8 +38,8 @@ $staff = $db->select('staff', 'user_accounts.full_name, user_accounts.user_id')
 $whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
 
 $products = $db->select('product')->where($whr)->fetchAll();
-var_dump($db->error());
-$projects = $db->select('projects')->where($whr)->fetchAll();
+
+$projects = $db->select('project_resources')->where($whr)->fetchAll();
                 
 $sortedProjects = [];
 /*foreach($projects as $proj){
