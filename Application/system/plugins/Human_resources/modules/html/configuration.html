@@ -49,12 +49,12 @@
 </div>
 <script>
     const appendInput = ()=>{
-        let elem = window.event.target.parentNode;
+        let elem = window.event.target.parentNode.parentNode;
         elem.insertAdjacentHTML('afterEnd', elem.cloneNode(true).outerHTML);
         elem.nextElementSibling.querySelector('select').options.selectedIndex = 0;
     };
     const delInput = ()=>{
-        let elem = window.event.target.parentNode;
+        let elem = window.event.target.parentNode.parentNode;
         console.log(elem.parentNode.children.length);
         if(elem.parentNode.children.length < 3){
             Swal.fire({
