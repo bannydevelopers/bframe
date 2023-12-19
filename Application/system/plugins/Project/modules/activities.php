@@ -41,6 +41,8 @@ $project_activities = $db->select('project_activities')
                         ->join('branches', 'branch_id=projects.owner_branch')
                         ->join('user_accounts', 'user_id=activity_creator')
                         ->where($whr)->fetchAll();
+                       
+$projects = $db->select('projects', 'project_id, project_name')->where($whr)->fetchAll();
 
 $sortedProjects = [];
 foreach($project_activities as $proj){

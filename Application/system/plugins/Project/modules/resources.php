@@ -37,13 +37,13 @@ $staff = $db->select('staff', 'user_accounts.full_name, user_accounts.user_id')
 
 $whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
 
-$products = $db->select('product')->where($whr)->fetchAll();
-
 $project_resources = $db->select('project_resources')
                         ->join('projects', 'project_id=resource_project')
                         ->join('branches', 'branch_id=projects.owner_branch')
                         ->join('user_accounts', 'user_id=resource_requester')
                         ->where($whr)->fetchAll();
+
+$projects = $db->select('projects', 'project_id, project_name')->where($whr)->fetchAll();
 
 $sortedProjects = [];
 foreach($project_resources as $proj){

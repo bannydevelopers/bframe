@@ -1,23 +1,13 @@
 <form method="post">
-    <h3 class="py-3">Request resource</h3>
+    <h3 class="py-3">Create activity</h3>
     <div class="row">
-        <div class="mb-3 col-md-6">
-            <label class="form-label">Resource type </label>
-            <select class="form-control" name="resource_type" onchange="update_resources()">
-                <option value="">Choose...</option>
-                <option value="staff">Staff</option>
-                <option value="tools">Tools</option>
-                <option value="products">Deliverables</option>
-                <option value="money">Money</option>
-            </select>
-        </div>
-        <div class="mb-3 col-md-6">
-            <label class="form-label">Quantity</label>
-            <input type="number" class="form-control" name="resource_quantity" placeholder="...quantity">
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" name="activity_name" placeholder="...name">
         </div>
         <div class="mb-3">
             <label class="form-label">Project</label>
-            <select class="form-control" name="resource_project">
+            <select class="form-control" name="activity_project">
                 <option value="">Choose...</option>
                 <?php foreach($projects as $pr){?>
                 <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
@@ -25,9 +15,11 @@
             </select>
         </div>
     </div>
-    <div>
-        <label>Description</label>
-        <textarea name="request_desc" placeholder="...little description about the requested resource" rows="4"></textarea>
+    <div class="row">
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea  class="form-control" name="activity_description" placeholder="...little description about the activity" rows="4"></textarea>
+        </div>
     </div>
     <div class="text-end mt-3">
         <button type="submit" class="btn rounded-pill btn-primary">Save</button>
