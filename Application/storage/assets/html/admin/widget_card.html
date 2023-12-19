@@ -1,7 +1,7 @@
 <div>
     <div class="d-flex justify-content-between">
         <div>
-            <b class="content"><?=$widget['widget_name']?></b>
+            <b class="fs-5"><?=$widget['widget_name']?></b>
         </div>
         <div>
             <a onclick="add_snippet(`<?=$widget['widget_id']?>`)" class="btn btn-sm btn-primary text-white rounded-pill" data-icon="&#xf055;">Add snippet</a>
@@ -9,9 +9,9 @@
     </div>
     <div class="flex cards">
         <?php foreach($wid as $k=>$w){?>
-            <div>
-                <div class="grey content small-txt"><?=$w->name?></div>
-                <div class="content flex" data-wid-id='<?=$widget['widget_id']?>' data-json='<?=json_encode($w)?>' style="text-align: right;font-size: 1.2em;">
+            <div class="mb-3 me-2">
+                <div class="grey p-2"><?=$w->name?></div>
+                <div class="text-end" data-wid-id='<?=$widget['widget_id']?>' data-json='<?=json_encode($w)?>' style="text-align: right;font-size: 1.2em;">
                     <input onchange="update_status(`<?=$k?>`)" type="checkbox"<?=($w->status == 'active') ? ' checked' : ''?> data-check="&#xf205;" data-unchecked="&#xf204;">
                     <a onclick="delete_widget_content(`<?=$k?>`)" class="btn-sm text-danger" data-icon="&#xf2ed;"></a>
                     <a onclick="show_visibility(`<?=$k?>`)" class="btn-sm text-primary" data-icon="&#xf06e;"></a>
