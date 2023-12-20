@@ -47,6 +47,11 @@
                                             <div>
                                                 <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
                                             </div>
+                                            
+                                            <div>
+                                                <span>Comment: </span>
+                                                <em></em>
+                                            </div>
                                             <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
                                                 <?php if($item['reference_invoice']){?>
                                                 <a class="btn-sm text-primary" data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
