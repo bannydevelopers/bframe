@@ -61,7 +61,7 @@ if($me){
                     ->and(['debt_type'=>'loan'])
                     ->order_by('debt_id', 'desc')
                     ->fetchAll();
-var_dump($db->error());
+
     $sortedDebt = [];
     foreach($debt as $st){
         if(!isset($sortedDebt[$st['branch_name']])) $sortedDebt[$st['branch_name']] = [];

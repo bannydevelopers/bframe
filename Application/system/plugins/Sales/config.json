@@ -35,7 +35,7 @@
                         "permission":"view_invoice"
                     },
                     {
-                        "name":"Purchase order",
+                        "name":"Qoatation form",
                         "href":"/plugin/Sales/purchase_order",
                         "icon":"",
                         "permission":"view_purchase_order"

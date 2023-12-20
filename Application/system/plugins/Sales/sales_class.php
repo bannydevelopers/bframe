@@ -25,6 +25,8 @@ class Sales{
         if(str_replace('-', '_', strtolower($args[0])) == strtolower(__CLASS__)) {
             $me = human_resources::get_staff();
             if($me){
+                $headquarters = human_resources::get_headquarters_branch();
+                $is_headquarters = ($headquarters == $me['work_location']);
                 $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
                 $registry = storage::init();
                 $myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";

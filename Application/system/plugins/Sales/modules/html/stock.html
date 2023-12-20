@@ -8,10 +8,14 @@
 
 <div class="card bg-white">
     <div class="tab-view">
-        <?php foreach(array_keys($sortedStock) as $i=>$k){?>
+        <?php 
+        if($is_headquarters){
+        foreach(array_keys($sortedStock) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
-        <?php }?>
+        <?php 
+            }
+        }else{?><input type="radio" name="tab" style="display: none;" checked><?php }?>
         <div class="tab-panes">
             <?php foreach($sortedStock as $v){?>
             <div class="table-responsive text-nowrap" style="min-height: 240px;" >

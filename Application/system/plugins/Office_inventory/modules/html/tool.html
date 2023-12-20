@@ -7,250 +7,230 @@
 <br>
 
 <div class="card bg-white">
-    <div class="tab-view">
-        <?php foreach(array_keys($sortedTool) as $i=>$k){?>
-        <input type="radio" name="itab<?=$k?>" id="class_tab1<?=$k?>">
-        <label for="class_tab1<?=$k?>"><h5 class="card-header">Overview</h5></label>
-        <input type="radio" name="itab<?=$k?>" id="class_tab2<?=$k?>" checked>
-        <label for="class_tab2<?=$k?>"><h5 class="card-header">Available (<?=intval(count($tools_available))?>)</h5></label>
-        <input type="radio" name="itab<?=$k?>" id="class_tab3<?=$k?>">
-        <label for="class_tab3<?=$k?>"><h5 class="card-header">Borrowed (<?=intval(count($tools_borrowed))?>)</h5></label>
-        <input type="radio" name="itab<?=$k?>" id="class_tab4<?=$k?>">
-        <label for="class_tab4<?=$k?>"><h5 class="card-header">Requested (<?=intval(count($tools_requests))?>)</h5></label>
-        <input type="radio" name="itab<?=$k?>" id="class_tab5<?=$k?>">
-        <label for="class_tab5<?=$k?>"><h5 class="card-header">Off service (<?=intval(count($tools_offservice))?>)</h5></label>
-        <?php }?>
+    <div class="tab-view"> 
+        <?php 
+        if($is_headquarters){
+        foreach(array_keys($sortedTool) as $i=>$k){
+        ?>
+        <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
+        <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
+        <?php 
+            }
+        }else{?><input type="radio" name="tab" style="display: none;" checked><?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedTool as $k=>$toolx){?>
-            <div class="table-responsive text-nowrap" style="min-height: 240px;">
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($tools_available as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
-                                <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
-                                <span>
-                                    &nbsp;<strong><?=$st['tool_name']?></strong>
-                                </span>
-                            </td>
-                            <td><?=$st['tool_description']?></td>
-                            <td><?=$st['tool_status']?></td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
+            <?php foreach(array_keys($sortedTool) as $i=>$k){?>
+            <div>
+                <div class="tab-view px-2">
+                    <input type="radio" name="itab<?=$k?>" id="class_tab1<?=$k?>">
+                    <label for="class_tab1<?=$k?>">Overview</label>
+                    <input type="radio" name="itab<?=$k?>" id="class_tab2<?=$k?>" checked>
+                    <label for="class_tab2<?=$k?>" class="card-header">Available (<?=intval(count($tools_available))?>)</label>
+                    <input type="radio" name="itab<?=$k?>" id="class_tab3<?=$k?>">
+                    <label for="class_tab3<?=$k?>" class="card-header">Borrowed (<?=intval(count($tools_borrowed))?>)</label>
+                    <input type="radio" name="itab<?=$k?>" id="class_tab4<?=$k?>">
+                    <label for="class_tab4<?=$k?>" class="card-header">Requested (<?=intval(count($tools_requests))?>)</label>
+                    <input type="radio" name="itab<?=$k?>" id="class_tab5<?=$k?>">
+                    <label for="class_tab5<?=$k?>" class="card-header">Off service (<?=intval(count($tools_offservice))?>)</label>
+                    <?php }?>
+                    <div class="tab-panes">
+                        <?php foreach($sortedTool as $k=>$toolx){?>
+                        <div class="table-responsive text-nowrap" style="min-height: 240px;">
+                            ...
+                        </div>
+                        <div class="table-responsive text-nowrap" >
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($tools_available as $st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
+                                            <span>
+                                                &nbsp;<strong><?=$st['tool_name']?></strong>
+                                            </span>
+                                        </td>
+                                        <td><?=$st['tool_description']?></td>
+                                        <td><?=$st['tool_status']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive text-nowrap" >
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($tools_borrowed as $st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
+                                            <span>
+                                                &nbsp;<strong><?=$st['tool_name']?></strong>
+                                            </span>
+                                        </td>
+                                        <td><?=$st['tool_description']?></td>
+                                        <td><?=$st['tool_status']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive text-nowrap" >
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($tools_requests as $st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
+                                            <span>
+                                                &nbsp;<strong><?=$st['tool_name']?></strong>
+                                            </span>
+                                        </td>
+                                        <td><?=$st['tool_description']?></td>
+                                        <td><?=$st['tool_status']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive text-nowrap" >
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($tools_offservice as $st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
+                                            <span>
+                                                &nbsp;<strong><?=$st['tool_name']?></strong>
+                                            </span>
+                                        </td>
+                                        <td><?=$st['tool_description']?></td>
+                                        <td><?=$st['tool_status']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive text-nowrap" >
+                            <table class="table table-hover paginate" data-items-per-page="10">
+                                <thead>
+                                    <tr>
+                                        <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    <?php foreach($tools_offservice as $st){?>
+                                    <tr data-json='<?=json_encode($st)?>'>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
+                                            <span>
+                                                &nbsp;<strong><?=$st['tool_name']?></strong>
+                                            </span>
+                                        </td>
+                                        <td><?=$st['tool_description']?></td>
+                                        <td><?=$st['tool_status']?></td>
+                                        <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <?php }?>
+                                </tbody>
+                            </table>
+                        </div>
                         <?php }?>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
-            <div class="table-responsive text-nowrap" >
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($tools_available as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
-                                <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
-                                <span>
-                                    &nbsp;<strong><?=$st['tool_name']?></strong>
-                                </span>
-                            </td>
-                            <td><?=$st['tool_description']?></td>
-                            <td><?=$st['tool_status']?></td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="table-responsive text-nowrap" >
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($tools_borrowed as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
-                                <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
-                                <span>
-                                    &nbsp;<strong><?=$st['tool_name']?></strong>
-                                </span>
-                            </td>
-                            <td><?=$st['tool_description']?></td>
-                            <td><?=$st['tool_status']?></td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="table-responsive text-nowrap" >
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($tools_requests as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
-                                <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
-                                <span>
-                                    &nbsp;<strong><?=$st['tool_name']?></strong>
-                                </span>
-                            </td>
-                            <td><?=$st['tool_description']?></td>
-                            <td><?=$st['tool_status']?></td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="table-responsive text-nowrap" >
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($tools_offservice as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
-                                <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
-                                <span>
-                                    &nbsp;<strong><?=$st['tool_name']?></strong>
-                                </span>
-                            </td>
-                            <td><?=$st['tool_description']?></td>
-                            <td><?=$st['tool_status']?></td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="table-responsive text-nowrap" >
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th><input class="form-check-input" type="checkbox" onclick="upadte_checks()"> Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($tools_offservice as $st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td>
-                                <input type="checkbox" class="form-check-input" name="tool[]" value="<?=$st['tool_name']?>">
-                                <span>
-                                    &nbsp;<strong><?=$st['tool_name']?></strong>
-                                </span>
-                            </td>
-                            <td><?=$st['tool_description']?></td>
-                            <td><?=$st['tool_status']?></td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
-            </div>
-            <?php }?>
         </div>
     </div>
 </div>

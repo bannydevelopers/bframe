@@ -11,10 +11,14 @@
 <br>
 <div>
     <div class="tab-view">
-        <?php foreach(array_keys($sortedInvoice) as $i=>$k){?>
+        <?php 
+        if($is_headquarters){
+        foreach(array_keys($sortedInvoice) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><h5 class="card-header"><?=$k?></h5></label>
-        <?php }?>
+        <?php 
+            }
+        }else{?><input type="radio" name="tab" style="display: none;" checked><?php }?>
         <div class="tab-panes">
             <?php foreach($sortedInvoice as $branch=>$invoices){?>
             <div>

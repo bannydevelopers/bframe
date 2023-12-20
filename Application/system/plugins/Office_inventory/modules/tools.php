@@ -48,7 +48,7 @@ if($me){
                     ->join('tools_category', 'tool_category_id=tool_group', 'left')
                     ->where(1)
                     ->fetchAll();
-    var_dump($db->error());  
+ 
 
     $group = $db ->select('tools_category','tool_category_id, tool_category_name')
                   ->where(1)

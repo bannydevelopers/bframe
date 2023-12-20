@@ -44,7 +44,7 @@ if(isset($_POST['delete_sales'])){
     }
     if(isset($_POST['ajax_request'])) die(json_encode($msg));
 }
-if($me['work_location'] == human_resources::get_headquarters_branch()) {
+if($is_headquarters) {
     $whr = 1;
 }
 else{

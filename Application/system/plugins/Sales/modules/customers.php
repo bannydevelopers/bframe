@@ -45,12 +45,13 @@ if(isset($_POST['delete_customer'])){
     }
     if(isset($_POST['ajax_request'])) die(json_encode($msg));
 }
-if($me['work_location'] == human_resources::get_headquarters_branch()) {
+if($is_headquarters) {
     $whr = 1;
 }
 else{
     $whr = ['owner_branch'=>$me['work_location']];
 }
+
 $customer = $db->select('customer')
                 ->join('branches', 'branch_id=owner_branch')
                 ->where($whr)
