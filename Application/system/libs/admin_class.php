@@ -612,11 +612,7 @@ class admin{
 
         $user_id = isset($addr[2]) && intval($addr[2]) ? intval($addr[2]) : user::init()->get_session_user('user_id');
 
-        $widgets = system::dispatch_event('admin_profile_load', $addr);
-        if($widgets && $widgets[0]){
-            self::$data['widgets'] = '';
-            foreach($widgets as $widget) self::$data['widgets'] .= $widget;
-        }
+        self::$data['widgets'] = system::dispatch_event('admin_profile_load', $addr);
 
         $db = self::get_db();
         self::$data['me'] = $db->select('user_accounts')

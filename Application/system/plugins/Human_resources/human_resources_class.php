@@ -14,6 +14,8 @@ class human_resources{
         system::add_event_listener('admin_plugin_load', 'human_resources::load_admin_dashboard');
         // Hook to admin card
         system::add_event_listener('admin_widgets_load', 'human_resources::load_admin_dashboard_cards');
+        // fill up for profile
+        system::add_event_listener('admin_profile_load', 'human_resources::load_admin_profile_widget');
         // Respond to service requests
         system::add_event_listener('add_staff', 'human_resources::service_add_staff');
         system::add_event_listener('add_designation', 'human_resources::service_add_designation');
@@ -48,6 +50,30 @@ class human_resources{
     public static function load_page($request){
         $registry = storage::init();
         return;
+    }
+    public static function load_admin_profile_widget($args){
+        $me = human_resources::get_staff();
+        if($me){
+            $registry = storage::init();
+            //$myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";
+            $db = db::get_connection($registry->system_config->db_configs);
+            $salary = $db->select('salary_slip')->where(['employee'=>$me['user_reference']])->limit(1)->fetch();
+            //SELECT JSON_EXTRACT(payment_slips, "$[*].employee") FROM payroll;
+            //SELECT * FROM payroll where JSON_EXTRACT(payment_slips, "$[0].employee") = 94;
+            $leave  = $db->select('leave_application')
+                         ->where(['leave_applicant'=>$me['user_reference']])
+                         ->limit(1)->fetchAll();
+
+            $payroll = $db->select('payroll')
+                            ->where("Locate('\"employee\": {$me['user_reference']},', payment_slips)>0")
+                            ->fetchAll();
+            foreach($payroll as $x=>$v){
+                $v['payment_slips'] = json_decode($v['payment_slips'], true);
+                $key = array_search($me['user_reference'], array_column($v['payment_slips'], 'employee'));
+                $payroll[$x] = $v['payment_slips'][$key];
+            }
+            return ['staff'=>$me,'slips'=>$salary, 'payroll'=>$payroll, 'leave'=>$leave];
+        }
     }
     public static function get_headquarters_branch(){
         $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
