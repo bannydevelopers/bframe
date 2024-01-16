@@ -284,53 +284,91 @@
         }
         });
     }
-    const import_stock = ()=>{
-        let htz = document.querySelector('template').content.children[2].cloneNode(true);
-        Swal.fire({
-            title: 'Import stock',
-            html:htz,
-            customClass:'mySwalSmallForm',
-            showConfirmButton:false
-        });
-        let form = document.querySelector('.mySwalSmallForm form');
-        if(form != null){
-            form.addEventListener(
-                'submit',
-                evt=>{
-                    evt.preventDefault();
-                    let fd = new FormData(form);
+    const check_selection = (name)=>{
+
+        let evtarget = window.event.target;
+        if(evtarget.value == 'add'){
+            let serv = `add_${name}`;
+            request_service(
+                serv, 
+                resp=>{
+                    let jsx = JSON.parse(resp);
                     Swal.fire({
-                        title: 'Working, please wait...',
-                        icon: 'info',
-                        showConfirmButton:false
+                        title: serv.replace('_', ' '),
+                        html: jsx.response,
+                        customClass: 'mySwalSmallForm',
+                        showConfirmButton: false
                     });
-                    ajax(
-                        window.location.href,
-                        success=>{
-                            if([...success][0] == '{' || [...success][0] == '['){
-                                let jsx = JSON.parse(success);
+                    document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+                        evt.preventDefault();
+                        let data = new FormData(evt.target);
+                        data.append('ajax_request', 1);
+                        request_service(
+                            'add_product', 
+                            response=>{
+                                let jx = JSON.parse(response);
                                 Swal.fire({
-                                    icon:jsx.status,
-                                    title:jsx.message
+                                    icon: jx.status,
+                                    html: jx.message
                                 })
-                                .then(val=>{
+                                .then(any=>{
                                     window.location.reload();
                                 });
-                            }
-                            else{
-                                Swal.fire({
-                                    icon:'error',
-                                    title:success
-                                });
-                            }
-                        },
-                        error=>{
-                            console.log(error);
-                        },
-                        fd
-                    );
+                            },
+                            data
+                        );
+                    });
                 }
             );
+
+        }
+        else{
+            if(name == 'product'){
+                let price = evtarget.options[evtarget.options.selectedIndex].getAttribute('data-price');
+                document.querySelector('.mySwalSmallForm form #selling_price').value = price;
+            }
         }
     }
+    const check_cat_selection = arg=>{
+        if(arg == 'product_category'){
+            let ele = window.event.target;
+            if(ele.value == 'add'){
+                request_service(
+                    'add_product_category', 
+                    resp=>{
+                        let jsx = JSON.parse(resp);
+                        Swal.fire({
+                            title: 'Add product category',
+                            html: jsx.response,
+                            customClass: 'mySwalSmallForm',
+                            showConfirmButton: false
+                        });
+                        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+                            evt.preventDefault();
+                            let data = new FormData(evt.target);
+                            data.append('ajax_request', 1);
+                            request_service(
+                                'add_product_category', 
+                                response=>{
+                                    let jx = JSON.parse(response);
+                                    Swal.fire({
+                                        icon: jx.status,
+                                        html: jx.message
+                                    })
+                                    .then(any=>{
+                                        window.location.reload();
+                                    });
+                                },
+                                data
+                            );
+                        });
+                    }
+                );
+            }
+        }
+    };
+    
+    
+
+    
 </script>

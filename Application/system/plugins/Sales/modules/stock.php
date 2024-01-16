@@ -2,15 +2,16 @@
 
 $config = storage::get_data('system_config')->db_configs;
 $db = db::get_connection($config);
+$hq = human_resources::get_headquarters_branch();
 if(isset($_POST['stock_batch'])){
-    //var_dump($_POST);
+    var_dump($_POST);
     $data = [
         'owner_branch'=>$me['work_location'],
         'product'=>$_POST['product_name'], 
         'stock_batch'=>$_POST['stock_batch'], 
         'stock_quantity'=>$_POST['stock_quantity'], 
         'buying_price'=>$_POST['buying_price'], 
-        'selling_price'=>$_POST['product_price'], 
+        'selling_price'=>$_POST['selling_price'], 
         'stock_expenses'=>$_POST['stock_expenses'],
         'stock_receiver'=>$me['user_reference'],
         'stock_supplier'=>$_POST['supplier']
@@ -51,7 +52,7 @@ $stock = $db ->select('stock')
                 ->fetchAll();
 
 $whr = 'stock.stock_ref < 1';
-if($me['work_location'] != human_resources::get_headquarters_branch()) {
+if($me['work_location'] != $hq) {
     $whr .= " AND stock.owner_branch={$me['work_location']}";
 }
 $stock = $db->select('stock', 'stock.*,product.*,supplier.*,branches.branch_name,user_accounts.full_name,sum(outgoing.stock_quantity) as stock_out')
@@ -65,16 +66,14 @@ $stock = $db->select('stock', 'stock.*,product.*,supplier.*,branches.branch_name
             ->group_by('stock_id')
             ->fetchAll();
 
-$product = $db->select('product', 'product_id, product_name', 'product_price')
-            ->where(1)
+$whr = $me['work_location'] == $hq ? 1 : ['owner_branch'=>$me['work_location']];
+$product = $db->select('product', 'product_id, product_name, product_price')
+            ->where($whr)
             ->fetchAll();
 
-$store = $db ->select('store', 'store_id, store_name')
-                ->where(1)
-                ->fetchAll();
 
 $supplier = $db ->select('supplier','supplier_id, supplier_name')
-                ->where(1)
+                ->where($whr)
                 ->fetchAll();
 
 $sortedStock = [];

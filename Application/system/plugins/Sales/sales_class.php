@@ -19,7 +19,7 @@ class Sales{
         // Add product category
         system::add_event_listener('add_product_category', 'sales::add_product_category');
         // Add supplier
-        system::add_event_listener('add_supplier', 'sales::add_supplier()');
+        system::add_event_listener('add_supplier', 'sales::add_supplier');
     }
     public static function load_admin_dashboard_cards($args){
         // fetch info
@@ -139,6 +139,8 @@ class Sales{
         return ob_get_clean();
     }
     public static function add_supplier($args){
-        return 'comming tomorrow';
+        ob_start();
+        include __DIR__.'/modules/html/add_supplier.html';
+        return ob_get_clean();
     }
 }

@@ -2,12 +2,12 @@
     <div class="">
         <div class="mb-3">
             <label for="product_name" class="form-label">Product Name</label>
-            <select name="product_name" class="form-control" id="product_name" onchange="check_selection('product_name')">
+            <select name="product_name" class="form-control" id="product_name" onchange="check_selection('product')">
                 <option value="">Choose...</option>
                 <?php foreach($product as $pro){?>
-                <option value="<?=$pro['product_id']?>"><?=$pro['product_name']?></option>
+                <option value="<?=$pro['product_id']?>" data-price="<?=$pro['product_price']?>"><?=$pro['product_name']?></option>
                 <?php }?>
-                <option value="">Add product</option>
+                <option value="add">Add product</option>
             </select>
         </div>    
         <div class="mb-3">
@@ -37,7 +37,7 @@
                 <?php foreach($supplier as $sup){?>
                 <option value="<?=$sup['supplier_id']?>"><?=$sup['supplier_name']?></option>
                 <?php }?>
-                <option value="">Add supplier</option>
+                <option value="add">Add supplier</option>
             </select>
         </div>
     </div>
