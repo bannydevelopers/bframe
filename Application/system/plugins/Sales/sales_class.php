@@ -139,6 +139,37 @@ class Sales{
         return ob_get_clean();
     }
     public static function add_supplier($args){
+        $me = human_resources::get_staff();
+        $hq = human_resources::get_headquarters_branch();
+        $config = storage::get_data('system_config')->db_configs;
+        $db = db::get_connection($config);
+        $status = 'error';
+        if(isset($_POST['supplier_name'])){
+            //var_dump($_POST);
+            $data = [
+                'owner_branch'=>$me['work_location'],
+                'supplier_name'=>$_POST['supplier_name'], 
+                'supplier_phone_number'=>$_POST['supplier_phone_number'], 
+                'supplier_email'=>$_POST['supplier_email'], 
+                'supplier_physical_address'=>$_POST['supplier_physical_adress'], 
+                'supplier_details'=>$_POST['supplier_details']
+            ];
+            if(isset($_POST['supplier_id']) && intval($_POST['supplier_id']) > 0){
+                $k = intval($_POST['supplier_id']);
+                $db->update('supplier', $data)->where(['supplier_id'=>$_POST['supplier_id']])->commit();
+                //var_dump($db->error());
+            }
+            else $k = $db->insert('supplier', $data);
+            //var_dump($k);
+            if(!$db->error() && $k) {
+                $msg = 'Supplier saved successful';
+                $ok =true;
+            }
+            else $msg = $db->error()['message'];
+            die(json_encode(['status'=>'info', 'message'=>$msg]));
+            //var_dump($db->error()); 
+        }
+
         ob_start();
         include __DIR__.'/modules/html/add_supplier.html';
         return ob_get_clean();
