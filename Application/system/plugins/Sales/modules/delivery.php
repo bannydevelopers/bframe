@@ -18,9 +18,7 @@ if(isset($_POST['delete_item'])){
 if(isset($_POST['created_date'])){
     $delv_data = [
         'created_date'=>addslashes($_POST['created_date']),
-        'd_n_number'=>addslashes($_POST['d_n_number']),
         't_i_number'=>addslashes($_POST['t_i_number']),
-        'customer'=>addslashes($_POST['customer']),
         'prepaired_by'=>intval($me['user_reference']),
         'owner_branch'=>intval($me['work_location'])
     ];
@@ -105,7 +103,26 @@ $delivery = $db->select('delivery',"delivery.*, {$items_q}, branches.*, customer
                 ->order_by('delivery_id', 'desc')
                 ->fetchAll();
 
-//var_dump($db->error(),$delivery);
+var_dump($db->error(),$delivery);
+
+$items_q = "(
+    SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'id', item_id, 'invoice', invoice, 'product', product_name, 'qty', quantity, 
+            'product_id', product_id, 'unit_single', 
+            product_unit_singular, 'unit_prural', product_unit_plural
+        )
+    ) 
+    FROM invoice_items JOIN product ON product_id=product WHERE invoice_id=invoice
+) AS invoice_items";
+
+$ti = $db->select('invoice', "invoice_id, customer_name, {$items_q}")
+         ->join('customer','customer_id=customer')
+         ->join('tax_invoice', 'invoice_id=reference_invoice')
+         ->join('user_accounts', 'user_id=sale_represantative')
+         ->where("invoice.owner_branch={$me['work_location']}")
+         ->fetchAll();
+
 $sortedDelivery = [];
 foreach($delivery as $delv){
     if(!isset($sortedDelivery[$delv['branch_name']])) $sortedDelivery[$delv['branch_name']] = [];

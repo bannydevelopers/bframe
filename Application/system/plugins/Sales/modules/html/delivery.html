@@ -107,6 +107,9 @@
     .numbered-table tr td:first-child::before {
         content: counter(row-num) " ";
     }
+    .items_list:last-child{
+        display: none;
+    }
 </style>
 <script>
     const check_selection = (name)=>{
@@ -445,39 +448,29 @@
         let sform = document.querySelector('.smallSwal form')
             elem = window.event.target;
         let items_list = sform.querySelectorAll('.items_list'),
-            fdx = new FormData();
-        fdx.append('get_invoice_items', elem.value);
-        ajax(
-            window.location.href,
-            resp=>{
-                let jsx = [];//JSON.parse(resp);
-                let items = '';
-                jsx = [
-                        {"product_id":45, "product_name":"TEst", "quantity":4},
-                        {"product_id":4, "product_name":"TEst product", "quantity":7}
-                ];
-                if(items_list.length > 1){
-                    [...items_list].forEach((ix,index)=>{
-                        if(index < items_list.length-1)ix.parentNode.removeChild(ix);
-                    });
-                }
-                items_list = sform.querySelectorAll('.items_list'); // reload
-                [...jsx].forEach(item=>{
-                    let tmp = items_list[0].cloneNode(true);
-                    tmp.querySelector('select').children[0].setAttribute('value', item.product_id);
-                    tmp.querySelector('select').children[0].innerText = item.product_name;
-                    tmp.querySelector('[type=number]').value = item.quantity;
-                    items_list[0].before(tmp);
-                });
+            json = elem.options[elem.options.selectedIndex].getAttribute('data-json');
 
-            },
-            error=>{
-                Swal.fire({
-                    icon: 'error',
-                    html: error
-                });
-            },
-            fdx
-        );
+        if(items_list.length > 1){
+            [...items_list].forEach((ix,index)=>{
+                if(index < items_list.length-1)ix.parentNode.removeChild(ix);
+            });
+        }
+        if(json){
+            let jsx = JSON.parse(json);
+            //console.log(jsx);
+            let items = '';
+            items_list = sform.querySelectorAll('.items_list'); // reload
+            [...jsx].forEach(item=>{
+                let tmp = items_list[0].cloneNode(true);
+                tmp.querySelector('select').children[0].setAttribute('value', item.product_id);
+                tmp.querySelector('select').children[0].innerText = item.product;
+                tmp.querySelector('[type=number]').value = item.qty;
+                tmp.querySelector('[type=number]').setAttribute('min', 1);
+                tmp.querySelector('[type=number]').setAttribute('max', item.qty);
+                tmp.querySelector('[type=number]').setAttribute('required', true);
+                items_list[0].before(tmp);
+            });
+        }
+        //else elem.options.selectedIndex = 0;
     }
 </script>

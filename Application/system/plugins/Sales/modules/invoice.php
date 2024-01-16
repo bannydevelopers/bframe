@@ -43,7 +43,6 @@ if(isset($_POST['local_purchase_order'])){
     $data = [
         'reference_invoice'=>intval($_POST['reference_invoice']),
         'local_purchase_order'=>addslashes($_POST['local_purchase_order']),
-        'tax_invoice_remarks'=>addslashes($_POST['tax_invoice_remarks']),
         'recorded_by'=>user::init()->get_session_user('user_id')
     ];
 

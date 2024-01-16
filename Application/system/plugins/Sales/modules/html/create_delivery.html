@@ -13,17 +13,21 @@
                         <option value="add">Add customer</option>
                     </select>
                 </div-->
-                <div class="mb-3 col-md-6">
+                <div class="mb-3">
                     <label for="t_i_number" class="form-label">Tax Invoice:</label>
                     <select name="t_i_number" class="form-control" id="t_i_number" onchange="update_items()" required>
                         <option value="">Choose...</option>
-                        <?php foreach($customer as $cus){?>
-                        <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
+                        <?php foreach($ti as $cus){ 
+                            $items = $cus['invoice_items'] ? json_decode($cus['invoice_items'], true) : [];
+                            $cnt = $items ? array_sum(array_column($items, 'qty')) : 0
+                            ?>
+                        <option value="<?=$cus['invoice_id']?>" data-json='<?=$cus['invoice_items']?>'>
+                            #<?=(6891+intval($cus['invoice_id']))?> - <?=$cus['customer_name']?> (<?=$cnt?>)
+                        </option>
                         <?php }?>
-                        <option value="add">Add customer</option>
                     </select>
                 </div>
-                <div class="mb-3 col-md-6">
+                <div class="mb-3">
                     <label for="created_date" class="form-label">Create date</label>
                     <input type="date" class="form-control" name="created_date" id="created_date" value="<?=date('Y-m-d')?>">
                 </div>
