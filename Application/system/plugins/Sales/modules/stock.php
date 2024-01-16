@@ -10,7 +10,7 @@ if(isset($_POST['stock_batch'])){
         'stock_batch'=>$_POST['stock_batch'], 
         'stock_quantity'=>$_POST['stock_quantity'], 
         'buying_price'=>$_POST['buying_price'], 
-        'selling_price'=>$_POST['selling_price'], 
+        'selling_price'=>$_POST['product_price'], 
         'stock_expenses'=>$_POST['stock_expenses'],
         'stock_receiver'=>$me['user_reference'],
         'stock_supplier'=>$_POST['supplier']
@@ -45,7 +45,7 @@ if(isset($_POST['delete_stock'])){
 }
 $stock = $db ->select('stock')
                 ->join('branches', 'branch_id=owner_branch')
-                ->join('product', 'product_id=product')
+                ->join('product', 'product_id=product', 'product_price=selling_price')
                 ->join('supplier','supplier_id=stock_supplier')
                 ->join('user_accounts', 'user_id=stock_receiver')
                 ->fetchAll();
@@ -65,7 +65,7 @@ $stock = $db->select('stock', 'stock.*,product.*,supplier.*,branches.branch_name
             ->group_by('stock_id')
             ->fetchAll();
 
-$product = $db->select('product', 'product_id, product_name')
+$product = $db->select('product', 'product_id, product_name', 'product_price')
             ->where(1)
             ->fetchAll();
 
