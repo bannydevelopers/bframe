@@ -52,7 +52,6 @@
 </div>
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
-    <?php include __DIR__.'/add_product.html';?>
     <form method="post" enctype="multipart/form-data">
         <label>CSV file</label>
         <input type="file" name="staff_list" accept=".csv" required>
@@ -76,47 +75,37 @@
 </style>
 <script>
     const add_product = ()=>{
-        let tpl = document.querySelector('template').content.cloneNode(true).children[0];
-        Swal.fire({
-            title: 'Add product',
-            html:tpl,
-            customClass: 'mySwalSmallForm',
-            showConfirmButton: false
-        });
-        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
-            evt.preventDefault();
-            let frm = new FormData(evt.target);
-            frm.append('ajax_request', 1);
-            ajax(
-                window.location.href,
-                response=>{
-                    //console.log(response);
-                    if(response.startsWith('{') || response.startsWith('[')){
-                        let jsx = JSON.parse(response);
-                        Swal.fire({
-                            title:jsx.message,
-                            icon: jsx.status
-                        })
-                        .then(val=>{
-                            window.location.reload();
-                        });
-                    }
-                    else{
-                        Swal.fire({
-                            title:response,
-                            icon: 'info'
-                        })
-                        .then(val=>{
-                            window.location.reload();
-                        });
-                    }
-                },
-                error=>{
-                    console.log(error);
-                },
-                frm
-            );
-        });
+        request_service(
+            'add_product', 
+            resp=>{
+                let jsx = JSON.parse(resp);
+                Swal.fire({
+                    title: 'Add product',
+                    html: jsx.response,
+                    customClass: 'mySwalSmallForm',
+                    showConfirmButton: false
+                });
+                document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+                    evt.preventDefault();
+                    let data = new FormData(evt.target);
+                    data.append('ajax_request', 1);
+                    request_service(
+                        'add_product', 
+                        response=>{
+                            let jx = JSON.parse(response);
+                            Swal.fire({
+                                icon: jx.status,
+                                html: jx.message
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        data
+                    );
+                });
+            }
+        );
     };
     const delete_product = idx=>{
         Swal.fire({
@@ -150,8 +139,43 @@
             }
         })
     };
-    const check_selection = ()=>{
-
+    const check_cat_selection = arg=>{
+        if(arg == 'product_category'){
+            let ele = window.event.target;
+            if(ele.value == 'add'){
+                request_service(
+                    'add_product_category', 
+                    resp=>{
+                        let jsx = JSON.parse(resp);
+                        Swal.fire({
+                            title: 'Add product category',
+                            html: jsx.response,
+                            customClass: 'mySwalSmallForm',
+                            showConfirmButton: false
+                        });
+                        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+                            evt.preventDefault();
+                            let data = new FormData(evt.target);
+                            data.append('ajax_request', 1);
+                            request_service(
+                                'add_product_category', 
+                                response=>{
+                                    let jx = JSON.parse(response);
+                                    Swal.fire({
+                                        icon: jx.status,
+                                        html: jx.message
+                                    })
+                                    .then(any=>{
+                                        window.location.reload();
+                                    });
+                                },
+                                data
+                            );
+                        });
+                    }
+                );
+            }
+        }
     };
     const edit_product = ()=>{
         window.event.target.style.opacity = 0;

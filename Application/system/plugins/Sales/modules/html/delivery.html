@@ -64,7 +64,7 @@
 </template>
 <style>
     .mySwal{
-        min-width: 80%;
+        /*min-width: 80%;*/
     }
     .mySwal table, .mySwal tr, .mySwal th, .mySwal tr:hover{
         background-color: #fff;
@@ -297,7 +297,7 @@
         Swal.fire({
             title: 'Add Delivery',
             html: formx,
-            customClass:'mySwal',
+            customClass:'smallSwal',
             showConfirmButton:false
         });
         search_select();
@@ -441,4 +441,43 @@
 
     }
     search_select();
+    const update_items = ()=>{
+        let sform = document.querySelector('.smallSwal form')
+            elem = window.event.target;
+        let items_list = sform.querySelectorAll('.items_list'),
+            fdx = new FormData();
+        fdx.append('get_invoice_items', elem.value);
+        ajax(
+            window.location.href,
+            resp=>{
+                let jsx = [];//JSON.parse(resp);
+                let items = '';
+                jsx = [
+                        {"product_id":45, "product_name":"TEst", "quantity":4},
+                        {"product_id":4, "product_name":"TEst product", "quantity":7}
+                ];
+                if(items_list.length > 1){
+                    [...items_list].forEach((ix,index)=>{
+                        if(index < items_list.length-1)ix.parentNode.removeChild(ix);
+                    });
+                }
+                items_list = sform.querySelectorAll('.items_list'); // reload
+                [...jsx].forEach(item=>{
+                    let tmp = items_list[0].cloneNode(true);
+                    tmp.querySelector('select').children[0].setAttribute('value', item.product_id);
+                    tmp.querySelector('select').children[0].innerText = item.product_name;
+                    tmp.querySelector('[type=number]').value = item.quantity;
+                    items_list[0].before(tmp);
+                });
+
+            },
+            error=>{
+                Swal.fire({
+                    icon: 'error',
+                    html: error
+                });
+            },
+            fdx
+        );
+    }
 </script>

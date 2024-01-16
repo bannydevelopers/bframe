@@ -13,7 +13,7 @@ if(isset($_POST['sales_date'])){
         'product'=>$_POST['product_name'], 
         'quantity'=>$_POST['quantity']
     ];
-    var_dump($db->error());
+
     if(isset($_POST['sales_id']) && intval($_POST['sales_id']) > 0){
         $k = intval($_POST['sales_id']);
         $db->update('sales', $data)->where(['sales_id'=>$_POST['sales_id']])->commit();
@@ -59,6 +59,7 @@ $sales = $db->select('sales')
 
 $product = $db->select('product', 'product_id, product_name, product_price')
                 ->where(1)
+                ->order_by('product_id', 'desc')
                 ->fetchAll();
 
 $sortedSales = [];

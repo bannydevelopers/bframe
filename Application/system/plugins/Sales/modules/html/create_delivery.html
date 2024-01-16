@@ -1,11 +1,21 @@
 <form method="post" autocomplete="off">
     <div class="content-small">
         <div class="white">
-            <div class="flex">
+            <div class="row">
                 <input type="hidden" name="invoice_type" value="proforma">
-                <div>
-                    <label for="customer">Customer</label>
-                    <select name="customer" id="customer" onchange="check_selection('customer')" required>
+                <!--div class="mb-3">
+                    <label for="customer" class="form-label">Customer</label>
+                    <select name="customer" class="form-control" id="customer" onchange="check_selection('customer')" required>
+                        <option value="">Choose...</option>
+                        <?php foreach($customer as $cus){?>
+                        <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
+                        <?php }?>
+                        <option value="add">Add customer</option>
+                    </select>
+                </div-->
+                <div class="mb-3 col-md-6">
+                    <label for="t_i_number" class="form-label">Tax Invoice:</label>
+                    <select name="t_i_number" class="form-control" id="t_i_number" onchange="update_items()" required>
                         <option value="">Choose...</option>
                         <?php foreach($customer as $cus){?>
                         <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
@@ -13,41 +23,29 @@
                         <option value="add">Add customer</option>
                     </select>
                 </div>
-                <div>
-                    <label for="d_n_number">D.N NO:</label>
-                    <input type="text" name="d_n_number" id="d_n_number" required>
-                </div>
-                <div>
-                    <label for="t_i_number">T.I NO:</label>
-                    <input type="text" name="t_i_number" id="t_i_number" required>
-                </div>
-                <div>
-                    <label for="created_date">Created date</label>
-                    <input type="date" name="created_date" id="created_date" >
+                <div class="mb-3 col-md-6">
+                    <label for="created_date" class="form-label">Create date</label>
+                    <input type="date" class="form-control" name="created_date" id="created_date" value="<?=date('Y-m-d')?>">
                 </div>
             </div>
-            <div class="content" style="text-align: left;">
-            ITEMS
+            <div class="row">
+                <div class="mb-3" style="text-align: left;">ITEMS</div>
             </div>      
-            <div class="flex content">
-                <div>
-                    <label for="product">Items</label>
-                    <select name="product[]" id="product" onchange="check_selection()" required>
+            <div class="row items_list">
+                <div class="mb-3 col-md-6">
+                    <label for="product" class="form-label">Item</label>
+                    <select name="product[]" id="product" onchange="check_selection()" class="form-control">
                         <option value="">Choose...</option>
-                        <?php foreach($product as $pro){?>
-                        <option value="<?=$pro['product_id']?>" title="<?=$pro['product_description']?>" data-price="<?=$pro['product_price']?>" data-desc="<?=$pro['product_description']?>" data-unit="<?=$pro['product_unit_plural']?>"><?=$pro['product_name']?></option>
-                        <?php }?>
-                        <option value="add">Add product</option>
                     </select>
                 </div>
-                <div>
-                    <label for="quantity">Quantity</label>
-                    <input type="number" name="quantity[]" value="0" required>
+                <div class="mb-3 col-md-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" name="quantity[]" value="0" class="form-control" required>
                 </div>
-                <div>
-                    <label>&nbsp;</label>
-                    <div style="white-space: nowrap;">
-                        <button type="button" class="btn rounded-xl btn-secondary btn-sm" onclick="replicate_items()" data-icon="&#xf067;"></button>
+                <div class="mb-3 col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <div style="white-space: nowrap;text-align: right;">
+                        <!--button type="button" class="btn rounded-xl btn-secondary btn-sm" onclick="replicate_items()" data-icon="&#xf067;"></button-->
                         <button type="button" class="btn rounded-xl btn-primary btn-sm" onclick="delete_item()" data-icon="&#xf1f8;"></button>
                     </div>
                 </div>
@@ -55,7 +53,6 @@
         </div>
     </div>
     <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
-        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
     <style>.flex{display: flex;}.flex>*{flex-basis: 100%;}</style>

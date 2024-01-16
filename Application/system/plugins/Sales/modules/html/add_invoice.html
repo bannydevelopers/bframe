@@ -5,7 +5,7 @@
             <option  value="">Choose...</option>
             <?php foreach($proforma as $prof){ if($prof['reference_invoice']) continue;?>
             <option value="<?=$prof['invoice_id']?>">
-                #<?=decoct($prof['invoice_id'])?> - <?=$prof['customer_name']?> (<?=$prof['branch_name']?>)
+                #<?=6891+intval($prof['invoice_id'])?> - <?=$prof['customer_name']?> (<?=$prof['branch_name']?>)
             </option>
             <?php } ?>
         </select>
@@ -14,10 +14,10 @@
         <label class="form-label">Local purchase order</label>
         <input type="text" class="form-control" name="local_purchase_order" placeholder="...local purchase order">
     </div>
-    <div class="mb-3">
+    <!--div class="mb-3">
         <label class="form-label">Remarks</label>
         <textarea class="form-control" name="tax_invoice_remarks" placeholder="...local purchase order" rows="4"></textarea>
-    </div>
+    </div-->
     <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>

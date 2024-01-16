@@ -156,8 +156,10 @@ class db{
     public function in($options, $data = []){
         if(is_array($options)){
             if(is_int($options[0])) $options = implode(',', $options);
-            else $options = implode("','", $options);
-            $options = "'{$options}'";
+            else {
+                $options = implode("','", $options);
+                $options = "'{$options}'";
+            }
         }
         $options = trim($options, '()');
         return $this->make_condition("($options)", 'IN', $data);
