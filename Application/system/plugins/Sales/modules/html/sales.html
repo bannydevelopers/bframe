@@ -22,7 +22,7 @@
                                 Customer name
                             </th>
                             <th>
-                                Sold date
+                                Sale date
                             </th>
                             <th>
                                 Product sold
@@ -111,8 +111,6 @@
     .mySwalSmallForm label{
         padding-left: 0;
     }
-</style>
-<style>
     .contentx{
         padding: 0 1em;
         flex-basis: 100%;
@@ -299,9 +297,79 @@
     const check_selection = ()=>{
         let elem = window.event.target,
             inpt = document.querySelector('[name=unit_amount]');
-        inpt.value = elem.options[elem.options.selectedIndex].getAttribute('data-price');
-
+        if(elem.value == 'add'){
+            request_service(
+                'add_product', 
+                resp=>{
+                    let jsx = JSON.parse(resp);
+                    Swal.fire({
+                        title: 'Add product',
+                        html: jsx.response,
+                        customClass: 'mySwalSmallForm',
+                        showConfirmButton: false
+                    });
+                    document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+                        evt.preventDefault();
+                        let data = new FormData(evt.target);
+                        data.append('ajax_request', 1);
+                        request_service(
+                            'add_product', 
+                            response=>{
+                                let jx = JSON.parse(response);
+                                Swal.fire({
+                                    icon: jx.status,
+                                    html: jx.message
+                                })
+                                .then(any=>{
+                                    window.location.reload();
+                                });
+                            },
+                            data
+                        );
+                    });
+                }
+            );
+        }
+        else inpt.value = elem.options[elem.options.selectedIndex].getAttribute('data-price');
     }
+    const check_cat_selection = arg=>{
+        if(arg == 'product_category'){
+            let ele = window.event.target;
+            if(ele.value == 'add'){
+                request_service(
+                    'add_product_category', 
+                    resp=>{
+                        let jsx = JSON.parse(resp);
+                        Swal.fire({
+                            title: 'Add product category',
+                            html: jsx.response,
+                            customClass: 'mySwalSmallForm',
+                            showConfirmButton: false
+                        });
+                        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+                            evt.preventDefault();
+                            let data = new FormData(evt.target);
+                            data.append('ajax_request', 1);
+                            request_service(
+                                'add_product_category', 
+                                response=>{
+                                    let jx = JSON.parse(response);
+                                    Swal.fire({
+                                        icon: jx.status,
+                                        html: jx.message
+                                    })
+                                    .then(any=>{
+                                        window.location.reload();
+                                    });
+                                },
+                                data
+                            );
+                        });
+                    }
+                );
+            }
+        }
+    };
     const update_total = ()=>{
         let qty = parseInt(document.querySelector('[name=quantity]').value),
             price = parseInt(document.querySelector('[name=unit_amount]').value);

@@ -14,6 +14,12 @@ class Sales{
         system::add_event_listener('admin_plugin_load', 'sales::load_admin_dashboard');
         // Hook to admin card
         system::add_event_listener('admin_widgets_load', 'sales::load_admin_dashboard_cards');
+        // Add product service
+        system::add_event_listener('add_product', 'sales::add_product_service');
+        // Add product category
+        system::add_event_listener('add_product_category', 'sales::add_product_category');
+        // Add supplier
+        system::add_event_listener('add_supplier', 'sales::add_supplier()');
     }
     public static function load_admin_dashboard_cards($args){
         // fetch info
@@ -46,5 +52,93 @@ class Sales{
     public static function load_page($request){
         $registry = storage::init();
         return;
+    }
+    public static function add_product_service($args){
+        $me = human_resources::get_staff();
+        $hq = human_resources::get_headquarters_branch();
+        $config = storage::get_data('system_config')->db_configs;
+        $db = db::get_connection($config);
+        $status = 'error';
+        if(isset($_POST['product_name'])){
+            $data = [
+                'product_name'=>addslashes($_POST['product_name']),
+                'product_price'=>intval($_POST['product_price']),
+                'product_model'=>addslashes($_POST['product_model']),
+                'product_category'=>intval($_POST['product_category']),
+                'product_description'=>addslashes($_POST['product_description']),
+                'product_unit_singular'=>addslashes($_POST['product_unit_singular']),
+                'product_unit_plural'=>addslashes($_POST['product_unit_plural']),
+                'owner_branch'=>intval($me['work_location'])
+            ];
+            if(isset($_POST['product_id'])){
+                $k = intval($_POST['product_id']);
+                $db->update('product', $data)->where(['product_id'=>$k])->commit();
+            }
+            else{
+                $chk = $db->select('product', 'product_name')
+                            ->where(['product_name'=>$data['product_name']])
+                            ->and(['owner_branch'=>$data['owner_branch']])
+                            ->limit(1)
+                            ->fetch();
+        
+                if(!$chk) $k = $db->insert('product', $data);
+                else $k = 0;
+            }
+        
+            if(isset($_FILES['product_image']) && is_readable($_FILES['product_image']['tmp_name']) && $k){
+                $dir = realpath(__DIR__.'/../../../storage/uploads/products/');
+                $source = $_FILES['product_image']['tmp_name'];//product_thumb_0.jpg
+                $bp = system::upload_image($source, "{$dir}/product_{$k}.jpg", ['width'=>600, 'height'=>400]);
+        
+                file_put_contents("{$dir}/tmp.jpg", file_get_contents($bp));
+                $thumb = system::upload_image("{$dir}/tmp.jpg", "{$dir}/product_thumb_{$k}.jpg", ['width'=>200, 'height'=>170]);
+            }
+            if($k) {
+                $msg = 'Saved successful';
+                $status = 'success';
+            }
+            else{
+                $err = $db->error();
+                $msg = $k == 0 && $err ? 'Error saving product' : $err['message'];
+            }
+            if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
+        }
+
+        $productCategory = $db->select('product_category', 'category_id, category_name')
+                            ->where(1)
+                            ->fetchAll();
+        ob_start();
+        include __DIR__.'/modules/html/add_product.html';
+        return ob_get_clean();
+    }
+    public static function add_product_category($args){
+        $me = human_resources::get_staff();
+        $hq = human_resources::get_headquarters_branch();
+        $config = storage::get_data('system_config')->db_configs;
+        $db = db::get_connection($config);
+        $status = 'error';
+
+        if(isset($_POST['category_name'])){
+            $data = [
+                'category_name'=>addslashes($_POST['category_name']),
+                'category_description'=>addslashes($_POST['category_description'])
+            ];
+            if(isset($_POST['category_id'])){
+                $k = intval($_POST['category_id']);
+                $db->update('product_category', $data)->where(['category_id'=>$k])->commit();
+            }
+            else{
+                $k = $db->insert('product_category', $data);
+            }
+            if($db->error()) $msg = $db->error()['message'];
+            else $msg = 'Category saved successful';
+            if(isset($_POST['ajax_request'])) die(json_encode(['status'=>'info', 'message'=>$msg]));
+        }
+        ob_start();
+        include __DIR__.'/modules/html/add_product_category.html';
+        return ob_get_clean();
+    }
+    public static function add_supplier($args){
+        return 'comming tomorrow';
     }
 }

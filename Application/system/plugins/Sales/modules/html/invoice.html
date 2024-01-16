@@ -29,70 +29,78 @@
                     <label for="class_tab22<?=$branch?>">Tax</label>
                     <div class="tab-panes text-start">
                         <div class="row">
-                            <?php foreach($invoices['proforma'] as $item){?>
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="card bg-white mb-3">
-                                        <div class="card-header grey">
-                                            <strong><?=$item['customer_name']?></strong>
+                        <?php if(isset($invoices['proforma'])){?>
+                        <?php foreach($invoices['proforma'] as $item){?>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card bg-white mb-3">
+                                    <div class="card-header grey">
+                                        <strong><?=$item['customer_name']?></strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <div>
+                                            <span>Created: </span>
+                                            <em><?=system::format_time($item['created_time'], 3)?></em>
                                         </div>
-                                        <div class="card-body">
-                                            <div>
-                                                <span>Created: </span>
-                                                <em><?=system::format_time($item['created_time'], 3)?></em>
-                                            </div>
-                                            <div>
-                                                <span>Due: </span>
-                                                <em><?=system::format_time($item['due_date'], 2)?></em>
-                                            </div>
-                                            <div>
-                                                <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
-                                            </div>
-                                            
-                                            <div>
-                                                <span>Comment: </span>
-                                                <em></em>
-                                            </div>
-                                            <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
-                                                <?php if($item['reference_invoice']){?>
-                                                <a class="btn-sm text-primary" data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
-                                                <?php }else{?>
-                                                <a class="btn-sm text-primary" data-icon="&#xf06e;" onclick="view_invoice()"></a>
-                                                <?php }?>
-                                                <a class="btn-sm text-primary" data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                                <?php if(!$item['reference_invoice']){?>
-                                                <a class="btn-sm text-danger" data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
-                                                <?php }?>
-                                            </div>
+                                        <div>
+                                            <span>Due: </span>
+                                            <em><?=system::format_time($item['due_date'], 2)?></em>
+                                        </div>
+                                        <div>
+                                            <span>Reference: </span><em><?=6891+intval($item['invoice_id'])?></em>
+                                        </div>
+                                        
+                                        <div>
+                                            <strong>Comment: </strong>&nbsp;
+                                            <em style="font-family: 'Times New Roman', Times, serif;"><?=stripslashes(strval($item['remarks']))?></em>
+                                        </div>
+                                        <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
+                                            <?php if($item['reference_invoice']){?>
+                                            <a class="btn-sm text-primary" data-icon="&#xf0c5;" onclick="copy_invoice()"></a>
+                                            <?php }else{?>
+                                            <a class="btn-sm text-primary" data-icon="&#xf06e;" onclick="view_invoice()"></a>
+                                            <?php }?>
+                                            <a class="btn-sm text-primary" data-icon="&#xf02f;" onclick="print_preview()"></a>
+                                            <?php if(!$item['reference_invoice']){?>
+                                            <a class="btn-sm text-danger" data-icon="&#xf2ed;" onclick="delete_invoice(`<?=$item['invoice_id']?>`)"></a>
+                                            <?php }?>
                                         </div>
                                     </div>
                                 </div>
-                            <?php } ?>
+                            </div>
+                        <?php } ?>
+                        <?php } ?>
                         </div>
                         <div class="row">
+                            <?php if(isset($invoices['tax'])){?>
                             <?php foreach($invoices['tax'] as $item){?>
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="card bg-white mb-3">
-                                        <div class="card-header grey">
-                                            <strong><?=$item['customer_name']?></strong>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="cardx bg-white mb-3">
+                                    <div class="card-header grey">
+                                        <strong><?=$item['customer_name']?></strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <div>
+                                            <span>Created: </span>
+                                            <em><?=system::format_time($item['created_time'], 3)?></em>
                                         </div>
-                                        <div class="card-body">
-                                            <div>
-                                                <span>Created: </span>
-                                                <em><?=system::format_time($item['created_time'], 3)?></em>
-                                            </div>
-                                            <div>
-                                                <span>Due: </span>
-                                                <em><?=system::format_time($item['due_date'], 2)?></em>
-                                            </div>
-                                            <div>
-                                                <span>Reference: </span><em><?=decoct($item['invoice_id'])?></em>
-                                            </div>
-                                            <div class="text-end" data-json='<?=json_encode($item)?>'>
-                                                <a class="btn-sm text-secondary" data-icon="&#xf02f;" onclick="print_preview()"></a>
-                                            </div>
+                                        <div>
+                                            <span>Due: </span>
+                                            <em><?=system::format_time($item['due_date'], 2)?></em>
+                                        </div>
+                                        <div>
+                                            <span>Reference: </span><em><?=6891+intval($item['invoice_id'])?></em>
+                                        </div>
+                                        <div>
+                                            <strong>Comment: </strong>&nbsp;
+                                            <em style="font-family: 'Times New Roman', Times, serif;"><?=stripslashes(strval($item['remarks']))?></em>
+                                        </div>
+                                        <div class="text-end" data-json='<?=json_encode($item)?>'>
+                                            <a class="btn-sm text-secondary" data-icon="&#xf02f;" onclick="print_preview()"></a>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
@@ -209,12 +217,19 @@
         json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
         json.VAT = json.VAT.toLocaleString('en-US');
         json.total = json.total.toLocaleString('en-US');
-        json.order_id = 6891+parseInt(json.invoice_id);
+        json.invoice_no = 6891+parseInt(json.invoice_id);
+        //json.order_no = json.order_number;
         //let tpl = document.getElementById('invoice-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
 
         json.created_time = json.created_time.slice(0, 10);
         json.due_date = json.due_date.slice(0, 10);
+
+        // workaround
+        if(json.invoice_type == 'tax'){
+            tplx.querySelector('.order_no').innerText = 'LPO number';
+            json.order_no = json.local_purchase_order;
+        }
 
         htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
         Swal.fire({
@@ -231,7 +246,7 @@
     const delete_invoice = (invoice_ref)=>{
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
-            ref = decToOctal(invoice_ref);
+            ref = 6891+parseInt(invoice_ref);
         Swal.fire({
             icon: 'question',
             html: `Delete invoice with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
@@ -457,4 +472,9 @@
 
     }
     //search_select();
+    document.addEventListener('DOMContentLoaded', evt=>{
+        document.querySelector('[name=q]').addEventListener('keyup', ev=>{
+            alert(ev.target.value);
+        });
+    });
 </script>

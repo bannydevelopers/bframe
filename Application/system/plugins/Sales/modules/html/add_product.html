@@ -11,12 +11,12 @@
         </div>
         <div class="mb-3 col-md-6">
             <label for="product_category" class="form-label">Category</label>
-            <select name="product_category" class="form-select id="product_category" onchange="check_selection('product_category')">
+            <select name="product_category" class="form-select id="product_category" onchange="check_cat_selection('product_category')">
                 <option value="">Choose...</option>
                 <?php foreach($productCategory as $cat){?>
                 <option value="<?=$cat['category_id']?>"><?=$cat['category_name']?></option>
                 <?php }?>
-                <option value="">Add category</option>
+                <option value="add">Add category</option>
             </select>
         </div>
         <div class="mb-3 col-md-6">
@@ -40,7 +40,6 @@
         </div>
     </div>
     <div class="text-end">
-        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
 </form>

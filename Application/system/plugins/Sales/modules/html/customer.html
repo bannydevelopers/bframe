@@ -76,7 +76,8 @@
 
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
-    <div class="vspaced" style="text-align: left;">
+    <div>
+        <div class="vspaced" style="text-align: left;">
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{customer_name}}</h3>
                 <div><span style="color: #696cff;">E-mail: </span>{{customer_email}}</div>
@@ -92,6 +93,7 @@
                     <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
                 </div>
             </div>
+        </div>
     </div>
     <?php include __DIR__.'/add_customer.html';?>
     <form method="post" enctype="multipart/form-data">

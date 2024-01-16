@@ -6,7 +6,7 @@
         </div>    
         <div class="mb-3 col-md-6">
                 <label for="sales_date" class="form-label">Sales date</label>
-                <input type="date" id="sales_date" class="form-control" name="sales_date" value="" required />
+                <input type="date" id="sales_date" class="form-control" name="sales_date" value="<?=date('Y-m-d')?>" required />
         </div>
         <div class="mb-3 col-md-6">
             <label for="product_name" class="form-label">Product sold</label>
@@ -15,7 +15,7 @@
                 <?php foreach($product as $pro){?>
                 <option value="<?=$pro['product_id']?>" data-price="<?=$pro['product_price']?>"><?=$pro['product_name']?></option>
                 <?php }?>
-                <option value="">Add product</option>
+                <option value="add">Add product</option>
             </select>
         </div>
         <div class="mb-3 col-md-6">

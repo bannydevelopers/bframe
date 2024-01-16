@@ -146,8 +146,8 @@
             tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
                 <td>${reli[x].item_name}</td>
                 <td>${reli[x].qty}</td>
-                <td>${price}</td>
-                <td style="text-align: right;">${itotal}</td></tr>`;
+                <td><!--${price}--></td>
+                <td style="text-align: right;"><!--${itotal}--></td></tr>`;
             json.total += item_total;
         }
         //console.log(tmp[sn]);

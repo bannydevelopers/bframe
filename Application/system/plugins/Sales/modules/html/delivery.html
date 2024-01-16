@@ -64,7 +64,7 @@
 </template>
 <style>
     .mySwal{
-        min-width: 80%;
+        /*min-width: 80%;*/
     }
     .mySwal table, .mySwal tr, .mySwal th, .mySwal tr:hover{
         background-color: #fff;
@@ -106,6 +106,9 @@
     }
     .numbered-table tr td:first-child::before {
         content: counter(row-num) " ";
+    }
+    .items_list:last-child{
+        display: none;
     }
 </style>
 <script>
@@ -297,7 +300,7 @@
         Swal.fire({
             title: 'Add Delivery',
             html: formx,
-            customClass:'mySwal',
+            customClass:'smallSwal',
             showConfirmButton:false
         });
         search_select();
@@ -441,4 +444,33 @@
 
     }
     search_select();
+    const update_items = ()=>{
+        let sform = document.querySelector('.smallSwal form')
+            elem = window.event.target;
+        let items_list = sform.querySelectorAll('.items_list'),
+            json = elem.options[elem.options.selectedIndex].getAttribute('data-json');
+
+        if(items_list.length > 1){
+            [...items_list].forEach((ix,index)=>{
+                if(index < items_list.length-1)ix.parentNode.removeChild(ix);
+            });
+        }
+        if(json){
+            let jsx = JSON.parse(json);
+            //console.log(jsx);
+            let items = '';
+            items_list = sform.querySelectorAll('.items_list'); // reload
+            [...jsx].forEach(item=>{
+                let tmp = items_list[0].cloneNode(true);
+                tmp.querySelector('select').children[0].setAttribute('value', item.product_id);
+                tmp.querySelector('select').children[0].innerText = item.product;
+                tmp.querySelector('[type=number]').value = item.qty;
+                tmp.querySelector('[type=number]').setAttribute('min', 1);
+                tmp.querySelector('[type=number]').setAttribute('max', item.qty);
+                tmp.querySelector('[type=number]').setAttribute('required', true);
+                items_list[0].before(tmp);
+            });
+        }
+        //else elem.options.selectedIndex = 0;
+    }
 </script>

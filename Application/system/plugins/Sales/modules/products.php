@@ -4,50 +4,6 @@ $hq = human_resources::get_headquarters_branch();
 $config = storage::get_data('system_config')->db_configs;
 $db = db::get_connection($config);
 $status = 'error';
-if(isset($_POST['product_name'])){
-    $data = [
-        'product_name'=>addslashes($_POST['product_name']),
-        'product_price'=>intval($_POST['product_price']),
-        'product_model'=>addslashes($_POST['product_model']),
-        'product_category'=>intval($_POST['product_category']),
-        'product_description'=>addslashes($_POST['product_description']),
-        'product_unit_singular'=>addslashes($_POST['product_unit_singular']),
-        'product_unit_plural'=>addslashes($_POST['product_unit_plural']),
-        'owner_branch'=>intval($me['work_location'])
-    ];
-    if(isset($_POST['product_id'])){
-        $k = intval($_POST['product_id']);
-        $db->update('product', $data)->where(['product_id'=>$k])->commit();
-    }
-    else{
-        $chk = $db->select('product', 'product_name')
-                    ->where(['product_name'=>$data['product_name']])
-                    ->and(['owner_branch'=>$data['owner_branch']])
-                    ->limit(1)
-                    ->fetch();
-
-        if(!$chk) $k = $db->insert('product', $data);
-        else $k = 0;
-    }
-
-    if(isset($_FILES['product_image']) && is_readable($_FILES['product_image']['tmp_name']) && $k){
-        $dir = realpath(__DIR__.'/../../../../storage/uploads/products/');
-        $source = $_FILES['product_image']['tmp_name'];//product_thumb_0.jpg
-        $bp = system::upload_image($source, "{$dir}/product_{$k}.jpg", ['width'=>600, 'height'=>400]);
-
-        file_put_contents("{$dir}/tmp.jpg", file_get_contents($bp));
-        $thumb = system::upload_image("{$dir}/tmp.jpg", "{$dir}/product_thumb_{$k}.jpg", ['width'=>200, 'height'=>170]);
-    }
-    if($k) {
-        $msg = 'Saved successful';
-        $status = 'success';
-    }
-    else{
-        $err = $db->error();
-        $msg = $k == 0 && $err ? 'Error saving product' : $err['message'];
-    }
-    if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
-}
 if(isset($_POST['delete_product'])){
     $idx = intval($_POST['delete_product']);
     $db->delete('product')->where(['product_id'=>$idx])->commit();

@@ -22,7 +22,8 @@ if(isset($_POST['due_date'])){
         'customer'=>addslashes($_POST['customer']),
         'sale_represantative'=>intval($me['user_reference']),
         'owner_branch'=>intval($me['work_location']),
-        'created_time'=>addslashes($_POST['created_time'])
+        'created_time'=>addslashes($_POST['created_time']),
+        'remarks'=>addslashes($_POST['invoice_remarks'])
     ];
 
     $inv_items_qry = [];
@@ -42,7 +43,6 @@ if(isset($_POST['local_purchase_order'])){
     $data = [
         'reference_invoice'=>intval($_POST['reference_invoice']),
         'local_purchase_order'=>addslashes($_POST['local_purchase_order']),
-        'tax_invoice_remarks'=>addslashes($_POST['tax_invoice_remarks']),
         'recorded_by'=>user::init()->get_session_user('user_id')
     ];
 
@@ -135,6 +135,7 @@ $tax_invoices = $db->select('tax_invoice', $qry)
 foreach($tax_invoices as $inv){
     if(!isset($sortedInvoice[$inv['branch_name']])) $sortedInvoice[$inv['branch_name']] = ['tax'=>[]];
     $inv['invoice_items'] = $inv['invoice_items'] ? json_decode($inv['invoice_items'],true) : [];
+    $inv['invoice_type'] = 'tax';
     $sortedInvoice[$inv['branch_name']]['tax'][] = $inv;
 }
 if($me['work_location'] == human_resources::get_headquarters_branch()) {

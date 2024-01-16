@@ -30,13 +30,13 @@
         <td>
           <table style="min-width: 30%;text-align: left;font-size: 13px;">
             <tr class="white">
-                <td><b>As per your order NO:</b></td>
-                <td>{{order_id}}</td>
-              </tr>
-            <tr class="white">
-              <td><b>Proforma Invoice number.</b></td>
-              <td>{{order_id}}</td>
+              <td><b>Invoice number.</b></td>
+              <td>{{invoice_no}}</td>
             </tr>
+            <tr class="white">
+                <td><b class="order_no">Order NO:</b></td>
+                <td>{{order_number}}</td>
+              </tr>
             <tr class="white">
               <td><b>Create date</b></td>
               <td>{{created_time}}</td>
@@ -106,7 +106,7 @@
       <tr style="margin-top: 6em;" class="white">
         <td colspan="3" style="text-align: left;font-size: 13px;">
           <div style="display: flex;">
-            <div>
+            <div>&nbsp;
               <b>Payment terms</b><br>
               <pre style="font-family: inherit;"><?=$company[0]->payment_terms?></pre>
             </div>
