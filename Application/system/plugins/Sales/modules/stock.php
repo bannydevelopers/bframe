@@ -29,8 +29,7 @@ if(isset($_POST['stock_batch'])){
 }
 //var_dump($db->error());
 if(isset($_POST['delete_stock'])){
-    $db->delete('stock')->where(['user_reference'=>intval($_POST['delete_stock'])])->commit();
-    if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_stock'])])->commit();
+    $db->delete('stock')->where(['stock_id'=>intval($_POST['delete_stock'])])->commit();
     if(!$db->error()){
         $msg = [
             'status'=>'success',
@@ -43,6 +42,7 @@ if(isset($_POST['delete_stock'])){
             'message'=>$db->error()['message']
         ];
     }
+    if(isset($_POST['ajax_request'])) die(json_encode($msg));
 }
 $stock = $db ->select('stock')
                 ->join('branches', 'branch_id=owner_branch')
