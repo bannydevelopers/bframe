@@ -88,6 +88,10 @@
                                             <em><?=system::format_time($item['due_date'], 2)?></em>
                                         </div>
                                         <div>
+                                            <span>Staus: </span>
+                                            <em><?=str_replace('_', ' ', $item['payment_status'])?></em>
+                                        </div>
+                                        <div>
                                             <span>Reference: </span><em><?=6891+intval($item['invoice_id'])?></em>
                                         </div>
                                         <div>

@@ -4,7 +4,7 @@ $config = storage::get_data('system_config')->db_configs;
 $db = db::get_connection($config);
 $hq = human_resources::get_headquarters_branch();
 if(isset($_POST['stock_batch'])){
-    var_dump($_POST);
+    //var_dump($_POST);
     $data = [
         'owner_branch'=>$me['work_location'],
         'product'=>$_POST['product_name'], 
@@ -29,8 +29,7 @@ if(isset($_POST['stock_batch'])){
 }
 //var_dump($db->error());
 if(isset($_POST['delete_stock'])){
-    $db->delete('stock')->where(['user_reference'=>intval($_POST['delete_stock'])])->commit();
-    if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_stock'])])->commit();
+    $db->delete('stock')->where(['stock_id'=>intval($_POST['delete_stock'])])->commit();
     if(!$db->error()){
         $msg = [
             'status'=>'success',
@@ -43,6 +42,7 @@ if(isset($_POST['delete_stock'])){
             'message'=>$db->error()['message']
         ];
     }
+    if(isset($_POST['ajax_request'])) die(json_encode($msg));
 }
 $stock = $db ->select('stock')
                 ->join('branches', 'branch_id=owner_branch')
