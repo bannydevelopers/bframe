@@ -4,7 +4,7 @@ $config = storage::get_data('system_config')->db_configs;
 $db = db::get_connection($config);
 $hq = human_resources::get_headquarters_branch();
 if(isset($_POST['stock_batch'])){
-    var_dump($_POST);
+    //var_dump($_POST);
     $data = [
         'owner_branch'=>$me['work_location'],
         'product'=>$_POST['product_name'], 

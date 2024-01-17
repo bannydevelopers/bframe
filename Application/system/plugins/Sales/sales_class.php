@@ -101,7 +101,7 @@ class Sales{
                 $err = $db->error();
                 $msg = $k == 0 && $err ? 'Error saving product' : $err['message'];
             }
-            //var_dump($db->error());
+            var_dump($db->error());
             if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
         }
 
