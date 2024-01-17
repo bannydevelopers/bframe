@@ -304,8 +304,9 @@
                         let data = new FormData(evt.target);
                         data.append('ajax_request', 1);
                         request_service(
-                            'add_product', 
+                            serv, 
                             response=>{
+                                console.log(response);
                                 let jx = JSON.parse(response);
                                 Swal.fire({
                                     icon: jx.status,
@@ -329,6 +330,7 @@
             }
         }
     }
+    
     const check_cat_selection = arg=>{
         if(arg == 'product_category'){
             let ele = window.event.target;
