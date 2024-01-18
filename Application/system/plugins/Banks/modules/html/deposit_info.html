@@ -33,10 +33,10 @@
                             <td>
                                 <input type="checkbox" class="form-check-input" name="customer_name[]" value="<?=$st['customer_name']?>">
                                 <span>
-                                    &nbsp;<strong><?=$st['customer_name']?></strong>
+                                    &nbsp;<strong><?=$st['customer_name']?$st['customer_name']:$st['received_from']?></strong>
                                 </span>
                             </td>
-                            <td><?=$st['per_invoice_no']?></td>
+                            <td><?=6891+intval($st['per_invoice_no'])?></td>
                             <td><?=$st['date']?></td>
                             <td><?=$st['amount']?></td>
                             <td><?=$st['bank_name']?></td>
@@ -261,7 +261,7 @@
                 }
                 else {
                     Swal.fire({
-                        title: 'Malformed response returned',
+                        title: 'Service not available',
                         icon: 'error',
                         html:response
                     });
@@ -272,12 +272,6 @@
             },
             userdata
             );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
         }
         });
     }
@@ -329,5 +323,9 @@
                 }
             );
         }
+    }
+    const switch_source = ()=>{
+        document.querySelector('[name=received_from]').parentNode.classList.toggle('hidden');
+        document.querySelector('[name=per_invoice_no]').parentNode.classList.toggle('hidden');
     }
 </script>
