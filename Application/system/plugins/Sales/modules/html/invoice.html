@@ -34,7 +34,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="card bg-white mb-3">
                                     <div class="card-header grey">
-                                        <strong><?=$item['customer_name']?></strong>
+                                        <strong>#<?=6891+intval($item['invoice_id'])?> - <?=$item['customer_name']?></strong>
                                     </div>
                                     <div class="card-body">
                                         <div>
@@ -45,12 +45,9 @@
                                             <span>Due: </span>
                                             <em><?=system::format_time($item['due_date'], 2)?></em>
                                         </div>
-                                        <div>
-                                            <span>Reference: </span><em><?=6891+intval($item['invoice_id'])?></em>
-                                        </div>
                                         
                                         <div>
-                                            <strong>Comment: </strong>&nbsp;
+                                            <strong>Remarks: </strong>&nbsp;
                                             <em style="font-family: 'Times New Roman', Times, serif;"><?=stripslashes(strval($item['remarks']))?></em>
                                         </div>
                                         <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
@@ -73,10 +70,10 @@
                         <div class="row">
                             <?php if(isset($invoices['tax'])){?>
                             <?php foreach($invoices['tax'] as $item){?>
-                            <div class="col-md-6 col-lg-4">
+                            <div class="col-md-6 col-lg-4 <?=$item['payment_status']?>">
                                 <div class="cardx bg-white mb-3">
                                     <div class="card-header grey">
-                                        <strong><?=$item['customer_name']?></strong>
+                                        <strong>#<?=6891+intval($item['invoice_id'])?> - <?=$item['customer_name']?></strong>
                                     </div>
                                     <div class="card-body">
                                         <div>
@@ -92,10 +89,7 @@
                                             <em><?=str_replace('_', ' ', $item['payment_status'])?></em>
                                         </div>
                                         <div>
-                                            <span>Reference: </span><em><?=6891+intval($item['invoice_id'])?></em>
-                                        </div>
-                                        <div>
-                                            <strong>Comment: </strong>&nbsp;
+                                            <strong>Remarks: </strong>&nbsp;
                                             <em style="font-family: 'Times New Roman', Times, serif;"><?=stripslashes(strval($item['remarks']))?></em>
                                         </div>
                                         <div class="text-end" data-json='<?=json_encode($item)?>'>
