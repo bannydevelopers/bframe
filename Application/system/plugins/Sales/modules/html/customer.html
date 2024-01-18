@@ -80,20 +80,21 @@
         <div class="vspaced" style="text-align: left;">
             <div class="content-small">
                 <h3 style="padding-bottom: .6em;" class="large-text">{{customer_name}}</h3>
-                <div><span style="color: #696cff;">E-mail: </span>{{customer_email}}</div>
-                <div><span style="color: #696cff;">Phone: </span>{{customer_phone_number}}</div>
-                <div><span style="color: #696cff;">Address #: </span>{{customer_physical_adress}}</div>
-                <div><span style="color: #696cff;">Date Registered: </span>{{created_time}}</div>
+                <div class="mb-2"><span style="color:#696cff;">E-mail: </span>{{customer_email}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Phone: </span>{{customer_phone_number}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Address #: </span>{{customer_physical_adress}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Date Registered: </span>{{created_time}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Residence address: </span>{{residence_address}}</div>
             </div>
         </div>
-        <div>
+        <!-- <div>
             <div class="flex">
                 <div class="content-small">
-                    <span style="color: #696cff;">Residence address</span>
+                    <class="mb-2"><span style="color:#696cff;">Residence address</span>
                     <pre style="font-family: inherit;margin: 0;padding: 0;">{{residence_address}}</pre>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <?php include __DIR__.'/add_customer.html';?>
     <form method="post" enctype="multipart/form-data">
