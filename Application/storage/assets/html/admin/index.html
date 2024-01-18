@@ -22,6 +22,9 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="Application/storage/uploads/images/logo.png">
+    <!-- data-tables -->
+    <link rel="stylesheet" href="vendor/components/data-tables/vanilla-dataTables.min.css">
+    <script src="vendor/components/data-tables/vanilla-dataTables.min.js"></script>
 
     <!-- Fonts -->
     
@@ -712,82 +715,30 @@
                 evt.target.parentNode.classList.toggle('uncollapsed');
             });
         });
-        /* Pagination */
+        /*data-tables */
         document.addEventListener('DOMContentLoaded', function () {
             const contents = document.querySelectorAll('.paginate'); 
             if(contents !== null){
-                [...contents].forEach(content=>{
-                    let ic = parseInt(content.getAttribute('data-items-per-page'));
-                    const itemsPerPage = ic || 10;
-                    let currentPage = 0;
-                    const items = Array.from(content.getElementsByTagName('tr')).slice(1);
-                    const tables = Array.from(content.getElementsByTagName('table'));
-
-                    function showPage(page) {
-                        const startIndex = page * itemsPerPage;
-                        const endIndex = startIndex + itemsPerPage;
-                        tables.forEach((table, tindex) => {
-                            let tr = table.querySelector('tbody').children;
-                            Array.from(tr).forEach((item, index)=>{
-                                item.classList.toggle('hidden', index < startIndex || index >= endIndex);
-                            });
-                        });
-                        updateActiveButtonStates();
-                    }
-                    function showPage(page) {
-                        const startIndex = page * itemsPerPage;
-                        const endIndex = startIndex + itemsPerPage;
-                        items.forEach((item, index) => {
-                            item.classList.toggle('hidden', index < startIndex || index >= endIndex);
-                        });
-                        updateActiveButtonStates();
-                    }
-
-                    function createPageButtons() {
-                        const totalPages = Math.ceil(items.length / itemsPerPage);
-                        if(totalPages < 2) return;
-                        const paginationContainer = document.createElement('ul');
-                        paginationContainer.classList.add(
-                          'pagination', 'pt-3', 'px-2' //, 'justify-content-end'
-                          );
-                        const paginationDiv = document.body.appendChild(paginationContainer);
-
-                        // Add page buttons
-                        for (let i = 0; i < totalPages; i++) {
-                            const pageButton = document.createElement('li');
-                            pageButton.classList.add('page-item');
-                            const linkTag = document.createElement('a')
-                            linkTag.classList.add('page-link');
-                            linkTag.href = 'javascript:void(0);';
-
-                            linkTag.textContent = i + 1;
-                            linkTag.addEventListener('click', () => {
-                              currentPage = i;
-                              showPage(currentPage);
-                              updateActiveButtonStates();
-                            });
-                            pageButton.appendChild(linkTag);
-                            paginationDiv.appendChild(pageButton);
-                            content.appendChild(paginationContainer);
-                        }
-                    }
-
-                    function updateActiveButtonStates() {
-                      const pageButtons = document.querySelectorAll('.pagination li');
-                      pageButtons.forEach((button, index) => {
-                        if (index === currentPage) {
-                          button.classList.add('active');
-                        } else {
-                          button.classList.remove('active');
-                        }
-                      });
-                    }
-
-                    createPageButtons(); // create the page buttons initially
-                    showPage(currentPage);
+              let dataTables = [];
+                [...contents].forEach((table, index)=>{
+                  let idx = `data-table-${index}`;
+                  table.setAttribute('id', idx);
+                  dataTables[index] = new DataTable(`#${idx}`, {
+                      searchable: true,
+                      fixedHeight: true
+                  });
                 });
             }
         });
+        const update_checks = ()=>{
+          let chk = window.event.target;
+          let tbl = chk.closest('table');
+          tbl.querySelectorAll('tbody [type=checkbox]');
+          [...tbl.querySelectorAll('tbody [type=checkbox]')].forEach(el=>{
+            el.checked = chk.checked;
+          });
+        }
+        let upadte_checks = update_checks; /* token of appreciation to typos */
        </script>
   </body>
 </html>
