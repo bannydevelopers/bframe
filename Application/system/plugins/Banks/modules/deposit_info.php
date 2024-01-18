@@ -67,6 +67,13 @@ if($me){
                     ->where(1)
                     ->fetchAll();
 
+    $ti = $db->select('invoice', "invoice_id, customer_name")
+         ->join('customer','customer_id=customer')
+         ->join('tax_invoice', 'invoice_id=reference_invoice')
+         ->join('user_accounts', 'user_id=sale_represantative')
+         ->where("invoice.owner_branch={$me['work_location']}")
+         ->fetchAll();
+var_dump($ti);
     $sortedDeposit = [];
     foreach($deposit as $st){
         if(!isset($sortedDeposit[$st['branch_name']])) $sortedDeposit[$st['branch_name']] = [];

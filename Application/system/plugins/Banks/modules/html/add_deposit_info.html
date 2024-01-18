@@ -1,18 +1,13 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">    
     <div class="card-body">
         <div class="mb-3">
-            <label for="customer_name" class="form-label">Received from</label>
-            <select name="customer_name" id="customer_name" onchange="check_selection('customer_name')" class="form-select">
+            <label for="customer_name" class="form-label">Tax invoice</label>
+            <select name="per_invoice_no" id="per_invoice_no" class="form-select">
                 <option value="">Choose...</option>
-                <?php foreach($customer as $cus){?>
-                <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
+                <?php foreach($ti as $t){?>
+                <option value="<?=$t['invoice_id']?>">#<?=6891 + intval($t['invoice_id'])?> - <?=$t['customer_name']?></option>
                 <?php }?>
-                <option value="">Add customer</option>
             </select>
-        </div>
-        <div class="mb-3">
-            <label for="per_invoice_no" class="form-label">Per invoice no</label>
-            <input type="number" class="form-control" id="per_invoice_no" name="per_invoice_no" placeholder="Per invoice no..." required />
         </div>
         <div class="mb-3">
             <label for="date" class="form-label">Date</label>
