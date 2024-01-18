@@ -62,7 +62,6 @@
                             </td>
                             <td>
                                 <a onclick="view_sales()" data-icon="&#xf06e;"></a>
-                                <a onclick="edit_sales()" data-icon="&#xf044;"></a>
                                 <a onclick="delete_sales()" data-icon="&#xf2ed;"></a>
                             </td>
                         </tr>
@@ -77,18 +76,16 @@
 <style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <div class="vspaced" style="text-align: left;">
-        <div class="flex white rounded" style="box-shadow: 0 0 4px #999;margin: 4px;margin-top: -4em;">
             <div class="content-small">
-                <h3 style="padding-bottom: .6em;" class="large-text">{{customer_name}}</h3>
-                <div><span style="color: rgb(35, 57, 136);">Sales date: </span>{{sales_date}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Sales number: </span>{{sales_number}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Product sold: </span>{{product_name}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Unit: </span>{{unit}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Quantity: </span>{{quantity}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Unit amount </span>{{unit_amount}}</div>
-                <div><span style="color: rgb(35, 57, 136);">Total amount: </span>{{total_amount}}</div>
+                <h3 style="padding-bottom: .6em; text-align: center;" class="large-text">{{customer_name}}</h3>
+                <div class="mb-2"><span style="color:#696cff;">Sales date: </span>{{sales_date}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Sales number: </span>{{sales_number}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Product sold: </span>{{product_name}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Unit: </span>{{unit}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Quantity: </span>{{quantity}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Unit amount </span>{{unit_amount}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Total amount: </span>{{total_amount}}</div>
             </div>
-        </div>
     </div>
     <?php include __DIR__.'/add_sales.html';?>
     <form method="post" enctype="multipart/form-data">
