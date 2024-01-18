@@ -5,21 +5,42 @@ if($me){
     $db = db::get_connection($config);
     if(isset($_POST['amount'])){
         //var_dump($_POST);
-        $data = [
-            'owner_branch'=>$me['work_location'],
-            'per_invoice_no'=>intval($_POST['per_invoice_no']),   
-            'date'=>$_POST['date'], 
-            'amount'=>$_POST['amount'],
-            'cheque_no'=>$_POST['cheque_no'],
-            'received_from'=>$_POST['received_from'],
-            'received_by'=>$me['user_reference'],
-            'bank'=>$_POST['bank']
-        ];
-        if(empty($data['received_from']) && empty($data['per_invoice_no'])){
+        if(empty($_POST['received_from']) && empty($_POST['per_invoice_no'])){
             $msg = 'No deposit person';
             $ok = 'error';
         }
         else{
+            $data = [
+                'owner_branch'=>$me['work_location'],
+                'per_invoice_no'=>intval($_POST['per_invoice_no']),   
+                'date'=>$_POST['date'], 
+                'amount'=>$_POST['amount'],
+                'cheque_no'=>$_POST['cheque_no'],
+                'received_from'=>$_POST['received_from'],
+                'received_by'=>$me['user_reference'],
+                'bank'=>$_POST['bank']
+            ];
+
+            if($data['per_invoice_no'] > 0){
+                $inv_total = $db->select('invoice_items', 'SUM(price * quantity) as amount')
+                                ->where(['invoice'=>$data['per_invoice_no']])
+                                ->fetch();
+                $deposit_total = $db->select('deposit_info', 'SUM(amount) as paid')
+                                    ->where(['per_invoice_no'=>$data['per_invoice_no']])
+                                    ->fetch();
+
+                if(intval($deposit_total['paid']) >= intval($inv_total['amount'])){
+                    $db->update('tax_invoice', ['payment_status'=>'full_paid'])
+                        ->where(['reference_invoice'=>$data['per_invoice_no']])
+                        ->commit();
+                }
+                else{
+                    $db->update('tax_invoice', ['payment_status'=>'incomplete_payment'])
+                        ->where(['reference_invoice'=>$data['per_invoice_no']])
+                        ->commit();
+                }
+            }
+
             if(isset($_POST['deposit_id']) && intval($_POST['deposit_id']) > 0){
                 $k = intval($_POST['deposit_id']);
                 $db->update('deposit_info', $data)->where(['deposit_id'=>$_POST['deposit_id']])->commit();
