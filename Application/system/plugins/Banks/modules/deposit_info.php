@@ -7,25 +7,31 @@ if($me){
         //var_dump($_POST);
         $data = [
             'owner_branch'=>$me['work_location'],
-            'per_invoice_no'=>$_POST['per_invoice_no'],   
+            'per_invoice_no'=>intval($_POST['per_invoice_no']),   
             'date'=>$_POST['date'], 
             'amount'=>$_POST['amount'],
             'cheque_no'=>$_POST['cheque_no'],
-            'received_from'=>$_POST['customer_name'],
+            'received_from'=>$_POST['received_from'],
+            'received_by'=>$me['user_reference'],
             'bank'=>$_POST['bank']
         ];
-        //var_dump($db->error());
-        if(isset($_POST['deposit_id']) && intval($_POST['deposit_id']) > 0){
-            $k = intval($_POST['deposit_id']);
-            $db->update('deposit_info', $data)->where(['deposit_id'=>$_POST['deposit_id']])->commit();
+        if(empty($data['received_from']) && empty($data['per_invoice_no'])){
+            $msg = 'No deposit person';
+            $ok = 'error';
         }
-        else $k = $db->insert('deposit_info', $data);
-        $ok = 'error';
-        if(!$db->error() && $k) {
-            $msg = 'deposit saved successful';
-            $ok ='success';
+        else{
+            if(isset($_POST['deposit_id']) && intval($_POST['deposit_id']) > 0){
+                $k = intval($_POST['deposit_id']);
+                $db->update('deposit_info', $data)->where(['deposit_id'=>$_POST['deposit_id']])->commit();
+            }
+            else $k = $db->insert('deposit_info', $data);
+            $ok = 'error';
+            if(!$db->error() && $k) {
+                $msg = 'deposit saved successful';
+                $ok ='success';
+            }
+            else $msg = $db->error()['message']; 
         }
-        else $msg = $db->error()['message']; 
         if(isset($_POST['ajax_request'])) die($msg);
     }
     
@@ -53,7 +59,9 @@ if($me){
     }
     $deposit = $db->select('deposit_info')
                     ->join('branches', 'branch_id=owner_branch')
-                    ->join('customer','customer_id=received_from')
+                    ->join('user_accounts','user_id=received_by')
+                    ->join('invoice', 'invoice_id=per_invoice_no','left')
+                    ->join('customer', 'invoice.customer=customer_id', 'left')
                     ->join('banks','bank_id=bank')
                     ->where($whr)
                     ->order_by('deposit_id', 'desc')
@@ -73,7 +81,7 @@ if($me){
          ->join('user_accounts', 'user_id=sale_represantative')
          ->where("invoice.owner_branch={$me['work_location']}")
          ->fetchAll();
-var_dump($ti);
+
     $sortedDeposit = [];
     foreach($deposit as $st){
         if(!isset($sortedDeposit[$st['branch_name']])) $sortedDeposit[$st['branch_name']] = [];
