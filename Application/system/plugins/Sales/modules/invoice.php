@@ -26,6 +26,7 @@ if(isset($_POST['due_date'])){
         'remarks'=>addslashes($_POST['invoice_remarks'])
     ];
 
+    if(isset($_POST['skip_list'])) $inv_data['skip_list'] = json_encode(array_keys($_POST['skip_list']));
     $inv_items_qry = [];
     $inv_id = $db->insert('invoice', $inv_data);
     if($inv_id){

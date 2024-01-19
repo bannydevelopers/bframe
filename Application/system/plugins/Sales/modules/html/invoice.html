@@ -228,7 +228,18 @@
             tplx.querySelector('.order_no').innerText = 'LPO number';
             json.order_no = json.local_purchase_order;
         }
-
+        if(json.skip_list){
+            json.skip_list = JSON.parse(json.skip_list);
+            [...json.skip_list].forEach(sl=>{
+                let  el = tplx.querySelectorAll(`.${sl}-tr`);
+                if(el) {
+                    [...el].forEach(elx=>{
+                        elx.style.display = 'none';
+                    });
+                    
+                }
+            });
+        }
         htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
         Swal.fire({
             html:htmlContent,
