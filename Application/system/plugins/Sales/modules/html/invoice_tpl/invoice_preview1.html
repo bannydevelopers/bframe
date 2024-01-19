@@ -7,8 +7,8 @@
             <div style="text-align: left;flex-basis: 100%;">
               <div style="text-transform: capitalize;">{{customer_name}}</div>
               <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
-              <div>TIN: {{tin_number}}</div>
-              <div>VRN: {{vrn_number}}</div>
+              <div class="TIN-tr">TIN: {{tin_number}}</div>
+              <div class="VRN-tr">VRN: {{vrn_number}}</div>
             </div>
             <div style="flex-basis: 100%;">
               <div style="text-align: center;"">
@@ -33,19 +33,19 @@
               <td><b>Invoice number.</b></td>
               <td>{{invoice_no}}</td>
             </tr>
-            <tr class="white">
+            <tr class="white order_date-tr">
                 <td><b class="order_no">Order NO:</b></td>
                 <td>{{order_number}}</td>
               </tr>
             <tr class="white">
               <td><b>Create date</b></td>
-              <td>{{created_time}}</td>
+              <td>{{created}}</td>
             </tr>
-            <tr class="white">
+            <tr class="white due_date-tr">
               <td><b>Due date</b></td>
               <td>{{due_date}}</td>
             </tr>
-            <tr class="white">
+            <tr class="white sale_representantive-tr">
               <td><b>Sales represantantive</b></td>
               <td>{{full_name}}</td>
             </tr>
@@ -74,12 +74,12 @@
               <th style="text-align: right;">Total</th> 
               <th style="text-align: right;">{{total}}</th>
             </tr>
-            <tr class="white">
+            <tr class="white VAT-tr">
               <td colspan="4">&nbsp;</td>
               <th style="text-align: right;">VAT (18%)</th>
               <th style="text-align: right;"><span>{{VAT}}</span></th>
             </tr> 
-            <tr>
+            <tr class="VAT-tr">
               <td colspan="4">&nbsp;</td>
               <th style="text-align: right;">Total including VAT</th>
               <th style="text-align: right;padding: 0;">

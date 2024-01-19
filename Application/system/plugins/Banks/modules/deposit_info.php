@@ -22,14 +22,21 @@ if($me){
             ];
 
             if($data['per_invoice_no'] > 0){
-                $inv_total = $db->select('invoice_items', 'SUM(price * quantity) as amount')
+                $inv_total = $db->select('invoice_items', 'SUM(price * quantity) as amount, skip_list')
+                                ->join('invoice', 'invoice_id=invoice')
                                 ->where(['invoice'=>$data['per_invoice_no']])
                                 ->fetch();
+
                 $deposit_total = $db->select('deposit_info', 'SUM(amount) as paid')
                                     ->where(['per_invoice_no'=>$data['per_invoice_no']])
                                     ->fetch();
+                //var_dump($inv_total, $deposit_total); die;
 
-                if(intval($deposit_total['paid']) >= intval($inv_total['amount'])){
+                $depo = intval($deposit_total['paid']) + intval($data['amount']);
+                $inv = intval($inv_total['amount']);
+                $skiplist = $inv_total['skip_list'] ? json_decode($inv_total['skip_list'], true) : [];
+                if(!in_array('VAT', $skiplist)) $inv = $inv + (0.18 * $inv);
+                if($depo >= $inv){
                     $db->update('tax_invoice', ['payment_status'=>'full_paid'])
                         ->where(['reference_invoice'=>$data['per_invoice_no']])
                         ->commit();
@@ -101,6 +108,7 @@ if($me){
          ->join('tax_invoice', 'invoice_id=reference_invoice')
          ->join('user_accounts', 'user_id=sale_represantative')
          ->where("invoice.owner_branch={$me['work_location']}")
+         ->and("payment_status != 'full_paid'")
          ->fetchAll();
 
     $sortedDeposit = [];

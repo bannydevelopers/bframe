@@ -26,6 +26,7 @@ if(isset($_POST['due_date'])){
         'remarks'=>addslashes($_POST['invoice_remarks'])
     ];
 
+    if(isset($_POST['skip_list'])) $inv_data['skip_list'] = json_encode(array_keys($_POST['skip_list']));
     $inv_items_qry = [];
     $inv_id = $db->insert('invoice', $inv_data);
     if($inv_id){
@@ -105,7 +106,7 @@ $items_q = "(
                 ) 
                 FROM invoice_items JOIN product ON product_id=product WHERE invoice_id=invoice
             ) AS invoice_items";
-$qry = "invoice.*, branches.branch_name, customer.*, user_accounts.full_name, {$items_q}, tax_invoice.*";
+$qry = "invoice.*, branches.branch_name, customer.*, user_accounts.full_name, {$items_q}, tax_invoice.*, invoice.created_time as created";
     //FROM invoice JOIN  ON  JOIN  ON ";
 $proforma = $db->select('invoice',$qry)
                 ->join('branches','branch_id=owner_branch')

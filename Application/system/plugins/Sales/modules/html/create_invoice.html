@@ -22,8 +22,7 @@
         <div class="mb-3 col-md-3">
             <label for="due_date" class="form-label">Due date</label>
             <input type="date" name="due_date" class="form-control" id="due_date" value="<?=date('Y-m-d', (time()+(3600*24*29)))?>">
-        </div>
-           
+        </div> 
         <div class="content" style="text-align: left;">
         ITEMS
         </div>      
@@ -59,15 +58,24 @@
             </div>
         </div>
         
-        <div class="mb-3">
+        <div class="mb-3 col-md-8">
             <label class="form-label">Remarks</label>
             <textarea class="form-control" name="invoice_remarks" placeholder="...proforma description" rows="4"></textarea>
         </div>
+        <div class="mb-3 col-md-4">
+            <label class="form-label">Skip list</label>
+            <ul style="list-style: none;padding:0;line-height: 1.2;">
+                <li><label><input type="checkbox" name="skip_list[VAT]">&nbsp;Hide VAT</label></li>
+                <li><label><input type="checkbox" name="skip_list[TIN]">&nbsp;Hide TIN</label></li>
+                <li><label><input type="checkbox" name="skip_list[VRN]">&nbsp;Hide VRN</label></li>
+                <li><label><input type="checkbox" name="skip_list[due_date]">&nbsp;Hide Due date</label></li>
+                <li><label><input type="checkbox" name="skip_list[order_number]">&nbsp;Hide Order number</label></li>
+                <li><label><input type="checkbox" name="skip_list[sale_representantive]">&nbsp;Hide sale representantive</label></li>
+            </ul>
+        </div>
     </div>
     <div class="white" style="flex-shrink: 1;padding: .5em 1em;text-align: right;flex-basis: auto;">
-        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
-    <style>.flex{display: flex;}.flex>*{flex-basis: 100%;}</style>
 </form>
  
