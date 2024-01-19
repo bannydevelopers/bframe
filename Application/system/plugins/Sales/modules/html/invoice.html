@@ -39,7 +39,7 @@
                                     <div class="card-body">
                                         <div>
                                             <span>Created: </span>
-                                            <em><?=system::format_time($item['created_time'], 3)?></em>
+                                            <em><?=system::format_time($item['created'], 3)?></em>
                                         </div>
                                         <div>
                                             <span>Due: </span>
@@ -220,7 +220,7 @@
         //let tpl = document.getElementById('invoice-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
 
-        json.created_time = json.created_time.slice(0, 10);
+        json.created = json.created.slice(0, 10);
         json.due_date = json.due_date.slice(0, 10);
 
         // workaround

@@ -106,7 +106,7 @@ $items_q = "(
                 ) 
                 FROM invoice_items JOIN product ON product_id=product WHERE invoice_id=invoice
             ) AS invoice_items";
-$qry = "invoice.*, branches.branch_name, customer.*, user_accounts.full_name, {$items_q}, tax_invoice.*";
+$qry = "invoice.*, branches.branch_name, customer.*, user_accounts.full_name, {$items_q}, tax_invoice.*, invoice.created_time as created";
     //FROM invoice JOIN  ON  JOIN  ON ";
 $proforma = $db->select('invoice',$qry)
                 ->join('branches','branch_id=owner_branch')
