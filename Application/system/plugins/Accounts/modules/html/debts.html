@@ -22,6 +22,7 @@
                             <th>Type</th>
                             <th>Description</th>
                             <th>Amount</th>
+                            <th>Payment date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -40,6 +41,9 @@
                                 <td><?=$st['debt_description']?></td>
                                 <td>
                                     <?=$st['debt_amount']?><br>
+                                </td>
+                                <td>
+                                    <?=system::format_time($st['payment_date'],3)?><br>
                                 </td>
                             <td>
                             <div class="dropdown">
@@ -99,9 +103,9 @@
             <option value="<?=$s['supplier_id']?>"><?=$s['supplier_name']?></option>
             <?php } ?>
         </div>
-        <div id="tpl-business_partner">
+        <div id="tpl-business_partiner">
             <option value="">Choose...</option>
-            <?php foreach($Partners as $p){?>
+            <?php foreach($partiner as $p){?>
             <option value="<?=$p['business_partiner_id']?>"><?=$p['business_partiner_name']?></option>
             <?php } ?>
         </div>
