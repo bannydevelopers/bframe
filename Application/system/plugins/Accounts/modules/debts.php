@@ -9,6 +9,7 @@ if($me){
         
         $data = [
             'debt_date'=>addslashes($_POST['debt_date']), 
+            'payment_date'=>addslashes($_POST['payment_date']), 
             'debt_description'=>addslashes($_POST['debt_description']), 
             'debt_amount'=>addslashes($_POST['debt_amount']), 
             'debt_party_type'=>addslashes($_POST['debt_party_type']),
