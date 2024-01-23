@@ -1,7 +1,7 @@
 <form method="post" autocomplete="off">
     <div class="row">
         <input type="hidden" name="invoice_type" value="proforma">
-        <div class="mb-3 col-md-4">
+        <div class="mb-3 col-md-6">
             <label for="supplier" class="form-label" >Supplier name</label>
             <select name="supplier" class="form-control" id="supplier" onchange="check_selection('supplier')">
                 <option value="">Choose...</option>
@@ -11,11 +11,7 @@
                 <option value="add">Add supplier</option>
             </select>
         </div>
-        <div class="mb-3 col-md-4">
-            <label for="purchase_no" class="form-label">Purchase no</label>
-            <input type="text" class="form-control" name="purchase_no" id="purchase_no" required">
-        </div>
-        <div class="mb-3 col-md-4">
+        <div class="mb-3 col-md-6">
             <label for="purchase_date" class="form-label">Purchase date</label>
             <input type="date" class="form-control" name="purchase_date" id="purchase_date" value="<?=date('Y-m-d', time())?>">
         </div>

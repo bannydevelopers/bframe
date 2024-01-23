@@ -327,7 +327,39 @@
                 }
             );
         }
-        else inpt.value = elem.options[elem.options.selectedIndex].getAttribute('data-price');
+        else {
+            inpt.value = elem.options[elem.options.selectedIndex].getAttribute('data-price');
+            let fdata = new FormData();
+            fdata.append('get_batch', elem.value);
+            ajax(
+                window.location.href,
+                response=>{
+                    console.log(response);
+                    let pbi = document.querySelector('.mySwalSmallForm form [name=product_batch]'),
+                        jsx = JSON.parse(response);
+                    if(jsx){
+                        let opts = '<option value="">Choose...</option>';
+                        [...jsx].forEach(el=>{
+                            if(el.stock_out < el.stock_quantity){
+                                if(el.stock_out == null) el.stock_out = 0;
+                                el.create_date = el.create_date.substring(0,10);
+                                opts += `<option value="${el.stock_id}">`
+                                    + `#${el.stock_batch} of ${el.create_date}, (${el.stock_out}/${el.stock_quantity})`
+                                    + `</option>`;
+                            }
+                        });
+                        pbi.innerHTML = opts;
+                    }
+                },
+                error=>{
+                    Swal.fire({
+                        icon: 'info',
+                        html: error
+                    });
+                },
+                fdata
+            );
+        }
     }
     const check_cat_selection = arg=>{
         if(arg == 'product_category'){

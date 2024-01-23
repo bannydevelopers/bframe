@@ -34,6 +34,15 @@ if(isset($_POST['purchase_date'])){
     else $msg = 'Saved successful';
     if(isset($_POST['ajax_request'])) die($msg);
 }
+if(isset($_POST['approve_purchase'])){
+    $db->update('purchase', ['approved_by'=>$me['user_reference']])
+        ->where(['purchase_id'=>intval($_POST['approve_purchase'])])
+        ->commit();
+
+    if($db->error()) $msg = $db->error()['message'];
+    else $msg = 'Approved successful';
+    die($msg);
+}
 if(isset($_POST['local_purchase_order'])){
     $data = [
         'reference_purchase'=>intval($_POST['reference_purchase']),
@@ -106,17 +115,18 @@ $items_q = "(
                 FROM purchase_items WHERE purchase_item_reference=purchase_id
             ) AS purchase_items";
 
-$qry = "purchase.*, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
+$qry = "purchase.*, approver.full_name as approved, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
 
 $purchase = $db->select('purchase', $qry)
                 ->join('branches','branch_id=owner_branch')
                 ->join('user_accounts', 'user_id=created_by')
+                ->join('user_accounts as approver', 'approver.user_id=approved_by', 'LEFT')
                 ->join('supplier', 'supplier_id=supplier')
                 ->where($whr)
                 ->order_by('purchase_id', 'desc')
                 ->fetchAll();   
 
-
+//var_dump($db->error());
 $supplier = $db ->select('supplier','supplier_id, supplier_name')
                 ->where($whr)
                 ->fetchAll();

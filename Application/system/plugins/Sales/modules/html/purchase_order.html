@@ -29,6 +29,7 @@
                             <th>Purchase date</th>
                             <th>Supplier</th>
                             <th>Created by</th>
+                            <th>Approved by</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -36,16 +37,20 @@
                         <?php foreach($invoices as $kx=>$st){?>
                         <tr>
                             <td><?=++$kx?></td>
-                            <td><?=$st['purchase_no']?></td>
+                            <td><?=6891+intval($st['purchase_id'])?></td>
                             <td><?=system::format_time($st['purchase_date'])?></td>
                             <td><?=$st['supplier_name']?></td>
                             <td><?=$st['full_name']?></td>
+                            <td><?=$st['approved']?></td>
                             <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                     <img src="Application/storage/assets/html/admin/img/more.svg" alt="">
                                 </button>
                                 <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
+                                    <?php if(!$st['approved'] && user::init()->user_can('approve_purchase')){?>
+                                    <a onclick="approve_purchase()" class="dropdown-item"><span class="me-1" data-icon="&#xf14a;"></span>Approve purchase</a>
+                                    <?php }?>
                                     <a onclick="view_purchase_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Edit items</a>
                                     <a onclick="print_preview()" class="dropdown-item"><span class="me-1" data-icon="&#xf047;"></span> Print purchase</a>
                                     <a onclick="delete_purchase()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete purchase</a>
@@ -363,4 +368,38 @@
 
     }
     //search_select();
+    const approve_purchase = ()=>{
+        let elem = window.event.target;
+        let jsx = JSON.parse(elem.parentNode.getAttribute('data-json'));
+        jsx.purchase_no = jsx.purchase_id + 6891;
+        Swal.fire({
+            icon:'question',
+            html: `Surely delete purchase with number ${jsx.purchase_no}?`
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fdx = new FormData();
+                fdx.append('approve_purchase', jsx.purchase_id);
+                ajax(
+                    window.location.href,
+                    resp=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: resp
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon:'error',
+                            html:error
+                        })
+                    },
+                    fdx
+                );
+            }
+        });
+    }
 </script>

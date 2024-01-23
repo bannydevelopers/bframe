@@ -36,5 +36,6 @@
     "add_delivery",
     "edit_delivery",
     "view_delivery",
-    "delete_delivery"
+    "delete_delivery",
+    "approve_purchase"
 ]

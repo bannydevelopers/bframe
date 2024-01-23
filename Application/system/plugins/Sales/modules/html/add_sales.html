@@ -8,8 +8,10 @@
                 <label for="sales_date" class="form-label">Sales date</label>
                 <input type="date" id="sales_date" class="form-control" name="sales_date" value="<?=date('Y-m-d')?>" required />
         </div>
+    </div>
+    <div class="row">
         <div class="mb-3 col-md-6">
-            <label for="product_name" class="form-label">Product sold</label>
+            <label for="product_name" class="form-label">Product</label>
             <select name="product_name" class="form-control" id="product_name" onchange="check_selection()">
                 <option value="">Choose...</option>
                 <?php foreach($product as $pro){?>
@@ -19,20 +21,26 @@
             </select>
         </div>
         <div class="mb-3 col-md-6">
+            <label for="product_batch" class="form-label">Batch</label>
+            <select name="product_batch" class="form-control" id="product_batch">
+                <option value="">Choose...</option>
+            </select>
+        </div>
+        <div class="mb-3 col-md-4">
             <label for="quantity" class="form-label">Quantity</label>
             <input type="text" id="quantity"class="form-control" name="quantity" onchange="update_total()" onkeyup="update_total()" required />
         </div>
-        <div class="mb-3 col-md-6">
+        <div class="mb-3 col-md-4">
             <label for="unit_amount" class="form-label">Unit price</label>
-            <input type="text" id="unit_amount" class="form-control"name="unit_amount" onchange="update_total()" onkeyup="update_total()" required />
+            <input type="text" id="unit_amount" class="form-control" name="unit_amount" onchange="update_total()" onkeyup="update_total()" required />
         </div>
-        <div class="mb-3 col-md-6">
+        <div class="mb-3 col-md-4">
             <label for="total_amount" class="form-label">Total amount</label>
-            <input type="number" id="total_amount" class="form-control"value="" readonly />
+            <input type="number" id="total_amount" class="form-control" value="" readonly />
         </div>
     </div>
     <div class="text-end">
-        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
+        <button type="button" class="btn rounded-pill btn-secondary btn-sm" onclick="duplicate_inputs()">Add item</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
 </form>

@@ -73,13 +73,13 @@ if($me){
                 $qry .= "INSERT INTO user_accounts (full_name, email, phone, system_role, passcode) VALUES ('{$line[0]}','{$line[1]}','{$line[2]}','{$role_id}','{$pass}');".PHP_EOL;
                 
                 $bnk = array_search($line[4], array_column($banks, 'bank_id'));
-                $bank_id = @$banks[$bnk]['bank_id'];
+                $bank_id = $banks[$bnk]['bank_id'];
                 
                 $desn = array_search($line[4], array_column($designations, 'designation_id'));
                 $designation_id = $designations[$desn]['designation_id'];
                 
                 $wl = array_search($line[4], array_column($work_locations, 'branch_id'));
-                $branch_id = @$work_locations[$wl]['branch_id'];
+                $branch_id = $work_locations[$wl]['branch_id'];
                 if($me['work_location'] != $moduleconfig->headquarters_branch) $branch_id = $me['work_location'];
                 
                 $dept = array_search($line[4], array_column($departments, 'dept_id'));
