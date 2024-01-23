@@ -17,12 +17,12 @@
                     <label for="t_i_number" class="form-label">Tax Invoice:</label>
                     <select name="t_i_number" class="form-control" id="t_i_number" onchange="update_items()" required>
                         <option value="">Choose...</option>
-                        <?php foreach($ti as $cus){ 
-                            $items = $cus['invoice_items'] ? json_decode($cus['invoice_items'], true) : [];
+                        <?php foreach($ti as $tx){ 
+                            $items = $tx['invoice_items'] ? json_decode($tx['invoice_items'], true) : [];
                             $cnt = $items ? array_sum(array_column($items, 'qty')) : 0
-                            ?>
-                        <option value="<?=$cus['invoice_id']?>" data-json='<?=$cus['invoice_items']?>'>
-                            #<?=(6891+intval($cus['invoice_id']))?> - <?=$cus['customer_name']?> (<?=$cnt?>)
+                        ?>
+                        <option value="<?=$tx['tax_invoice_id']?>" data-json='<?=$tx['invoice_items']?>'>
+                            #<?=(6891+intval($tx['invoice_id']))?> - <?=$tx['customer_name']?> (<?=$cnt?>)
                         </option>
                         <?php }?>
                     </select>

@@ -22,13 +22,15 @@ if(isset($_POST['created_date'])){
         'prepaired_by'=>intval($me['user_reference']),
         'owner_branch'=>intval($me['work_location'])
     ];
-
+  
     $delv_items_qry = [];
     $delv_id = $db->insert('delivery', $delv_data);
     if($delv_id){
         foreach($_POST['product'] as $k=>$p){
+            if(!$p) continue;
             $delv_items_qry[] = "({$p}, {$delv_id}, {$_POST['quantity'][$k]})";
         }
+        //var_dump('<pre>',$delv_items_qry);die;
         $delv_items_qry = implode(',', $delv_items_qry);
         $db->query("INSERT INTO delivery_items (product, delivery, quantity) VALUES {$delv_items_qry}");
     }
@@ -97,13 +99,15 @@ WHERE delivery_id=delivery) AS delivery_items";
     //FROM delivery JOIN  ON  JOIN  ON ";
 $delivery = $db->select('delivery',"delivery.*, {$items_q}, branches.*, customer.*,user_accounts.full_name")
                 ->join('branches','branch_id=owner_branch')
-                ->join('customer', 'customer_id=customer')
+                ->join('tax_invoice', 'tax_invoice_id=t_i_number', 'left')
+                ->join('invoice', 'invoice_id=reference_invoice', 'left')
+                ->join('customer', 'customer_id=customer', 'left')
                 ->join('user_accounts', 'user_id=prepaired_by')
                 ->where($whr)
                 ->order_by('delivery_id', 'desc')
                 ->fetchAll();
 
-var_dump($db->error(),$delivery);
+//var_dump($db->error(),$delivery);
 
 $items_q = "(
     SELECT JSON_ARRAYAGG(
@@ -116,7 +120,7 @@ $items_q = "(
     FROM invoice_items JOIN product ON product_id=product WHERE invoice_id=invoice
 ) AS invoice_items";
 
-$ti = $db->select('invoice', "invoice_id, customer_name, {$items_q}")
+$ti = $db->select('invoice', "tax_invoice_id, invoice_id, customer_name, {$items_q}")
          ->join('customer','customer_id=customer')
          ->join('tax_invoice', 'invoice_id=reference_invoice')
          ->join('user_accounts', 'user_id=sale_represantative')

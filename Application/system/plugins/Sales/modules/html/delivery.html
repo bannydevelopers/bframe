@@ -27,16 +27,16 @@
                     <div class="tab-panes" style="text-align: left;">
                         <div class="row">
                             <?php foreach($deliverys as $item){?>
-                                <div class="col-md-6">
-                                    <div class="content-small grey">
-                                        <strong><?=$item['customer_name']?></strong>
+                                <div class="shadow-sm p-2 m-3 bg-body rounded col-md-3 card">
+                                    <div class="p-2 content-small grey">
+                                        <strong>#<?=6891+intval($item['delivery_id'])?> - <?=$item['customer_name']?></strong>
                                     </div>
-                                    <div>
+                                    <div class="pb-2">
                                         <span>Created: </span>
                                         <em><?=system::format_time($item['created_time'], 3)?></em>
                                     </div>
                                     <div>
-                                        <span>Reference: </span><em><?=decoct($item['delivery_id'])?></em>
+                                        <span>Reference: </span><em></em>
                                     </div>
                                     <div style="text-align: right;" data-json='<?=json_encode($item)?>'>
                                         <a data-icon="&#xf06e;" onclick="view_delivery()"></a>

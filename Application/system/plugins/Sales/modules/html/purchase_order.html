@@ -374,7 +374,7 @@
         jsx.purchase_no = jsx.purchase_id + 6891;
         Swal.fire({
             icon:'question',
-            html: `Surely delete purchase with number ${jsx.purchase_no}?`
+            html: `Surely approve purchase with number ${jsx.purchase_no}?`
         })
         .then(prompt=>{
             if(prompt.isConfirmed){
