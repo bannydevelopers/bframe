@@ -1,8 +1,10 @@
-<div class="mb-2 border <?=(in_array($v, $active)?'border-success':'border-secondary')?>">
-    <div class="p-2 grey"><?=$info->name?></div>
-    <div class="p-2"><?=$info->description?></div>
-    <div class="text-end">
-        <a data-icon="&#xf2ed;" onclick="delete_plugin(`<?=$v?>`)" class="text-danger text-lg btn btn-sm"></a>
-        <a data-icon="<?=$icon?>" onclick="update_plugin(`<?=$v?>`)" class="text-primary btn btn-sm"></a>
+<div class="col-4">
+    <div class="m-1 border <?=(in_array($v, $active)?'border-success':'border-secondary')?>">
+        <div class="p-2 grey"><?=$info->name?></div>
+        <div class="p-2"><?=$info->description?></div>
+        <div class="text-end">
+            <a data-icon="&#xf2ed;" onclick="delete_plugin(`<?=$v?>`)" class="text-danger text-lg btn btn-sm"></a>
+            <a data-icon="<?=$icon?>" onclick="update_plugin(`<?=$v?>`)" class="text-primary btn btn-sm"></a>
+        </div>
     </div>
 </div>

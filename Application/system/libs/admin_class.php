@@ -413,7 +413,7 @@ class admin{
             
             $empty_roles = $db->select('roles')->order_by('role_id', 'desc')->fetchAll();
 
-            $perms = $db->select('permissions')->fetchAll();
+            $perms = $db->select('permissions')->order_by('legend', 'desc')->fetchAll();
             $permissions = [];
             foreach($perms as $perm){
                 if(!isset($permissions[$perm['legend']])) $permissions[$perm['legend']] = [];

@@ -20,7 +20,7 @@
                         <div><strong><?=$legend?></strong></div>
                         <div class="d-flex flex-wrap">
                         <?php foreach($permission as $v){?>
-                            <div class="p-2" data-icon="&#xf058;">
+                            <div class="p-2 perms" data-icon="&#xf058;">
                                 <?=$v['permission_name']?>
                             </div>
                         <?php }?>
@@ -124,7 +124,8 @@
         let tpl = '<form method="post" name="perms-form" class="content-small">'
                     +`<input type="hidden" name="role_perm" value="${role}" placeholder="Role name">`
                     +'<div>';
-        let perms = window.event.target.parentNode.nextElementSibling.querySelectorAll('.content-small');
+        let perms = window.event.target.parentNode.nextElementSibling.querySelectorAll('.perms');
+
         let perm_list = [];
         [...perms].forEach(elem=>{
             perm_list.push(elem.innerText.trim());
@@ -210,12 +211,6 @@
                     data
                 )
             }
-        });
-    }
-    const update_checks = ()=>{
-        let elem = window.event.target;
-        [...elem.parentNode.nextElementSibling.querySelectorAll('[type=checkbox]')].forEach(bx=>{
-            bx.checked = elem.checked;
         });
     }
 </script>

@@ -22,13 +22,17 @@
     <hr>   
     <div>
         <div class="row">
-            <div class="mb-3 col-md-4">
+            <div class="mb-3 col-md-3">
                 <label for="item_name"class="form-label">Items name</label>
                 <input type="text" class="form-control" name="item_name[]" id="item_name">
             </div>
             <div class="mb-3 col-md-4">
-                <label for="discription"class="form-label">Discription</label>
-                <textarea rows="1" type="text" id="discription" class="form-control" name="discription"></textarea>
+                <label class="form-label">Description
+                <textarea rows="1" type="text" class="form-control" name="description[]"></textarea></label>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">Quantity
+                <textarea rows="1" type="number" class="form-control" name="quantity[]"></textarea></label>
             </div>
             <!-- <div class="mb-3 col-md-3">
                 <label for="price"class="form-label">Price per item</label>
@@ -38,7 +42,7 @@
                 <label class="form-label">Total price</label>
                 <input type="number" value="0" class="form-control" id="total_price" readonly>
             </div> -->
-            <div class="mb-3 col-md-4"> 
+            <div class="mb-3 col-md-2"> 
                 <div class="d-flex pt-4">
                     <button type="button" class="btn rounded-xl btn-primary btn-sm me-1" onclick="replicate_items()" data-icon="&#xf067;"></button>
                     <button type="button" class="btn rounded-xl btn-danger btn-sm" onclick="delete_item()" data-icon="&#xf1f8;"></button>

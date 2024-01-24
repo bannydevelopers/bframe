@@ -1,7 +1,6 @@
 <div>
     <h3 class="py-3">Edit purchase order</h3>
     <form method="post">
-        <input type="hidden" name="invoice" value="0">
         <table class="table table-hover text-start numbered-table">
             <thead>
                 <tr>
@@ -13,7 +12,7 @@
                         Quantity
                     </th>
                     <th>
-                        Price
+                        Description
                     </th>
                     <th>
                         &nbsp;
@@ -28,17 +27,15 @@
                     </td>
                     <td class="text-nowrap">
                         <div class="d-flex">
-                            <input class="form-control" value="{{qty}}" name="qty[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> 
+                            <input class="form-control" value="{{qty}}" name="qty[{{id}}]" style="width: 72px;" type="number" min="1" required> 
                         </div>               
                     </td>
                     <td>
-                        <input class="form-control" value="{{price}}" name="price[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required>
-                    </td>
-                    <td class="text-end">
-                        {{total_price}}
+                        <input class="form-control" value="{{description}}" name="description[{{id}}]" type="text" required>
                     </td>
                     <td>
-                        <a onclick="delete_item_row(`{{id}}`)" class="fa fa-trash-alt"></a>
+                        <a onclick="delete_item_row(`{{id}}`)" class="fa fa-trash-alt text-danger"></a>
+                        <input type="hidden" name="purchase" value="{{purchase}}">
                     </td>
                 </tr>
             </tbody>

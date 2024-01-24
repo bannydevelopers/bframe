@@ -17,6 +17,8 @@
     "edit_purchase_order",
     "view_purchase_order",
     "delete_purchase_order",
+    "approve_purchase_order",
+    "print_purchase_order",
     "add_products",
     "edit_products",
     "view_products",
@@ -36,6 +38,5 @@
     "add_delivery",
     "edit_delivery",
     "view_delivery",
-    "delete_delivery",
-    "approve_purchase"
+    "delete_delivery"
 ]

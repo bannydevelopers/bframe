@@ -48,12 +48,19 @@
                                     <img src="Application/storage/assets/html/admin/img/more.svg" alt="">
                                 </button>
                                 <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
-                                    <?php if(!$st['approved'] && user::init()->user_can('approve_purchase')){?>
+                                    <?php if(!$st['approved'] && user::init()->user_can('approve_purchase_order')){?>
                                     <a onclick="approve_purchase()" class="dropdown-item"><span class="me-1" data-icon="&#xf14a;"></span>Approve purchase</a>
                                     <?php }?>
-                                    <a onclick="view_purchase_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Edit items</a>
+                                    <a onclick="view_purchase_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>View items</a>
+                                    <?php if(!$st['approved'] && user::init()->user_can('edit_purchase_order')){?>
+                                    <a onclick="edit_purchase_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Edit purchase</a>
+                                    <?php }?>
+                                    <?php if($st['approved'] && user::init()->user_can('print_purchase_order')){?>
                                     <a onclick="print_preview()" class="dropdown-item"><span class="me-1" data-icon="&#xf047;"></span> Print purchase</a>
+                                    <?php }?>
+                                    <?php if(!$st['approved'] && user::init()->user_can('delete_purchase_order')){?>
                                     <a onclick="delete_purchase()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete purchase</a>
+                                    <?php }?>
                                 </div>
                             </div>
                             </td>
@@ -92,6 +99,7 @@
         let tmp = '', sn = 0;
         jsx.purchase_items = JSON.parse(jsx.purchase_items);
         //console.log(jsx.purchase_items);
+        
         [...jsx.purchase_items].forEach(item=>{
             item.sn = ++sn;
             //item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
@@ -215,11 +223,6 @@
             }
         });
     };
-    const update_price = ()=>{
-        let elem = window.event.target.parentNode.parentNode;
-        let prc = parseInt(elem.children[3].children[0].value) *  parseInt(elem.children[4].children[0].value);
-        elem.children[5].innerText = prc;
-    };
     const create_purchase = ()=>{
         let formx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
@@ -306,32 +309,21 @@
     const add_item_row = ()=>{
         let elem = window.event.target;
         //let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[6].children[0].children[1];
-        let tr = `<tr>
-            <td></td>
-            <td class="text-nowrap">
-                <input class="form-control" value="" name="item_namex[]">
-            </td>
-            <td class="text-nowrap">
-                <div class="d-flex">
-                    <input class="form-control" value="" name="qtyx[]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> 
-                </div>               
-            </td>
-            <td>
-                <input class="form-control" value="" name="pricex[]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required>
-            </td>
-            <td class="text-end">
-                
-            </td>
-            <td>
-                <a onclick="delete_this_row()" class="fa fa-trash-alt"></a>
-            </td>
-        </tr>`;
-        elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
+        let tr = elem.parentNode.previousElementSibling.querySelector('tbody tr:last-child');
+        let trx = tr.cloneNode(true);
+        [...trx.querySelectorAll('input')].forEach((inp, index)=>{
+            if(inp.name == 'purchase') return;
+            if(inp.value) inp.setAttribute('value', '');
+            //inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,`[x${index}]`);
+            inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,'[]');
+        });
+        tr.after(trx);
+        //elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
         //console.log(sel);
     }
     const search_select = ()=>{
         let sels = document.querySelectorAll('select');
-        if(!sels) return;
+        if(!sels || sels.length < 5) return;
         let sbx = '<div class="selectsearchbox"><input type="search" placeholder="Search..."></div>';
         [...sels].forEach(sel=>{
             sel.addEventListener('click', evt=>{

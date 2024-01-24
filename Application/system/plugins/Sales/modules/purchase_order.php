@@ -15,21 +15,21 @@ if(isset($_POST['purchase_date'])){
         'purchase_date'=>addslashes($_POST['purchase_date']),
         'supplier'=>intval($_POST['supplier']),
         'owner_branch'=>intval($me['work_location']),
-        'purchase_no'=>addslashes($_POST['purchase_no']),
         'created_by'=>addslashes($me['work_location'])
     ];
     $purch_items_qry = [];
     $purch_id = $db->insert('purchase', $purch_data);
     if($purch_id && !$db->error()){
         foreach($_POST['item_name'] as $k=>$p){
-            $purch_items_qry[] = "('{$p}', {$purch_id}, {$_POST['price'][$k]}, {$_POST['quantity'][$k]})";
+            $purch_items_qry[] = "('{$p}', {$purch_id}, {$_POST['quantity'][$k]}, '{$_POST['description'][$k]}')";
         }
         $purch_items_qry = implode(',', $purch_items_qry);
-        $db->query("INSERT INTO purchase_items (purchase_item_name, purchase_item_reference, purchase_item_price, purchase_item_quantity) VALUES {$purch_items_qry}");
+        $db->query("INSERT INTO purchase_items (purchase_item_name, purchase_item_reference, purchase_item_quantity, purchase_item_description) VALUES {$purch_items_qry}");
         if($db->error()){
-            $db->delete('purchase')->where(['purchase_id'=>purch_id])->commit();
+            $db->delete('purchase')->where(['purchase_id'=>$purch_id])->commit();
         }
     }
+    var_dump($db->error());
     if($db->error()) $msg = $db->error()['message'];
     else $msg = 'Saved successful';
     if(isset($_POST['ajax_request'])) die($msg);
@@ -70,14 +70,22 @@ if(isset($_POST['qty'])){
         //cod_user=VALUES(cod_user), date=VALUES(date)
     */
     $tmp = [];
+    $lst = $db->select('purchase_items','purchase_item_id')
+              ->where('purchase_item_id')
+              ->in(array_keys($_POST['qty']))
+              ->fetchAll();
     foreach($_POST['qty'] as $id=>$qty){
-        $tmp[] = "({$id}, '{$_POST['item_name'][$id]}', 0, $qty, {$_POST['price'][$id]})";
+        if(array_search($id, array_column($lst, 'purchase_item_id')) === false) $idx = 'NULL';
+        else $idx = intval($id);
+        $tmp[] = "({$idx}, '{$_POST['item_name'][$id]}', '{$_POST['purchase']}', $qty, '{$_POST['description'][$id]}')";
     }
     $tmp = implode(',', $tmp);
-    $qry = "INSERT INTO purchase_items (purchase_item_id, purchase_item_name, purchase_item_reference, purchase_item_quantity, purchase_item_price) VALUES "
-            . " {$tmp} ON DUPLICATE KEY UPDATE purchase_item_name = VALUES(purchase_item_name), purchase_item_price=VALUES(purchase_item_price), purchase_item_quantity=VALUES(purchase_item_quantity)";
+    $qry = "INSERT INTO purchase_items (purchase_item_id, purchase_item_name, purchase_item_reference, purchase_item_quantity, purchase_item_description) VALUES "
+            . " {$tmp} ON DUPLICATE KEY UPDATE purchase_item_name = VALUES(purchase_item_name), purchase_item_description=VALUES(purchase_item_description), purchase_item_quantity=VALUES(purchase_item_quantity)";
+            
+    //var_dump($tmp);die;
     $db->query($qry);
-    var_dump($db->error());
+    //var_dump($db->error());
     if($db->error()) die('Saving failed');
     else die('Saved successful');
 }
@@ -109,7 +117,7 @@ else{
 $items_q = "(
                 SELECT JSON_ARRAYAGG(
                     JSON_OBJECT(
-                        'id', purchase_item_id, 'item_name',purchase_item_name, 'purchase', purchase_item_reference, 'price', purchase_item_price, 'qty', purchase_item_quantity
+                        'id', purchase_item_id, 'item_name', purchase_item_name, 'purchase', purchase_item_reference, 'description', purchase_item_description, 'qty', purchase_item_quantity
                     )
                 ) 
                 FROM purchase_items WHERE purchase_item_reference=purchase_id
