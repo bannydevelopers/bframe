@@ -313,7 +313,7 @@
         let trx = tr.cloneNode(true);
         [...trx.querySelectorAll('input')].forEach((inp, index)=>{
             if(inp.name == 'purchase') return;
-            if(inp.value) inp.setAttribute('value', '');
+            if(inp.value) inp.value = '';
             //inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,`[x${index}]`);
             inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,'[]');
         });
