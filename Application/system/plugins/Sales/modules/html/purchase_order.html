@@ -102,6 +102,36 @@
         
         [...jsx.purchase_items].forEach(item=>{
             item.sn = ++sn;
+            tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
+        });
+        frm.querySelector('tbody tr').outerHTML = tmp;
+        [...frm.querySelectorAll('input')].forEach(ix=>{
+            ix.setAttribute('readonly', true);
+        });
+        [...frm.querySelectorAll('tr td:last-child')].forEach(tdl=>{
+            tdl.style.display = 'none';
+        });
+        frm.querySelector('.text-end').style.display = 'none';
+        frm.querySelector('h3').style.display = 'none';
+        let ref = 6891+parseInt(jsx.purchase_id);
+        Swal.fire({
+            title: `Items of purchase with number ${ref}`,
+            html: frm,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+    }
+    const edit_purchase_items = ()=>{
+        let elem = window.event.target,
+            frm = document.querySelector('template').content.cloneNode(true).children[1],
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            htz = frm.querySelector('tbody tr');
+        let tmp = '', sn = 0;
+        jsx.purchase_items = JSON.parse(jsx.purchase_items);
+        //console.log(jsx.purchase_items);
+        
+        [...jsx.purchase_items].forEach(item=>{
+            item.sn = ++sn;
             //item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
             item.total_price = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
@@ -152,22 +182,16 @@
         let reli = JSON.parse(json.purchase_items);
         for(x in reli) {
             let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
-                itotal = item_total.toLocaleString('en-US'),
-                price = reli[x].price.toLocaleString('en-US');
+                itotal = 0,//item_total.toLocaleString('en-US'),
+                price = 0;//reli[x].price.toLocaleString('en-US');
 
-            console.log(reli[x]);
+
             tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
                 <td>${reli[x].item_name}</td>
                 <td>${reli[x].qty}</td>
-                <td><!--${price}--></td>
-                <td style="text-align: right;"><!--${itotal}--></td></tr>`;
-            json.total += item_total;
+                <td>&nbsp;</td>
+                <td style="text-align: right;">&nbsp;</td></tr>`;
         }
-        //console.log(tmp[sn]);
-        json.VAT = (json.total * 0.18);
-        json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
-        json.VAT = json.VAT.toLocaleString('en-US');
-        json.total = json.total.toLocaleString('en-US');
         json.order_id = 6891+parseInt(json.purchase_id);
         //let tpl = document.getElementById('purchase-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
@@ -190,7 +214,8 @@
     const delete_purchase = (purchase_ref)=>{
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
-            ref = decToOctal(purchase_ref);
+            ref = 6891+parseInt(jsx.purchase_id);
+            console.log(jsx);
         Swal.fire({
             icon: 'question',
             html: `Delete purchase with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
@@ -199,7 +224,7 @@
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let dt = new FormData();
-                dt.append('delete_purchase', purchase_ref);
+                dt.append('delete_purchase', jsx.purchase_id);
                 dt.append('ajax_request', 1);
                 ajax(
                     window.location.href,
@@ -296,6 +321,32 @@
                 }
             );
         }
+    }
+    const delete_item_row = ()=>{
+        let tr = window.event.target.closest('tr'),
+            str = tr.querySelector('input').name;
+        let idx = str.substring( str.indexOf("[") + 1,  str.lastIndexOf("]"));
+        if(parseInt(idx) > 0){
+            let fdx = new FormData();
+                fdx.append('delete_purchase_item', idx);
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response != 'ok'){
+                        alert(response);
+                    }
+                    else tr.parentNode.removeChild(tr);
+                },
+                error=>{
+                    Swal.fire({
+                        icon: 'error',
+                        html: error
+                    });
+                },
+                fdx
+            );
+        }
+        else tr.parentNode.removeChild(tr);
     }
     function replicate_items() {
         let btn = window.event.target.parentNode.parentNode.parentNode;

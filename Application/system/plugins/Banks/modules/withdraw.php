@@ -9,12 +9,12 @@ if($me){
             'owner_branch'=>$me['work_location'],
             'payment_to'=>$_POST['payment_to'],
             'payment_method'=>$_POST['payment_method'],   
-            'due_date'=>$_POST['due_date'], 
+            'withdraw_date'=>$_POST['withdraw_date'], 
             'amount'=>$_POST['amount'], 
             'mode_of_payment'=>$_POST['mode_of_payment'],
-            'bank'=>$_POST['bank_name'],
-            'cheque_no'=>$_POST['cheque_number'],
-            'staff'=>$_POST['staff']
+            'bank'=>$_POST['payment_bank'],
+            'cheque_no'=>$_POST['cheque_no'],
+            'created_by'=>$me['user_reference']
         ];
         
         if(isset($_POST['withdraw_id']) && intval($_POST['withdraw_id']) > 0){
@@ -24,19 +24,19 @@ if($me){
         else $k = $db->insert('withdraw', $data);
         $ok = 'error';
         if(!$db->error() && $k) {
-            $msg = 'withdraw saved successful';
+            $msg = 'Withdraw saved successful';
             $ok ='success';
         }
         else $msg = $db->error()['message']; 
         if(isset($_POST['ajax_request'])) die($msg);
     }
-    var_dump($db->error());
+
     if(isset($_POST['delete_withdraw'])){
         $k = $db->delete('withdraw')->where(['withdraw_id'=>intval($_POST['delete_withdraw'])])->commit();
         if(!$db->error() && $k){
             $msg = [
                 'status'=>'success',
-                'message'=>'withdraw deleted successful'
+                'message'=>'Withdraw deleted successful'
             ];
         }
         else{
@@ -53,28 +53,19 @@ if($me){
     else{
         $whr = ['owner_branch'=>$me['work_location']];
     }
-    $withdraw = $db->select('withdraw')
+    $withdraw = $db->select('withdraw', 'withdraw.*, branches.*, banks.*, user_accounts.full_name, approver.full_name as approve')
                     ->join('branches', 'branch_id=owner_branch')
                     ->join('banks','bank_id=bank')
-                    ->join('user_accounts','user_id=staff')
+                    ->join('user_accounts','user_id=created_by')
+                    ->join('user_accounts as approver','approver.user_id=approved_by', 'left')
                     ->where($whr)
                     ->order_by('withdraw_id', 'desc')
                     ->fetchAll();
 
     $banks = $db ->select('banks','bank_id, bank_name')
-                  ->where(1)
+                  ->where($whr)
                   ->fetchAll();
 
-    $staff = $db->select('staff')
-                ->join('user_accounts','user_id=user_reference')
-                ->join('roles', 'system_role=role_id', 'left')
-                ->join('designations', 'designation=designation_id', 'left')
-                ->join('departments', 'department=dept_id', 'left')
-                ->join('branches', 'work_location=branch_id', 'left')
-                ->join('banks', 'bank=bank_id', 'left')
-                ->where($whr)
-                ->order_by('staff_id', 'desc')
-                ->fetchAll();
    
     $sortedWithdraw = [];
     foreach($withdraw as $st){
