@@ -1,0 +1,60 @@
+<div>
+    <h3 class="py-3">Edit LPO</h3>
+    <form method="post">
+        <table class="table table-hover text-start numbered-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>
+                        Item name
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Price per item
+                    </th>
+                    <th>
+                        Total price
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td class="text-nowrap">
+                        <input class="form-control" value="{{name}}" name="name[{{id}}]">
+                    </td>
+                    <td class="text-nowrap">
+                        <div class="d-flex">
+                            <input class="form-control" value="{{qty}}" name="qty[{{id}}]" style="width: 72px;" type="number" min="1" required> 
+                        </div>               
+                    </td>
+                    <td>
+                        <input class="form-control" value="{{desc}}" name="desc[{{id}}]" type="text" required>
+                    </td>
+                    <td>
+                        <input class="form-control" value="{{price}}" name="price[{{id}}]" type="text" required>
+                    </td>
+                    <td>
+                        {{price_total}}
+                    </td>
+                    <td>
+                        <a onclick="delete_item_row(`{{id}}`)" class="fa fa-trash-alt text-danger"></a>
+                        <input type="hidden" name="purchase" value="{{purchase}}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-end">
+            <button type="button"class="btn rounded-pill btn-secondary btn-sm" onclick="add_item_row()">Add item</button>
+            <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+</div>

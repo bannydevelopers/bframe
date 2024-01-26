@@ -47,6 +47,13 @@ if($me){
         }
         if(isset($_POST['ajax_request'])) die(json_encode($msg));
     }
+    if(isset($_POST['approve_withdraw'])){
+        $wdx = intval($_POST['approve_withdraw']);
+        $db->update('withdraw', ['approved_by'=>$me['user_reference']])->where(['withdraw_id'=>$wdx])->commit();
+        if($db->error()) $msg = $db->error()['message'];
+        else $msg = 'Approved successful';
+        die($msg);
+    }
     if($me['work_location'] == human_resources::get_headquarters_branch()) {
         $whr = 1;
     }
