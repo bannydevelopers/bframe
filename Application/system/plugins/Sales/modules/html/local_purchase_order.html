@@ -37,8 +37,8 @@
                         <?php foreach($invoices as $kx=>$st){?>
                         <tr>
                             <td><?=++$kx?></td>
-                            <td><?=6891+intval($st['purchase_id'])?></td>
-                            <td><?=system::format_time($st['purchase_date'])?></td>
+                            <td><?=6891+intval($st['lpo_id'])?></td>
+                            <td><?=system::format_time($st['created_date'])?></td>
                             <td><?=$st['supplier_name']?></td>
                             <td><?=$st['full_name']?></td>
                             <td><?=$st['approved']?></td>
@@ -97,11 +97,12 @@
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
         let tmp = '', sn = 0;
-        jsx.purchase_items = JSON.parse(jsx.purchase_items);
-        //console.log(jsx.purchase_items);
+        jsx.lpo_items = JSON.parse(jsx.lpo_items);
+        console.log(jsx);
         
-        [...jsx.purchase_items].forEach(item=>{
+        [...jsx.lpo_items].forEach(item=>{
             item.sn = ++sn;
+            item.price_total = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
         frm.querySelector('tbody tr').outerHTML = tmp;
@@ -113,7 +114,7 @@
         });
         frm.querySelector('.text-end').style.display = 'none';
         frm.querySelector('h3').style.display = 'none';
-        let ref = 6891+parseInt(jsx.purchase_id);
+        let ref = 6891+parseInt(jsx.lpo_id);
         Swal.fire({
             title: `Items of purchase with number ${ref}`,
             html: frm,
@@ -127,13 +128,12 @@
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
         let tmp = '', sn = 0;
-        jsx.purchase_items = JSON.parse(jsx.purchase_items);
-        //console.log(jsx.purchase_items);
+
+        jsx.lpo_items = JSON.parse(jsx.lpo_items);
         
-        [...jsx.purchase_items].forEach(item=>{
+        [...jsx.lpo_items].forEach(item=>{
             item.sn = ++sn;
-            //item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
-            item.total_price = parseInt(item.qty) * parseInt(item.price);
+            item.price_total = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
         frm.querySelector('tbody tr').outerHTML = tmp;
@@ -215,7 +215,7 @@
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             ref = 6891+parseInt(jsx.purchase_id);
-            console.log(jsx);
+
         Swal.fire({
             icon: 'question',
             html: `Delete purchase with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
@@ -224,7 +224,7 @@
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let dt = new FormData();
-                dt.append('delete_purchase', jsx.purchase_id);
+                dt.append('delete_lpo', jsx.lpo_id);
                 dt.append('ajax_request', 1);
                 ajax(
                     window.location.href,

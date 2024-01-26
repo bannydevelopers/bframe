@@ -11,8 +11,6 @@ else{
     $whr = "owner_branch={$me['work_location']}";
 }
 if(isset($_POST['created_date'])){
-    //var_dump($_POST);
-//var_dump($db->error());
     $purch_data = [
         'created_date'=>addslashes($_POST['created_date']),
         'supplier'=>intval($_POST['supplier']),
@@ -23,7 +21,7 @@ if(isset($_POST['created_date'])){
     $purch_id = $db->insert('local_purchase_order', $purch_data);
     if($purch_id && !$db->error()){
         foreach($_POST['item_name'] as $k=>$p){
-            $purch_items_qry[] = "('{$p}', {$purch_id}, {$_POST['quantity'][$k]}, '{$_POST['description'][$k]}, '{$_POST['price'][$k]}'')";
+            $purch_items_qry[] = "('{$p}', {$purch_id}, {$_POST['quantity'][$k]}, '{$_POST['description'][$k]}', {$_POST['price'][$k]})";
         }
         $purch_items_qry = implode(',', $purch_items_qry);
         $db->query("INSERT INTO local_purchase_order_item (lpo_item_name, lpo_item_reference, lpo_item_quantity, lpo_item_description, lpo_item_per_price) VALUES {$purch_items_qry}");
@@ -31,16 +29,16 @@ if(isset($_POST['created_date'])){
             $db->delete('local_purchase_order')->where(['lpo_id'=>$purch_id])->commit();
         }
     }
-            var_dump($db->error());
-        if ($db->error() && isset($db->error()['message'])) {
-            $msg = $db->error()['message'];
-        } else {
-            $msg = 'Saved successful';
-        }
+    if ($db->error() && isset($db->error()['message'])) {
+        $msg = $db->error()['message'];
+    } 
+    else {
+        $msg = 'Saved successful';
+    }
 
-if (isset($_POST['ajax_request'])) {
-    die($msg);
-}
+    if (isset($_POST['ajax_request'])) {
+        die($msg);
+    }
 }
 if(isset($_POST['approve_local_purchase'])){
     $db->update('local_purchase_order', ['approved_by'=>$me['user_reference']])
@@ -97,10 +95,10 @@ if(isset($_POST['qty'])){
     if($db->error()) die('Saving failed');
     else die('Saved successful');
 }
-if(isset($_POST['delete_purchase'])){
-    $db->delete('local_purchase_order_item')->where(['lpo_item_reference'=>intval($_POST['delete_purchase'])])->commit();
+if(isset($_POST['delete_lpo'])){
+    $db->delete('local_purchase_order_item')->where(['lpo_item_reference'=>intval($_POST['delete_lpo'])])->commit();
     if(!$db->error()){
-        $db->delete('local_purchase_order')->where(['lpo_id'=>intval($_POST['delete_purchase'])])->commit();
+        $db->delete('local_purchase_order')->where(['lpo_id'=>intval($_POST['delete_lpo'])])->commit();
         if($db->error()) $msg = $db->error()['message'];
         else $msg = 'LPO deleted successful!';
     }
@@ -109,9 +107,9 @@ if(isset($_POST['delete_purchase'])){
     }
     die($msg);
 }
-if(isset($_POST['delete_purchase_item'])){
-    $idx = intval($_POST['delete_purchase_item']);
-    $db->delete('purchase_items')->where(['lpo_item_id'=>$idx])->commit();
+if(isset($_POST['delete_lpo_item'])){
+    $idx = intval($_POST['delete_lpo_item']);
+    $db->delete('local_purchase_order_item')->where(['lpo_item_id'=>$idx])->commit();
     if($db->error()) $msg = $db->error()['message'];
     else $msg = 'ok';
     die($msg);
@@ -126,18 +124,18 @@ if($me['work_location'] == human_resources::get_headquarters_branch()) {
     $whr = 1;
 }
 else{
-    $whr = "purchase.owner_branch={$me['work_location']}";
+    $whr = "local_purchase_order.owner_branch={$me['work_location']}";
 }
 $items_q = "(
                 SELECT JSON_ARRAYAGG(
                     JSON_OBJECT(
-                        'id', lpo_item_id, 'item_name', purchase_item_name, 'purchase', lpo_item_reference, 'description', purchase_item_description, 'qty', purchase_item_quantity
+                        'id', lpo_item_id, 'name', lpo_item_name, 'qty', lpo_item_quantity, 'desc', lpo_item_description, 'price', lpo_item_per_price
                     )
                 ) 
-                FROM purchase_items WHERE lpo_item_reference=purchase_id
-            ) AS purchase_items";
+                FROM local_purchase_order_item WHERE lpo_item_reference=lpo_id
+            ) AS lpo_items";
 
-$qry = "purchase.*, approver.full_name as approved, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
+$qry = "local_purchase_order.*, approver.full_name as approved, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
 
 $purchase = $db->select('local_purchase_order', $qry)
                 ->join('branches','branch_id=owner_branch')
@@ -145,10 +143,9 @@ $purchase = $db->select('local_purchase_order', $qry)
                 ->join('user_accounts as approver', 'approver.user_id=approved_by', 'LEFT')
                 ->join('supplier', 'supplier_id=supplier')
                 ->where($whr)
-                ->order_by('purchase_id', 'desc')
+                ->order_by('lpo_id', 'desc')
                 ->fetchAll();   
 
-//var_dump($db->error());
 $supplier = $db ->select('supplier','supplier_id, supplier_name')
                 ->where($whr)
                 ->fetchAll();
@@ -169,7 +166,7 @@ foreach($branches as $b){
 }
 
 ob_start();
-$dir = realpath(__DIR__.'/html/purchase_tpl');
+$dir = realpath(__DIR__.'/html/lpo_tpl');
 foreach(scandir($dir) as $filename){
     if(pathinfo("{$dir}/{$filename}", PATHINFO_EXTENSION) == 'html') include "{$dir}/{$filename}";
 }
