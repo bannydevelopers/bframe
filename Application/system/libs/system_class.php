@@ -153,9 +153,6 @@ class system{
             return ltrim($phone_to_check, '+');
         }
     }
-    public static function format_email($email){
-        return filter_var($email, FILTER_SANITIZE_EMAIL);
-    }
     public static function format_time($datetime, $selected=NULL){
         if(!$datetime) return $datetime;// passing null to strtotime is deprecated, hence bail
         if($selected == NULL) $selected = 0;
@@ -168,6 +165,79 @@ class system{
         if(!isset($formats[$selected])) $formats[$selected] = $formats[0];
         if(date('H:i:s', $ts) != '00:00:00') $formats[$selected] .= ' @ H:i';
         return date($formats[$selected], $ts);
+    }
+    public static function format_email($email){
+        return filter_var($email, FILTER_SANITIZE_EMAIL);
+    }
+    public static function send_email($opts){
+        $config = storage::init()->system_config;
+
+        $opts['headers']  = "From: " . strip_tags($opts['from']) . "\r\n";
+                
+        //$opts['headers'] .= "CC: susan@example.com\r\n";
+        if(isset($opts['replyTo'])) {
+            if(is_array($opts['replyTo'])) $opts['headers'] .= "Reply-To: " . $opts['replyTo'][0] . "\r\n";
+            else $opts['headers'] .= "Reply-To: " . $opts['replyTo'] . "\r\n";
+        }
+        $opts['headers'] .= "MIME-Version: 1.0\r\n";
+        $opts['headers'] .= "Content-Type: text/html; charset=UTF-8\r\n";
+
+        if(isset($config->phpmailer)){
+            //use PHPMailer\PHPMailer\PHPMailer;
+            //use PHPMailer\PHPMailer\Exception;
+            require realpath(__DIR__.'/../../../').'/vendor/phpmailer/phpmailer/src/Exception.php';
+            require realpath(__DIR__.'/../../../').'/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+            require realpath(__DIR__.'/../../../').'/vendor/phpmailer/phpmailer/src/SMTP.php';
+
+            $phpmailer = new PHPMailer\PHPMailer\PHPMailer();
+            $phpmailer->isSMTP();
+            $phpmailer->isHTML();
+            $phpmailer->Host = $config->phpmailer->host;
+            $phpmailer->SMTPAuth = true;
+            $phpmailer->Port = 25;
+            $phpmailer->Username = $config->phpmailer->username;
+            $phpmailer->Password = $config->phpmailer->password;
+            $phpmailer->SMTPSecure = 'tls';
+
+            if(is_array($opts['to'])) $phpmailer->addAddress(...$opts['to']);
+            else  $phpmailer->addAddress($opts['to']);
+
+            $phpmailer->setFrom($opts['from'], $config->site_name);
+
+            if(isset($opts['replyTo'])) {
+                if(is_array($opts['replyTo'])) $phpmailer->addReplyTo(...$opts['replyTo']);
+                else $phpmailer->addReplyTo($opts['replyTo']);
+            }
+            if(isset($opts['cc'])) {
+                if(is_array($opts['cc'])) $phpmailer->addReplyTo(...$opts['cc']);
+                else $phpmailer->addReplyTo($opts['cc']);
+            }
+            if(isset($opts['bcc'])) {
+                if(is_array($opts['bcc'])) $phpmailer->addReplyTo(...$opts['bcc']);
+                else $phpmailer->addReplyTo($opts['bcc']);
+            }
+            
+            $phpmailer->Subject = $opts['subject'];
+
+            $phpmailer->isHTML(true);
+
+            $phpmailer->Body = strip_tags($opts['message']);
+            $phpmailer->MsgHTML($opts['message']);
+
+            if(isset($opts['attachment'])) $phpmailer->addAttachment($opts['attachment']);
+            //$phpmailer->msgHTML($content, $dir);
+            if($phpmailer->send()){
+                return true;
+            }
+            else{
+                storage::init()->mail_error = $phpmailer->ErrorInfo;
+                return mail($opts['to'], $opts['subject'], $opts['message'], $opts['headers']);
+            }
+        }
+        else{
+            storage::init()->mail_error = 'Mailer config not found';
+            return mail($opts['to'], $opts['subject'], $opts['message'], $opts['headers']);
+        }
     }
     public static function clear_cache($target = null){
         $root = realpath(__DIR__.'/../');

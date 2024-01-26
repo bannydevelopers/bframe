@@ -17,9 +17,14 @@ class Project{
         //system::add_event_listener('add_resource', 'project::service_add_resources');
     }
     public static function load_admin_dashboard_cards($args){
+        $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
+        $registry = storage::init();
+        $me = human_resources::get_staff();
+        $_this = new static();
+        $user = user::init()->get_session_user();
         // fetch info
         ob_start();
-        include __DIR__.'/modules/html/card.html';
+        include __DIR__.'/modules/html/admin_widget.html';
         return ob_get_clean();
     }
     public static function load_admin_dashboard($args){

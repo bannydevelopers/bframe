@@ -1,45 +1,43 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
     <div class="card-body row">
         <div class="mb-3 col-md-6">
-            <label for="mode_of_payment" class="form-label">Payment to</label>
-            <input type="text" class="form-control" id="mode_of_payment" name="mode_of_payment" placeholder="Payment to..." required />
+            <label for="payment_to" class="form-label">Paid to</label>
+            <input type="text" class="form-control" id="payment_to" name="payment_to" placeholder="Payment to..." required />
         </div>
         <div class="mb-3 col-md-6">
             <label for="amount" class="form-label">Amount</label>
             <input type="number" class="form-control" id="amount" name="amount" placeholder="Write Amount..." required />
         </div>
         <div class="mb-3">
-            <label for="payment_to" class="form-label">Payment purpose</label>
-            <input type="text" class="form-control" id="payment_to" name="payment_to" placeholder="Payment purpose..." required />
+            <label for="mode_of_payment" class="form-label">Payment purpose</label>
+            <textarea class="form-control" id="mode_of_payment" name="mode_of_payment" placeholder="Payment purpose..." required></textarea>
+        </div>
+        <div class="mb-3 col-md-6">
+            <label for="payment_bank" class="form-label">Bank</label>
+            <select name="payment_bank" id="payment_bank" class="form-select">
+                <option value="">Choose...</option>
+                <?php foreach($banks as $b){?>
+                <option value="<?=$b['bank_id']?>"><?=$b['bank_name']?></option>
+                <?php }?>
+            </select>
+        </div>
+        <div class="mb-3 col-md-6">
+            <label for="due_date" class="form-label">Withdraw date</label>
+            <input type="date" class="form-control" id="withdraw_date" name="withdraw_date" value="<?=date('Y-m-d')?>" required />
         </div>
         <div class="mb-3 col-md-6">
             <label for="payment_method" class="form-label">Mode of payment</label>
             <select name="payment_method" id="payment_method" onchange="toggleChequeField()"class="form-select">
-                <option value="">Choose...</option>
                 <option value="cheque">By Cheque</option>
                 <option value="transfer">By Transfer</option>
             </select>
         </div>
         <div class="mb-3 col-md-6">
-            <label for="cheque_number" class="form-label">Cheque No:</label>
-            <input type="text" class="form-control" id="cheque_number" name="cheque_number" placeholder="Write Cheque Number..." required />
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="staff" class="form-label">Approved by</label>
-          <select name="staff" id="staff" class="form-select" onchange="add_form('staff')">
-            <option value="">Choose...</option>
-            <?php foreach($staff as $star){?>
-            <option value="<?=$star['user_id']?>"><?=$star['full_name']?></option>
-            <?php }?> 
-          </select>
-        </div>
-        <div class="mb-3 col-md-6">
-            <label for="due_date" class="form-label">Due Date</label>
-            <input type="date" class="form-control" id="due_date" name="due_date" required />
+            <label for="cheque_no" class="form-label">Cheque No:</label>
+            <input type="text" class="form-control" id="cheque_no" name="cheque_no" placeholder="Cheque Number..." />
         </div>
     </div>
     <div class="text-end">
-        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
 </form>

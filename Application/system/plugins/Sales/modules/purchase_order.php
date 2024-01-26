@@ -29,7 +29,7 @@ if(isset($_POST['purchase_date'])){
             $db->delete('purchase')->where(['purchase_id'=>$purch_id])->commit();
         }
     }
-    var_dump($db->error());
+    //var_dump($db->error());
     if($db->error()) $msg = $db->error()['message'];
     else $msg = 'Saved successful';
     if(isset($_POST['ajax_request'])) die($msg);
@@ -90,18 +90,24 @@ if(isset($_POST['qty'])){
     else die('Saved successful');
 }
 if(isset($_POST['delete_purchase'])){
-    $db->delete('purchase_items')->where(['purchase'=>intval($_POST['delete_purchase'])])->commit();
+    $db->delete('purchase_items')->where(['purchase_item_reference'=>intval($_POST['delete_purchase'])])->commit();
     if(!$db->error()){
         $db->delete('purchase')->where(['purchase_id'=>intval($_POST['delete_purchase'])])->commit();
         if($db->error()) $msg = $db->error()['message'];
-        else $msg = 'purchase deleted successful!';
+        else $msg = 'Purchase deleted successful!';
     }
     else{
         $msg = $db->error()['message'];
     }
     die($msg);
 }
-
+if(isset($_POST['delete_purchase_item'])){
+    $idx = intval($_POST['delete_purchase_item']);
+    $db->delete('purchase_items')->where(['purchase_item_id'=>$idx])->commit();
+    if($db->error()) $msg = $db->error()['message'];
+    else $msg = 'ok';
+    die($msg);
+}
 /*$Purchase = $db->select('product')
                     ->join('product_category', 'category_id=product_category', 'LEFT')
                     ->join('branches', 'branch_id=owner_branch', 'LEFT')

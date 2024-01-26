@@ -11,5 +11,6 @@
     "add_points_to_share",
     "edit_points_to_share",
     "view_points_to_share",
-    "delete_points_to_share"
+    "delete_points_to_share",
+    "approve_withdraw"
 ]

@@ -2,35 +2,10 @@
 
 $config = storage::get_data('system_config')->db_configs;
 $db = db::get_connection($config);
-if(isset($_POST['supplier_name'])){
-    //var_dump($_POST);
-    $data = [
-        'owner_branch'=>$me['work_location'],
-        'supplier_name'=>$_POST['supplier_name'], 
-        'supplier_phone_number'=>$_POST['supplier_phone_number'], 
-        'supplier_email'=>$_POST['supplier_email'], 
-        'supplier_physical_address'=>$_POST['supplier_physical_adress'], 
-        'supplier_details'=>$_POST['supplier_details']
-    ];
-    if(isset($_POST['supplier_id']) && intval($_POST['supplier_id']) > 0){
-        $k = intval($_POST['supplier_id']);
-        $db->update('supplier', $data)->where(['supplier_id'=>$_POST['supplier_id']])->commit();
-        //var_dump($db->error());
-    }
-    else $k = $db->insert('supplier', $data);
-    //var_dump($k);
-    if(!$db->error() && $k) {
-        $msg = 'Supplier saved successful';
-        $ok =true;
-    }
-    else $msg = $db->error()['message'];
-    //var_dump($db->error()); 
-}
 //var_dump($_POST);
 //var_dump($db->error());
 if(isset($_POST['delete_supplier'])){
-    $db->delete('supplier')->where(['user_reference'=>intval($_POST['delete_supplier'])])->commit();
-    if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_supplier'])])->commit();
+    $db->delete('supplier')->where(['supplier_id'=>intval($_POST['delete_supplier'])])->commit();
     if(!$db->error()){
         $msg = [
             'status'=>'success',
@@ -43,10 +18,13 @@ if(isset($_POST['delete_supplier'])){
             'message'=>$db->error()['message']
         ];
     }
+    if(isset($_POST['ajax_request'])) die(json_encode($msg));
 } 
+$whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
 $supplier = $db->select('supplier')
                 ->join('branches', 'branch_id=owner_branch', 'left')
-                ->where(1)
+                ->where($whr)
+                ->order_by('supplier_id', 'DESC')
                 ->fetchAll();
 //var_dump($db->error(), $supplier);
 $sortedSupplier = [];
