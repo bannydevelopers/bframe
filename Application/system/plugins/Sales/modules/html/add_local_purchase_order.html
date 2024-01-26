@@ -1,6 +1,5 @@
 <form method="post" autocomplete="off">
     <div class="row">
-        <input type="hidden" name="invoice_type" value="proforma">
         <div class="mb-3 col-md-4">
             <label for="supplier" class="form-label" >Supplier name</label>
             <select name="supplier" class="form-control" id="supplier" onchange="check_selection('supplier')">
@@ -16,11 +15,10 @@
             <input type="text" class="form-control" name="proforma_no" id="proforma_no">
         </div>
         <div class="mb-3 col-md-4">
-            <label for="created_date" class="form-label">Create date</label>
-            <input type="date" class="form-control" name="created_date" id="created_date" value="<?=date('Y-m-d', time())?>">
+            <label for="create_date" class="form-label">Create date</label>
+            <input type="date" class="form-control" name="create_date" id="create_date" value="<?=date('Y-m-d', time())?>">
         </div>
     </div>
-
     <br>
     <div class="text-center">PURCHASE ITEMS</div>
     <hr>   
@@ -28,7 +26,7 @@
         <div class="row">
             <div class="mb-3 col-md-2">
                 <label for="item_name"class="form-label">Item name</label>
-                <input type="text" class="form-control" name="item_name[]" id="item_name">
+                <input type="text" class="form-control" name="item_name[]">
             </div>
             <div class="mb-3 col-md-3">
                 <label class="form-label">Description</label>
@@ -40,7 +38,7 @@
             </div>
             <div class="mb-3 col-md-2">
                 <label for="price"class="form-label">Price per item</label>
-                <input type="number" class="form-control" id="price" name="price[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()">
+                <input type="number" class="form-control" name="price[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()">
             </div>
             <div class="mb-3 col-md-2">
                 <label class="form-label">Total price</label>
