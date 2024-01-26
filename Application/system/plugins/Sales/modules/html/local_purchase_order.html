@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center">
-    <h3 class="pt-1">Local purchase order</h3>
+    <h3 class="pt-1">Local Purchase Order</h3>
     <div class="">
-        <button type="button" onclick="create_lpo()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Create LPO</button>
+        <button type="button" onclick="create_purchase()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>CREATE LPO</button>
     </div>
 </div>
 <?php if(isset($msg) && $msg){?>
@@ -12,46 +12,55 @@
     <div class="tab-view">
         <?php 
         if($is_headquarters){
-        foreach(array_keys($sortedLpo) as $i=>$k){?>
+        foreach(array_keys($sortedPurchase) as $i=>$k){?>
         <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
         <label for="class_tab<?=$i?>"><?=$k?></label>
         <?php 
             }
         }else{?><input type="radio" name="tab" style="display: none;" checked><?php }?>
         <div class="tab-panes">
-            <?php foreach($sortedLpo as $branch=>$invoices){?>
-            <div class="table-responsive text-nowrap" style="min-height: 240px;">
+            <?php foreach($sortedPurchase as $branch=>$invoices){?>
+            <div class="table-responsive text-nowrap" style="padding-bottom: 120px;">
                 <table class="table table-hover paginate" data-items-per-page="10">
                     <thead>
                         <tr>
-                            <th>S/N</th>
-                            <th>Lpo number</th>
-                            <th>Proforma no</th>
-                            <th>Created date</th>
+                            <th>#</th>
+                            <th>LPO number</th>
+                            <th>Create date</th>
                             <th>Supplier</th>
-                            <th>Prepared by</th>
+                            <th>Created by</th>
+                            <th>Approved by</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                         <?php foreach($invoices as $kx=>$st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
+                        <tr>
                             <td><?=++$kx?></td>
-                            <td><?=$st['lpo_no']?></td>
-                            <td><?=$st['proforma_no']?></td>
-                            <td><?=system::format_time($st['created_date'])?></td>
+                            <td><?=6891+intval($st['purchase_id'])?></td>
+                            <td><?=system::format_time($st['purchase_date'])?></td>
                             <td><?=$st['supplier_name']?></td>
                             <td><?=$st['full_name']?></td>
+                            <td><?=$st['approved']?></td>
                             <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;">
-                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" transform="rotate(90)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M388.8 896.4v-27.198c.6-2.2 1.6-4.2 2-6.4 8.8-57.2 56.4-102.4 112.199-106.2 62.4-4.4 115.2 31.199 132.4 89.199 2.2 7.6 3.8 15.6 5.8 23.4v27.2c-.6 1.8-1.6 3.399-1.8 5.399-8.6 52.8-46.6 93-98.6 104.4-4 .8-8 2-12 3h-27.2c-1.8-.6-3.6-1.6-5.4-1.8-52-8.4-91.599-45.4-103.6-96.8-1.2-5-2.6-9.6-3.8-14.2zm252.4-768.797l-.001 27.202c-.6 2.2-1.6 4.2-1.8 6.4-9 57.6-56.8 102.6-113.2 106.2-62.2 4-114.8-32-131.8-90.2-2.2-7.401-3.8-15-5.6-22.401v-27.2c.6-1.8 1.6-3.4 2-5.2 9.6-52 39.8-86 90.2-102.2 6.6-2.2 13.6-3.4 20.4-5.2h27.2c1.8.6 3.6 1.6 5.4 1.8 52.2 8.6 91.6 45.4 103.6 96.8 1.201 4.8 2.401 9.4 3.601 13.999zm-.001 370.801v27.2c-.6 2.2-1.6 4.2-2 6.4-9 57.4-58.6 103.6-114.6 106-63 2.8-116.4-35.2-131.4-93.8-1.6-6.2-3-12.4-4.4-18.6v-27.2c.6-2.2 1.6-4.2 2-6.4 8.8-57.4 58.6-103.601 114.6-106.2 63-3 116.4 35.2 131.4 93.8 1.6 6.4 3 12.6 4.4 18.8z"></path></g></svg></i>
+                                    <img src="Application/storage/assets/html/admin/img/more.svg" alt="">
                                 </button>
-                                <div class="dropdown-menu">
-                                <a onclick="view_lpo_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View items</a>
-                                <a onclick="edit_lpo()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit lpo</a>
-                                <a onclick="delete_lpo()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete lpo</a>
+                                <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
+                                    <?php if(!$st['approved'] && user::init()->user_can('approve_purchase_order')){?>
+                                    <a onclick="approve_purchase()" class="dropdown-item"><span class="me-1" data-icon="&#xf14a;"></span>Approve purchase</a>
+                                    <?php }?>
+                                    <a onclick="view_purchase_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>View items</a>
+                                    <?php if(!$st['approved'] && user::init()->user_can('edit_purchase_order')){?>
+                                    <a onclick="edit_purchase_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Edit purchase</a>
+                                    <?php }?>
+                                    <?php if($st['approved'] && user::init()->user_can('print_purchase_order')){?>
+                                    <a onclick="print_preview()" class="dropdown-item"><span class="me-1" data-icon="&#xf047;"></span> Print purchase</a>
+                                    <?php }?>
+                                    <?php if(!$st['approved'] && user::init()->user_can('delete_purchase_order')){?>
+                                    <a onclick="delete_purchase()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete purchase</a>
+                                    <?php }?>
                                 </div>
                             </div>
                             </td>
@@ -65,89 +74,69 @@
     </div>
 </div>
 <template>
-    <?php include __DIR__.'/create_lpo.html';?>
-    <div>
-        <?=$lpo_tpl?>
-    </div>
-    <?php include __DIR__.'/create_lpo.html';?>
+    <?php include __DIR__.'/add_local_purchase_order.html';?>
+    <?php include __DIR__.'/local_purchase_items.html';?>
+    <div><?=$purchase_tpl?></div>
 </template>
-<style>
-    .mySwal{
-        min-width: 80%;
-    }
-    .mySwal table, .mySwal tr, .mySwal th, .mySwal tr:hover{
-        background-color: #fff;
-        box-shadow: none;
-        border: none;
-    }
-    .mySwal label, .smallSwal label{
-        text-align: left;
-        display: block;
-    }
-    .selectsearchbox{
-        position: absolute;
-        left: 0;
-        background-color: #fff;
-        display: inline-block;
-        width: 100%;
-        text-align: left;
-        z-index: 4;
-    }
-    .selectsearchbox ul{
-        box-shadow: 0 0 3px #999;
-    }
-    .selectsearchbox li{
-        background-color: #fff;
-        padding: .2em .6em;
-        cursor: pointer;
-    }
-    .selectsearchbox li:hover{
-        font-weight: bold;
-    }
-    .uppercase{
-        text-transform: uppercase;
-    }
-    .numbered-table {
-        counter-reset: row-num -1;
-    }
-    .numbered-table tr {
-        counter-increment: row-num;
-    }
-    .numbered-table tr td:first-child::before {
-        content: counter(row-num) " ";
-    }
-</style>
 <script>
     const check_selection = (name)=>{
-        let elem = window.event.target;
-        if(elem.parentNode.tagName == 'TD'){
-            let opt = elem.options[elem.options.selectedIndex];
-            console.log(opt);
-            elem.parentNode.parentNode.children[2].innerHTML = opt.getAttribute('data-desc');
-            elem.parentNode.parentNode.children[3].children[1].innerHTML = opt.getAttribute('data-unit');
-            elem.parentNode.parentNode.children[4].children[0].value = opt.getAttribute('data-price');
-            return;
-        }
-        let price = elem.children[window.event.target.options.selectedIndex].getAttribute('data-price');
+        let elem = window.event.target,
+            price = elem.children[window.event.target.options.selectedIndex].getAttribute('data-price');
         if(elem.name == 'product[]'){
             elem.parentNode.nextElementSibling.nextElementSibling.children[1].value = price;
         }
-    }
-    const view_lpo_items = ()=>{
+    };
+    const update_total_price = ()=>{
+        let prc = document.querySelector('#price'),
+            qty = document.querySelector('#quantity');
+        document.querySelector('#total_price').value = parseInt(prc.value) * parseInt(qty.value);
+    };
+    const view_purchase_items = ()=>{
         let elem = window.event.target,
             frm = document.querySelector('template').content.cloneNode(true).children[1],
-            jsx = JSON.parse(elem.parentNode.parentNode.parentNode.parentNode.getAttribute('data-json')),
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
-            //frm.querySelector('[name=invoice]').value = jsx.invoice_id;
-
         let tmp = '', sn = 0;
-        [...jsx.lpo_item].forEach(item=>{
+        jsx.purchase_items = JSON.parse(jsx.purchase_items);
+        //console.log(jsx.purchase_items);
+        
+        [...jsx.purchase_items].forEach(item=>{
+            item.sn = ++sn;
+            tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
+        });
+        frm.querySelector('tbody tr').outerHTML = tmp;
+        [...frm.querySelectorAll('input')].forEach(ix=>{
+            ix.setAttribute('readonly', true);
+        });
+        [...frm.querySelectorAll('tr td:last-child')].forEach(tdl=>{
+            tdl.style.display = 'none';
+        });
+        frm.querySelector('.text-end').style.display = 'none';
+        frm.querySelector('h3').style.display = 'none';
+        let ref = 6891+parseInt(jsx.purchase_id);
+        Swal.fire({
+            title: `Items of purchase with number ${ref}`,
+            html: frm,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+    }
+    const edit_purchase_items = ()=>{
+        let elem = window.event.target,
+            frm = document.querySelector('template').content.cloneNode(true).children[1],
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            htz = frm.querySelector('tbody tr');
+        let tmp = '', sn = 0;
+        jsx.purchase_items = JSON.parse(jsx.purchase_items);
+        //console.log(jsx.purchase_items);
+        
+        [...jsx.purchase_items].forEach(item=>{
             item.sn = ++sn;
             //item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
             item.total_price = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
-        //frm.querySelector('tbody tr').outerHTML = tmp;
+        frm.querySelector('tbody tr').outerHTML = tmp;
         Swal.fire({
             html: frm,
             customClass:'mySwal',
@@ -156,7 +145,7 @@
         document.querySelector('.mySwal form').addEventListener('submit', evt=>{
             evt.preventDefault();
             let fd = new FormData(evt.target);
-            //fd.append('save_invoice_items',1)
+            //fd.append('save_purchase_items',1)
             ajax(
                 window.location.href,
                 response=>{
@@ -179,7 +168,7 @@
         let elem = window.event.target,
             tplx = document.querySelector('template').content.cloneNode(true).children[2],
             json = JSON.parse(elem.parentNode.getAttribute('data-json'));
-        
+
         let temp = tplx.querySelector(`#branch_${json.owner_branch}`);
         if(!temp) temp = tplx.querySelector('#branch_0');
         tplx = temp;
@@ -190,39 +179,25 @@
         json.grand_total = 0;
 
         let tmp = '', sn = 0;
-        let reli = json.invoice_items;
+        let reli = JSON.parse(json.purchase_items);
         for(x in reli) {
             let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
-                itotal = item_total.toLocaleString('en-US'),
-                price = reli[x].price.toLocaleString('en-US'),
-                xyz = '';
-            if(reli[x].unit == 'People') {
-                reli[x].unit = 'LUMPSUM';
-                xyz = '';
-            }
-            else xyz = reli[x].qty;
-            if(reli[x].qty == 1) reli[x].unit = reli[x].unit_single;
-            else reli[x].unit = reli[x].unit_prural;
-            
+                itotal = 0,//item_total.toLocaleString('en-US'),
+                price = 0;//reli[x].price.toLocaleString('en-US');
+
+
             tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
-                <td>${reli[x].product}</td>
-                <td>${reli[x].item_desc}</td>
-                <td>${xyz} ${reli[x].unit}</td>
-                <td>${price}</td>
-                <td style="text-align: right;">${itotal}</td></tr>`;
-            json.total += item_total;
+                <td>${reli[x].item_name}</td>
+                <td>${reli[x].qty}</td>
+                <td>&nbsp;</td>
+                <td style="text-align: right;">&nbsp;</td></tr>`;
         }
-        //console.log(tmp[sn]);
-        json.VAT = (json.total * 0.18);
-        json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
-        json.VAT = json.VAT.toLocaleString('en-US');
-        json.total = json.total.toLocaleString('en-US');
-        json.order_id = 6891+parseInt(json.invoice_id);
-        //let tpl = document.getElementById('invoice-tpl').content.cloneNode(true);
+        json.order_id = 6891+parseInt(json.purchase_id);
+        //let tpl = document.getElementById('purchase-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
 
-        json.created_time = json.created_time.slice(0, 10);
-        json.due_date = json.due_date.slice(0, 10);
+        json.create_time = json.create_time.slice(0, 10);
+        //json.due_date = json.due_date.slice(0, 10);
 
         htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
         Swal.fire({
@@ -236,19 +211,20 @@
             customClass: 'mySwal'
         });*/
     };
-    const delete_lpo = (lpo_ref)=>{
+    const delete_purchase = (purchase_ref)=>{
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
-            ref = decToOctal(lpo_ref);
+            ref = 6891+parseInt(jsx.purchase_id);
+            console.log(jsx);
         Swal.fire({
             icon: 'question',
-            html: `Delete invoice with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
+            html: `Delete purchase with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
             showCancelButton: true
         })
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let dt = new FormData();
-                dt.append('delete_lpo', lpo_ref);
+                dt.append('delete_purchase', jsx.purchase_id);
                 dt.append('ajax_request', 1);
                 ajax(
                     window.location.href,
@@ -272,41 +248,10 @@
             }
         });
     };
-    const update_price = ()=>{
-        let elem = window.event.target.parentNode.parentNode;
-        let prc = parseInt(elem.children[3].children[0].value) *  parseInt(elem.children[4].children[0].value);
-        elem.children[5].innerText = prc;
-    };
-    const update_total_price = ()=>{
-        let elem = window.event.target.parentNode.parentNode;
-        let price = parseInt(elem.children[1].children[1].value) *  parseInt(elem.children[2].children[1].value);
-        elem.children[3].children[1].value = price;
-    };
-    const decToOctal = (n)=>{
-        
-        // array to store octal number
-        let octalNum = new Array(100);
-
-        // counter for octal number array
-        let i = 0;
-        while (n != 0) {
-
-            // storing remainder in octal array
-            octalNum[i] = n % 8;
-            n = Math.floor(n / 8);
-            i++;
-        }
-        let tmp = '';
-        // printing octal number array in reverse order
-        for (let j = i - 1; j >= 0; j--){
-            tmp += octalNum[j];
-        }
-        return tmp;
-    }
-    const create_lpo = ()=>{
+    const create_purchase = ()=>{
         let formx = document.querySelector('template').content.cloneNode(true).children[0];
         Swal.fire({
-            title: 'Create LPO',
+            title: 'Add purchase',
             html: formx,
             customClass:'mySwal',
             showConfirmButton:false
@@ -340,10 +285,10 @@
             );
         }
     }
-    const add_invoice = ()=>{
+    const add_purchase = ()=>{
         let formy = document.querySelector('template').content.cloneNode(true).children[3];
         Swal.fire({
-            title: 'Create tax invoice',
+            title: 'Create tax purchase',
             html: formy,
             customClass:'smallSwal',
             showConfirmButton:false
@@ -377,6 +322,32 @@
             );
         }
     }
+    const delete_item_row = ()=>{
+        let tr = window.event.target.closest('tr'),
+            str = tr.querySelector('input').name;
+        let idx = str.substring( str.indexOf("[") + 1,  str.lastIndexOf("]"));
+        if(parseInt(idx) > 0){
+            let fdx = new FormData();
+                fdx.append('delete_purchase_item', idx);
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response != 'ok'){
+                        alert(response);
+                    }
+                    else tr.parentNode.removeChild(tr);
+                },
+                error=>{
+                    Swal.fire({
+                        icon: 'error',
+                        html: error
+                    });
+                },
+                fdx
+            );
+        }
+        else tr.parentNode.removeChild(tr);
+    }
     function replicate_items() {
         let btn = window.event.target.parentNode.parentNode.parentNode;
         btn.insertAdjacentHTML('afterEnd', btn.cloneNode(true).outerHTML);
@@ -386,36 +357,24 @@
         let btn = window.event.target.parentNode.parentNode.parentNode;
         let html = btn.parentNode.removeChild(btn);
     }
-    const delete_item_row = idx=>{
-        let elem = window.event.target;
-        elem.className = 'fa fa-spinner fa-spin';
-        let fdx = new FormData();
-        fdx.append('delete_item', idx);
-        ajax(
-            window.location.href,
-            response=>{
-                if(response == 'ok') {
-                    elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
-                    // TO DO: re-arrange numbers
-                }
-                else elem.className = 'fa fa-trash-alt';
-            },
-            error=>{
-                Swal.fire(error);
-            },
-            fdx
-        );
-    };
     const add_item_row = ()=>{
         let elem = window.event.target;
-        let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[0].children[2].children[0].children[1];
-        let tr = `<tr><td></td><td>${sel.outerHTML}</td><td>N/A</td><td><input name="qtyx[]" style="width: 72px;" value="0" onchange="update_price()" onkeyup="update_price()"><span>?</span></td><td><input name="prcx[]" style="width: 72px;" onchange="update_price()" onkeyup="update_price()"></td><td>0</td><td><a onclick="remove_item_row" class="fa fa-trash"></a></td></tr>`;
-        elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
+        //let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[6].children[0].children[1];
+        let tr = elem.parentNode.previousElementSibling.querySelector('tbody tr:last-child');
+        let trx = tr.cloneNode(true);
+        [...trx.querySelectorAll('input')].forEach((inp, index)=>{
+            if(inp.name == 'purchase') return;
+            if(inp.value) inp.value = '';
+            //inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,`[x${index}]`);
+            inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,'[]');
+        });
+        tr.after(trx);
+        //elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
         //console.log(sel);
     }
     const search_select = ()=>{
         let sels = document.querySelectorAll('select');
-        if(!sels) return;
+        if(!sels || sels.length < 5) return;
         let sbx = '<div class="selectsearchbox"><input type="search" placeholder="Search..."></div>';
         [...sels].forEach(sel=>{
             sel.addEventListener('click', evt=>{
@@ -451,5 +410,39 @@
         });
 
     }
-    search_select();
+    //search_select();
+    const approve_purchase = ()=>{
+        let elem = window.event.target;
+        let jsx = JSON.parse(elem.parentNode.getAttribute('data-json'));
+        jsx.purchase_no = jsx.purchase_id + 6891;
+        Swal.fire({
+            icon:'question',
+            html: `Surely approve purchase with number ${jsx.purchase_no}?`
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fdx = new FormData();
+                fdx.append('approve_purchase', jsx.purchase_id);
+                ajax(
+                    window.location.href,
+                    resp=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: resp
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon:'error',
+                            html:error
+                        })
+                    },
+                    fdx
+                );
+            }
+        });
+    }
 </script>
