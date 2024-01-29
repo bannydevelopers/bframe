@@ -31,18 +31,18 @@
         "token": "YmFubnk6QmFzZWFAQkNM"
     },
     "company_profile": {
-        "company_legal_name": "Wizdon T Ltd",
-        "company_slogan": "Unlimited possibilities",
-        "phone_number": "255 713 824 487",
-        "email": "info@wizdon.co.tz",
+        "company_legal_name": "Banny Company T Ltd",
+        "company_slogan": "Customer and quality is our priority",
+        "phone_number": "255 755 049 955",
+        "email": "info@banny.co.tz",
         "TIN_number": "122-781-437",
         "VRN_number": "40024207.Z",
-        "company_address": "Samora avenue, \r\nNHC House,\r\nP. O. Box 22429,\r\nDar es Salaam",
+        "company_address": "Samora avenue, \nNHC House,\nP. O. Box 22429,\nDar es Salaam",
         "company_logo": "banny logo.png",
-        "payment_terms": "The PI valid for 30 days including the issue date.\r\nFull payment or 40% deposit is necessary to confirm PI.\r\nDelivery period is 5 to 7 within working days after confirmation.",
-        "primary_payment_account": "A\/C name: Banny Company T Ltd\r\nBank name: NCBA\r\nA\/C number: 118 688 100 015\r\nBranch: Clock tower branch",
-        "aux_payment_account": "A\/C name: Banny Company Limited\r\nBank name: CRDB\r\nA\/C number: 0150560102100\r\nBranch: TRA Samora",
-        "LPO_terms": "Your invoice should be submitted together with the original of the LPO. \r\nThe purchase order number should be quoted on all communications relevant to this order."
+        "payment_terms": "The PI valid for 30 days including the issue date.Full payment or 40% deposit is necessary to confirm PI.Delivery period is 5 to 7 within working days after confirmation.",
+        "primary_payment_account": "A\/C name: Banny Company T LtdBank name: NCBAA\/C number: 118 688 100 015Branch: Clock tower branch",
+        "aux_payment_account": "A\/C name: Banny Company LimitedBank name: CRDBA\/C number: 0150560102100Branch: TRA Samora",
+        "LPO_terms": "Your invoice should be submitted together with the original of the LPO. The purchase order number should be quoted on all communications relevant to this order."
     },
     "db_configs": {
         "dbdriver": "mysql",
