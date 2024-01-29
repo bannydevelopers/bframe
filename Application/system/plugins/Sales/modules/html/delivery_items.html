@@ -1,8 +1,8 @@
 <div>
     <h3 class="content-small no-pad-top">Edit Proforma</h3>
     <form method="post">
-        <input type="hidden" name="invoice" value="0">
-        <table class="paginate numbered-table" data-items-per-page="10">
+        <input type="hidden" name="delivery" value="0">
+        <table class="paginate numbered-table col-12">
             <thead>
                 <tr>
                     <th>#</th>
@@ -14,15 +14,6 @@
                     </th>
                     <th>
                         Quantity
-                    </th>
-                    <th style="white-space: nowrap;">
-                        Unit price
-                    </th>
-                    <th style="white-space: nowrap;">
-                        Amount
-                    </th>
-                    <th>
-                        &nbsp;
                     </th>
                 </tr>
             </thead>
@@ -36,23 +27,10 @@
                         <em>{{item_desc}}</em>
                     </td>
                     <td style="white-space: nowrap;">
-                        <input value="{{qty}}" name="qty[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required> {{unit}}                
-                    </td>
-                    <td>
-                        <input value="{{price}}" name="price[{{id}}]" style="width: 72px;" type="number" min="0" onchange="update_price()" onkeyup="update_price()" required>
-                    </td>
-                    <td>
-                        {{total_price}}
-                    </td>
-                    <td>
-                        <a onclick="delete_item_row(`{{id}}`)" class="fa fa-trash-alt"></a>
+                        {{qty}} {{unit}}                
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div style="text-align: right;padding-top: 1em;">
-            <button type="button" onclick="add_item_row()">Add item</button>
-            <button type="submit">Save</button>
-        </div>
     </form>
 </div>
