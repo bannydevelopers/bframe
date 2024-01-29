@@ -48,6 +48,22 @@ if($me){
         }
         if(isset($_POST['ajax_request'])) die(json_encode(['status'=>$status, 'message'=>$msg]));
     }
+    if(isset($_POST['category_name'])){
+        $data = [
+            'category_name'=>addslashes($_POST['category_name']),
+            'category_description'=>addslashes($_POST['category_description'])
+        ];
+        if(isset($_POST['category_id'])){
+            $k = intval($_POST['category_id']);
+            $db->update('expenses_category', $data)->where(['category_id'=>$k])->commit();
+        }
+        else{
+            $k = $db->insert('expenses_category', $data);
+        }
+        if(!$db->error()) $msg = 'Category saved successful';
+        else $msg = $db->error()['message'];
+        if(isset($_POST['ajax_request'])) die($msg);
+    }
     if($me['work_location'] == human_resources::get_headquarters_branch()) {
         $whr = 1;
     }
@@ -68,7 +84,7 @@ if($me){
                         ->join('branches', 'branch_id=owner_branch', 'LEFT')
                         ->where($whr)
                         ->fetchAll();
-
+    
     $employees = $db->select('staff')
                 ->join('user_accounts','user_id=user_reference')
                 ->where($whr)

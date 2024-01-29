@@ -1,40 +1,22 @@
 <form method="post" enctype="multipart/form-data">
-        <div class="card-body">
-            <div class="mb-3">
+        <div class="card-body row">
+            <div class="mb-3 col-6">
                 <label for="expenses_date" class="form-label">Expenses date</label>
                 <input type="date" class="form-control" id="expenses_date" name="expenses_date" placeholder="Expense date..." required />
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-6">
               <label for="expenses_category" class="form-label">Category</label>
               <select name="expenses_category" id="expenses_category" onchange="check_selection('expenses_category')" class="form-select">
                 <option value="">Choose...</option>
                 <?php foreach($expensesCategory as $cat){?>
                 <option value="<?=$cat['category_id']?>"><?=$cat['category_name']?></option>
                 <?php }?>
-                <option value="">Add category</option>
+                <option value="add">Add category</option>
               </select>
             </div>
             <div class="mb-3">
                 <label for="expenses_price" class="form-label">Amount</label>
                 <input type="number" class="form-control" id="expenses_price" name="expenses_price" placeholder="Expense amount..." min="0" required />
-            </div>
-            <div class="mb-3">
-              <label for="approved_by" class="form-label">Approved by</label>
-              <select name="approved_by" id="approved_by" onchange="add_form('approved_by')" class="form-select">
-                <option value="" disabled selected>Choose...</option>
-                <?php foreach($employees as $user){?>
-                    <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
-                <?php }?>  
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="purchased_by" class="form-label">Purchased by</label>
-              <select name="purchased_by" id="purchased_by" onchange="add_form('purchased_by')" class="form-select">
-                <option value="" selected>Choose...</option>
-                <?php foreach($employees as $user){?>
-                    <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
-                <?php }?>
-              </select>
             </div>
             <div class="mb-3">
                 <label for="expenses_description" class="form-label">Description</label>
