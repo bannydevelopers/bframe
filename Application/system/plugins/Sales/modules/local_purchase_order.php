@@ -24,12 +24,12 @@ if(isset($_POST['created_date'])){
             $purch_items_qry[] = "('{$p}', {$purch_id}, {$_POST['quantity'][$k]}, '{$_POST['description'][$k]}', {$_POST['price'][$k]})";
         }
         $purch_items_qry = implode(',', $purch_items_qry);
-        $db->query("INSERT INTO local_purchase_order_item (lpo_item_name, lpo_item_reference, lpo_item_quantity, lpo_item_description, lpo_item_per_price) VALUES {$purch_items_qry}");
+        $db->query("INSERT INTO local_purchase_order_item (lpo_item_name, lpo_item_reference, lpo_item_quantity, lpo_item_description, lpo_item_price) VALUES {$purch_items_qry}");
         if($db->error()){
             $db->delete('local_purchase_order')->where(['lpo_id'=>$purch_id])->commit();
         }
     }
-    if ($db->error() && isset($db->error()['message'])) {
+    if ($db->error()) {
         $msg = $db->error()['message'];
     } 
     else {
@@ -40,9 +40,9 @@ if(isset($_POST['created_date'])){
         die($msg);
     }
 }
-if(isset($_POST['approve_local_purchase'])){
+if(isset($_POST['approve_local_purchase_order'])){
     $db->update('local_purchase_order', ['approved_by'=>$me['user_reference']])
-        ->where(['lpo_id'=>intval($_POST['approve_purchase'])])
+        ->where(['lpo_id'=>intval($_POST['approve_local_purchase_order'])])
         ->commit();
 
     if($db->error()) $msg = $db->error()['message'];
@@ -83,16 +83,16 @@ if(isset($_POST['qty'])){
     foreach($_POST['qty'] as $id=>$qty){
         if(array_search($id, array_column($lst, 'lpo_item_id')) === false) $idx = 'NULL';
         else $idx = intval($id);
-        $tmp[] = "({$idx}, '{$_POST['item_name'][$id]}', '{$_POST['purchase']}', $qty, '{$_POST['description'][$id]}')";
+        $tmp[] = "({$idx}, '{$_POST['name'][$id]}', '{$_POST['lpo_id']}', $qty, '{$_POST['desc'][$id]}', '{$_POST['price'][$id]}')";
     }
+
     $tmp = implode(',', $tmp);
-    $qry = "INSERT INTO local_purchase_order_item (lpo_item_id, lpo_item_name, lpo_item_reference, lpo_item_quantity, lpo_item_description) VALUES "
-            . " {$tmp} ON DUPLICATE KEY UPDATE lpo_item_name = VALUES(lpo_item_name), lpo_item_description=VALUES(lpo_item_description), lpo_item_quantity=VALUES(lpo_item_quantity)";
+    $qry = "INSERT INTO local_purchase_order_item (lpo_item_id, lpo_item_name, lpo_item_reference, lpo_item_quantity, lpo_item_description, lpo_item_price) VALUES "
+            . " {$tmp} ON DUPLICATE KEY UPDATE lpo_item_name = VALUES(lpo_item_name), lpo_item_description=VALUES(lpo_item_description), lpo_item_quantity=VALUES(lpo_item_quantity), lpo_item_price=VALUES(lpo_item_price)";
             
-    //var_dump($tmp);die;
     $db->query($qry);
     //var_dump($db->error());
-    if($db->error()) die('Saving failed');
+    if($db->error()) die($db->error()['message']);
     else die('Saved successful');
 }
 if(isset($_POST['delete_lpo'])){
@@ -129,7 +129,7 @@ else{
 $items_q = "(
                 SELECT JSON_ARRAYAGG(
                     JSON_OBJECT(
-                        'id', lpo_item_id, 'name', lpo_item_name, 'qty', lpo_item_quantity, 'desc', lpo_item_description, 'price', lpo_item_per_price
+                        'id', lpo_item_id, 'name', lpo_item_name, 'qty', lpo_item_quantity, 'desc', lpo_item_description, 'price', lpo_item_price
                     )
                 ) 
                 FROM local_purchase_order_item WHERE lpo_item_reference=lpo_id

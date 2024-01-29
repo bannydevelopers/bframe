@@ -136,7 +136,9 @@
             item.price_total = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
+
         frm.querySelector('tbody tr').outerHTML = tmp;
+        frm.querySelector('[name=lpo_id]').value = jsx.lpo_id;
         Swal.fire({
             html: frm,
             customClass:'mySwal',
@@ -179,20 +181,24 @@
         json.grand_total = 0;
 
         let tmp = '', sn = 0;
-        let reli = JSON.parse(json.purchase_items);
+        let reli = JSON.parse(json.lpo_items);
         for(x in reli) {
             let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
-                itotal = 0,//item_total.toLocaleString('en-US'),
-                price = 0;//reli[x].price.toLocaleString('en-US');
-
+                itotal = item_total.toLocaleString('en-US'),
+                price = reli[x].price.toLocaleString('en-US');
+            json.total += item_total;
 
             tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
-                <td>${reli[x].item_name}</td>
+                <td>${reli[x].name}</td>
+                <td>${reli[x].desc}</td>
                 <td>${reli[x].qty}</td>
-                <td>&nbsp;</td>
-                <td style="text-align: right;">&nbsp;</td></tr>`;
+                <td>${reli[x].price}</td>
+                <td style="text-align:right">${itotal}</td>
+                </tr>`;
         }
-        json.order_id = 6891+parseInt(json.purchase_id);
+        json.total = json.total.toLocaleString('en-US');
+        json.lpo_no = 6891+parseInt(json.lpo_id);
+        console.log(json);
         //let tpl = document.getElementById('purchase-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
 
@@ -360,15 +366,17 @@
     const add_item_row = ()=>{
         let elem = window.event.target;
         //let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[6].children[0].children[1];
-        let tr = elem.parentNode.previousElementSibling.querySelector('tbody tr:last-child');
+        let tr = elem.parentNode.previousElementSibling.querySelector('tbody tr:first-child');
         let trx = tr.cloneNode(true);
+        console.log(tr);
         [...trx.querySelectorAll('input')].forEach((inp, index)=>{
-            if(inp.name == 'purchase') return;
+            console.log(inp);
+            if(inp.name == 'lpo_id') return;
             if(inp.value) inp.value = '';
             //inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,`[x${index}]`);
             inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,'[]');
         });
-        tr.after(trx);
+        tr.parentNode.appendChild(trx);
         //elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
         //console.log(sel);
     }
@@ -414,7 +422,7 @@
     const approve_purchase = ()=>{
         let elem = window.event.target;
         let jsx = JSON.parse(elem.parentNode.getAttribute('data-json'));
-        jsx.purchase_no = jsx.purchase_id + 6891;
+        jsx.purchase_no = jsx.lpo_id + 6891;
         Swal.fire({
             icon:'question',
             html: `Surely approve purchase with number ${jsx.purchase_no}?`
@@ -422,7 +430,7 @@
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let fdx = new FormData();
-                fdx.append('approve_purchase', jsx.purchase_id);
+                fdx.append('approve_local_purchase_order', jsx.lpo_id);
                 ajax(
                     window.location.href,
                     resp=>{

@@ -30,8 +30,12 @@
           <td>
             <table style="min-width: 30%;text-align: left;font-size: 13px;">
               <tr class="white">
-                <td><b>Purchase number</b></td>
-                <td>{{order_id}}</td>
+                <td><b>LPO number</b></td>
+                <td>{{lpo_no}}</td>
+              </tr>
+              <tr class="white">
+                <td><b>Proforma number</b></td>
+                <td>{{proforma_no}}</td>
               </tr>
               <tr class="white">
                 <td><b>Create date</b></td>
@@ -43,13 +47,14 @@
         <tr class="white">
           <td colspan="2">
             <div style="text-align: center;">
-              <b style="text-transform: uppercase;font-size: 140%;">PURCHASE ORDER</b>
+              <b style="text-transform: uppercase;font-size: 140%;">LOCAL PURCHASE ORDER</b>
             </div>
             
             <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
               <tr style="border-bottom: 1px solid #222;" class="white">
                 <th>S/N</th>
                 <th>Item name</th>
+                <th>Description</th>
                 <th>Quantity</th>
                 <th>Unit price</th>
                 <th style="text-align: right;">Total amount</th>
@@ -57,9 +62,9 @@
               <tr id="items_list" class="white">
               </tr>
               <tr style="border-top: 1px solid #222;" class="white">
-                <td colspan="3">&nbsp;</td>
+                <td colspan="4">&nbsp;</td>
                 <th style="text-align: right;">Total</th> 
-                <th style="text-align: right;">&nbsp;</th>
+                <th style="text-align: right;">{{total}}</th>
               </tr>
             </table>
           </td>
@@ -76,6 +81,12 @@
               <span>___________________</span><br>
               <span>Client's signature</span>
             </span-->&nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: justify;">
+            <strong>TERMS AND CONDITIONS</strong><br>
+            <?=$company[0]->LPO_terms?>
           </td>
         </tr>
         <style>

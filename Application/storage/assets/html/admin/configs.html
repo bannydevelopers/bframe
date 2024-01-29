@@ -4,9 +4,9 @@
     <div class="content-small" <?=(is_object($val)) ? 'style="min-width: 100%;"':''?>>
         <label for="<?="config_{$key}"?>"><?=ucwords($key)?></label>
         <?php if(is_object($val)){?>
-        <div class="flex cards">
+        <div class="row">
             <?php foreach($val as $k=>$v){?>
-            <div class="content-small">
+            <div class="content-small col-4">
                 <b><em id="<?="config_{$key}_{$k}"?>"><?=ucwords($k)?></em></b>
                 <div class="content-small">
                     <input type="text" class="form-control" name="<?="{$key}[{$k}]"?>" value="<?=$v?>" />
