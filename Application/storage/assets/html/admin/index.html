@@ -458,14 +458,17 @@
             tinymce.init(tinymce_opts);
       }
       const jsprint = (html, opts)=>{
-              var printWindow = window.open('', '', 'height=600,width=1200');
-              printWindow.document.write('<html><head><title>Print preview</title>');
-              if(opts != undefined && opts.css != undefined) printWindow.document.write(`<style>${opts.css}</style>`);
-              printWindow.document.write('</head><body >');
-              printWindow.document.write(html);
-              printWindow.document.write('</body></html>');
-              printWindow.document.close();
+          var printWindow = window.open('', '', 'height=600,width=1200');
+          printWindow.document.write('<html><head><title>Document</title>');
+          if(opts != undefined && opts.css != undefined) printWindow.document.write(`<style>${opts.css}</style>`);
+          printWindow.document.write('</head><body >');
+          printWindow.document.write(html);
+          printWindow.document.write('</body></html>');
+          printWindow.document.close();
+          setTimeout(()=>{
               printWindow.print();
+              printWindow.onafterprint = printWindow.close(); /* Thanks SO for this line*/
+          },100);
       }
       const ajax = (url, success, fail, data, method)=>{
           fetch(
