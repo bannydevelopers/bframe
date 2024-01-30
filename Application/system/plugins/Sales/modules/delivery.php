@@ -110,12 +110,15 @@ $delivery = $db->select('delivery',"delivery.*, {$items_q}, branches.*, customer
 //var_dump($db->error(),$delivery);
 
 $items_q = "(
-                SELECT JSON_ARRAYAGG( 
-                    JSON_OBJECT( 'id', tool_id, 'name', tool_name ) 
-                ) FROM tools 
-                JOIN project_resources_approved ON tool_id=pra_allocated_resource 
-                WHERE pra_resource=resource_id 
-            ) AS items";
+    SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'id', item_id, 'invoice', invoice, 'product', product_name, 'qty', quantity, 
+            'product_id', product_id, 'unit_single', 
+            product_unit_singular, 'unit_prural', product_unit_plural
+        )
+    ) 
+    FROM invoice_items JOIN product ON product_id=product WHERE invoice_id=invoice
+) AS invoice_items";
 
 $ti = $db->select('invoice', "tax_invoice_id, invoice_id, customer_name, {$items_q}")
          ->join('customer','customer_id=customer')
