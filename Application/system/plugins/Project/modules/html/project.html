@@ -1,0 +1,73 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1"><?=$project['project_name']?></h3>
+    <div>
+        <a href="/<?=$base_url?>" class="btn rounded-pill btn-outline-secondary">
+            <i class="fas fa-angle-double-left me-1"></i>Projects
+        </a>
+    </div>
+</div>
+<br>
+
+<div class="card bg-white">
+    <pre><?php var_dump($project)?></pre>
+</div>
+
+<template>
+    <?php include __DIR__.'/register_project.html';?>
+</template>
+<style>
+    .mySwalForm{
+        min-width: 80%;
+    }
+    .mySwalForm :placeholder-shown, .mySwalSmallForm :placeholder-shown{
+        font-family: 'Times New Roman', Times, serif;
+        font-style: italic;
+    }
+    .mySwalForm label, .mySwalSmallForm label{
+        display: block;
+        text-align: left;
+        padding-left: 1em;
+    }
+    .mySwalSmallForm label{
+        padding: .5em;
+        padding-top: 1em;
+    }
+</style>
+<script>
+    const register_project = (name)=>{
+        let fx = document.querySelector('template').content.cloneNode(true).children[0];
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+</script>

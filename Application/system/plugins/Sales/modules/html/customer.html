@@ -58,7 +58,9 @@
                                 <div class="dropdown-menu">
                                 <a onclick="view_customer()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
                                 <a onclick="edit_customer()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                <?php if(user::init()->user_can('delete_customer')){?>
                                 <a onclick="delete_customer()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                <?php }?>
                                 </div>
                             </div>
                             </td>
