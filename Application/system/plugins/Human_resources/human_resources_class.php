@@ -103,8 +103,8 @@ class human_resources{
                     'work_location'=>intval( $_POST['work_location']), 
                     'department'=>intval( $_POST['department']),
                     'date_employed'=>$_POST['date_employed'],
-                    //'employment_length'=>intval( $_POST['designation']), 
-                    //'employment_status'=>addslashes( $_POST['designation']), 
+                    'staff_nida'=>intval( $_POST['staff_nida']), 
+                    'staff_tin' =>intval( $_POST['staff_tin'])
                     //'employment_last_renewal'=>addslashes( $_POST['designation']),
                     //'employment_end_date'=>addslashes( $_POST['designation'])
                 ];
