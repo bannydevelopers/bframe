@@ -30,17 +30,25 @@ if(isset($_POST['customer_name'])){
 }
 
 if(isset($_POST['delete_customer'])){
-    $k = $db->delete('customer')->where(['customer_id'=>intval($_POST['delete_customer'])])->commit();
-    if(!$db->error() && $k){
-        $msg = [
-            'status'=>'success',
-            'message'=>'Customer deleted successful'
-        ];
+    if(user::init()->user_can('delete_customer')){
+        $k = $db->delete('customer')->where(['customer_id'=>intval($_POST['delete_customer'])])->commit();
+        if(!$db->error() && $k){
+            $msg = [
+                'status'=>'success',
+                'message'=>'Customer deleted successful'
+            ];
+        }
+        else{
+            $msg = [
+                'status'=>'error',
+                'message'=>$db->error()['message']
+            ];
+        }
     }
     else{
         $msg = [
-            'status'=>'error',
-            'message'=>$db->error()['message']
+            'status'=>'info',
+            'message'=>'Access denied, no permission for requested action'
         ];
     }
     if(isset($_POST['ajax_request'])) die(json_encode($msg));

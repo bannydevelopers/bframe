@@ -25,6 +25,13 @@ class storage{
         return self::get_data($index);
     }
 
+    public function __toString(){
+        return $this->get_json();
+    }
+    public function get_json(){
+        return json_encode(self::$data, JSON_PRETTY_PRINT);
+    }
+
     public static function get_data($index = null){
         if($index == null) return self::$data;
         if(isset(self::$data[$index])) return self::$data[$index];
