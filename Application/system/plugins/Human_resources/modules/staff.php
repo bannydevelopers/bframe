@@ -85,7 +85,7 @@ if($me){
                 $dept = array_search($line[4], array_column($departments, 'dept_id'));
                 $dept_id = $departments[$dept]['dept_id'];
 
-                $qry .= "INSERT INTO staff (user_reference, bank, bank_account_number, registration_number, residence_address,designation, work_location, department, date_employed, employment_length, employment_last_renewal, employment_end_date) VALUES (LAST_INSERT_ID(), '{$line[4]}','{$line[5]}','{$line[6]}','{$line[7]}','{$designation_id}','{$branch_id}','{$dept_id}','{$line[11]}','{$line[12]}','{$line[13]}','{$line[14]}');".PHP_EOL;
+                $qry .= "INSERT INTO staff (user_reference, bank, bank_account_number, registration_number, residence_address,designation, work_location, department, date_employed, employment_length, employment_last_renewal, employment_end_date, staff_nida, staff_tin) VALUES (LAST_INSERT_ID(), '{$line[4]}','{$line[5]}','{$line[6]}','{$line[7]}','{$designation_id}','{$branch_id}','{$dept_id}','{$line[11]}','{$line[12]}','{$line[13]}','{$line[14]}','{$line[15]}','{$line[16]}');".PHP_EOL;
             }
             $qry .= 'COMMIT;';
 
@@ -106,6 +106,9 @@ if($me){
     if($me['work_location'] == human_resources::get_headquarters_branch()) {
         $whr = 1;
     }
+    else{
+        $whr = ['work_location'=>$me['work_location']];
+    }
     if(isset($_POST['export_staff'])){
         $export = $db->select('staff')
                     ->join('user_accounts','user_id=user_reference')
@@ -118,14 +121,11 @@ if($me){
                     ->order_by('staff_id', 'desc')
                     ->fetchAll();
 
-        $csv = "full_name, email, phone, system_role, bank, bank_account_number, registration_number, residence_address, designation, work_location, department, date_employed, employment_length, employment_last_renewal, employment_end_date\n";
+        $csv = "full_name, email, phone, system_role, bank, bank_account_number, registration_number, residence_address, designation, work_location, department, date_employed, employment_length, employment_last_renewal, employment_end_date, staff_nida, staff_tin\n";
         foreach($export as $ex){
-            $csv .= "{$ex['full_name']},{$ex['email']},{$ex['phone']},{$ex['role_name']}, {$ex['bank_name']}, {$ex['bank_account_number']}, {$ex['registration_number']}, {$ex['residence_address']}, {$ex['designation_name']}, {$ex['branch_name']}, {$ex['dept_name']}, {$ex['date_employed']}, {$ex['employment_length']}, {$ex['employment_last_renewal']}, {$ex['employment_end_date']}\n";
+            $csv .= "{$ex['full_name']},{$ex['email']},{$ex['phone']},{$ex['role_name']}, {$ex['bank_name']}, {$ex['bank_account_number']}, {$ex['registration_number']}, {$ex['residence_address']}, {$ex['designation_name']}, {$ex['branch_name']}, {$ex['dept_name']}, {$ex['date_employed']}, {$ex['employment_length']}, {$ex['employment_last_renewal']}, {$ex['employment_end_date']}, {$ex['staff_nida']}, {$ex['staff_tin']}\n";
         }
         die($csv);
-    }
-    else{
-        $whr = ['work_location'=>$me['work_location']];
     }
     $staff = $db->select('staff')
                 ->join('user_accounts','user_id=user_reference')
