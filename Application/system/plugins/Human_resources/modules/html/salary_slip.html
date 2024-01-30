@@ -267,4 +267,32 @@
             );
         });
     }
+
+    function calculateSalary() {
+        var basicSalaryInput = document.getElementById('basic_salary');
+        var educationFundInput = document.getElementById('education_fund');
+        var workerCompasionFundInput = document.getElementById('worker_compasion_fund');
+        var healthInsuranceFundInput = document.getElementById('health_insurance_fund');
+        var socialSecurityFundInput = document.getElementById('social_security_fund');
+        var payeeInput = document.getElementById('payee');
+
+        var basicSalary = parseFloat(basicSalaryInput.value);
+
+        // Calculate values based on percentages
+        var educationFundValue = basicSalary * 0.1;
+        var workerCompasionFundValue = basicSalary * 0.01;
+        var healthInsuranceFundValue = basicSalary * 0.03;
+        var socialSecurityFundValue = basicSalary * 0.1;
+        var payeeValue = basicSalary * 0.18;
+
+        // Update the input fields with the calculated values
+        educationFundInput.value = educationFundValue.toFixed(2);
+        workerCompasionFundInput.value = workerCompasionFundValue.toFixed(2);
+        healthInsuranceFundInput.value = healthInsuranceFundValue.toFixed(2);
+        socialSecurityFundInput.value = socialSecurityFundValue.toFixed(2);
+        payeeInput.value = payeeValue.toFixed(2);
+    }
+
+    // Attach the calculateSalary function to the basic_salary input's onchange event
+    // document.getElementById('basic_salary').addEventListener('input', calculateSalary);
 </script>

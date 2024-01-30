@@ -29,35 +29,35 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Bank</h6>
-                            <span class="text-secondary">CRDB</span>
+                            <span class="text-secondary"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Bank account #</h6>
-                            <span class="text-secondary">12345678</span>
+                            <span class="text-secondary"><?=$widgets[0]['staff']['bank_account_number']?></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Reg number</h6>
-                            <span class="text-secondary">BN3456</span>
+                            <span class="text-secondary"><?=$widgets[0]['staff']['registration_number']?></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Designation</h6>
-                            <span class="text-secondary">HOD</span>
+                            <span class="text-secondary"><?=$widgets[0]['staff']['bank_account_number']?></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Department</h6>
-                            <span class="text-secondary">TCT</span>
+                            <span class="text-secondary"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Work location</h6>
-                            <span class="text-secondary">Headquotor</span>
+                            <span class="text-secondary"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Date employed</h6>
-                            <span class="text-secondary">23 May, 2023</span>
+                            <span class="text-secondary"><?=$widgets[0]['staff']['date_employed']?></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Employment length</h6>
-                            <span class="text-secondary">2 years</span>
+                            <span class="text-secondary"><?=$widgets[0]['staff']['employment_length']?> years</span>
                         </li>
                     </ul>
                 </div>
@@ -106,7 +106,7 @@
                                 <h6 class="mb-0">Address</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <!-- <?=$me['residence_address']?> -->
+                                <?=$widgets[0]['staff']['residence_address']?>
                         </div>
                         </div>
                             <hr>
@@ -141,9 +141,6 @@
                                 <div class="d-flex justify-content-between mb-3">
                                     <small>31 Jul, 2023 <span class="ms-3 text-success">paid</span></small>
                                     <a href="javascript:void(0);">view</a>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    .......<pre><?php print_r($widgets)?></pre>
                                 </div>
                             </div>
                         </div>
@@ -225,6 +222,11 @@ background-color: #e2e8f0;
 }
 </style>
    
-<div class="flex cards">
-    <?php print_r(@$widgets)?>
+<div>
+    <?php 
+    //print_r($widgets[0]['staff']);
+    //print_r($widgets[0]['payroll']);
+    //print_r($widgets[0]['slips']);
+    print_r($widgets[0]['leave']);
+    ?>
 </div>

@@ -1,33 +1,40 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
     <div class="row">
         <div class="mb-3 col-md-6">
-            <label class="form-label" for="assignee">Responsible assignee</label>
-            <select class="form-select" name="assignee" id="assignee" onchange="add_form('assignee')" required>
+            <label for="responsible_assignee" class="form-label">Employee name</label>
+            <select name="responsible_assignee" class="form-select" id="responsible_assignee">
                 <option value="">Choose...</option>
-                <?php foreach($assignee as $user){?>
+                <?php foreach($employees as $user){?>
                     <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
                 <?php }?>    
             </select>
         </div>
         <div class="mb-3 col-md-6">
             <label class="form-label" for="leave_type">Leave type</label>
-            <input class="form-control" type="text" name="leave_type" value="" required />
+            <select name="leave_type" class="form-select" id="leave_type" onchange="updateLeaveLength()" required>
+                <option value="" selected disabled>Choose...</option>
+                <option value="Emergency">Emergency leave</option>
+                <option value="Annual">Annual leave</option>
+                <option value="Maternity">Maternity leave</option>
+                <option value="Sick">Sick leave</option>
+                <option value="Paternity">Paternity leave</option>
+            </select>
         </div>
         <div class="mb-3 col-md-6">
             <label class="form-label" for="leave_start">Leave start</label>
-            <input class="form-control" type="date" name="leave_start" value="" required />
+            <input class="form-control" id="leave_start" type="date" name="leave_start" value="" required />
         </div>
         <div class="mb-3 col-md-6">
             <label class="form-label" for="leave_length">Leave length</label>
-            <input class="form-control" type="number" name="leave_length" value="0" required />
+            <input class="form-control" id="leave_length" type="number" name="leave_length" value="0" required />
         </div>
-        <div class="mb-3 col-md-6">
-            <label class="form-label" for="leave_description">Leave description</label>
-            <input class="form-control" type="text" name="leave_description" value="" required />   
+        <div class="mb-3 col-md-12">
+            <label class="form-label" for="leave_application_description">Leave description</label>
+            <textarea class="form-control" type="text" id="leave_application_description" name="leave_application_description"></textarea>   
         </div>
     </div>
     <div class="text-end">
         <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
-        <button type="submit" class="btn rounded-pill btn-primary btn-sm">Create</button>
+        <button type="submit" name="apply_leave" class="btn rounded-pill btn-primary btn-sm">Create</button>
     </div>
 </form>
