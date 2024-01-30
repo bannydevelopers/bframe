@@ -65,8 +65,7 @@
     "headquarters_branch": 1,
     "leave_approve_flow": [
         "1",
-        "5",
         "4",
-        "4"
+        "3"
     ]
 }

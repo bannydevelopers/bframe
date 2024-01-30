@@ -28,18 +28,24 @@ if(isset($_POST['leave_application_description'])){
         }
 }
 
-if(user::init()->user_can('approve_leav')){
+if(in_array($user['system_role'], $moduleconfig->leave_approve_flow)){
     $leave  = $db->select('leave_application')
         ->join('user_accounts', "user_accounts.user_id=leave_application.leave_applicant", 'left')
         ->fetchAll();
 }else {
-    $leave  = $db->select('leave_application')
-        ->join('user_accounts', "user_accounts.user_id=leave_application.leave_applicant", 'left')
-        ->where(['leave_applicant'=>$user_id])
-        ->fetchAll();
+    // $leave  = $db->select('leave_application')
+    //     ->join('user_accounts', "user_accounts.user_id=leave_application.leave_applicant", 'left')
+    //     ->where(['leave_applicant'=>$user_id])
+    //     ->fetchAll();
 }
-
-
+$sr = implode(',', $moduleconfig->leave_approve_flow);
+$leave = $db->select('leave_application')
+            ->join('user_accounts', "user_accounts.user_id=leave_application.leave_applicant", 'left')
+            ->where(['leave_applicant'=>$user['user_id']])
+            ->or('leave_applicant')
+            ->in("SELECT user_id FROM user_accounts WHERE system_role IN ({$user['system_role']})")
+            ->fetchAll();
+//var_dump($db->getQuery());
 $employees = $db->select('user_accounts', 'full_name, user_id')
     ->where("system_role={$system_role}")
     ->order_by('full_name', 'asc')

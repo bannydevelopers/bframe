@@ -161,7 +161,7 @@ class db{
                 $options = "'{$options}'";
             }
         }
-        $options = trim($options, '()');
+        $options = ($options[0] == '(') ? trim($options, '()') :  $options;
         return $this->make_condition("($options)", 'IN', $data);
     }
     public function having($condition){
