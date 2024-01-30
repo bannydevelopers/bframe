@@ -121,9 +121,9 @@ if($me){
                     ->order_by('staff_id', 'desc')
                     ->fetchAll();
 
-        $csv = "full_name, email, phone, system_role, bank, bank_account_number, registration_number, residence_address, designation, work_location, department, date_employed, employment_length, staff_nida, employment_last_renewal, employment_end_date\n";
+        $csv = "full_name, email, phone, system_role, bank, bank_account_number, registration_number, residence_address, designation, work_location, department, date_employed, employment_length, employment_last_renewal, employment_end_date, staff_nida, staff_tin\n";
         foreach($export as $ex){
-            $csv .= "{$ex['full_name']},{$ex['email']},{$ex['phone']},{$ex['role_name']}, {$ex['bank_name']}, {$ex['bank_account_number']}, {$ex['registration_number']}, {$ex['residence_address']}, {$ex['designation_name']}, {$ex['branch_name']}, {$ex['dept_name']}, {$ex['date_employed']}, {$ex['employment_length']}, {$ex['employment_last_renewal']}, {$ex['employment_end_date']}\n";
+            $csv .= "{$ex['full_name']},{$ex['email']},{$ex['phone']},{$ex['role_name']}, {$ex['bank_name']}, {$ex['bank_account_number']}, {$ex['registration_number']}, {$ex['residence_address']}, {$ex['designation_name']}, {$ex['branch_name']}, {$ex['dept_name']}, {$ex['date_employed']}, {$ex['employment_length']}, {$ex['employment_last_renewal']}, {$ex['employment_end_date']}, {$ex['staff_nida']}, {$ex['staff_tin']}\n";
         }
         die($csv);
     }
