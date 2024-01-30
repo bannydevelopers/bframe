@@ -168,6 +168,19 @@ class admin{
             array_shift($plugins_count);
             $_this::$data['admin_widgets']['plugins'] = ['total' => count($plugins_count)];
         }
+        if($user->user_can('view_products')){
+            $_this::$data['admin_widgets']['products'] = $db->select('product', 'count(product_id) as total')->fetch();
+        }
+        if($user->user_can('view_customers')){
+            $_this::$data['admin_widgets']['customers'] = $db->select('customer', 'count(customer_id) as total')->fetch();
+        }
+        if($user->user_can('view_suppliers')){
+            $_this::$data['admin_widgets']['suppliers'] = $db->select('supplier', 'count(supplier_id) as total')->fetch();
+        }
+         if($user->user_can('view_staff')){
+           $_this::$data['admin_widgets']['Staffs'] = $db->select('STAFF', 'count(staff_id) as total')->fetch();
+        }
+        
         
         $widgets = system::dispatch_event('admin_widgets_load', []);
         if($widgets && $widgets[0]){
