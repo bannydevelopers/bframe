@@ -61,9 +61,44 @@ if(isset($registry->request[4])){
                     ->where(['project_id'=>$registry->request[4]])
                     ->fetch();
 
-    $resources = $db->select('project_resources')
-                    ->where(['resource_project'=>$registry->request[4]])
-                    ->fetchAll();
+    $_q['tools'] = "(
+                SELECT JSON_ARRAYAGG( 
+                    JSON_OBJECT( 'id', tool_id, 'name', tool_name ) 
+                ) FROM tools 
+                JOIN project_resources_approved ON tool_id=pra_allocated_resource 
+                WHERE pra_resource=resource_id 
+            ) AS items";
+            
+
+    $_q['staff'] = "(
+                    SELECT JSON_ARRAYAGG( 
+                        JSON_OBJECT( 'id', user_id, 'name', full_name ) 
+                    ) FROM user_accounts 
+                    JOIN project_resources_approved ON tool_id=pra_allocated_resource 
+                    WHERE pra_resource=resource_id 
+                ) AS items";
+
+   $_q['products'] = "(
+                    SELECT JSON_ARRAYAGG( 
+                        JSON_OBJECT( 'id', product_id, 'name', product_name ) 
+                    ) FROM product 
+                    JOIN project_resources_approved ON tool_id=pra_allocated_resource 
+                    WHERE pra_resource=resource_id 
+                ) AS items";
+    
+    $rt = $db->select('project_resources', 'resource_type as rtype')
+             ->where(['resource_project'=>$registry->request[4]])
+             ->fetch();
+    if(isset($rt['rtype'])) 
+    {
+        $sub_q = $_q[$rt['rtype']];
+        $resources = $db->select('project_resources', "project_resources.*, {$sub_q}")
+                        ->where(['resource_project'=>$registry->request[4]])
+                        ->fetchAll();
+    }
+    else{
+        $resources = [];
+    }
 
     ob_start();
     include __DIR__.'/html/project.html';
