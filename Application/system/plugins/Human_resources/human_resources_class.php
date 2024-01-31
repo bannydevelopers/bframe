@@ -63,7 +63,8 @@ class human_resources{
             //SELECT * FROM payroll where JSON_EXTRACT(payment_slips, "$[0].employee") = 94;
             $leave  = $db->select('leave_application')
                          ->where(['leave_applicant'=>$me['user_reference']])
-                         ->limit(1)->fetchAll();
+                         ->order_by('leave_start_date', 'asc')
+                         ->limit(4)->fetchAll();
 
             $payroll = $db->select('payroll')
                             ->where("Locate('\"employee\": {$me['user_reference']},', payment_slips)>0")

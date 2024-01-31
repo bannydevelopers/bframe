@@ -41,7 +41,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Designation</h6>
-                            <span class="text-secondary"><?=$widgets[0]['staff']['bank_account_number']?></span>
+                            <span class="text-secondary"></span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-0">Department</h6>
@@ -122,26 +122,17 @@
                         <div class="card h-100">
                             <div class="card-body">
                                 <h6 class="d-flex align-items-center mb-3">My salary</h6>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small>31 Nov, 2023 <span class="ms-3 text-warning">not paid</span></small>
-                                    <a href="javascript:void(0);">view</a>
+                                <div class="d-flex justify-content-between mb-3" data-json='<?=json_encode($widgets[0]["slips"])?>'>
+                                    <small><?=date("M, Y")?><span class="ms-3 text-warning">To be paid</span></small>
+                                    <a href="javascript:void(0);" onclick="view_slip()">view</a>
                                 </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small>31 Oct, 2023 <span class="ms-3 text-success">paid</span></small>
-                                    <a href="javascript:void(0);">view</a>
+                                <?php 
+                                foreach($widgets[0]['payroll'] as $payroll) { ?>
+                                <div class="d-flex justify-content-between mb-3" data-json='<?=json_encode($payroll)?>'>
+                                    <small><?=system::format_time($payroll['create_date'], 4)?><span class="ms-3 text-success">previously paid</span></small>
+                                    <a href="javascript:void(0);" onclick="view_payslip()">view</a>
                                 </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small>31 Sep, 2023 <span class="ms-3 text-success">paid</span></small>
-                                    <a href="javascript:void(0);">view</a>
-                                </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small>31 Aug, 2023 <span class="ms-3 text-success">paid</span></small>
-                                    <a href="javascript:void(0);">view</a>
-                                </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small>31 Jul, 2023 <span class="ms-3 text-success">paid</span></small>
-                                    <a href="javascript:void(0);">view</a>
-                                </div>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -149,14 +140,23 @@
                         <div class="card h-100">
                             <div class="card-body">
                                 <h6 class="d-flex align-items-center mb-3">My leave</h6>
-                                <small>13 Jan, 2024</small>
+                                <?php 
+                                $today = new DateTime();
+                                foreach($widgets[0]['leave'] as $leave) {
+                                    $leaveDate = new DateTime($leave['leave_start_date']);
+
+                                    $intervalTillLeave = $today->diff($leaveDate);
+                                    $intervalTillLeave = $intervalTillLeave->days+1;
+
+                                    $applicationDate = new DateTime($leave['application_date']);
+                                    $interval = $leaveDate->diff($applicationDate);
+                                    $percent = ($intervalTillLeave/$interval->days )* 100;
+                                ?>
+                                <small><?php echo "(". $intervalTillLeave ."/". $interval->days ." days left) ". system::format_time($leave['leave_start_date'], 3) ." - ". $leave['leave_type']?></small>
                                 <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: <?=100-$percent?>%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
                                 </div>
-                                <small>13 Aug, 2024</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -222,11 +222,129 @@ background-color: #e2e8f0;
 }
 </style>
    
+<template>
+    <div class="container-fluid mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center lh-1 mb-2">
+                    <h6 class="fw-bold h4">Payslip</h6> <span class="fw-normal">Payment slip for {{create_date}}</span>
+                </div>
+                <div class="d-flex justify-content-end"> <span>Working Branch: Main</span> </div>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div> <span class="fw-bolder">EMP Code</span> <small class="ms-3">008</small> </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div> <span class="fw-bolder">EMP Name</span> <small class="ms-3">Abby</small> </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div> <span class="fw-bolder">Mode of Pay</span> <small class="ms-3">BANK</small> </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div> <span class="fw-bolder">Ac No.</span> <small class="ms-3">{{bank_account_number}}</small> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="mt-4 table table-bordered">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th scope="col">Earnings</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Deductions</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row">Basic</td>
+                                <td class="text-end">{{basic_salary}}</td>
+                                <td>Payee</td>
+                                <td class="text-end">{{payee}}</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">Allowance</td>
+                                <td class="text-end">{{allowance}}</td>
+                                <td>Health Insurance Fund</td>
+                                <td class="text-end">{{health_insurance_fund}}</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">Bonus</td>
+                                <td class="text-end">{{bonus}}</td>
+                                <td>Social Security Fund</td>
+                                <td class="text-end">{{social_security_fund}}</td>
+                            </tr>
+                            <tr>
+                                <td scope="row"></td>
+                                <td></td>
+                                <td>Worker Compasion Fund</td>
+                                <td class="text-end">{{worker_compasion_fund}}</td>
+                            </tr>
+                            <tr>
+                                <td scope="row"></td>
+                                <td></td>
+                                <td>Education Fund</td>
+                                <td class="text-end">{{education_fund}}</td>
+                            </tr>
+                            <tr>
+                                <td scope="row"></td>
+                                <td></td>
+                                <th scope="row">Other Deduction</th>
+                                <td class="text-end">{{other_deduction}}</td>
+                            </tr>
+                            <tr class="border-top">
+                                <th scope="row">Total Earning</th>
+                                <td class="text-end">25970.00</td>
+                                <td>Total Deductions</td>
+                                <td class="text-end">2442.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row text-end mb-5">
+                    <div class="col-md-12"> <br> <span class="fw-bolder">Net Pay : 24528.00</span> </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <div class="d-flex flex-column mt-2"> <span class="fw-bold">Awadhi A. Awadhi</span> <span class="mt-4">Authorised Signatory</span> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="Vspaced" style="text-align: left;">
+        <div class="content-small">
+            <h3 style="padding-bottom: .6em;" class="large-text">{{basic_salary}}</h3>
+            <div class="mb-2"><span style="color:#696cff;">Description: </span>{{basic_salary}}</div>
+            <div class="mb-2"><span style="color:#696cff;">Status: </span>{{create_date}}</div>
+        </div>
+    </div>
+</template>
 <div>
     <?php 
-    //print_r($widgets[0]['staff']);
-    //print_r($widgets[0]['payroll']);
-    //print_r($widgets[0]['slips']);
-    print_r($widgets[0]['leave']);
+    print_r($widgets[0]['payroll']);
     ?>
 </div>
+<script>
+    const view_slip = ()=>{
+        let elem = window.event.target.parentNode,
+            htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
+        Swal.fire({
+            html: htz,
+            customClass:'mySwal'
+        });
+    };
+    const view_payslip = ()=>{
+        let elem = window.event.target.parentNode,
+            htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
+        htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
+        Swal.fire({
+            html: htz,
+            customClass:'mySwal'
+        });
+    };
+</script>

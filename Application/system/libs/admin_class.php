@@ -180,12 +180,12 @@ class admin{
          if($user->user_can('view_staff')){
            $_this::$data['admin_widgets']['Staffs'] = $db->select('STAFF', 'count(staff_id) as total')->fetch();
         }
-        
+         
         
         $widgets = system::dispatch_event('admin_widgets_load', []);
         if($widgets && $widgets[0]){
             $_this::$data['widgets'] = '';
-            foreach($widgets as $widget) $_this::$data['widgets'] = $widget;
+            foreach($widgets as $widget) $_this::$data['widgets'] .= $widget;
         }
 
         $user = user::init()->get_session_user('full_name');

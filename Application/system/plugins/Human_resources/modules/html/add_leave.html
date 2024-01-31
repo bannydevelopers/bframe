@@ -22,7 +22,7 @@
         </div>
         <div class="mb-3 col-md-6">
             <label class="form-label" for="leave_start">Leave start</label>
-            <input class="form-control" id="leave_start" type="date" name="leave_start" value="" required />
+            <input class="form-control" id="leave_start" type="date" name="leave_start" value="" min="<?=date('Y-m-d')?>" required />
         </div>
         <div class="mb-3 col-md-6">
             <label class="form-label" for="leave_length">Leave length</label>

@@ -15,7 +15,8 @@ if($me){
                 'education_fund'=>intval( $_POST['education_fund'] ), 
                 'allowance'=>intval( $_POST['allowance'] ), 
                 'bonus'=>intval( $_POST['bonus'] ), 
-                'other_deduction'=>intval( $_POST['other_deduction'] )    
+                'other_deduction'=>intval( $_POST['other_deduction'] ),
+                'net_salary' => $_POST['net_salary'] 
             ];
             if(isset($_POST['slip_id'])){
                 $k = intval($_POST['slip_id']);

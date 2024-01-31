@@ -160,7 +160,8 @@ class system{
         $formats = array('l, m d, Y', //0
                          'l, M d, Y', //1
                          'D, m d, Y', //2
-                         'D, M d, Y');//3
+                         'D, M d, Y', //3
+                         'M d, Y');//4
         if(date($formats[3]) == date($formats[$selected], $ts)) return 'Today';
         if(!isset($formats[$selected])) $formats[$selected] = $formats[0];
         if(date('H:i:s', $ts) != '00:00:00') $formats[$selected] .= ' @ H:i';

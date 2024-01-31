@@ -37,9 +37,7 @@
                     <td><?=number_format(array_sum([$ssp['basic_salary'],$ssp['allowance'],$ssp['bonus']]))?></td>
                     <td><?=number_format(array_sum([$ssp['health_insurance_fund'],$ssp['payee'] 
                         ,$ssp['social_security_fund'],$ssp['worker_compasion_fund'],$ssp['education_fund']]))?></td>
-                    <td><?=number_format(array_sum([$ssp['basic_salary'],$ssp['allowance'],$ssp['bonus']])-array_sum([$ssp['payee'],
-                        $ssp['health_insurance_fund'],$ssp['social_security_fund'],
-                        $ssp['worker_compasion_fund'],$ssp['education_fund']]))?></td>
+                    <td><?=$ssp['net_salary']?></td>
                     <td>
                     <div class="dropdown">
                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -275,6 +273,7 @@
         var healthInsuranceFundInput = document.getElementById('health_insurance_fund');
         var socialSecurityFundInput = document.getElementById('social_security_fund');
         var payeeInput = document.getElementById('payee');
+        var netSalaryInput = document.getElementById('net_salary');
 
         var basicSalary = parseFloat(basicSalaryInput.value);
 
@@ -291,6 +290,9 @@
         healthInsuranceFundInput.value = healthInsuranceFundValue.toFixed(2);
         socialSecurityFundInput.value = socialSecurityFundValue.toFixed(2);
         payeeInput.value = payeeValue.toFixed(2);
+
+        netSalary = basicSalary - (educationFundValue + workerCompasionFundValue + healthInsuranceFundValue + socialSecurityFundValue + payeeValue);
+        netSalaryInput.value = netSalary.toFixed(2);
     }
 
     // Attach the calculateSalary function to the basic_salary input's onchange event
