@@ -65,6 +65,26 @@ if(isset($_POST['approve_leave'])){
         die($msg);
     }
 }
+if(isset($_POST['delete_leave'])){
+    $db->delete('leave_application')
+        ->where(['leave_application_id'=>intval($_POST['delete_leave'])])
+        ->and(['leave_applicant'=>$user['user_id']])
+        ->and("leave_application_status != 'Approved'")
+        ->commit();
+
+    if(!$db->error()){
+        $chk = $db->select('leave_application')
+                    ->where(['leave_application_id'=>intval($_POST['delete_leave'])])
+                    ->limit(1)
+                    ->fetch();
+        if(!$chk) $msg = 'Deleted successful';
+        else $msg = 'Error: Something unexpected happened';
+    }
+    else{
+        $msg = $db->error()['message'];
+    }
+    if(isset($_POST['ajax_request'])) die($msg);
+}
 $sr = implode(',', $moduleconfig->leave_approve_flow);
 if(user::init()->user_can('view_all_leave')){
     if($_this::get_headquarters_branch() == $me['work_location']) $whr = 1;

@@ -152,10 +152,10 @@
         });
     };
     const delete_leave= ()=>{
-        let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
+        let elem = window.event.target.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
+        let name = jsx.full_name;
+
         Swal.fire({
             title: `Delete ${name}?`,
             showCancelButton: true,
@@ -163,49 +163,30 @@
             html:"No UNDO remember!"
         })
         .then(response=>{
-        if(response.isConfirmed){
-            let userdata = new FormData();
-            userdata.append('delete_leave', uid);
-            userdata.append('ajax',1);
-            ajax(
-            window.location.href, 
-            response=>{
-                let res_json = JSON.parse(response);
-                //console.log(response);
-                if(res_json){
-                    let jsx = res_json.response;
+            if(response.isConfirmed){
+                let userdata = new FormData();
+                userdata.append('delete_leave', jsx.leave_application_id);
+                userdata.append('ajax_request',1);
+                ajax(
+                window.location.href, 
+                response=>{
                     Swal.fire({
-                        title: jsx.message,
-                        icon: jsx.status
+                        icon: 'info',
+                        html: response
                     })
                     .then(e=>{
-                        if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             createPageButtons(); // create the page buttons initially
-                            showPage(currentPage);
-                        }
+                        window.location.reload();
                     });
-                }
-                else {
+                },
+                error=>{
                     Swal.fire({
-                        title: 'Malformed response returned',
                         icon: 'error',
-                        html:response
+                        html: error
                     });
-                }
-            },
-            error=>{
-                console.log(error);
-            },
-            userdata
-            );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
-        }
+                },
+                userdata
+                );
+            }
         });
     }
     const create_leave = ()=>{
