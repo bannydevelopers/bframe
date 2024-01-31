@@ -60,7 +60,81 @@
             <em><?=$project['customer_phone_number']?></em>
         </div>
     </div><hr>
-    <pre><?php var_dump($resources,$project)?></pre>
+    <div>
+        <div class="tab-view px-2">
+            <input type="radio" name="itab" id="class_tab12" checked>
+            <label for="class_tab12">Resources</label>
+            <input type="radio" name="itab" id="class_tab22">
+            <label for="class_tab22">Activities</label>
+            <div class="tab-panes text-start">
+                <div class="row">
+                <?php //foreach($resources as $item){?>
+                    <!--div><?php var_dump($resources)?></div-->
+                <?php //} ?>
+                <table class="table table-hover paginate" data-items-per-page="10">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Resource type</th>
+                            <th> Quantity</th>
+                            <th>Description</th>
+                            <th>Requested by</th>
+                            <th>Approved by</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <?php foreach($resources as $sn=>$st){?>
+                        <tr data-json='<?=json_encode($st)?>'>
+                            <td><?=++$sn?></td>
+                            <td>
+                                <?=$st['resource_type']?>
+                            </td>
+                            <td>
+                                <?=$st['resource_quantity']?>
+                            </td>
+                            <td>
+                                <?=$st['request_description']?>
+                            </td>
+                            <td>
+                                <?=$st['requester_name']?><br>
+                                <em><small><?=system::format_time($st['request_date'])?></small></em>
+                            </td>
+                            <td>
+                                <?=$st['approver_name']?><br>
+                                <em><small><?=system::format_time($st['approve_date'])?></small></em>
+                            </td>
+                            <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="px-1" style="font-size: 22px;" data-icon="&#xf141;"></i>
+                                </button>
+                                <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
+                                    <?php if($st['resource_type'] != 'money'){?>
+                                    <a onclick="view_status()" class="dropdown-item"><span class="me-1 fa fa-eye"></span>View</a>
+                                    <?php }?>
+                                    <?php if(user::init()->user_can('approve_project_resource') && !$st['resource_approver']){?>
+                                    <a onclick="approve_resource()" class="dropdown-item"><span class="me-1" data-icon="&#xf560;"></span>Approve</a>
+                                    <?php }?>
+                                    <?php if($user['user_id'] == $st['resource_requester'] && $st['resource_status'] == 'requested'){?>
+                                    <a onclick="delete_activity()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                    <?php }?>&nbsp;
+                                </div>
+                            </div>
+                            </td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+                </div>
+                <div class="row">
+                <?php //foreach($resources as $item){?>
+                    <div><?php var_dump($resources)?></div>
+                <?php //} ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <template>
@@ -120,5 +194,56 @@
                 fdx
             );
         });
+    }
+    const approve_resource = ()=>{
+        let jsx = JSON.parse(window.event.target.parentNode.getAttribute('data-json'));
+        Swal.fire({
+            icon: 'info',
+            html: 'Please wait...'
+        });
+        let fx = new FormData();
+        fx.append('approve_resource_items', jsx.resource_id);
+        
+        ajax(
+            window.location.href,
+            resp=>{
+                Swal.fire({
+                    html: resp,
+                    customClass: 'smallSwal'
+                });
+                let frm = document.querySelector('.smallSwal form');
+                if(frm){
+                    frm.addEventListener('submit', evt=>{
+                        evt.preventDefault();
+                        fdx = new FormData(evt.target);
+                        ajax(
+                            window.location.href,
+                            response=>{
+                                console.log(response);
+                                Swal.fire({
+                                    html: response,
+                                    icon: 'info'
+                                });
+                            },
+                            error=>{
+                                Swal.fire({
+                                    html: error,
+                                    icon:'error'
+                                });
+                            },
+                            fdx
+                        );
+                    });
+                }
+                else console.log(resp);
+            },
+            err=>{
+                Swal.fire({
+                    icon: 'error',
+                    html: err
+                });
+            },
+            fx
+        );
     }
 </script>

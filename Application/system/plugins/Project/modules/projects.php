@@ -30,6 +30,68 @@ if(isset($_POST['project_name'])){
     }
 }
 
+if(isset($_POST['approved_resource'])){
+    if(isset($_POST['resource_item'])){
+        $qry = 'INSERT INTO project_resources_approved (pra_resource, pra_allocated_resource) VALUES';
+        $vals = [];
+        foreach($_POST['resource_item'] as $ri){
+            $vals[] = " ({$_POST['approved_resource']}, {$ri})";
+        }
+        $qry .= implode(',', $vals);
+        $k = $db->query($qry);
+        if($k  && !$db->error()){
+            $data = [
+                'resource_status'=>'approved',
+                'resource_approver'=>$user['user_id'],
+                'approve_date'=>date('Y-m-d H:i:s')
+            ];
+            $db->update('project_resources', $data)
+                ->where(['resource_id'=>intval($_POST['approved_resource'])])
+                ->commit();
+        }
+        else{
+            $db->delete('project_resources_approved')->where(['pra_id'=>$k])->commit();
+        }
+        if(!$db->error()) $msg = '<h3>Approved successful</h3>';
+        else $msg = json_encode($db->error());
+    }
+    else $msg = 'Nothing to approve, please select some';
+    die($msg);
+}
+if(isset($_POST['approve_resource_items'])){
+    $res = $db->select('project_resources')
+                ->where(['resource_id'=>intval($_POST['approve_resource_items'])])
+                ->fetch();
+
+    if($res['resource_type'] == 'money'){
+        $data = [
+            'resource_status'=>'approved',
+            'resource_approver'=>$user['user_id'],
+            'approve_date'=>date('Y-m-d H:i:s')
+        ];
+        $db->update('project_resources', $data)
+            ->where(['resource_id'=>intval($_POST['approve_resource_items'])])
+            ->commit();
+        if(!$db->error()) $msg = '<h3>Approved successful</h3>';
+        else $msg = $db->error()['message'];
+    }
+    else if($res['resource_type'] == 'tools'){
+    }
+    else if($res['resource_type'] == 'products'){
+    }
+    else if($res['resource_type'] == 'staff'){
+        $res_list = $db->select('user_accounts','full_name as name, user_id as id')
+                    ->where(1)
+                    ->fetchAll();
+        ob_start();
+        include __DIR__.'/html/resource_approve_entities.html';
+        $msg = ob_get_clean();
+    }
+    else{
+        $msg = 'Unknown resource type';
+    }
+    die($msg);
+}
 
 $customer = $db->select('customer')->where($whr)->fetchAll();
 
@@ -61,7 +123,7 @@ if(isset($registry->request[4])){
                     ->join('user_accounts as uc','uc.user_id=projects.created_by')
                     ->where(['project_id'=>$registry->request[4]])
                     ->fetch();
-var_dump($db->error());
+
     $_q['tools'] = "(
                 SELECT JSON_ARRAYAGG( 
                     JSON_OBJECT( 'id', tool_id, 'name', tool_name ) 
@@ -93,9 +155,12 @@ var_dump($db->error());
     if(isset($rt['rtype'])) 
     {
         $sub_q = $_q[$rt['rtype']];
-        $resources = $db->select('project_resources', "project_resources.*, {$sub_q}")
+        $resources = $db->select('project_resources', "project_resources.*, {$sub_q}, user_accounts.full_name as requester_name, appr.full_name as approver_name")
+                        ->join('user_accounts', 'resource_requester=user_accounts.user_id')
+                        ->join('user_accounts as appr', 'resource_approver=appr.user_id', 'LEFT')
                         ->where(['resource_project'=>$registry->request[4]])
                         ->fetchAll();
+
     }
     else{
         $resources = [];
