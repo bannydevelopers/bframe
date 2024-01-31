@@ -39,7 +39,7 @@
                             </td>
                             <td>
                                 <?=$st['customer_name']?><br>
-                                <?=$st['customer_phone_number']?>
+                                <?=system::format_phone($st['customer_phone_number'])?>
                             </td>
                             <td style="white-space: nowrap;">
                                 From: <em style="font-family: 'Times New Roman', Times, serif;"><?=system::format_time($st['project_start'],3)?></em><br>

@@ -6,8 +6,7 @@ if(isset($_POST['project_name'])){
     $data = [
         'project_name'=>addslashes($_POST['project_name']),
         'owner_branch'=>intval($me['work_location']),
-        'project_client'=>intval($_POST['project_client']),
-        'project_invoice'=>0,
+        'project_invoice'=>intval($_POST['project_invoice']),
         'project_manager'=>intval($_POST['project_manager']),
         'project_budget'=>intval($_POST['project_budget']),
         'project_location'=>addslashes($_POST['project_location']),
@@ -57,11 +56,12 @@ if(isset($registry->request[4])){
     $project = $db->select('projects', 'projects.*, user_accounts.full_name as manager, branches.*, customer.*, uc.full_name as creator')
                     ->join('user_accounts','user_accounts.user_id=projects.project_manager')
                     ->join('branches','owner_branch=branch_id')
-                    ->join('customer','project_client=customer_id')
+                    ->join('invoice','project_invoice=invoice_id')
+                    ->join('customer','invoice.customer=customer_id')
                     ->join('user_accounts as uc','uc.user_id=projects.created_by')
                     ->where(['project_id'=>$registry->request[4]])
                     ->fetch();
-
+var_dump($db->error());
     $_q['tools'] = "(
                 SELECT JSON_ARRAYAGG( 
                     JSON_OBJECT( 'id', tool_id, 'name', tool_name ) 
@@ -109,11 +109,17 @@ else{
     $projects = $db->select('projects', 'projects.*, user_accounts.full_name as manager, branches.*, customer.*, uc.full_name as creator')
                     ->join('user_accounts','user_accounts.user_id=projects.project_manager')
                     ->join('branches','owner_branch=branch_id')
-                    ->join('customer','project_client=customer_id')
+                    ->join('invoice','project_invoice=invoice_id')
+                    ->join('customer','invoice.customer=customer_id')
                     ->join('user_accounts as uc','uc.user_id=projects.created_by')
                     ->where($whr)
                     ->fetchAll();
-
+var_dump($db->error());
+    $ti = $db->select('invoice', "invoice_id, customer_name")
+            ->join('customer','customer_id=customer')
+            ->join('tax_invoice', 'invoice_id=reference_invoice')
+            ->where("invoice.owner_branch={$me['work_location']}")
+            ->fetchAll();
     $sortedProjects = [];
     foreach($projects as $proj){
         if(!isset($sortedProjects[$proj['branch_name']])) $sortedProjects[$proj['branch_name']] = [];

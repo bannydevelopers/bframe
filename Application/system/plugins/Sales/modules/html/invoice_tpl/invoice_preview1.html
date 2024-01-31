@@ -108,15 +108,15 @@
           <div style="display: flex;">
             <div>&nbsp;
               <b>Payment terms</b><br>
-              <pre style="font-family: inherit;"><?=$company[0]->payment_terms?></pre>
+              <div style="font-family: inherit;"><?=$company[0]->payment_terms?></div>
             </div>
             <div style="margin: 0 2em;">
               <b>Primary payment account</b><br>
-              <pre style="font-family: inherit;"><?=$company[0]->primary_payment_account?></pre>
+              <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->primary_payment_account?></pre>
             </div>
             <div>
               <b>Auxilliary payment account</b><br>
-              <pre style="font-family: inherit;"><?=$company[0]->aux_payment_account?></pre>
+              <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->aux_payment_account?></pre>
             </div>
           </div>
         </td>
