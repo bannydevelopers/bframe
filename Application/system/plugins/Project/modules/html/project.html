@@ -219,8 +219,9 @@
                         ajax(
                             window.location.href,
                             response=>{
+                                console.log(response);
                                 Swal.fire({
-                                    html: resp,
+                                    html: response,
                                     icon: 'info'
                                 });
                             },
@@ -229,7 +230,8 @@
                                     html: error,
                                     icon:'error'
                                 });
-                            }
+                            },
+                            fdx
                         );
                     });
                 }

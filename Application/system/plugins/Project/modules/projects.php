@@ -32,11 +32,12 @@ if(isset($_POST['project_name'])){
 
 if(isset($_POST['approved_resource'])){
     if(isset($_POST['resource_item'])){
-        $qry = 'INSERT INTO project_resources_approved (pra_resource, pra_allocated_resource) VALUE';
+        $qry = 'INSERT INTO project_resources_approved (pra_resource, pra_allocated_resource) VALUES';
         $vals = [];
         foreach($_POST['resource_item'] as $ri){
             $vals[] = " ({$_POST['approved_resource']}, {$ri})";
         }
+        $qry .= implode(',', $vals);
         $k = $db->query($qry);
         if($k  && !$db->error()){
             $data = [
@@ -52,7 +53,7 @@ if(isset($_POST['approved_resource'])){
             $db->delete('project_resources_approved')->where(['pra_id'=>$k])->commit();
         }
         if(!$db->error()) $msg = '<h3>Approved successful</h3>';
-        else $msg = $db->error()['message'];
+        else $msg = json_encode($db->error());
     }
     else $msg = 'Nothing to approve, please select some';
     die($msg);
