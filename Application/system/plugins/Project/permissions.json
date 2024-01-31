@@ -12,5 +12,7 @@
     "edit_activities",
     "view_activities",
     "delete_activities",
-    "view_project_budget"
+    "view_project_budget",
+    "approve_project_resource",
+    "delete_project_resource"
 ]
