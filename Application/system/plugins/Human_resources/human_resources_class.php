@@ -53,6 +53,7 @@ class human_resources{
     }
     public static function load_admin_profile_widget($args){
         $me = human_resources::get_staff();
+        $user = user::init()->get_session_user();
         if($me){
             $registry = storage::init();
             //$myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";

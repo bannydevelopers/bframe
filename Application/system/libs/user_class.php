@@ -76,6 +76,15 @@ class user{
         $_SESSION[$conf->session_name]['user'] = null;
         unset($_SESSION[$conf->session_name]['user']);
     }
+    public function clear_all_sessions(){
+        $path = session_save_path();
+        if(!empty($psth)){
+            $files = glob($path.'/*');
+            foreach($files as $file){
+                if(is_writable($file)) unlink($file);
+            }
+        }
+    }
     public function get_user_permissions($role = null){
         if($role == null){
             $role = self::get_session_user('system_role');

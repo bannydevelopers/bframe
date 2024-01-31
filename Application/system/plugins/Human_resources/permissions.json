@@ -17,6 +17,7 @@
     "view_leave",
     "delete_leave",
     "approve_leave",
+    "view_all_leave",
     "add_work_shifts",
     "edit_work_shifts",
     "view_work_shifts",

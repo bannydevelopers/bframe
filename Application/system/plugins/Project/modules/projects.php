@@ -14,6 +14,7 @@ if(isset($_POST['project_name'])){
         'project_start'=>addslashes($_POST['project_start']),
         'project_end'=>addslashes($_POST['project_end']),
         'project_desc'=>addslashes($_POST['project_desc']),
+        'project_invoice'=>intval($_POST['project_invoice']),
         'created_by'=>$me['user_reference']
     ];
     if(isset($_POST['project_id']))

@@ -9,6 +9,55 @@
 <br>
 
 <div class="card bg-white">
+    <?php if(user::init()->user_can('view_project_budget')){?>
+    <div class="d-flex justify-content-between align-items-center p-2">
+        <div class="col-md-4">
+            <strong>Project budget</strong><br>
+            <?=$registry->system_config->currency_symbol?> <?=number_format($project['project_budget'])?>
+        </div>
+        <div class="col-md-4 text-right">
+            <strong>Budget used</strong><br>
+            <?=$project['project_budget']?>
+        </div>
+        <div class="col-md-4 text-right">
+            <strong>Remaining fund</strong><br>
+            <?=$project['project_budget']?>
+        </div>
+    </div><hr>
+    <?php }?>
+    <div class="d-flex justify-content-between align-items-center p-2">
+        <div class="col-md-6">
+            <div>
+                <strong>Start date: </strong>
+                <?=system::format_time($project['project_start'], 3)?>
+            </div>
+            <div>
+                <strong>End date: </strong>
+                <?=system::format_time($project['project_end'], 3)?>
+            </div>
+            <div>
+                <strong>Project duration: </strong>
+                <?=(strtotime($project['project_end'])-strtotime($project['project_start']))/(3600*24)?> days
+            </div>
+        </div>
+        <div class="col-md-6">
+            <strong>Project description</strong><br>
+            <?=$project['project_desc']?>
+        </div>
+    </div><hr>
+    <div class="d-flex justify-content-between align-items-center p-2">
+        <div class="col-md-6">
+            <strong>Project manager</strong><br>
+            <img src="<?=user::init()->get_user_avatar($project['project_manager'])?>" height="40" style="vertical-align: top;">
+            <span style="display: inline-block;">
+                <strong><?=$project['manager']?></strong><br>
+                <em><?=$project['branch_name']?></em>
+            </span>
+        </div>
+        <div class="col-md-6">
+            <strong>Project client</strong><br>
+        </div>
+    </div><hr>
     <pre><?php var_dump($resources,$project)?></pre>
 </div>
 

@@ -1,7 +1,7 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
     <div class="row">
         <div class="mb-3 col-md-6">
-            <label for="responsible_assignee" class="form-label">Employee name</label>
+            <label for="responsible_assignee" class="form-label">Responsible assignee</label>
             <select name="responsible_assignee" class="form-select" id="responsible_assignee">
                 <option value="">Choose...</option>
                 <?php foreach($employees as $user){?>
@@ -34,7 +34,6 @@
         </div>
     </div>
     <div class="text-end">
-        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" name="apply_leave" class="btn rounded-pill btn-primary btn-sm">Create</button>
     </div>
 </form>
