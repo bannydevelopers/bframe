@@ -91,7 +91,7 @@
                                 <?=$st['resource_type']?>
                             </td>
                             <td>
-                                <?=$st['resource_quantity']?>
+                                <?=$st['resource_type'] == 'money' ? $registry->system_config->currency_symbol.' '.number_format($st['resource_quantity']) : $st['resource_quantity']?>
                             </td>
                             <td>
                                 <?=$st['request_description']?>
@@ -128,8 +128,8 @@
                 </table>
                 </div>
                 <div class="row">
-                <?php //foreach($resources as $item){?>
-                    <div><?php var_dump($resources)?></div>
+                <?php //foreach($activities as $item){?>
+                    <div><?php var_dump($activities)?></div>
                 <?php //} ?>
                 </div>
             </div>
@@ -223,6 +223,9 @@
                                 Swal.fire({
                                     html: response,
                                     icon: 'info'
+                                })
+                                .then(any=>{
+                                    window.location.reload();
                                 });
                             },
                             error=>{

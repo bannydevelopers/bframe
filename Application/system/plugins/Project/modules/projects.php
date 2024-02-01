@@ -74,22 +74,32 @@ if(isset($_POST['approve_resource_items'])){
             ->commit();
         if(!$db->error()) $msg = '<h3>Approved successful</h3>';
         else $msg = $db->error()['message'];
+        die($msg);
     }
     else if($res['resource_type'] == 'tools'){
+        $res_list = $db->select('tools','tool_name as name, tool_id as id')
+                    ->where(1)
+                    ->fetchAll();
     }
     else if($res['resource_type'] == 'products'){
+        $res_list = $db->select('product','DISTINCT(product_name) as name, product_id as id')
+                        ->join('invoice_items', 'invoice_items.product=product_id')
+                        ->join('invoice', 'invoice_items.invoice=invoice_id')
+                        ->join('projects','project_invoice=invoice_id')
+                        ->join('project_resources','resource_project=project_id')
+                        ->fetchAll();
     }
     else if($res['resource_type'] == 'staff'){
         $res_list = $db->select('user_accounts','full_name as name, user_id as id')
                     ->where(1)
                     ->fetchAll();
-        ob_start();
-        include __DIR__.'/html/resource_approve_entities.html';
-        $msg = ob_get_clean();
     }
     else{
-        $msg = 'Unknown resource type';
+        die('Unknown resource type');
     }
+    ob_start();
+    include __DIR__.'/html/resource_approve_entities.html';
+    $msg = ob_get_clean();
     die($msg);
 }
 
@@ -152,6 +162,7 @@ if(isset($registry->request[4])){
     $rt = $db->select('project_resources', 'resource_type as rtype')
              ->where(['resource_project'=>$registry->request[4]])
              ->fetch();
+
     if(isset($rt['rtype'])) 
     {
         $sub_q = $_q[$rt['rtype']];
@@ -159,6 +170,7 @@ if(isset($registry->request[4])){
                         ->join('user_accounts', 'resource_requester=user_accounts.user_id')
                         ->join('user_accounts as appr', 'resource_approver=appr.user_id', 'LEFT')
                         ->where(['resource_project'=>$registry->request[4]])
+                        ->order_by('resource_id', 'desc')
                         ->fetchAll();
 
     }
@@ -166,6 +178,9 @@ if(isset($registry->request[4])){
         $resources = [];
     }
 
+    $activities = $db->select('project_activities')
+                     ->where(['activity_project'=>$registry->request[4]])
+                     ->fetchAll();
     ob_start();
     include __DIR__.'/html/project.html';
     $body = ob_get_clean();
@@ -178,8 +193,9 @@ else{
                     ->join('customer','invoice.customer=customer_id')
                     ->join('user_accounts as uc','uc.user_id=projects.created_by')
                     ->where($whr)
+                    ->order_by('project_id','desc')
                     ->fetchAll();
-var_dump($db->error());
+//var_dump($db->error());
     $ti = $db->select('invoice', "invoice_id, customer_name")
             ->join('customer','customer_id=customer')
             ->join('tax_invoice', 'invoice_id=reference_invoice')
