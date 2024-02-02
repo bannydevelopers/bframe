@@ -15,7 +15,7 @@
         </div>
         <div class="mb-3 col-md-6 col-lg-4">
             <label class="form-label" for="status">Status</label>
-            <select class="form-select" name="status" id="status" onchange="add_form('status')" required>
+            <select class="form-select" name="status" id="status" required>
                 <option value="">Choose...</option>
                 <option value="active">Active</option>
                 <option value="pending">Pending</option>
@@ -24,12 +24,11 @@
         </div>
         <div class="mb-3 col-md-6 col-lg-4">
             <label class="form-label" for="roles">Role</label>
-            <select class="form-select" name="system_role" id="roles" onchange="add_form('roles')" required>
+            <select class="form-select" name="system_role" id="roles" required>
                 <option value="">Choose...</option>
                 <?php foreach($roles as $opt){?>
                 <option value="<?=$opt['role_id']?>"><?=$opt['role_name']?></option>
                 <?php }?>
-                <option value="add">Add role</option>
             </select>
         </div>
         <div class="mb-3 col-md-6 col-lg-4">

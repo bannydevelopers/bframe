@@ -20,7 +20,6 @@ class human_resources{
         system::add_event_listener('add_staff', 'human_resources::service_add_staff');
         system::add_event_listener('add_designation', 'human_resources::service_add_designation');
         system::add_event_listener('add_department', 'human_resources::service_add_department');
-        system::add_event_listener('add_bank', 'human_resources::service_add_bank');
         system::add_event_listener('add_branch', 'human_resources::service_add_branch');
     }
     public static function load_admin_dashboard_cards($args){
@@ -220,10 +219,6 @@ class human_resources{
             include __DIR__.'/modules/html/add_department.html';
             return ob_get_clean();
         }
-    }
-    public static function service_add_bank($data){
-        return 'no bank to add';
-        
     }
     public static function service_add_branch($data){
         $registry = storage::init();

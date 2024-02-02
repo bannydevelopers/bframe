@@ -187,7 +187,7 @@
     function add_form(name){
         let main_evt = window.event;
         main_evt.preventDefault();
-        if(main_evt.target.getAttribute('data-value') == 'add'){
+        if(main_evt.target.getAttribute('data-value') == 'add' || main_evt.target.value == 'add'){
             let wide = main_evt.target.getAttribute('data-form-width');
             let customClass = (wide == 'wide') ? 'mySwalForm' : 'mySwalSmallForm';
             request_service(

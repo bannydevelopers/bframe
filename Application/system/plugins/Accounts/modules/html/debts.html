@@ -262,56 +262,48 @@
     const delete_debt = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
+        let name = jsx.partiner_name,
+            uid = jsx.debt_id;
         Swal.fire({
-            title: `Delete ${name}?`,
+            title: `Delete debt of ${name}?`,
             showCancelButton: true,
             confirmButtonText:'Sure, delete',
             html:"No UNDO remember!"
         })
         .then(response=>{
-        if(response.isConfirmed){
-            let userdata = new FormData();
-            userdata.append('delete_debt', uid);
-            userdata.append('ajax_request',1);
-            ajax(
-            window.location.href, 
-            response=>{
-                let jsx = JSON.parse(response);
-                if(jsx){
-                    Swal.fire({
-                        title: jsx.message,
-                        icon: jsx.status
-                    })
-                    .then(e=>{
-                        if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             //createPageButtons(); // create the page buttons initially
-                            //showPage(currentPage);
-                        }
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: 'Malformed response returned',
-                        icon: 'error',
-                        html:response
-                    });
-                }
-            },
-            error=>{
-                console.log(error);
-            },
-            userdata
-            );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
-        }
+            if(response.isConfirmed){
+                let userdata = new FormData();
+                userdata.append('delete_debt', uid);
+                userdata.append('ajax_request',1);
+                ajax(
+                window.location.href, 
+                response=>{
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title: jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(e=>{
+                            if(jsx.status == 'success'){
+                                window.location.reload();
+                            }
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Service not available',
+                            icon: 'error',
+                            html:response
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                userdata
+                );
+            }
         });
     }
     const import_debt = ()=>{

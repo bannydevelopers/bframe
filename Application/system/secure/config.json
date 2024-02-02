@@ -7,9 +7,9 @@
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
+        "Banks",
         "Project",
         "Human_resources",
-        "Banks",
         "Sales",
         "Office_inventory",
         "Front_desk",

@@ -33,7 +33,7 @@
                                     </div>
                                     <div>
                                         <img src="<?=$pro['product_image']?>" alt="img" style="width: 60px; min-width: 60px;" />
-                                        <div class="text-center">
+                                        <div class="text-center" data-json='<?=json_encode($pro)?>''>
                                             <a onclick="edit_product()" data-icon="&#xf044;"></a>&nbsp;
                                             <a onclick="delete_product(`<?=$pro['product_id']?>`)" data-icon="&#xf2ed;"></a>
                                         </div>
@@ -169,6 +169,50 @@
         }
     };
     const edit_product = ()=>{
-        window.event.target.style.opacity = 0;
+        let elem = window.event.target.parentNode;
+        add_product();
+        setTimeout(()=>{
+            let efrm = document.querySelector('.mySwalSmallForm form'),
+                jsx = JSON.parse(elem.getAttribute('data-json'));
+
+            let inp = efrm.querySelectorAll('input'),
+                sel = efrm.querySelectorAll('select'),
+                tex = efrm.querySelectorAll('textarea');
+
+            let hin = document.createElement('input');
+            hin.type = 'hidden';
+            hin.name = 'product_id';
+            hin.value = jsx.product_id;
+            efrm.appendChild(hin);
+            [...inp, ...sel].forEach(item=>{
+                if(item.type != 'file'){
+                    item.value = jsx[item.name];
+                }
+                else{
+                    item.removeAttribute('required');
+                }
+            });
+            efrm.addEventListener('submit', evt=>{
+                    evt.preventDefault();
+                    let data = new FormData(evt.target);
+                    data.append('ajax_request', 1);
+                    request_service(
+                        'add_product', 
+                        response=>{
+                            console.log(response);
+                            let jx = JSON.parse(response);
+                            Swal.fire({
+                                icon: jx.status,
+                                html: jx.message
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        data
+                    );
+                });
+        }, 100);
+
     };
 </script>

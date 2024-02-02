@@ -12,5 +12,8 @@
     "edit_points_to_share",
     "view_points_to_share",
     "delete_points_to_share",
-    "approve_withdraw"
+    "approve_withdraw",
+    "add_bank",
+    "edit_bank",
+    "delete_bank"
 ]

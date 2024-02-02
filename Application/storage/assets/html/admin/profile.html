@@ -305,7 +305,7 @@ background-color: #e2e8f0;
                     </table>
                 </div>
                 <div class="row text-end mb-5">
-                    <div> <span class="fw-bolder">Net Salary.</span> <small class="ms-3">{{net_salaryy}}</small> </div>
+                    <div> <span class="fw-bolder">Net Salary.</span> <small class="ms-3">{{net_salary}}</small> </div>
                 </div>
                 <div class="d-flex justify-content-end">
                     <div class="d-flex flex-column mt-2"> <span class="fw-bold">Awadhi A. Awadhi</span> <span class="mt-4">Authorised Signatory</span> </div>
@@ -331,6 +331,7 @@ background-color: #e2e8f0;
         let elem = window.event.target.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
+        console.log(jsx);
         htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
             html: htz,

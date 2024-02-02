@@ -14,6 +14,8 @@ class   Banks{
         system::add_event_listener('admin_plugin_load', 'banks::load_admin_dashboard');
         // Hook to admin card
         system::add_event_listener('admin_widgets_load', 'banks::load_admin_dashboard_cards');
+        // Add service
+        system::add_event_listener('add_bank', 'banks::service_add_bank');
     }
     public static function load_admin_dashboard_cards($args){
         // fetch info
@@ -34,6 +36,42 @@ class   Banks{
             }
             return $return;
         }
+    }
+    
+    public static function service_add_bank($data){
+        $registry = storage::init();
+        $db = db::get_connection($registry->system_config->db_configs);
+
+        if(isset($_POST['bank_name'])){
+            $fd = [
+                'bank_name'=>addslashes($_POST['bank_name']),
+                'bank_logo'=>''
+            ];
+            if(isset($_POST['bank_id']) && intval($_POST['bank_id'])) {
+                $k = intval($_POST['bank_id']);
+                if(user::init()->user_can('edit_bank')){
+                    $db->update('banks', $fd)->where("bank_id={$k}")->commit();
+                }
+                else return json_encode(['message'=>'Access denied!','status'=>'error']);
+            }
+            else{
+                if(user::init()->user_can('add_bank')){
+                    $k = $db->insert('banks', $fd);
+                }
+                else return json_encode(['message'=>'Access denied!','status'=>'error']);
+            }
+            if($db->error()) {
+                return json_encode(['message'=>$db->error()['message'],'status'=>'error']);
+            }
+            else {
+                return json_encode(['message'=>'Bank saved successful', 'status'=>'success']);
+            }
+        }
+        else{
+            ob_start();
+            include __DIR__.'/modules/html/add_bank.html';
+            return ob_get_clean();
+        }        
     }
     public static function load_page($request){
         $registry = storage::init();
