@@ -128,9 +128,62 @@
                 </table>
                 </div>
                 <div class="row">
-                <?php //foreach($activities as $item){?>
+                <!-- <?php //foreach($activities as $item){?>
                     <div><?php var_dump($activities)?></div>
-                <?php //} ?>
+                <?php //} ?> -->
+                <table class="table table-hover paginate" data-items-per-page="10">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Activity </th>
+                            <th> Created by</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Created on</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <?php foreach($activities as $sn=>$st){?>
+                        <tr data-json='<?=json_encode($st)?>'>
+                            <td><?=++$sn?></td>
+                            <td>
+                                <?=$st['activity_name']?>
+                            </td>
+                            <td>
+                                <?=$st['activity_creator']?>
+                            </td>
+                            <td>
+                                <?=$st['activity_description']?>
+                            </td>
+                            <td>
+                                <?=$st['activity_status']?><br>
+                            </td>
+                            <td>
+                                <?=$st['create_date']?><br>
+                            </td>
+                            <td>
+                            <!-- <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="px-1" style="font-size: 22px;" data-icon="&#xf141;"></i>
+                                </button>
+                                <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
+                                    <?php if($st['resource_type'] != 'money'){?>
+                                    <a onclick="view_status()" class="dropdown-item"><span class="me-1 fa fa-eye"></span>View</a>
+                                    <?php }?>
+                                    <?php if(user::init()->user_can('approve_project_resource') && !$st['resource_approver']){?>
+                                    <a onclick="approve_resource()" class="dropdown-item"><span class="me-1" data-icon="&#xf560;"></span>Approve</a>
+                                    <?php }?>
+                                    <?php if($user['user_id'] == $st['resource_requester'] && $st['resource_status'] == 'requested'){?>
+                                    <a onclick="delete_activity()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                    <?php }?>&nbsp;
+                                </div>
+                            </div> -->
+                            </td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
                 </div>
             </div>
         </div>
