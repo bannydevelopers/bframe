@@ -62,7 +62,7 @@
                             </td>
                             <td>
                                 <a onclick="view_sales()" data-icon="&#xf06e;"></a>
-                                <a onclick="delete_sales()" data-icon="&#xf2ed;"></a>
+                                <!--a onclick="delete_sales()" data-icon="&#xf2ed;"></a-->
                             </td>
                         </tr>
                         <?php }?>
@@ -245,8 +245,7 @@
     const delete_sales = ()=>{
         let elem = window.event.target.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
+
         Swal.fire({
             title: `Delete ${name}?`,
             showCancelButton: true,
@@ -256,7 +255,7 @@
         .then(response=>{
         if(response.isConfirmed){
             let userdata = new FormData();
-            userdata.append('delete_sales', uid);
+            userdata.append('delete_sales', jsx.sales_id);
             userdata.append('ajax_request',1);
             ajax(
                 window.location.href, 
@@ -268,11 +267,7 @@
                             icon: jsx.status
                         })
                         .then(e=>{
-                            if(jsx.status == 'success'){
-                                elem.parentNode.removeChild(elem);
-                                //createPageButtons(); // create the page buttons initially
-                                //showPage(currentPage);
-                            }
+                            window.location.reload();
                         });
                     }
                     else {

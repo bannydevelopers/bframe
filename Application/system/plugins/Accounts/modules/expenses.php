@@ -11,15 +11,22 @@ if($me){
             'expenses_description'=>addslashes($_POST['expenses_description']),
             'expenses_amount'=>intval($_POST['expenses_price']),
             'purchased_by'=>$me['user_reference'],
-            'expenses_category'=>intval($_POST['expenses_category']),
             'owner_branch'=>intval($me['work_location'])
         ];
+        if(intval($_POST['expenses_category'])) $data['expenses_category'] = intval($_POST['expenses_category']);
         if(isset($_POST['expenses_id'])){
             $k = intval($_POST['expenses_id']);
             $db->update('expenses', $data)->where(['expenses_id'=>$k])->commit();
         }
         else{
             $k = $db->insert('expenses', $data);
+        }
+        if(isset($_FILES['expenses_receipt'])){
+            $ext = pathinfo($_FILES['expenses_receipt']['name'], PATHINFO_EXTENSION);
+            $dest = realpath(__DIR__.'/../../../../../')."/Application/storage/uploads/receipts/";
+
+            if(!is_readable($dest)) mkdir($dest);
+            move_uploaded_file($_FILES['expenses_receipt']['tmp_name'], "$dest/expense_{$k}.$ext");
         }
         if(!$db->error()) {
             $msg = 'Saved successful';
@@ -52,6 +59,30 @@ if($me){
         }
         if(!$db->error()) $msg = 'Category saved successful';
         else $msg = $db->error()['message'];
+        if(isset($_POST['ajax_request'])) die($msg);
+    }
+    if(isset($_POST['approve_expense'])){
+        if(user::init()->user_can('approve_expenses')){
+            $db->update('expenses', ['approved_by'=>$me['user_reference'], 'approve_date'=>date('Y-m-d H:i:s')])
+                ->where(['expenses_id'=>intval($_POST['approve_expense'])])
+                ->commit();
+            if($db->error()) $msg = $db->error()['message'];
+            else $msg = 'Approved successful';
+        }
+        else{
+            $msg = 'Access denied';
+        }
+        if(isset($_POST['ajax_request'])) die($msg);
+    }
+    if(isset($_POST['delete_expense'])){
+        if(user::init()->user_can('delete_expenses')){
+            $db->delete('expenses')->where(['expenses_id'=>intval($_POST['delete_expense'])])->commit();
+            if($db->error()) $msg = $db->error()['message'];
+            else $msg = 'Delete successful';
+        }
+        else{
+            $msg = 'Access denied';
+        }
         if(isset($_POST['ajax_request'])) die($msg);
     }
     if($me['work_location'] == human_resources::get_headquarters_branch()) {
@@ -90,7 +121,7 @@ if($me){
     
         $sortedExpenses[$exp['branch_name']][$exp['category_name']][] = $exp;
     }
-    
+  
     $employees = $db->select('staff')
                 ->join('user_accounts','user_id=user_reference')
                 ->where($whr)

@@ -64,9 +64,13 @@
                                             <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            <!--a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a-->
+                                            <?php if(user::init()->user_can('edit_tools')){?>
+                                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                                <?php }?>
+                                                <?php if(user::init()->user_can('delete_tools')){?>
+                                                <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            <?php }?>
                                             </div>
                                         </div>
                                         </td>
@@ -102,9 +106,10 @@
                                             <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            <!--a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a-->
+                                            <?php if(user::init()->user_can('edit_tools')){?>
+                                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                                <?php }?>
                                             </div>
                                         </div>
                                         </td>
@@ -140,9 +145,10 @@
                                             <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            <!--a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a-->
+                                            <?php if(user::init()->user_can('edit_tools')){?>
+                                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                                <?php }?>
                                             </div>
                                         </div>
                                         </td>
@@ -178,9 +184,10 @@
                                             <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
-                                            <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            <!--a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a-->
+                                            <?php if(user::init()->user_can('edit_tools')){?>
+                                                <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                                <?php }?>
                                             </div>
                                         </div>
                                         </td>
@@ -216,9 +223,10 @@
                                             <i class="bx bx-dots-vertical-rounded px-2" style="font-size: 20px;"><img src="Application/storage/assets/html/admin/img/more.svg"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                            <a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
+                                            <!--a onclick="view_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a-->
+                                            <?php if(user::init()->user_can('edit_tools')){?>
                                             <a onclick="edit_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
-                                            <a onclick="delete_tool()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                            <?php }?>
                                             </div>
                                         </div>
                                         </td>
@@ -319,11 +327,12 @@
     const edit_tool = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[1].cloneNode(true);
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
         let hin = document.createElement('input');
         hin.type = 'hidden';
-        hin.name = 'user_id';
+        hin.name = 'tool_id';
+        hin.value = jsx.tool_id;
         htz.firstElementChild.firstElementChild.appendChild(hin);
-        let jsx = JSON.parse(elem.getAttribute('data-json'));
         let inpts = htz.querySelectorAll('input'),
             selec = htz.querySelectorAll('select'),
             tarea = htz.querySelectorAll('textarea');
@@ -340,47 +349,12 @@
             customClass: 'mySwalSmallForm',
             showConfirmButton: false
         });
-        let form = document.querySelector('.mySwalSmallForm form');
-        if(form != null){
-            form.addEventListener(
-                'submit',
-                evt=>{
-                    evt.preventDefault();
-                    let fd = new FormData(form);
-                    request_service(
-                        'add_tool',
-                        response => {
-                            console.log(response);
-                            let res_json = JSON.parse(response);
-                            if(res_json){
-                                let jsx = JSON.parse(res_json.response);
-                                Swal.fire({
-                                    title: jsx.message,
-                                    icon: jsx.status
-                                })
-                                .then(e=>{
-                                    window.location.reload();
-                                });
-                            }
-                            else {
-                                Swal.fire({
-                                    title: 'Malformed response returned',
-                                    icon: 'error',
-                                    html:response
-                                });
-                            }
-                        },
-                        fd
-                    );
-                }
-            );
-        }
     };
     const delete_tool = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
+        let name = jsx.tool_name,
+            uid = jsx.tool_id;
         Swal.fire({
             title: `Delete ${name}?`,
             showCancelButton: true,
@@ -388,49 +362,30 @@
             html:"No UNDO remember!"
         })
         .then(response=>{
-        if(response.isConfirmed){
-            let userdata = new FormData();
-            userdata.append('delete_tool', uid);
-            userdata.append('ajax',1);
-            ajax(
-            window.location.href, 
-            response=>{
-                let res_json = JSON.parse(response);
-                //console.log(response);
-                if(res_json){
-                    let jsx = res_json.response;
-                    Swal.fire({
-                        title: jsx.message,
-                        icon: jsx.status
-                    })
-                    .then(e=>{
-                        if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             createPageButtons(); // create the page buttons initially
-                            showPage(currentPage);
-                        }
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: 'Malformed response returned',
-                        icon: 'error',
-                        html:response
-                    });
-                }
-            },
-            error=>{
-                console.log(error);
-            },
-            userdata
-            );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
-        }
+            if(response.isConfirmed){
+                let userdata = new FormData();
+                userdata.append('delete_tools', uid);
+                userdata.append('ajax_request',1);
+                ajax(
+                window.location.href, 
+                response=>{
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title: jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(e=>{
+                            window.location.reload();
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                userdata
+                );
+            }
         });
     }
     const import_tool = ()=>{

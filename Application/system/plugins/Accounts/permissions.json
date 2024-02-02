@@ -4,6 +4,7 @@
     "edit_expenses",
     "view_expenses",
     "delete_expenses",
+    "approve_expenses",
     "add_debts",
     "edit_debts",
     "view_debts",

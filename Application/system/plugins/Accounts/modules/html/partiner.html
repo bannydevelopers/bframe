@@ -184,21 +184,25 @@
     const edit_partiner = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[1].cloneNode(true);
+        let jsx = JSON.parse(elem.getAttribute('data-json'));
         let hin = document.createElement('input');
         hin.type = 'hidden';
-        hin.name = 'partiner_id';
+        hin.name = 'business_partiner_id';
+        hin.value = jsx.business_partiner_id;
         htz.firstElementChild.firstElementChild.appendChild(hin);
-        let jsx = JSON.parse(elem.getAttribute('data-json'));
         let inpts = htz.querySelectorAll('input'),
             selec = htz.querySelectorAll('select'),
             tarea = htz.querySelectorAll('textarea');
         [...inpts, ...selec].forEach(elem=>{
-            if(elem.type == 'date' && jsx[elem.name]) jsx[elem.name] = [...jsx[elem.name.trim()]].splice(0,10).join('');
-            if(jsx[elem.name]) elem.value = jsx[elem.name];
+            if(elem.type == 'date' && jsx[`business_${elem.name}`]) 
+                jsx[elem.name] = [...jsx[`business_${elem.name}`.trim()]].splice(0,10).join('');
+            if(jsx[`business_${elem.name}`]) elem.value = jsx[`business_${elem.name}`];
+            console.log(jsx[`business_${elem.name}`]);
         });
         [...tarea].forEach(elem=>{
-            if(jsx[elem.name]) elem.innerHTML = jsx[elem.name];
+            if(jsx[`business_${elem.name}`]) elem.innerHTML = jsx[`business_${elem.name}`];
         });
+        //console.log(jsx);
         //htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);
         Swal.fire({
             title: `Edit ${jsx.partiner_name}`,
@@ -237,8 +241,8 @@
     const delete_partiner = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
+        let name = jsx.business_partiner_name,
+            uid = jsx.business_partiner_id;
         Swal.fire({
             title: `Delete ${name}?`,
             showCancelButton: true,
@@ -246,47 +250,34 @@
             html:"No UNDO remember!"
         })
         .then(response=>{
-        if(response.isConfirmed){
-            let userdata = new FormData();
-            userdata.append('delete_partiner', uid);
-            userdata.append('ajax_request',1);
-            ajax(
-            window.location.href, 
-            response=>{
-                let jsx = JSON.parse(response);
-                if(jsx){
-                    Swal.fire({
-                        title: jsx.message,
-                        icon: jsx.status
-                    })
-                    .then(e=>{
-                        if(jsx.status == 'success'){
-                             elem.parentNode.removeChild(elem);
-                             //createPageButtons(); // create the page buttons initially
-                            //showPage(currentPage);
-                        }
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: 'Malformed response returned',
-                        icon: 'error',
-                        html:response
-                    });
-                }
-            },
-            error=>{
-                console.log(error);
-            },
-            userdata
-            );
-        }
-        else{
-            Swal.fire({
-            title: "Cancel Deletion",
-            icon:"error"
-            })
-        }
+            if(response.isConfirmed){
+                let userdata = new FormData();
+                userdata.append('delete_business_partiner', uid);
+                userdata.append('ajax_request', 1);
+                ajax(
+                window.location.href, 
+                response=>{
+                    let jsx = JSON.parse(response);
+                    if(jsx){
+                        Swal.fire({
+                            title: jsx.message,
+                            icon: jsx.status
+                        })
+                        .then(e=>{
+                            if(jsx.status == 'success'){
+                                elem.parentNode.removeChild(elem);
+                                //createPageButtons(); // create the page buttons initially
+                                //showPage(currentPage);
+                            }
+                        });
+                    }
+                },
+                error=>{
+                    console.log(error);
+                },
+                userdata
+                );
+            }
         });
     }
     const import_partiner = ()=>{

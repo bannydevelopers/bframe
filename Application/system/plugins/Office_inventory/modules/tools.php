@@ -9,7 +9,7 @@ if($me){
             'owner_branch'=>$me['work_location'],
             'tool_name'=>$_POST['tool_name'], 
             'tool_description'=>$_POST['tool_description'], 
-            'tool_group'=>$_POST['tool_group'], 
+            'tool_group'=>0,//$_POST['tool_group'], 
             'tool_status'=>$_POST['tool_status']
         ];
         if(isset($_POST['tool_id']) && intval($_POST['tool_id']) > 0){
@@ -32,7 +32,7 @@ if($me){
         if(!$db->error()){
             $msg = [
                 'status'=>'success',
-                'message'=>'Tool deleted successful'.$_POST['delete_tool']
+                'message'=>'Tool deleted successful'
             ];
         }
         else{

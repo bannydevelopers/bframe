@@ -61,8 +61,10 @@
                                 </button>
                                 <div class="dropdown-menu">
                                 <!--a onclick="view_stock()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a-->
+                                <?php if($st['stock_out'] == 0){?>
                                 <a onclick="edit_stock()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
                                 <a onclick="delete_stock()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                <?php }else{?><span class="dropdown-item">No options</span><?php }?>
                                 </div>
                             </div>
                             </td>
@@ -247,10 +249,10 @@
     const delete_stock = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
-            uid = jsx.user_id;
+        let name = jsx.stock_batch,
+            uid = jsx.stock_id;
         Swal.fire({
-            title: `Delete ${name}?`,
+            title: `Delete stock with batch number ${name}?`,
             showCancelButton: true,
             confirmButtonText:'Sure, delete',
             html:"No UNDO remember!"
@@ -271,11 +273,7 @@
                             icon: jsx.status
                         })
                         .then(e=>{
-                            if(jsx.status == 'success'){
-                                elem.parentNode.removeChild(elem);
-                                createPageButtons(); // create the page buttons initially
-                                showPage(currentPage);
-                            }
+                            window.location.reload();
                         });
                     }
                     else {
@@ -287,7 +285,10 @@
                     }
                 },
                 error=>{
-                    console.log(error);
+                    Swal.fire({
+                        icon: 'error',
+                        html:error
+                    });
                 },
                 userdata
                 );

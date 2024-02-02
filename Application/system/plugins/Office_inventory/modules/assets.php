@@ -26,8 +26,7 @@ if($me){
         //var_dump($db->error()); 
     }
     if(isset($_POST['delete_asset'])){
-        $db->delete('assets')->where(['user_reference'=>intval($_POST['delete_asset'])])->commit();
-        if(!$db->error()) $db->delete('user_accounts')->where(['user_id'=>intval($_POST['delete_asset'])])->commit();
+        $db->delete('assets')->where(['asset_id'=>intval($_POST['delete_asset'])])->commit();
         if(!$db->error()){
             $msg = [
                 'status'=>'success',
@@ -40,6 +39,7 @@ if($me){
                 'message'=>$db->error()['message']
             ];
         }
+        die(json_encode($msg));
     } 
     $asset = $db->select('assets')
                     ->join('branches', 'branch_id=owner_branch', 'left')
