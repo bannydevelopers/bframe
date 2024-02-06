@@ -639,7 +639,7 @@ class admin{
                         ->where(['user_id'=>user::init()->get_session_user('user_id')])
                         ->and(['passcode'=>system::create_hash($_POST['old_passcode'])])
                         ->commit();
-
+                    // should be there
                     $chk = $db->select('user_accounts')
                                 ->where(['user_id'=>$user_id, 'passcode'=>$data['passcode']])
                                 ->fetch();
