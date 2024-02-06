@@ -624,10 +624,35 @@ class admin{
     public function load_profile($addr){        
 
         $user_id = isset($addr[2]) && intval($addr[2]) ? intval($addr[2]) : user::init()->get_session_user('user_id');
+        $db = self::get_db();
 
+        if(isset($_POST['new_passcode'])){
+            if($user_id != user::init()->get_session_user('user_id')) 
+                $msg = 'Access denied, owners can change their own passwords';
+            else{
+                if($_POST['new_passcode'] == $_POST['new_passcode_confirm']){
+                    $data = [
+                        'passcode'=>system::create_hash($_POST['new_passcode'])
+                    ];
+
+                    $db->update('user_accounts', $data)
+                        ->where(['user_id'=>user::init()->get_session_user('user_id')])
+                        ->and(['passcode'=>system::create_hash($_POST['old_passcode'])])
+                        ->commit();
+
+                    $chk = $db->select('user_accounts')
+                                ->where(['user_id'=>$user_id, 'passcode'=>$data['passcode']])
+                                ->fetch();
+                    
+                    if(!$db->error() && $chk) $msg = 'Password changed succesful';
+                    else $msg = 'Password change error';
+                }
+                else $msg = 'Password change failed, passwords do not match';
+                if(isset($_POST['ajax_request'])) die($msg);
+            }
+        }
         self::$data['widgets'] = system::dispatch_event('admin_profile_load', $addr);
 
-        $db = self::get_db();
         self::$data['me'] = $db->select('user_accounts')
                                ->join('roles','role_id=system_role')
                                ->where(['user_id'=>$user_id])

@@ -10,7 +10,7 @@ define('STORAGE_DIR','storage');
 // Setup auto load
 spl_autoload_register(
     function($classname){
-	    $system_dir = SYSTEM_DIR;
+        $system_dir = SYSTEM_DIR;
         $filename = strtolower($classname).'_class';
         $path = realpath(__DIR__)."/$system_dir/libs/$filename.php";
         if(is_readable($path)) include $path;
@@ -23,9 +23,29 @@ spl_autoload_register(
                 if(is_readable($path)) include $path;
             }
         }
-    }
-);
+        if(!class_exists($classname)){
+            $err = storage::init()->error;
+            if(is_array($err)) $err = [];
+            $err[] = "Class '{$classname}' does not exist";
+            storage::init()->error = $err;
+            $newClass = new class{
+                public function __call($name, $arguments)
+                {
+                    // Note: value of $name is case sensitive.
+                }
 
+                /**  As of PHP 5.3.0  */
+                public static function __callStatic($name, $arguments)
+                {
+                    // Note: value of $name is case sensitive.
+                }
+            }; //create an anonymous class
+            $newClassName = get_class($newClass); //get the name PHP assigns the anonymous class
+            class_alias($newClassName, $classname);
+        }
+    },
+    true
+);
 
 // System configs
 $storage = storage::get_instance();
