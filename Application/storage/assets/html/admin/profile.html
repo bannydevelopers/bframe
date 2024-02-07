@@ -344,25 +344,8 @@
             <button class="btn rounded-pill btn-primary btn-sm">Save</button>
         </div>
     </form>
-    <form method="post" class="text-start">
-        <div class="mb-3">
-            <label class="form-label">Full name</label>
-            <input type="text" class="form-control" name="full_name" value="<?=$me['full_name']?>">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Address</label>
-            <textarea class="form-control" name="physical_address">
-        </div>
-        <div class="text-end">
-            <button class="btn rounded-pill btn-primary btn-sm">Save</button>
-        </div>
-    </form>
 </template>
-<div>
-    <!--?php 
-    print_r(@$widgets[0]['payroll']);
-    ?-->
-</div>
+
 <script>
     const view_slip = ()=>{
         let elem = window.event.target.parentNode,
