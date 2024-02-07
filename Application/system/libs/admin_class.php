@@ -1,11 +1,18 @@
 <?php 
 class admin{
     public static $data = [];
+    public static $base_url;
+
+    public function __construct(){
+        $conf = storage::get_instance()->system_config;
+        self::$base_url = storage::get_instance()->install_dir.$conf->dashboard_url;
+    }
     private static function get_db(){
         $config = storage::get_data('system_config')->db_configs;
         return db::get_connection($config);
     }
     public static function load_dashboard($page = ''){
+        self::$data['notification'] = self::get_db()->select('system_notification')->fetchAll();
         $user = user::init();
         if(!$user->get_session_user()) $user->init_login();
         if(isset($_POST['ajax_register'])){
@@ -627,7 +634,9 @@ class admin{
         $db = self::get_db();
 
         if(isset($_POST['new_passcode'])){
-            if($user_id != user::init()->get_session_user('user_id')) 
+
+            $uid = user::init()->get_session_user('user_id');
+            if($user_id != $uid) 
                 $msg = 'Access denied, owners can change their own passwords';
             else{
                 if($_POST['new_passcode'] == $_POST['new_passcode_confirm']){
@@ -635,17 +644,20 @@ class admin{
                         'passcode'=>system::create_hash($_POST['new_passcode'])
                     ];
 
-                    $db->update('user_accounts', $data)
-                        ->where(['user_id'=>user::init()->get_session_user('user_id')])
-                        ->and(['passcode'=>system::create_hash($_POST['old_passcode'])])
-                        ->commit();
-                    // should be there
-                    $chk = $db->select('user_accounts')
-                                ->where(['user_id'=>$user_id, 'passcode'=>$data['passcode']])
-                                ->fetch();
-                    
-                    if(!$db->error() && $chk) $msg = 'Password changed succesful';
-                    else $msg = 'Password change error';
+                    $k = $db->update('user_accounts', $data)
+                            ->where(['user_id'=>$uid])
+                            ->and(['passcode'=>system::create_hash($_POST['old_passcode'])])
+                            ->commit();
+                            
+                    if($db->error()) $msg = $db->error()['message'];
+                    else{
+                        $chk = $db->select('user_accounts')
+                                    ->where(['user_id'=>$user_id, 'passcode'=>$data['passcode']])
+                                    ->fetch();
+                        
+                        if($chk) $msg = 'Password changed succesful';
+                        else $msg = 'Password change error';
+                    }
                 }
                 else $msg = 'Password change failed, passwords do not match';
                 if(isset($_POST['ajax_request'])) die($msg);

@@ -610,9 +610,35 @@
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
                 <li class="nav-item lh-1 me-3">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <button type="button" class="btn btn-sm rounded-pill btn-icon btn-outline-secondary">
                       <i class="fa-regular fa-bell"></i>
                     </button>
+                    <sup class="bg-red text-whitex"><?=count($notification)?></sup>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <?php if($notification){?>
+                      <!--li>
+                        <strong class="dropdown-item">Notification</strong>
+                      </li-->
+                      <?php foreach($notification as $n){?>
+                      <li>
+                        <a class="dropdown-item" href="<?=admin::$base_url?>/<?=$n['notification_url']?>">
+                          <i class="<?=$n['notification_icon']?>">&nbsp;</i>&nbsp;<?=$n['notification_brief']?>
+                        </a>
+                      </li>
+                      <!--li>
+                        <div class="dropdown-divider"></div>
+                      </li-->
+                      <?php }?>
+                    <?php }else{?>
+                      <li>
+                        <a class="dropdown-item" href="javascript::void(0)">
+                          No notification
+                        </a>
+                      </li>
+                    <?php }?>
+                  </ul>
                 </li>
 
                 <!-- User -->
@@ -624,7 +650,7 @@
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item" href="<?=storage::get_instance()->install_dir?>admin/profile">
+                      <a class="dropdown-item" href="<?=admin::$base_url?>/profile">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
