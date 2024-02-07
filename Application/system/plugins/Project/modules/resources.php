@@ -14,10 +14,25 @@ if(isset($_POST['resource_project'])){
     ];
     if(isset($_POST['project_id']))
       $db->update('project_resources', $data)->where(['project_id'=>intval($_POST['project_id'])])->commit();
-    else
+    else{}
         $db->insert('project_resources', $data);
 
-    if(!$db->error()) $msg = 'Saved successfully';
+    if(!$db->error()) {
+        $msg = 'Saved successfully';
+        $url = 'plugin/Project/resources';
+        $user = $db->select('user_accounts', 'user_id')
+                    ->where('user_id')
+                    ->in("SELECT project_manager FROM projects WHERE project_id = {$data['resource_project']}")
+                    ->fetch();
+        $opts = [
+                    'icon'=>'fa fa-info-circle',
+                    'url'=>$url,
+                    'brief'=>'Resource requested by '.user::init()->get_session_user('full_name'),
+                    'target'=>$user['user_id']
+        ];
+        $ns = system::send_notification($opts);
+        if($ns !== 'ok') $msg = $ns;
+    }
     else $msg = $db->error();
 
     if(isset($_POST['ajax_request'])){
@@ -52,7 +67,10 @@ foreach($project_resources as $proj){
     }
     $sortedProjects[$proj['branch_name']][$proj['resource_status']][] = $proj;
 }
-
+// clear notification
+$db->update('system_notification',['notification_status'=>'read'])
+    ->where(['notification_url'=>'plugin/Project/resources', 'notification_target'=>$me['user_reference']])
+    ->commit();
 ob_start();
 include __DIR__.'/html/resources.html';
 $body = ob_get_clean();

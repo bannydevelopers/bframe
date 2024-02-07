@@ -14,6 +14,7 @@ class admin{
     public static function load_dashboard($page = ''){
         self::$data['notification'] = self::get_db()->select('system_notification')
                                                     ->where(['notification_target'=>user::init()->get_session_user('user_id')])
+                                                    ->and(['notification_status'=>'unread'])
                                                     ->fetchAll();
         $user = user::init();
         if(!$user->get_session_user()) $user->init_login();

@@ -44,7 +44,19 @@ class system{
     public static function send_notification($opts){
         $db = db::get_connection(storage::get_instance()->system_config->db_configs);
         $vals = [];
-        //if(!is_array($opts['target'])) $vals[]
+        if(!is_array($opts['target'])) {
+            $vals[] = "('{$opts['icon']}', '{$opts['url']}', '{$opts['brief']}', {$opts['target']})";
+        }
+        else{
+            foreach($opts['target'] as $target){
+                $vals[] = "('{$opts['icon']}', '{$opts['url']}', '{$opts['brief']}', {$target})";
+            }
+        }
+        $qry = 'INSERT INTO system_notification (notification_icon, notification_url, notification_brief, notification_target) VALUES '.implode(', ', $vals);
+
+        $db->query($qry);
+        if(!$db->error()) return 'ok';
+        else return $db->error()['message'];
     }
     public static function load_page(){
         $req = storage::init()->request;
