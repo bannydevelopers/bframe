@@ -131,10 +131,12 @@ class template{
 		ob_start(
 			function($buffer){
 				$error = error_get_last();
+				if(isset($error['message'])) $error = $error['message'];
+				else $error = 'Unknown error occured';
 				$return  = '<title>Fatal error</title>';
 				$return .= '<body>';
 				$return .= '<h1>Fatal error: Theme has issues</h1>';
-				$return .= "<p>{$error['message']}</p>";
+				$return .= "<p>{$error}</p>";
 				$return .= '</body>';
 				return $return;
 			}

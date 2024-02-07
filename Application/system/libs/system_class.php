@@ -41,6 +41,11 @@ class system{
     public static function translate($index){
         return $index;
     }
+    public static function send_notification($opts){
+        $db = db::get_connection(storage::get_instance()->system_config->db_configs);
+        $vals = [];
+        //if(!is_array($opts['target'])) $vals[]
+    }
     public static function load_page(){
         $req = storage::init()->request;
         $db = db::get_connection(storage::get_instance()->system_config->db_configs);

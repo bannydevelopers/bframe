@@ -12,7 +12,9 @@ class admin{
         return db::get_connection($config);
     }
     public static function load_dashboard($page = ''){
-        self::$data['notification'] = self::get_db()->select('system_notification')->fetchAll();
+        self::$data['notification'] = self::get_db()->select('system_notification')
+                                                    ->where(['notification_target'=>user::init()->get_session_user('user_id')])
+                                                    ->fetchAll();
         $user = user::init();
         if(!$user->get_session_user()) $user->init_login();
         if(isset($_POST['ajax_register'])){
