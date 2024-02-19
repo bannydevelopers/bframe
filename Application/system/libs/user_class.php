@@ -128,7 +128,7 @@ class user{
         $obj = new static();
         $whr = "passcode = :passcode AND (phone = :pnumber OR email = :email) AND status = 'active'";
         if(intval($login_info['login'])){
-            $login = $obj::format_phone_number($login_info['login']);
+            $login = system::format_phone_number($login_info['login']);
         }
         else $login = system::format_email($login_info['login']);
         if(!$login) return false;
@@ -138,8 +138,8 @@ class user{
                     ->join('roles','role_id=system_role')
                     ->where($whr, ['passcode'=>$pass, 'pnumber'=>$login, 'email'=>$login])
                     ->limit(1)->fetch();
-        
-        if(!$db->error() && isset($user['passcode'])){
+        //var_dump($db->error(), $user);die;
+        if($user && isset($user['passcode'])){
             unset($user['passcode']);
             unset($user['activation_token']);
             return $obj->set_session_user($user);

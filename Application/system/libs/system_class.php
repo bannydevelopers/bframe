@@ -170,6 +170,9 @@ class system{
             return ltrim($phone_to_check, '+');
         }
     }
+    public static function format_phone_number($phone_number){
+        return self::format_phone($phone_number);
+    }
     public static function format_time($datetime, $selected=NULL){
         if(!$datetime) return $datetime;// passing null to strtotime is deprecated, hence bail
         if($selected == NULL) $selected = 0;

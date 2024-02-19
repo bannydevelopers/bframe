@@ -4,7 +4,16 @@
     <ul style="list-style: none;">
         <?php foreach($res_list as $rl){?>
         <li>
-            <label><input type="checkbox" name="resource_item[]" value="<?=$rl['id']?>"> &nbsp;<?=$rl['name']?></label>
+            <label style="display: table-row;">
+                <span>
+                    <input type="checkbox" name="resource_item[]" value="<?=$rl['id']?>"> &nbsp;<?=$rl['name']?>
+                </span>
+                <?php if($res['resource_type'] == 'products' or $res['resource_type'] == 'tools'){?>
+                <input type="number" value="" name="resource_count[]" style="width:40px;">
+                <?php }else{?>
+                <input type="hidden" value="" name="resource_count[]">
+                <?php }?>
+            </label>
         </li>
         <?php }?>
     </ul>

@@ -32,10 +32,11 @@ if(isset($_POST['project_name'])){
 
 if(isset($_POST['approved_resource'])){
     if(isset($_POST['resource_item'])){
-        $qry = 'INSERT INTO project_resources_approved (pra_resource, pra_allocated_resource) VALUES';
+        $qry = 'INSERT INTO project_resources_approved (pra_resource, pra_allocated_resource, pra_count) VALUES';
         $vals = [];
-        foreach($_POST['resource_item'] as $ri){
-            $vals[] = " ({$_POST['approved_resource']}, {$ri})";
+        foreach($_POST['resource_item'] as $x=>$ri){
+            if(!$_POST['resource_count'][$x]) $_POST['resource_count'][$x] = 'NULL';
+            $vals[] = " ({$_POST['approved_resource']}, {$ri}, {$_POST['resource_count'][$x]})";
         }
         $qry .= implode(',', $vals);
         $k = $db->query($qry);
@@ -136,28 +137,28 @@ if(isset($registry->request[4])){
 
     $_q['tools'] = "(
                 SELECT JSON_ARRAYAGG( 
-                    JSON_OBJECT( 'id', tool_id, 'name', tool_name ) 
+                    JSON_OBJECT( 'id', tool_id, 'name', tool_name, 'total', pra_count ) 
                 ) FROM tools 
                 JOIN project_resources_approved ON tool_id=pra_allocated_resource 
                 WHERE pra_resource=resource_id 
-            ) AS items";
+            ) AS tools";
             
 
     $_q['staff'] = "(
                     SELECT JSON_ARRAYAGG( 
-                        JSON_OBJECT( 'id', user_id, 'name', full_name ) 
+                        JSON_OBJECT( 'id', user_id, 'name', full_name, 'total', pra_count ) 
                     ) FROM user_accounts 
-                    JOIN project_resources_approved ON tool_id=pra_allocated_resource 
+                    JOIN project_resources_approved ON user_id=pra_allocated_resource 
                     WHERE pra_resource=resource_id 
-                ) AS items";
+                ) AS staff";
 
    $_q['products'] = "(
                     SELECT JSON_ARRAYAGG( 
-                        JSON_OBJECT( 'id', product_id, 'name', product_name ) 
+                        JSON_OBJECT( 'id', product_id, 'name', product_name, 'total', pra_count ) 
                     ) FROM product 
-                    JOIN project_resources_approved ON tool_id=pra_allocated_resource 
+                    JOIN project_resources_approved ON product_id=pra_allocated_resource 
                     WHERE pra_resource=resource_id 
-                ) AS items";
+                ) AS products";
     
     $rt = $db->select('project_resources', 'resource_type as rtype')
              ->where(['resource_project'=>$registry->request[4]])
@@ -165,7 +166,8 @@ if(isset($registry->request[4])){
 
     if(isset($rt['rtype'])) 
     {
-        $sub_q = $_q[$rt['rtype']];
+        $sub_q = implode(', ', $_q);//$_q[$rt['rtype']];
+        //var_dump($sub_q);die;
         $resources = $db->select('project_resources', "project_resources.*, {$sub_q}, user_accounts.full_name as requester_name, appr.full_name as approver_name")
                         ->join('user_accounts', 'resource_requester=user_accounts.user_id')
                         ->join('user_accounts as appr', 'resource_approver=appr.user_id', 'LEFT')
@@ -173,6 +175,7 @@ if(isset($registry->request[4])){
                         ->order_by('resource_id', 'desc')
                         ->fetchAll();
 
+        //var_dump($db->error());
     }
     else{
         $resources = [];
@@ -181,6 +184,7 @@ if(isset($registry->request[4])){
     $activities = $db->select('project_activities')
                      ->where(['activity_project'=>$registry->request[4]])
                      ->fetchAll();
+    $projects = [$project];
     ob_start();
     include __DIR__.'/html/project.html';
     $body = ob_get_clean();

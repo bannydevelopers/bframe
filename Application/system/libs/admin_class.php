@@ -642,27 +642,39 @@ class admin{
             if($user_id != $uid) 
                 $msg = 'Access denied, owners can change their own passwords';
             else{
-                if($_POST['new_passcode'] == $_POST['new_passcode_confirm']){
-                    $data = [
-                        'passcode'=>system::create_hash($_POST['new_passcode'])
-                    ];
-
-                    $k = $db->update('user_accounts', $data)
+                $oldchk = $db->select('user_accounts')
                             ->where(['user_id'=>$uid])
                             ->and(['passcode'=>system::create_hash($_POST['old_passcode'])])
-                            ->commit();
-                            
-                    if($db->error()) $msg = $db->error()['message'];
-                    else{
-                        $chk = $db->select('user_accounts')
-                                    ->where(['user_id'=>$user_id, 'passcode'=>$data['passcode']])
-                                    ->fetch();
-                        
-                        if($chk) $msg = 'Password changed succesful';
-                        else $msg = 'Password change error';
-                    }
+                            ->fetch();
+                if(!$oldchk){
+                    $msg = 'Old password incorrect';
                 }
-                else $msg = 'Password change failed, passwords do not match';
+                else{
+                    if($_POST['new_passcode'] == $_POST['new_passcode_confirm']){
+                        $data = [
+                            'passcode'=>system::create_hash($_POST['new_passcode'])
+                        ];
+
+                        $k = $db->update('user_accounts', $data)
+                                ->where(['user_id'=>$uid])
+                                //->and(['passcode'=>system::create_hash($_POST['old_passcode'])])
+                                ->commit();
+                        //var_dump($db->error(), $k);        
+                        if($db->error()) $msg = $db->error()['message'];
+                        else{
+                            $chk = $db->select('user_accounts')
+                                        ->where(['user_id'=>$user_id, 'passcode'=>$data['passcode']])
+                                        ->fetch();
+                            
+                            if($chk) {
+                                $msg = 'Password changed succesful';
+                                user::init()->end_user_session();
+                            }
+                            else $msg = 'Password change error';
+                        }
+                    }
+                    else $msg = 'Password change failed, passwords do not match';
+                }
                 if(isset($_POST['ajax_request'])) die($msg);
             }
         }
@@ -765,11 +777,11 @@ class admin{
             if(isset($_POST['login'])){
                 $user = $db->select('user')
                             ->where(['email'=>helper::format_email($_POST['login'])])
-                            ->or(['phone_number'=>helper::format_phone_number($_POST['login'])])
+                            ->or(['phone_number'=>system::format_phone_number($_POST['login'])])
                             ->limit(1)
                             ->fetch();
                 if($user){//var_dump(storage::init()->system_config);
-                    $token = helper::create_hash(microtime(true));
+                    $token =system::create_hash(microtime(true));
         
                     $db->update('user', ['activation_token'=>$token])->where(['user_id'=>$user['user_id']])->commit();
         
@@ -785,14 +797,14 @@ class admin{
                         'recipients'=>$user['phone_number'],
                         'body'=>strip_tags($body)
                     ];
-                    if($user['phone_number']) $result = helper::send_sms($sms_opts);
+                    if($user['phone_number']) $result =system::send_sms($sms_opts);
         
                     $email_opts = [
                         'body'=>$body, 
                         'subject'=>'Password recovery instruction',
                         'recipient'=>$user['email']
                     ];
-                    if($user['email']) $result = helper::send_email($email_opts);
+                    if($user['email']) $result =system::send_email($email_opts);
                     if($result == 'mail_send_ok'){
                         die($helper::get_sub_template('token-sent',['phone'=>$phone,'email'=>'*****']));
                     }

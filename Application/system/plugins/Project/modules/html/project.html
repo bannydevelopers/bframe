@@ -1,6 +1,9 @@
 <div class="d-flex justify-content-between align-items-center">
     <h3 class="pt-1"><?=$project['project_name']?></h3>
     <div>
+        <button type="button" onclick="request_resource()" class="btn rounded-pill btn-outline-secondary">
+            <i class="fa fa-plus-circle me-1"></i>Request resource
+        </button>
         <a href="/<?=$base_url?>" class="btn rounded-pill btn-outline-secondary">
             <i class="fas fa-angle-double-left me-1"></i>Projects
         </a>
@@ -68,64 +71,61 @@
             <label for="class_tab22">Activities</label>
             <div class="tab-panes text-start">
                 <div class="row">
-                <?php //foreach($resources as $item){?>
-                    <!--div><?php var_dump($resources)?></div-->
-                <?php //} ?>
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Resource type</th>
-                            <th> Quantity</th>
-                            <th>Description</th>
-                            <th>Requested by</th>
-                            <th>Approved by</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($resources as $sn=>$st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td><?=++$sn?></td>
-                            <td>
-                                <?=$st['resource_type']?>
-                            </td>
-                            <td>
-                                <?=$st['resource_type'] == 'money' ? $registry->system_config->currency_symbol.' '.number_format($st['resource_quantity']) : $st['resource_quantity']?>
-                            </td>
-                            <td>
-                                <?=$st['request_description']?>
-                            </td>
-                            <td>
-                                <?=$st['requester_name']?><br>
-                                <em><small><?=system::format_time($st['request_date'])?></small></em>
-                            </td>
-                            <td>
-                                <?=$st['approver_name']?><br>
-                                <em><small><?=system::format_time($st['approve_date'])?></small></em>
-                            </td>
-                            <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="px-1" style="font-size: 22px;" data-icon="&#xf141;"></i>
-                                </button>
-                                <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
-                                    <?php if($st['resource_type'] != 'money'){?>
-                                    <a onclick="view_status()" class="dropdown-item"><span class="me-1 fa fa-eye"></span>View</a>
-                                    <?php }?>
-                                    <?php if(user::init()->user_can('approve_project_resource') && !$st['resource_approver']){?>
-                                    <a onclick="approve_resource()" class="dropdown-item"><span class="me-1" data-icon="&#xf560;"></span>Approve</a>
-                                    <?php }?>
-                                    <?php if($user['user_id'] == $st['resource_requester'] && $st['resource_status'] == 'requested'){?>
-                                    <a onclick="delete_activity()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                    <?php }?>&nbsp;
+                    <table class="table table-hover paginate" data-items-per-page="10">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Resource type</th>
+                                <th> Quantity</th>
+                                <th>Description</th>
+                                <th>Requested by</th>
+                                <th>Approved by</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            <?php foreach($resources as $sn=>$st){?>
+                            <tr data-json='<?=json_encode($st)?>'>
+                                <td><?=++$sn?></td>
+                                <td>
+                                    <?=$st['resource_type']?>
+                                </td>
+                                <td>
+                                    <?=$st['resource_type'] == 'money' ? $registry->system_config->currency_symbol.' '.number_format($st['resource_quantity']) : $st['resource_quantity']?>
+                                </td>
+                                <td>
+                                    <?=$st['request_description']?>
+                                </td>
+                                <td>
+                                    <?=$st['requester_name']?><br>
+                                    <em><small><?=system::format_time($st['request_date'])?></small></em>
+                                </td>
+                                <td>
+                                    <?=$st['approver_name']?><br>
+                                    <em><small><?=system::format_time($st['approve_date'])?></small></em>
+                                </td>
+                                <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="px-1" style="font-size: 22px;" data-icon="&#xf141;"></i>
+                                    </button>
+                                    <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
+                                        <?php if($st['resource_type'] != 'money'){?>
+                                        <a onclick="view_status()" class="dropdown-item"><span class="me-1 fa fa-eye"></span>View</a>
+                                        <?php }?>
+                                        <?php if(user::init()->user_can('approve_project_resource') && !$st['resource_approver']){?>
+                                        <a onclick="approve_resource()" class="dropdown-item"><span class="me-1" data-icon="&#xf560;"></span>Approve</a>
+                                        <?php }?>
+                                        <?php if($user['user_id'] == $st['resource_requester'] && $st['resource_status'] == 'requested'){?>
+                                        <a onclick="delete_activity()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                        <?php }?>&nbsp;
+                                    </div>
                                 </div>
-                            </div>
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
+                                </td>
+                            </tr>
+                            <?php }?>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="row">
                 <!-- <?php //foreach($activities as $item){?>
@@ -190,8 +190,10 @@
     </div>
 </div>
 
+<style>.swal2-html-container{overflow: visible;}</style>
 <template>
     <?php include __DIR__.'/register_project.html';?>
+    <?php include __DIR__.'/request_resource.html';?>
 </template>
 <style>
     .mySwalForm{
@@ -232,6 +234,50 @@
                         Swal.fire({
                             icon: jsx.status,
                             title:jsx.message
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+    
+    const request_resource = (name)=>{
+        let fx = document.querySelector('template').content.cloneNode(true).children[1];
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            let urx = window.location.href.split('/');
+            urx.pop();
+            urx.pop();
+            url = urx.join('/') + '/resources';
+            ajax(
+                url,
+                response=>{
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
                         });
                     }
                     else{
@@ -301,5 +347,18 @@
             },
             fx
         );
+    }
+    const view_status = ()=>{
+        let jsx = JSON.parse(window.event.target.parentNode.getAttribute('data-json'));
+        let resx = JSON.parse(jsx[jsx.resource_type]), prods = '', cnt;
+        console.log(jsx);
+        [...resx].forEach(res=>{
+            cnt = res.total ? `(${res.total})` : '';
+            prods += `<li>${res.name} ${cnt}</li>`;
+        });
+        Swal.fire({
+            title: `Approved ${jsx.resource_type}`,
+            html: `<ol class="text-start">${prods}</ol>`
+        });
     }
 </script>
