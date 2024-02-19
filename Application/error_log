@@ -1,0 +1,10 @@
+[19-Feb-2024 13:01:17 Africa/Dar_es_Salaam] PHP Fatal error:  Uncaught Error: Call to a member function fetch() on null in /home/bannycot/public_html/bframe/Application/system/libs/system_class.php:78
+Stack trace:
+#0 /home/bannycot/public_html/bframe/Application/index.php(93): system::load_page()
+#1 {main}
+  thrown in /home/bannycot/public_html/bframe/Application/system/libs/system_class.php on line 78
+[19-Feb-2024 13:03:12 Africa/Dar_es_Salaam] PHP Fatal error:  Uncaught Error: Call to a member function fetch() on null in /home/bannycot/public_html/bframe/Application/system/libs/system_class.php:78
+Stack trace:
+#0 /home/bannycot/public_html/bframe/Application/index.php(93): system::load_page()
+#1 {main}
+  thrown in /home/bannycot/public_html/bframe/Application/system/libs/system_class.php on line 78

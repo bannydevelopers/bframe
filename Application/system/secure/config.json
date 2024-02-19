@@ -47,8 +47,8 @@
     "db_configs": {
         "dbdriver": "mysql",
         "hostname": "localhost",
-        "db_name": "bannycot_bframe_cms",
-        "username": "root",
-        "password": "root"
+        "db_name": "bannycot_bframe",
+        "username": "bannycot_bframe_cms",
+        "password": "bannycot_bframe_cms"
     }
 }
