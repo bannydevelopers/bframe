@@ -1,6 +1,6 @@
 {
     "session_name": "userdata",
-    "site_name": "CMIS v2",
+    "site_name": "CMIS-V2",
     "theme": "default",
     "dashboard_url": "admin",
     "currency": "TZS",
@@ -14,8 +14,7 @@
         "Sales",
         "Office_inventory",
         "Front_desk",
-        "Forms",
-        "Communication"
+        "Forms"
     ],
     "gateways": {
         "payment": "pesapal",
@@ -37,11 +36,11 @@
         "email": "info@banny.co.tz",
         "TIN_number": "122-781-437",
         "VRN_number": "40024207.Z",
-        "company_address": "Samora avenue, \nNHC House,\nP. O. Box 22429,\nDar es Salaam",
+        "company_address": "Samora avenue,<br> NHC House,<br>P. O. Box 22429,<br>Dar es Salaam",
         "company_logo": "banny logo.png",
         "payment_terms": "The PI valid for 30 days including the issue date.Full payment or 40% deposit is necessary to confirm PI.Delivery period is 5 to 7 within working days after confirmation.",
-        "primary_payment_account": "A\/C name: Banny Company T LtdBank name: NCBAA\/C number: 118 688 100 015Branch: Clock tower branch",
-        "aux_payment_account": "A\/C name: Banny Company LimitedBank name: CRDBA\/C number: 0150560102100Branch: TRA Samora",
+        "primary_payment_account": "A\/C name: BANNY COMPANY (T) LTD        Bank name: NCBAA\/C number: 118 688 100 015 Branch: Clock tower branch",
+        "aux_payment_account": "A\/C name: BANNY COMPANY LTD       Bank name: CRDBA\/C number: 0150560102100Branch: TRA Samora",
         "LPO_terms": "Your invoice should be submitted together with the original of the LPO. The purchase order number should be quoted on all communications relevant to this order."
     },
     "db_configs": {

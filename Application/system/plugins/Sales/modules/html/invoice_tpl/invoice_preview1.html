@@ -39,11 +39,11 @@
               </tr>
             <tr class="white">
               <td><b>Create date</b></td>
-              <td>{{created}}</td>
+              <td class="created_date">{{created}}</td>
             </tr>
-            <tr class="white due_date-tr">
-              <td><b>Due date</b></td>
-              <td>{{due_date}}</td>
+            <tr class="white due_date-tr due_date">
+              <td ><b>Due date</b></td>
+              <td >{{due_date}}</td>
             </tr>
             <tr class="white">
               <td><b>Sales represantantive</b></td>
@@ -58,7 +58,7 @@
             <b style="text-transform: uppercase;font-size: 140%;">{{invoice_type}} INVOICE</b>
           </div>
           
-          <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
+          <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 12px;border-collapse: collapse;">
             <tr style="border-bottom: 1px solid #222;" class="white">
               <th>S/N</th>
               <th>Item name</th>
@@ -105,22 +105,28 @@
       </tr-->
       <tr style="margin-top: 6em;" class="white">
         <td colspan="3" style="text-align: left;font-size: 13px;">
-          <div style="display: flex;">
-            <div>&nbsp;
-              <b>Payment terms</b><br>
-              <div style="font-family: inherit;"><?=$company[0]->payment_terms?></div>
+            <div style="display: flex;">
+                <div>&nbsp;
+                    <b>Payment terms</b><br>
+                    <div style="font-family: inherit;"><?=$company[0]->payment_terms?></div>
+                </div>
+                <div style="margin: 0 2em;">
+                    <b>Primary payment account</b><br>
+                    <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->primary_payment_account?></pre>
+                </div>
+                <div>
+                    <b>Auxilliary payment account</b><br>
+                    <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->aux_payment_account?></pre>
+                </div>
             </div>
-            <div style="margin: 0 2em;">
-              <b>Primary payment account</b><br>
-              <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->primary_payment_account?></pre>
-            </div>
-            <div>
-              <b>Auxilliary payment account</b><br>
-              <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->aux_payment_account?></pre>
-            </div>
-          </div>
+            <div style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 12px; font-family: inherit; white-space: wrap;">
+              
+            <p>“POWERD BY cmis.banny.co.tz” <br>
+                 Website: <a href="http://www.banny.co.tz">www.banny.co.tz</a>, E-mail: <a href="mailto:director@banny.co.tz">director@banny.co.tz</a> / <a href="mailto:info@banny.co.tz">info@banny.co.tz</a>
+            </p>
+          </div>       
         </td>
-      </tr>
+    </tr>
       <style>
         th,td{
           padding: 10px;
@@ -139,5 +145,22 @@
         padding: 8px;
       }
     </style>
-</div>
+    <style>
+      @media print {
+          @page {
+              size: A4; /* or whatever size your document uses */
+          }
+  
+          /* Show footer only on the last page */
+          @page :last {
+              .footer {
+                  position: fixed; /* Change position to fixed */
+                  bottom: 0; /* Align to the bottom */
+                  display: block; /* Show the footer */
+              }
+          }
+      }
+  
+  </style>
+</div>  
 </div>
