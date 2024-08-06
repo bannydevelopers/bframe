@@ -490,4 +490,14 @@
             alert(ev.target.value);
         });
     });
+    const displayFooterOnLastPage = () => {
+    // Assuming you have some way to determine if the current page is the last one
+
+    // Check if this is the last page
+    var isLastPage = true; // Change this condition based on your application's logic
+
+    if (isLastPage) {
+        document.getElementById('footer').style.display = 'block';
+    }
+};
 </script>

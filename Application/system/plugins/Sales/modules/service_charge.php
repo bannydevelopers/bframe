@@ -10,23 +10,23 @@ if($me['work_location'] == human_resources::get_headquarters_branch()) {
 else{
     $whr = "owner_branch={$me['work_location']}";
 }
-if(isset($_POST['purchase_date'])){
+if(isset($_POST['created_date'])){
     $purch_data = [
-        'purchase_date'=>addslashes($_POST['purchase_date']),
-        'supplier'=>intval($_POST['supplier']),
+        'created_date'=>addslashes($_POST['created_date']),
+        'customer'=>intval($_POST['customer']),
         'owner_branch'=>intval($me['work_location']),
         'created_by'=>addslashes($me['work_location'])
     ];
     $purch_items_qry = [];
-    $purch_id = $db->insert('purchase', $purch_data);
+    $purch_id = $db->insert('service', $purch_data);
     if($purch_id && !$db->error()){
         foreach($_POST['item_name'] as $k=>$p){
             $purch_items_qry[] = "('{$p}', {$purch_id}, {$_POST['quantity'][$k]}, '{$_POST['description'][$k]}')";
         }
         $purch_items_qry = implode(',', $purch_items_qry);
-        $db->query("INSERT INTO purchase_items (purchase_item_name, purchase_item_reference, purchase_item_quantity, purchase_item_description) VALUES {$purch_items_qry}");
+        $db->query("INSERT INTO service_items (service_item_name, service_item_reference, service_item_quantity, service_item_description) VALUES {$purch_items_qry}");
         if($db->error()){
-            $db->delete('purchase')->where(['purchase_id'=>$purch_id])->commit();
+            $db->delete('service')->where(['service_id'=>$purch_id])->commit();
         }
     }
     //var_dump($db->error());
@@ -34,24 +34,24 @@ if(isset($_POST['purchase_date'])){
     else $msg = 'Saved successful';
     if(isset($_POST['ajax_request'])) die($msg);
 }
-if(isset($_POST['approve_purchase'])){
-    $db->update('purchase', ['approved_by'=>$me['user_reference']])
-        ->where(['purchase_id'=>intval($_POST['approve_purchase'])])
+if(isset($_POST['approve_service'])){
+    $db->update('service', ['approved_by'=>$me['user_reference']])
+        ->where(['service_id'=>intval($_POST['approve_service'])])
         ->commit();
 
     if($db->error()) $msg = $db->error()['message'];
     else $msg = 'Approved successful';
     die($msg);
 }
-if(isset($_POST['local_purchase_order'])){
+if(isset($_POST['local_service_order'])){
     $data = [
-        'reference_purchase'=>intval($_POST['reference_purchase']),
-        'local_purchase_order'=>addslashes($_POST['local_purchase_order']),
-        'tax_purchase_remarks'=>addslashes($_POST['tax_purchase_remarks']),
+        'reference_service'=>intval($_POST['reference_service']),
+        'local_service_order'=>addslashes($_POST['local_service_order']),
+        'tax_service_remarks'=>addslashes($_POST['tax_service_remarks']),
         'recorded_by'=>user::init()->get_session_user('user_id')
     ];
 
-    $k = $db->insert('tax_purchase', $data);
+    $k = $db->insert('tax_service', $data);
     if(!$db->error()){
         $msg = 'Saved successful';
     }
@@ -70,18 +70,18 @@ if(isset($_POST['qty'])){
         //cod_user=VALUES(cod_user), date=VALUES(date)
     */
     $tmp = [];
-    $lst = $db->select('purchase_items','purchase_item_id')
-              ->where('purchase_item_id')
+    $lst = $db->select('service_items','service_item_id')
+              ->where('service_item_id')
               ->in(array_keys($_POST['qty']))
               ->fetchAll();
     foreach($_POST['qty'] as $id=>$qty){
-        if(array_search($id, array_column($lst, 'purchase_item_id')) === false) $idx = 'NULL';
+        if(array_search($id, array_column($lst, 'service_item_id')) === false) $idx = 'NULL';
         else $idx = intval($id);
-        $tmp[] = "({$idx}, '{$_POST['item_name'][$id]}', '{$_POST['purchase']}', $qty, '{$_POST['description'][$id]}')";
+        $tmp[] = "({$idx}, '{$_POST['item_name'][$id]}', '{$_POST['service']}', $qty, '{$_POST['description'][$id]}')";
     }
     $tmp = implode(',', $tmp);
-    $qry = "INSERT INTO purchase_items (purchase_item_id, purchase_item_name, purchase_item_reference, purchase_item_quantity, purchase_item_description) VALUES "
-            . " {$tmp} ON DUPLICATE KEY UPDATE purchase_item_name = VALUES(purchase_item_name), purchase_item_description=VALUES(purchase_item_description), purchase_item_quantity=VALUES(purchase_item_quantity)";
+    $qry = "INSERT INTO service_items (service_item_id, service_item_name, service_item_reference, service_item_quantity, service_item_description) VALUES "
+            . " {$tmp} ON DUPLICATE KEY UPDATE service_item_name = VALUES(service_item_name), service_item_description=VALUES(service_item_description), service_item_quantity=VALUES(service_item_quantity)";
             
     //var_dump($tmp);die;
     $db->query($qry);
@@ -89,26 +89,26 @@ if(isset($_POST['qty'])){
     if($db->error()) die('Saving failed');
     else die('Saved successful');
 }
-if(isset($_POST['delete_purchase'])){
-    $db->delete('purchase_items')->where(['purchase_item_reference'=>intval($_POST['delete_purchase'])])->commit();
+if(isset($_POST['delete_service'])){
+    $db->delete('service_items')->where(['service_item_reference'=>intval($_POST['delete_service'])])->commit();
     if(!$db->error()){
-        $db->delete('purchase')->where(['purchase_id'=>intval($_POST['delete_purchase'])])->commit();
+        $db->delete('service')->where(['service_id'=>intval($_POST['delete_service'])])->commit();
         if($db->error()) $msg = $db->error()['message'];
-        else $msg = 'Purchase deleted successful!';
+        else $msg = 'service deleted successful!';
     }
     else{
         $msg = $db->error()['message'];
     }
     die($msg);
 }
-if(isset($_POST['delete_purchase_item'])){
-    $idx = intval($_POST['delete_purchase_item']);
-    $db->delete('purchase_items')->where(['purchase_item_id'=>$idx])->commit();
+if(isset($_POST['delete_service_item'])){
+    $idx = intval($_POST['delete_service_item']);
+    $db->delete('service_items')->where(['service_item_id'=>$idx])->commit();
     if($db->error()) $msg = $db->error()['message'];
     else $msg = 'ok';
     die($msg);
 }
-/*$Purchase = $db->select('product')
+/*$service = $db->select('product')
                     ->join('product_category', 'category_id=product_category', 'LEFT')
                     ->join('branches', 'branch_id=owner_branch', 'LEFT')
                     ->where($whr)
@@ -118,38 +118,38 @@ if($me['work_location'] == human_resources::get_headquarters_branch()) {
     $whr = 1;
 }
 else{
-    $whr = "purchase.owner_branch={$me['work_location']}";
+    $whr = "service.owner_branch={$me['work_location']}";
 }
 $items_q = "(
                 SELECT JSON_ARRAYAGG(
                     JSON_OBJECT(
-                        'id', purchase_item_id, 'item_name', purchase_item_name, 'purchase', purchase_item_reference, 'description', purchase_item_description, 'qty', purchase_item_quantity
+                        'id', service_item_id, 'item_name', service_item_name, 'service', service_item_reference, 'description', service_item_description, 'qty', service_item_quantity
                     )
                 ) 
-                FROM purchase_items WHERE purchase_item_reference=purchase_id
-            ) AS purchase_items";
+                FROM service_items WHERE service_item_reference=service_id
+            ) AS service_items";
 
-$qry = "purchase.*, approver.full_name as approved, branches.branch_name, user_accounts.full_name, {$items_q}, supplier.*";
+$qry = "service.*, approver.full_name as approved, branches.branch_name, user_accounts.full_name, {$items_q}, customer.*";
 
-$purchase = $db->select('purchase', $qry)
+$service = $db->select('service', $qry)
                 ->join('branches','branch_id=owner_branch')
                 ->join('user_accounts', 'user_id=created_by')
                 ->join('user_accounts as approver', 'approver.user_id=approved_by', 'LEFT')
-                ->join('supplier', 'supplier_id=supplier')
+                ->join('customer', 'customer_id=customer')
                 ->where($whr)
-                ->order_by('purchase_id', 'desc')
+                ->order_by('service_id', 'desc')
                 ->fetchAll();   
 
-//var_dump($db->error());
-$supplier = $db ->select('supplier','supplier_id, supplier_name')
+var_dump($db->error());
+$customer = $db ->select('customer','customer_id, customer_name')
                 ->where($whr)
                 ->fetchAll();
 
 
-$sortedPurchase = [];
-foreach($purchase as $prod){
-    if(!isset($sortedPurchase[$prod['branch_name']])) $sortedPurchase[$prod['branch_name']] = [];
-    $sortedPurchase[$prod['branch_name']][] = $prod;
+$sortedservice = [];
+foreach($service as $prod){
+    if(!isset($sortedservice[$prod['branch_name']])) $sortedservice[$prod['branch_name']] = [];
+    $sortedservice[$prod['branch_name']][] = $prod;
 }
 
 $default = [
@@ -166,13 +166,13 @@ foreach($branches as $b){
 }
 
 ob_start();
-$dir = realpath(__DIR__.'/html/purchase_tpl');
+$dir = realpath(__DIR__.'/html/service_tpl');
 foreach(scandir($dir) as $filename){
     if(pathinfo("{$dir}/{$filename}", PATHINFO_EXTENSION) == 'html') include "{$dir}/{$filename}";
 }
-$purchase_tpl = ob_get_clean();
+$service_tpl = ob_get_clean();
 
 ob_start();
-include __DIR__.'/html/purchase_order.html';
+include __DIR__.'/html/service_charge.html';
 $body = ob_get_clean();
 $return = ['title'=>' ','body'=>$body];

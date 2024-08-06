@@ -7,11 +7,11 @@
     "currency_symbol": "TSH",
     "locale": "sw-TZ",
     "plugins": [
+        "Sales",
         "Human_resources",
         "Accounts",
         "Banks",
         "Project",
-        "Sales",
         "Office_inventory",
         "Front_desk",
         "Forms"
@@ -36,7 +36,7 @@
         "email": "info@banny.co.tz",
         "TIN_number": "122-781-437",
         "VRN_number": "40024207.Z",
-        "company_address": "Samora avenue, NHC House,P. O. Box 22429,Dar es Salaam",
+        "company_address": "Samora avenue,<br> NHC House,<br>P. O. Box 22429,<br>Dar es Salaam",
         "company_logo": "banny logo.png",
         "payment_terms": "The PI valid for 30 days including the issue date.Full payment or 40% deposit is necessary to confirm PI.Delivery period is 5 to 7 within working days after confirmation.",
         "primary_payment_account": "A\/C name: BANNY COMPANY (T) LTD        Bank name: NCBAA\/C number: 118 688 100 015 Branch: Clock tower branch",

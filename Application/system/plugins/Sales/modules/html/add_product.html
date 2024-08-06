@@ -19,13 +19,18 @@
                 <option value="add">Add category</option>
             </select>
         </div>
-        <div class="mb-3 col-md-6">
+        <!--<div class="mb-3 col-md-6">
             <label for="product_price" class="form-label">Product price</label>
             <input type="number" min="0" class="form-control" id="product_price" name="product_price" placeholder="product price..." required />
+        </div>-->
+        <div class="mb-3 col-md-6">
+            <label for="product_price" class="form-label">Product price</label>
+            <input type="number" min="0" class="form-control" id="product_price" name="product_price" placeholder="Product price..." step="any" required />
         </div>
+        
         <div class="mb-3">
             <label for="product_image" class="form-label">Product image</label>
-            <input type="file" class="form-control" id="product_image" name="product_image"accept=".jpg, .jpeg, .png, .gif" placeholder="product image..." required />
+            <input type="file" class="form-control" id="product_image" name="product_image"accept=".jpg, .jpeg, .png, .gif" placeholder="product image..."/>
         </div>
         <div class="mb-3">
             <label for="product_description" class="form-label">Product discription</label>

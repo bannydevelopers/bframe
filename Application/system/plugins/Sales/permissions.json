@@ -38,5 +38,9 @@
     "add_delivery",
     "edit_delivery",
     "view_delivery",
-    "delete_delivery"
+    "delete_delivery",
+    "add_service_charge",
+    "edit_service_charge",
+    "view_service_charge",
+    "delete_service_charge"
 ]

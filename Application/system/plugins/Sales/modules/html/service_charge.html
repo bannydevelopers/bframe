@@ -1,0 +1,448 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1">Service Charge</h3>
+    <div class="">
+        <button type="button" onclick="create_service()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Create service</button>
+    </div>
+</div>
+<?php if(isset($msg) && $msg){?>
+    <p class="content box-shadow msg"><?=$msg?></p>
+<?php }?>
+<br>
+<div>
+    <div class="tab-view">
+        <?php 
+        if($is_headquarters){
+        foreach(array_keys($sortedservice) as $i=>$k){?>
+        <input type="radio" name="tab" id="class_tab<?=$i?>"<?=$i == 0?' checked':'' ?>>
+        <label for="class_tab<?=$i?>"><?=$k?></label>
+        <?php 
+            }
+        }else{?><input type="radio" name="tab" style="display: none;" checked><?php }?>
+        <div class="tab-panes">
+            <?php foreach($sortedservice as $branch=>$invoices){?>
+            <div class="table-responsive text-nowrap" style="padding-bottom: 120px;">
+                <table class="table table-hover paginate" data-items-per-page="10">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>service number</th>
+                            <th>service date</th>
+                            <th>customer</th>
+                            <th>Created by</th>
+                            <th>Approved by</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <?php foreach($invoices as $kx=>$st){?>
+                        <tr>
+                            <td><?=++$kx?></td>
+                            <td><?=6891+intval($st['service_id'])?></td>
+                            <td><?=system::format_time($st['created_date'])?></td>
+                            <td><?=$st['customer_name']?></td>
+                            <td><?=$st['full_name']?></td>
+                            <td><?=$st['approved']?></td>
+                            <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <img src="Application/storage/assets/html/admin/img/more.svg" alt="">
+                                </button>
+                                <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
+                                    <?php if(!$st['approved'] && user::init()->user_can('approve_service_order')){?>
+                                    <a onclick="approve_service()" class="dropdown-item"><span class="me-1" data-icon="&#xf14a;"></span>Approve service</a>
+                                    <?php }?>
+                                    <a onclick="view_service_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>View items</a>
+                                    <?php if(!$st['approved'] && user::init()->user_can('edit_service_order')){?>
+                                    <a onclick="edit_service_items()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Edit service</a>
+                                    <?php }?>
+                                    <?php if($st['approved'] && user::init()->user_can('print_service_order')){?>
+                                    <a onclick="print_preview()" class="dropdown-item"><span class="me-1" data-icon="&#xf047;"></span> Print service</a>
+                                    <?php }?>
+                                    <?php if(!$st['approved'] && user::init()->user_can('delete_service_order')){?>
+                                    <a onclick="delete_service()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete service</a>
+                                    <?php }?>
+                                </div>
+                            </div>
+                            </td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+            </div>
+            <?php }?>
+        </div>
+    </div>
+</div>
+<template>
+    <?php include __DIR__.'/add_service_charge.html';?>
+    <?php include __DIR__.'/service_items.html';?>
+    <div><?=$service_tpl?></div>
+</template>
+<script>
+    const check_selection = (name)=>{
+        let elem = window.event.target,
+            price = elem.children[window.event.target.options.selectedIndex].getAttribute('data-price');
+        if(elem.name == 'product[]'){
+            elem.parentNode.nextElementSibling.nextElementSibling.children[1].value = price;
+        }
+    };
+    const update_total_price = ()=>{
+        let prc = document.querySelector('#price'),
+            qty = document.querySelector('#quantity');
+        document.querySelector('#total_price').value = parseInt(prc.value) * parseInt(qty.value);
+    };
+    const view_service_items = ()=>{
+        let elem = window.event.target,
+            frm = document.querySelector('template').content.cloneNode(true).children[1],
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            htz = frm.querySelector('tbody tr');
+        let tmp = '', sn = 0;
+        jsx.service_items = JSON.parse(jsx.service_items);
+        //console.log(jsx.service_items);
+        
+        [...jsx.service_items].forEach(item=>{
+            item.sn = ++sn;
+            tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
+        });
+        frm.querySelector('tbody tr').outerHTML = tmp;
+        [...frm.querySelectorAll('input')].forEach(ix=>{
+            ix.setAttribute('readonly', true);
+        });
+        [...frm.querySelectorAll('tr td:last-child')].forEach(tdl=>{
+            tdl.style.display = 'none';
+        });
+        frm.querySelector('.text-end').style.display = 'none';
+        frm.querySelector('h3').style.display = 'none';
+        let ref = 6891+parseInt(jsx.service_id);
+        Swal.fire({
+            title: `Items of service with number ${ref}`,
+            html: frm,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+    }
+    const edit_service_items = ()=>{
+        let elem = window.event.target,
+            frm = document.querySelector('template').content.cloneNode(true).children[1],
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            htz = frm.querySelector('tbody tr');
+        let tmp = '', sn = 0;
+        jsx.service_items = JSON.parse(jsx.service_items);
+        //console.log(jsx.service_items);
+        
+        [...jsx.service_items].forEach(item=>{
+            item.sn = ++sn;
+            //item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
+            item.total_price = parseInt(item.qty) * parseInt(item.price);
+            tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
+        });
+        frm.querySelector('tbody tr').outerHTML = tmp;
+        Swal.fire({
+            html: frm,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        document.querySelector('.mySwal form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            let fd = new FormData(evt.target);
+            //fd.append('save_service_items',1)
+            ajax(
+                window.location.href,
+                response=>{
+                    Swal.fire({
+                        html: response,
+                        icon:'info'
+                    })
+                    .then(any=>{
+                        window.location.reload();
+                    });
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fd
+            );
+        });
+    };
+    const print_preview = ()=>{
+        let elem = window.event.target,
+            tplx = document.querySelector('template').content.cloneNode(true).children[2],
+            json = JSON.parse(elem.parentNode.getAttribute('data-json'));
+
+        let temp = tplx.querySelector(`#branch_${json.owner_branch}`);
+        if(!temp) temp = tplx.querySelector('#branch_0');
+        tplx = temp;
+        /* copy */
+        //let json = JSON.parse(elem.getAttribute('data-json'));
+
+        json.total = 0;
+        json.grand_total = 0;
+
+        let tmp = '', sn = 0;
+        let reli = JSON.parse(json.service_items);
+        for(x in reli) {
+            let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
+                itotal = 0,//item_total.toLocaleString('en-US'),
+                price = 0;//reli[x].price.toLocaleString('en-US');
+
+
+            tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
+                <td>${reli[x].item_name}</td>
+                <td>${reli[x].qty}</td>
+                <td>&nbsp;</td>
+                <td style="text-align: right;">&nbsp;</td></tr>`;
+        }
+        json.order_id = 6891+parseInt(json.service_id);
+        //let tpl = document.getElementById('service-tpl').content.cloneNode(true);
+        tplx.querySelector('#items_list').outerHTML = tmp;
+
+        json.create_time = json.create_time.slice(0, 10);
+        //json.due_date = json.due_date.slice(0, 10);
+
+        htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
+        Swal.fire({
+            html:htmlContent,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        /* end */
+        /*Swal.fire({
+            html: tmp,
+            customClass: 'mySwal'
+        });*/
+    };
+    const delete_service = (service_ref)=>{
+        let elem = window.event.target,
+            jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
+            ref = 6891+parseInt(jsx.service_id);
+            console.log(jsx);
+        Swal.fire({
+            icon: 'question',
+            html: `Delete service with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
+            showCancelButton: true
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let dt = new FormData();
+                dt.append('delete_service', jsx.service_id);
+                dt.append('ajax_request', 1);
+                ajax(
+                    window.location.href,
+                    response=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon: 'error',
+                            html: error
+                        });
+                    },
+                    dt
+                );
+            }
+        });
+    };
+    const create_service = ()=>{
+        let formx = document.querySelector('template').content.cloneNode(true).children[0];
+        Swal.fire({
+            title: 'Add service',
+            html: formx,
+            customClass:'mySwal',
+            showConfirmButton:false
+        });
+        search_select();
+        let form = document.querySelector('.mySwal form');
+        if(form != null){
+            form.addEventListener( 
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    fd.append('ajax_request',1);
+                    ajax(
+                        window.location.href,
+                        response=>{
+                            Swal.fire({
+                                html: response,
+                                icon:'info'
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        error=>{
+                            Swal.fire(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    }
+    const add_service = ()=>{
+        let formy = document.querySelector('template').content.cloneNode(true).children[3];
+        Swal.fire({
+            title: 'Create tax service',
+            html: formy,
+            customClass:'smallSwal',
+            showConfirmButton:false
+        });
+        search_select();
+        let form = document.querySelector('.smallSwal form');
+        if(form != null){
+            form.addEventListener( 
+                'submit',
+                evt=>{
+                    evt.preventDefault();
+                    let fd = new FormData(form);
+                    fd.append('ajax_request',1);
+                    ajax(
+                        window.location.href,
+                        response=>{
+                            Swal.fire({
+                                html: response,
+                                icon:'info'
+                            })
+                            .then(any=>{
+                                window.location.reload();
+                            });
+                        },
+                        error=>{
+                            Swal.fire(error);
+                        },
+                        fd
+                    );
+                }
+            );
+        }
+    }
+    const delete_item_row = ()=>{
+        let tr = window.event.target.closest('tr'),
+            str = tr.querySelector('input').name;
+        let idx = str.substring( str.indexOf("[") + 1,  str.lastIndexOf("]"));
+        if(parseInt(idx) > 0){
+            let fdx = new FormData();
+                fdx.append('delete_service_item', idx);
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response != 'ok'){
+                        alert(response);
+                    }
+                    else tr.parentNode.removeChild(tr);
+                },
+                error=>{
+                    Swal.fire({
+                        icon: 'error',
+                        html: error
+                    });
+                },
+                fdx
+            );
+        }
+        else tr.parentNode.removeChild(tr);
+    }
+    function replicate_items() {
+        let btn = window.event.target.parentNode.parentNode.parentNode;
+        btn.insertAdjacentHTML('afterEnd', btn.cloneNode(true).outerHTML);
+        search_select();
+    }
+    function delete_item() {
+        let btn = window.event.target.parentNode.parentNode.parentNode;
+        let html = btn.parentNode.removeChild(btn);
+    }
+    const add_item_row = ()=>{
+        let elem = window.event.target;
+        //let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[6].children[0].children[1];
+        let tr = elem.parentNode.previousElementSibling.querySelector('tbody tr:last-child');
+        let trx = tr.cloneNode(true);
+        [...trx.querySelectorAll('input')].forEach((inp, index)=>{
+            if(inp.name == 'service') return;
+            if(inp.value) inp.value = '';
+            //inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,`[x${index}]`);
+            inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,'[]');
+        });
+        tr.after(trx);
+        //elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
+        //console.log(sel);
+    }
+    const search_select = ()=>{
+        let sels = document.querySelectorAll('select');
+        if(!sels || sels.length < 5) return;
+        let sbx = '<div class="selectsearchbox"><input type="search" placeholder="Search..."></div>';
+        [...sels].forEach(sel=>{
+            sel.addEventListener('click', evt=>{
+                evt.target.parentNode.style.position = 'relative';
+                evt.target.insertAdjacentHTML('afterEnd', sbx);
+                sel.nextElementSibling.children[0].focus();
+                sel.nextElementSibling.children[0].addEventListener('blur', ev=>{
+                    setTimeout(fn=>{
+                        ev.target.parentNode.outerHTML = '';
+                    }, 400);
+                });
+                let opts = sel.innerHTML.replaceAll('option','li');
+                sel.nextElementSibling.insertAdjacentHTML('beforeEnd', `<ul>${opts}</ul>`);
+                let ul = sel.nextElementSibling.querySelector('ul');
+                ul.addEventListener('click', e=>{
+                    sel.value = e.target.getAttribute('value');
+                    sel.dispatchEvent(new Event('change'));
+                });
+                sel.nextElementSibling.children[0].addEventListener('keyup', evx=>{
+                    let li = evx.target.nextElementSibling.querySelectorAll('li');
+
+                    let filter = evx.target.value.toUpperCase();
+                    for (i = 0; i < li.length; i++) {
+                        txtValue = li[i].textContent || li[i].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            li[i].style.display = "";
+                        } else {
+                            li[i].style.display = "none";
+                        }
+                    }
+                });
+            });
+        });
+
+    }
+    //search_select();
+    const approve_service = ()=>{
+        let elem = window.event.target;
+        let jsx = JSON.parse(elem.parentNode.getAttribute('data-json'));
+        jsx.service_no = jsx.service_id + 6891;
+        Swal.fire({
+            icon:'question',
+            html: `Surely approve service with number ${jsx.service_no}?`
+        })
+        .then(prompt=>{
+            if(prompt.isConfirmed){
+                let fdx = new FormData();
+                fdx.append('approve_service', jsx.service_id);
+                ajax(
+                    window.location.href,
+                    resp=>{
+                        Swal.fire({
+                            icon: 'info',
+                            html: resp
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    },
+                    error=>{
+                        Swal.fire({
+                            icon:'error',
+                            html:error
+                        })
+                    },
+                    fdx
+                );
+            }
+        });
+    }
+</script>

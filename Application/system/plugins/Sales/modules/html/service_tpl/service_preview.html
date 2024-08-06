@@ -5,12 +5,10 @@
           <td colspan="2">
             <div style="display: flex;">
               <div style="text-align: left;flex-basis: 100%;">
-                <div style="text-transform: capitalize;">{{supplier_name}}</div>
-                <pre style="font-family: inherit;">{{supplier_physical_address}}</pre>
-                <!--<div>E-mail: {{supplier_email}}</div>
-                <div>Phone: {{supplier_phone_number}}</div>-->
-                <p>TIN: 111-082-243 </p>
-                <p>VRN: 40-007857 </p>
+                <div style="text-transform: capitalize;">{{customer_name}}</div>
+                <pre style="font-family: inherit;">{{customer_physical_address}}</pre>
+                <div>E-mail: {{customer_email}}</div>
+                <div>Phone: {{customer_phone_number}}</div>
               </div>
               <div style="flex-basis: 100%;">
                 <div style="text-align: center;"">
@@ -24,7 +22,6 @@
                 <div><?=$company[0]->phone_number?></div>
                 <div>TIN: <?=$company[0]->TIN_number?></div>
                 <div>VRN: <?=$company[0]->VRN_number?></div>
-                
               </div>
             </div>
           </td>
@@ -33,16 +30,12 @@
           <td>
             <table style="min-width: 30%;text-align: left;font-size: 13px;">
               <tr class="white">
-                <td><b>LPO number :</b></td>
-                <td>0L012</td>
+                <td><b>Purchase number</b></td>
+                <td>{{order_id}}</td>
               </tr>
               <tr class="white">
-                <td><b>Proforma number :</b></td>
-                <td></td>
-              </tr>
-              <tr class="white">
-                <td><b>Create date :</b></td>
-                <td>15/07/2024</td>
+                <td><b>Created date</b></td>
+                <td>{{created_date}}</td>
               </tr>
             </table>
           </td>
@@ -50,14 +43,13 @@
         <tr class="white">
           <td colspan="2">
             <div style="text-align: center;">
-              <b style="text-transform: uppercase;font-size: 140%;">LOCAL PURCHASE ORDER</b>
+              <b style="text-transform: uppercase;font-size: 140%;">SERVICE CHARGE</b>
             </div>
             
             <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
               <tr style="border-bottom: 1px solid #222;" class="white">
                 <th>S/N</th>
                 <th>Item name</th>
-                <th>Description</th>
                 <th>Quantity</th>
                 <th>Unit price</th>
                 <th style="text-align: right;">Total amount</th>
@@ -65,21 +57,9 @@
               <tr id="items_list" class="white">
               </tr>
               <tr style="border-top: 1px solid #222;" class="white">
-                <td colspan="4">&nbsp;</td>
+                <td colspan="3">&nbsp;</td>
                 <th style="text-align: right;">Total</th> 
-                <th style="text-align: right;">6,364,407.00</th>
-              </tr>
-              <tr class="white VAT-tr">
-                <td colspan="4">&nbsp;</td>
-                <th style="text-align: right;">VAT (18%)</th>
-                <th style="text-align: right;"><span>1,145,593.26</span></th>
-              </tr>
-              <tr class="VAT-tr">
-                <td colspan="4">&nbsp;</td>
-                <th style="text-align: right;">Total including VAT</th>
-                <th style="text-align: right;padding: 0;">
-                  <span style="border-top: 1px solid #222;padding:10px">7,510,000.26</span>
-                </th>
+                <th style="text-align: right;">&nbsp;</th>
               </tr>
             </table>
           </td>
@@ -88,22 +68,14 @@
           <td style="text-align: left;">
             <span style="text-align: center;display: inline-block;">
               <span>___________________</span><br>
-              <span>Prepared By
-              </span>
+              <span>Signature</span>
             </span>
           </td>
-          <td style="text-align: left;">
-            <span style="text-align: center;display: inline-block;">
+          <td style="text-align: right;">
+            <!--span style="text-align: center;display: inline-block;">
               <span>___________________</span><br>
-              <span>Approved By
-              </span>
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td style="text-align: justify;">
-            <strong>TERMS AND CONDITIONS</strong><br>
-            <p>Your invoice should be submitted together with the original of the LPO.<br>The purchase order number should be quoted on all communications relevant to this order.</p>
+              <span>Client's signature</span>
+            </span-->&nbsp;
           </td>
         </tr>
         <style>

@@ -5,30 +5,83 @@
             <td colspan="3">
               <div style="display: flex;">
                 <div style="text-align: left;flex-basis: 100%;">
-                  <div style="text-transform: capitalize;">{{customer_name}}</div>
-                  <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
-                  <div>TIN: {{tin_number}}</div>
-                  <div>VRN: {{vrn_number}}</div>
-                </div>
-                <div style="flex-basis: 100%;">
-                  <div style="text-align: center;"">
-                    <img src="/Application/storage/uploads/images/compulinics-logo.png" style="height: 150px;margin: auto;" alt="logo">
-                  </div>
-                </div>
-                <div style="text-align: right;flex-basis: 100%">
-                  <div style="font-size: 120%;"><?=$company[2]->company_legal_name?></div>
-                  <pre style="font-family: inherit;"><?=$company[2]->company_address?></pre>
+
+                <div style="text-align: left;flex-basis: 100%">
+                  <div style="font-size: 140%;">COMPULINICS</div>
+                  <!--<pre style="font-family: inherit;"><?=$company[2]->company_address?></pre>
                   <div><?=$company[2]->email?></div>
                   <div><?=$company[2]->phone_number?></div>
                   <div>TIN: <?=$company[2]->TIN_number?></div>
-                  <div>VRN: <?=$company[2]->VRN_number?></div>
+                  <div>VRN: <?=$company[2]->VRN_number?></div>-->
+                  <P>P.O.BOX 21328<br>
+                  Dar es salaam,Tanzania<br>
+                  0768 969 186/0754 502 077<br>
+                  compulinicstz@gmail.com<br>
+                  <br>ROAD/INDIRSA GANDHI<br>
+                  TIN: 139-497-341<br>
+                  VRN: 40-038308-R
+                </div>
+                <h6 style="display: inline-block; margin: 0; background-color: #0d39fdd7; color: white; text-align: left; padding: 4px 8px;">CUSTOMER DETAILS</h6>
+                  <div style="text-transform: capitalize;">{{customer_name}}</div>
+                  <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
+                </div>
+                <div style="flex-basis: 100%;">
+                  <div style="text-align: center;">
+                    <img src="/Application/storage/uploads/images/compulinics-logo.png" style="height: 120px;margin: auto;" alt="logo">
+                  </div>
+                </div>
+                <div style="text-align: left;flex-basis: 100%">
+                  <div style="display: table; margin-top: auto;">
+                    <div style="display: table-row;">
+                      <!--<div style="display: table-cell;">
+                        <b>Order NO.: </b>
+                      </div>
+                      <div style="display: table-cell;">
+                        {{order_number}}
+                      </div>-->
+                    </div>
+                    <div style="display: table-row;">
+                      <div style="display: table-cell;">
+                        <b>Invoice NO.:</b>
+                      </div>
+                      <div style="display: table-cell;">
+                        1034
+                      </div>
+                    </div> 
+                  <div style="display: table-row;">
+                    <div style="display: table-cell;">
+                      <b>Create date: </b>
+                    </div>
+                    <div style="display: table-cell;">
+                      {{created_time}}
+                    </div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell;">
+                      <b>Due date: </b>
+                    </div>
+                    <div style="display: table-cell;">
+                      {{due_date}}
+                    </div>
+                  </div>
+                  <br>
+                  <br>
+                  <h6 style="display: inline-block; margin: 0; background-color: #0d39fdd7; color: white; text-align: left; padding: 5px 10px;">REPRESENTER</h6>
+                  <div style="display: table-row;">
+                    <!--<div style="display: table-cell;">
+                      <b>Sales represantantive: </b>
+                    </div>-->
+                    <div style="display: table-cell;">
+                      Maisara Ibrahim
+                    </div>
+                  </div>
                 </div>
               </div>
             </td>
           </tr>
           <tr class="white">
             <td>
-              <div style="display: table;">
+              <!-- <div style="display: table; margin-left: auto;">
                 <div style="display: table-row;">
                   <div style="display: table-cell;padding-right: 1em;">
                     <b>As per your order No.:</b>
@@ -69,7 +122,7 @@
                     {{full_name}}
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!--
                 <table style="min-width: 30%;text-align: left;font-size: 13px;">
                 <tr class="white">
@@ -102,14 +155,14 @@
                 <b style="text-transform: uppercase;font-size: 140%;">{{invoice_type}} INVOICE</b>
               </div>
               
-              <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
-                <tr style="border-bottom: 1px solid #222;" class="white">
-                  <th>S/N</th>
-                  <th>Item name</th>
-                  <th>Description</th>
-                  <th>Quantity</th>
-                  <th>Unit price</th>
-                  <th style="text-align: right;">Total amount</th>
+              <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 10px;border-collapse: collapse;">
+                <tr style="background-color: hsla(226, 98%, 52%, 0.637); color: white; padding: 8px;">
+                  <th style="background-color: hsla(226, 98%, 52%, 0.637); color: white; padding: 8px;">S/N</th>
+                  <th style="background-color: hsla(226, 98%, 52%, 0.637); color: white; padding: 8px;">Item name</th>
+                  <th style="background-color: hsla(226, 98%, 52%, 0.637); color: white; padding: 8px;">Description</th>
+                  <th style="background-color: hsla(226, 98%, 52%, 0.637); color: white; padding: 8px;">Quantity</th>
+                  <th style="background-color: hsla(226, 98%, 52%, 0.637); color: white; padding: 8px;">Unit price</th>
+                  <th style="background-color: hsla(226, 98%, 52%, 0.637); color: white; padding: 8px; text-align: right;">Total amount</th>
                 </tr>
                 <tr id="items_list" class="white">
                 </tr>
@@ -131,6 +184,11 @@
                   </th>
                 </tr>
               </table>
+               <!----<div class="footer" style="position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 10px; font-family: inherit; white-space: nowrap;">
+           <p>“POWERED BY cmis.banny.co.tz” <br>
+                Website: <a href="http://www.banny.co.tz">www.banny.co.tz</a>, E-mail: <a href="mailto:director@banny.co.tz">director@banny.co.tz</a> / <a href="mailto:info@banny.co.tz">info@banny.co.tz</a>
+              </p>
+            </div>-->
             </td>
           </tr>
           <tr style="margin-top: 6em;" class="white">
@@ -148,21 +206,21 @@
             </td>
           </tr-->
           <tr style="margin-top: 6em;" class="white">
-            <td colspan="3" style="text-align: left;font-size: 13px;">
+            <td colspan="3" style="text-align: left;font-size: 12px;">
               <div style="display: flex;">
-                <div>
-                  <b>Payment terms</b><br>
-                  <pre style="font-family: inherit;"><?=$company[2]->payment_terms?></pre>
+                <div>&nbsp;
+                  <b>PAYMENT TERMS</b>
+                  <p>CASH/TRANSFER/CHEQUE<br>
+                    ACCOUNT NAME: COMPULINICS<br>
+                    BANK NAME AND BRANCH: CRDB VIJANA<br>
+                    ACCOUNT NUMBER: 0150475881400</p>      
                 </div>
-                <div style="margin: 0 2em;">
-                  <b>Primary payment account</b><br>
-                  <pre style="font-family: inherit;"><?=$company[2]->primary_payment_account?></pre>
-                </div>
-                <div>
-                  <b>Auxilliary payment account</b><br>
-                  <pre style="font-family: inherit;"><?=$company[2]->aux_payment_account?></pre>
-                </div>
-              </div>
+              </div><br>
+          <!--<div id="footer">
+            <p>“POWERD BY cmis.banny.co.tz” <br>
+              Website: <a href="http://www.banny.co.tz">www.banny.co.tz</a>, E-mail: <a href="mailto:director@banny.co.tz">director@banny.co.tz</a> / <a href="mailto:info@banny.co.tz">info@banny.co.tz</a>
+            </p>
+          </div>-->
             </td>
           </tr>
           <style>
@@ -182,6 +240,34 @@
             vertical-align: top;
             padding: 8px;
           }
+          </style>
+         <style>
+          td,th{
+            vertical-align: top;
+            padding: 8px;
+          }
+      @media print {
+        @page {
+          size: A4;
+          margin: 20mm;
+        }
+        .footer {
+          display: none;
+        }
+        /* Show footer only on the last page */
+        @page :last {
+          .footer {
+            display: block;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            font-family: inherit;
+            white-space: nowrap;
+          }
+        }
+      }
         </style>
     </div>
 </div>

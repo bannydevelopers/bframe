@@ -68,7 +68,12 @@
                         "href":"/plugin/Sales/delivery",
                         "icon":"",
                         "permission":"view_delivery"
-                    }
+                    }, {
+                        "name":"Service charge",
+                        "href":"/plugin/Sales/service_charge",
+                        "icon":"",
+                        "permission":"view_service_charge"
+                        }
                 ]
             }
         ]
