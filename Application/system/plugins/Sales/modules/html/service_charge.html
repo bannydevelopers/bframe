@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center">
-    <h3 class="pt-1">Service Charge</h3>
+    <h3 class="pt-1">Local service Order</h3>
     <div class="">
-        <button type="button" onclick="create_service()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>Create service</button>
+        <button type="button" onclick="create_service()" value="add" data-form-width="wide" class="btn rounded-pill btn-outline-secondary"><i class="fa fa-plus-circle me-1"></i>CREATE LPO</button>
     </div>
 </div>
 <?php if(isset($msg) && $msg){?>
@@ -25,8 +25,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>service number</th>
-                            <th>service date</th>
+                            <th>LPO number</th>
+                            <th>Create date</th>
                             <th>customer</th>
                             <th>Created by</th>
                             <th>Approved by</th>
@@ -75,7 +75,7 @@
 </div>
 <template>
     <?php include __DIR__.'/add_service_charge.html';?>
-    <?php include __DIR__.'/service_items.html';?>
+    <?php include __DIR__.'/service_charge_item.html';?>
     <div><?=$service_tpl?></div>
 </template>
 <script>
@@ -97,11 +97,12 @@
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
         let tmp = '', sn = 0;
-        jsx.service_items = JSON.parse(jsx.service_items);
-        //console.log(jsx.service_items);
+        jsx.lpo_items = JSON.parse(jsx.lpo_items);
+        console.log(jsx);
         
-        [...jsx.service_items].forEach(item=>{
+        [...jsx.lpo_items].forEach(item=>{
             item.sn = ++sn;
+            item.price_total = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
         frm.querySelector('tbody tr').outerHTML = tmp;
@@ -127,16 +128,17 @@
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             htz = frm.querySelector('tbody tr');
         let tmp = '', sn = 0;
-        jsx.service_items = JSON.parse(jsx.service_items);
-        //console.log(jsx.service_items);
+
+        jsx.lpo_items = JSON.parse(jsx.lpo_items);
         
-        [...jsx.service_items].forEach(item=>{
+        [...jsx.lpo_items].forEach(item=>{
             item.sn = ++sn;
-            //item.unit = item.qty == 1 ? item.unit_single : item.unit_prural;
-            item.total_price = parseInt(item.qty) * parseInt(item.price);
+            item.price_total = parseInt(item.qty) * parseInt(item.price);
             tmp += htz.cloneNode(true).outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => item[tag.trim()]);
         });
+
         frm.querySelector('tbody tr').outerHTML = tmp;
+        frm.querySelector('[name=service_id]').value = jsx.service_id;
         Swal.fire({
             html: frm,
             customClass:'mySwal',
@@ -179,20 +181,24 @@
         json.grand_total = 0;
 
         let tmp = '', sn = 0;
-        let reli = JSON.parse(json.service_items);
+        let reli = JSON.parse(json.lpo_items);
         for(x in reli) {
             let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
-                itotal = 0,//item_total.toLocaleString('en-US'),
-                price = 0;//reli[x].price.toLocaleString('en-US');
-
+                itotal = item_total.toLocaleString('en-US'),
+                price = reli[x].price.toLocaleString('en-US');
+            json.total += item_total;
 
             tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
-                <td>${reli[x].item_name}</td>
+                <td>${reli[x].name}</td>
+                <td>${reli[x].desc}</td>
                 <td>${reli[x].qty}</td>
-                <td>&nbsp;</td>
-                <td style="text-align: right;">&nbsp;</td></tr>`;
+                <td>${reli[x].price}</td>
+                <td style="text-align:right">${itotal}</td>
+                </tr>`;
         }
-        json.order_id = 6891+parseInt(json.service_id);
+        json.total = json.total.toLocaleString('en-US');
+        json.lpo_no = 6891+parseInt(json.service_id);
+        console.log(json);
         //let tpl = document.getElementById('service-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
 
@@ -215,7 +221,7 @@
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
             ref = 6891+parseInt(jsx.service_id);
-            console.log(jsx);
+
         Swal.fire({
             icon: 'question',
             html: `Delete service with number ${ref}?<br><em>Be reminded, no UNDO!</em>`,
@@ -224,7 +230,7 @@
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let dt = new FormData();
-                dt.append('delete_service', jsx.service_id);
+                dt.append('delete_lpo', jsx.service_id);
                 dt.append('ajax_request', 1);
                 ajax(
                     window.location.href,
@@ -360,15 +366,17 @@
     const add_item_row = ()=>{
         let elem = window.event.target;
         //let sel = document.querySelector('template').content.cloneNode(true).children[0].children[0].children[6].children[0].children[1];
-        let tr = elem.parentNode.previousElementSibling.querySelector('tbody tr:last-child');
+        let tr = elem.parentNode.previousElementSibling.querySelector('tbody tr:first-child');
         let trx = tr.cloneNode(true);
+        console.log(tr);
         [...trx.querySelectorAll('input')].forEach((inp, index)=>{
-            if(inp.name == 'service') return;
+            console.log(inp);
+            if(inp.name == 'service_id') return;
             if(inp.value) inp.value = '';
             //inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,`[x${index}]`);
             inp.name = inp.name.replace(/\[([^\[\]]{1,})\]/,'[]');
         });
-        tr.after(trx);
+        tr.parentNode.appendChild(trx);
         //elem.parentNode.previousElementSibling.querySelector('tbody').insertAdjacentHTML('beforeEnd', tr);
         //console.log(sel);
     }
@@ -422,7 +430,7 @@
         .then(prompt=>{
             if(prompt.isConfirmed){
                 let fdx = new FormData();
-                fdx.append('approve_service', jsx.service_id);
+                fdx.append('approve_service_charge', jsx.service_id);
                 ajax(
                     window.location.href,
                     resp=>{

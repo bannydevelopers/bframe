@@ -189,13 +189,14 @@
 
         let tmp = '', sn = 0;
         let reli = json.invoice_items;
+        
         for(x in reli) {
             let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
                 itotal = item_total.toLocaleString('en-US'),
                 price = reli[x].price.toLocaleString('en-US'),
                 xyz = '';
-            if(reli[x].unit == 'People') {
-                reli[x].unit = 'LUMPSUM';
+
+            if(reli[x].unit_prural == 'LUPSUM' || reli[x].unit_single == 'LUPSUM') {
                 xyz = '';
             }
             else xyz = reli[x].qty;
