@@ -11,6 +11,10 @@
                 <div>Phone: {{supplier_phone_number}}</div>-->
                 <p>TIN: 111-082-243 </p>
                 <p>VRN: 40-007857 </p>
+                <!--<div>E-mail: {{supplier_email}}</div>
+                <div>Phone: {{supplier_phone_number}}</div>-->
+                <p>TIN: 111-082-243 </p>
+                <p>VRN: 40-007857 </p>
               </div>
               <div style="flex-basis: 100%;">
                 <div style="text-align: center;"">
@@ -33,7 +37,7 @@
           <td>
             <table style="min-width: 30%;text-align: left;font-size: 13px;">
               <tr class="white">
-                <td><b>LPO number :</b></td>
+                <td><b>LPO number</b></td>
                 <td>{{lpo_no}}</td>
               </tr>
               <tr class="white">
@@ -41,8 +45,8 @@
                 <td>0</td>
               </tr>
               <tr class="white">
-                <td><b>Create date :</b></td>
-                <td>{{created_date}}</td>
+                <td><b>Create date</b></td>
+                <td>{{create_time}}</td>
               </tr>
             </table>
           </td>
@@ -67,7 +71,19 @@
               <tr style="border-top: 1px solid #222;" class="white">
                 <td colspan="4">&nbsp;</td>
                 <th style="text-align: right;">Total</th> 
-                <th style="text-align: right;">{{total}}</th>
+                <th style="text-align: right;">4,703,391.00</th>
+              </tr>
+              <tr class="white VAT-tr">
+                <td colspan="4">&nbsp;</td>
+                <th style="text-align: right;">VAT (18%)</th>
+                <th style="text-align: right;"><span>846,610.38</span></th>
+              </tr>
+              <tr class="VAT-tr">
+                <td colspan="4">&nbsp;</td>
+                <th style="text-align: right;">Total including VAT</th>
+                <th style="text-align: right;padding: 0;">
+                  <span style="border-top: 1px solid #222;padding:10px">5,550,001.38</span>
+                </th>
               </tr>
               <tr class="white VAT-tr">
                 <td colspan="4">&nbsp;</td>

@@ -152,6 +152,11 @@ foreach($purchase as $prod){
     $sortedPurchase[$prod['branch_name']][] = $prod;
 }
 
+$default = [
+    'branch_name' => 'Default Branch Name',  // Example default value, modify as needed
+    'branch_profile' => 'Default Branch Profile'  // Example default value, modify as needed
+];
+
 $company = [];
 $company[] = storage::get_data('system_config')->company_profile;
 $branches = $db->select('branches', 'branch_id,branch_profile')->where($whr)->fetchAll();

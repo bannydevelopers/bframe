@@ -1,0 +1,58 @@
+<form method="post" autocomplete="off">
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label for="customer" class="form-label" >customer name</label>
+            <select name="customer" class="form-control" id="customer" onchange="check_selection('customer')">
+                <option value="">Choose...</option>
+                <?php foreach($customer as $cus){?>
+                <option value="<?=$cus['customer_id']?>"><?=$cus['customer_name']?></option>
+                <?php }?>
+                <option value="add">Add customer</option>
+            </select>
+        </div>
+        <div class="mb-3 col-md-4">
+            <label for="proforma_no" class="form-label">Proforma number</label>
+            <input type="text" class="form-control" name="proforma_no" id="proforma_no">
+        </div>
+        <div class="mb-3 col-md-4">
+            <label for="created_date" class="form-label">Create date</label>
+            <input type="date" class="form-control" name="created_date" id="created_date" value="<?=date('Y-m-d', time())?>">
+        </div>
+    </div>
+    <br>
+    <div class="text-center">service details</div>
+    <hr>   
+    <div style="overflow-x: hidden;">
+        <div class="row">
+            <div class="mb-3 col-md-2">
+                <label for="item_name"class="form-label">Service name</label>
+                <input type="text" class="form-control" name="item_name[]">
+            </div>
+            <div class="mb-3 col-md-3">
+                <label class="form-label">Description</label>
+                <textarea rows="1" type="text" class="form-control" name="description[]"></textarea>
+            </div>
+            <div class="mb-3 col-md-2">
+                <label class="form-label">Quantity</label>
+                <textarea rows="1" type="number" class="form-control" name="quantity[]"></textarea>
+            </div>
+            <div class="mb-3 col-md-2">
+                <label for="price"class="form-label">Price per item</label>
+                <input type="number" class="form-control" name="price[]" value="0" onchange="update_total_price()" onkeyup="update_total_price()">
+            </div>
+            <div class="mb-3 col-md-2">
+                <label class="form-label">Total price</label>
+                <input type="number" value="0" class="form-control" id="total_price" readonly>
+            </div>
+            <div class="mb-1 col-md-1"> 
+                <div class="d-flex pt-4">
+                    <button type="button" class="btn rounded-xl btn-primary btn-sm me-1" onclick="replicate_items()" data-icon="&#xf067;"></button>
+                    <button type="button" class="btn rounded-xl btn-danger btn-sm" onclick="delete_item()" data-icon="&#xf1f8;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
+    </div>
+</form>
