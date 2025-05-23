@@ -253,7 +253,7 @@
     const delete_withdraw = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
+        let name = "this deposit";
             uid = jsx.user_id;
         Swal.fire({
             title: `Delete ${name}?`,

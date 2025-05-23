@@ -4,13 +4,16 @@ $is_headquarters = $me['work_location'] == human_resources::get_headquarters_bra
 $whr = $is_headquarters ? 1 : ['owner_branch'=>$me['work_location']];
 if(isset($_POST['activity_project'])){
     $data = [
-        'activity_name'=>addslashes($_POST['activity_name']), 
+        'activity_name'=>addslashes($_POST['activity_name'] ?? ''), 
         'activity_creator'=>$me['user_reference'], 
-        'activity_description'=>addslashes($_POST['activity_description']), 
+        'activity_description'=>addslashes($_POST['activity_description'] ?? ''), 
         'activity_project'=>intval($_POST['activity_project'])
     ];
-    if(isset($_POST['activity_id']))
-      $db->update('project_activities', $data)->where(['activity_id'=>intval($_POST['activity_id'])])->commit();
+    if(isset($_POST['activity_id'])){
+        $status =['activity_status'=>$_POST['activity_status']];
+       
+      $db->update('project_activities', $status)->where(['activity_id'=>intval($_POST['activity_id'])])->commit();
+    }
     else
         $db->insert('project_activities', $data);
 
@@ -40,6 +43,7 @@ $project_activities = $db->select('project_activities')
                         ->join('projects', 'project_id=activity_project')
                         ->join('branches', 'branch_id=projects.owner_branch')
                         ->join('user_accounts', 'user_id=activity_creator')
+                        ->and('activity_parent != 0')
                         ->where($whr)->fetchAll();
                        
 $projects = $db->select('projects', 'project_id, project_name')->where($whr)->fetchAll();

@@ -29,7 +29,7 @@
                             <?php foreach($deliverys as $item){?>
                                 <div class="shadow-sm p-2 m-3 bg-body rounded col-md-3 card">
                                     <div class="p-2 content-small grey">
-                                        <strong>#<?=6891+intval($item['delivery_id'])?> - <?=$item['customer_name']?></strong>
+                                        <strong>#<?=6872+intval($item['delivery_id'])?> - <?=$item['customer_name']?></strong>
                                     </div>
                                     <div class="pb-2">
                                         <span>Created: </span>
@@ -117,47 +117,45 @@
             );
         });
     };
-    const print_preview = ()=>{
-        let elem = window.event.target,
-            tplx = document.querySelector('template').content.cloneNode(true).children[2],
-            json = JSON.parse(elem.parentNode.getAttribute('data-json'));
+    const print_preview = () => {
+    let elem = window.event.target,
+        tplx = document.querySelector('template').content.cloneNode(true).children[2],
+        json = JSON.parse(elem.parentNode.getAttribute('data-json'));
+    
+    // Add the invoice number calculation
+    json.invoice_no = 6872 + (parseInt(json.delivery_id) || 0); // Fallback to 0 if invoice_id is invalid
+
+
+    let temp = tplx.querySelector(`#branch_${json.owner_branch}`);
+    if (!temp) temp = tplx.querySelector('#branch_0');
+    tplx = temp;
+
+    console.log(json);
+
+    let tmp = '', sn = 0;
+    let reli = json.delivery_items;
+    for (x in reli) {
+        if (reli[x].qty == 1) reli[x].unit = reli[x].unit_single;
+        else reli[x].unit = reli[x].unit_prural;
         
-        let temp = tplx.querySelector(`#branch_${json.owner_branch}`);
-        if(!temp) temp = tplx.querySelector('#branch_0');
-        tplx = temp;
+        tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
+            <td>${reli[x].product}</td>
+            <td>${reli[x].item_desc}</td>
+            <td>${reli[x].qty} ${reli[x].unit}</td>
+            </tr>`;
+    }
+    tplx.querySelector('#items_list').outerHTML = tmp;
 
-        console.log(json);
+    json.created_time = json.created_date.slice(0, 10);
 
-        let tmp = '', sn = 0;
-        let reli = json.delivery_items;
-        for(x in reli) {
-            if(reli[x].qty == 1) reli[x].unit = reli[x].unit_single;
-            else reli[x].unit = reli[x].unit_prural;
-            
-            tmp += `<tr style="border-bottom:1px solid #222"><td>${++sn}</td>
-                <td>${reli[x].product}</td>
-                <td>${reli[x].item_desc}</td>
-                <td>${reli[x].qty} ${reli[x].unit}</td>
-                </tr>`;
-        }
-        //console.log(tmp[sn]);
-        //let tpl = document.getElementById('delivery-tpl').content.cloneNode(true);
-        tplx.querySelector('#items_list').outerHTML = tmp;
+    htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g, (match, tag) => json[tag.trim()]);
+    Swal.fire({
+        html: htmlContent,
+        customClass: 'mySwal',
+        showConfirmButton: false
+    });
+};
 
-        json.created_time = json.created_date.slice(0, 10);
-
-        htmlContent = tplx.outerHTML.replace(/\{\{(.+?)\}\}/g,  (match, tag) => json[tag.trim()]);
-        Swal.fire({
-            html:htmlContent,
-            customClass:'mySwal',
-            showConfirmButton:false
-        });
-        /* end */
-        /*Swal.fire({
-            html: tmp,
-            customClass: 'mySwal'
-        });*/
-    };
     const delete_delivery = (delivery_ref)=>{
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),

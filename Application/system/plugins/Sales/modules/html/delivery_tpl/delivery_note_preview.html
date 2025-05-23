@@ -1,93 +1,111 @@
 <div id="branch_0">
-    <div style="padding: 1.2em;">
-      <table style="width: 100%;font-family: Verdana, Geneva, Tahoma, sans-serif;line-height: 1.4;font-size: 13px;color: #060c67;">
-        <tr class="white">
-          <td colspan="3">
-            <div style="display: flex;">
-              <div style="text-align: left;flex-basis: 100%;">
-                <div style="text-transform: capitalize;">{{customer_name}}</div>
-                <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
-              </div>
-              <div style="flex-basis: 100%;">
-                <div style="text-align: center;"">
-                  <img src="/Application/storage/uploads/images/logo.png" style="height: 150px;margin: auto;" alt="logo">
-                </div>
-              </div>
-              <div style="text-align: right;flex-basis: 100%">
-                <div style="font-size: 120%;"><?=$company[0]->company_legal_name?></div>
-                <pre style="font-family: inherit;"><?=$company[0]->company_address?></pre>
-                <div><?=$company[0]->email?></div>
-                <div><?=$company[0]->phone_number?></div>
-                <div>TIN: <?=$company[0]->TIN_number?></div>
-                <div>VRN: <?=$company[0]->VRN_number?></div>
+  <div style="padding: 1.2em;">
+    <table style="width: 100%;font-family: Verdana, Geneva, Tahoma, sans-serif;line-height: 1.4;font-size: 13px;color: #060c67;">
+      <tr class="white">
+        <td colspan="3">
+          <div style="display: flex;">
+            <div style="text-align: left;flex-basis: 100%;">
+              <div style="text-transform: capitalize;">{{customer_name}}</div>
+              <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
+            </div>
+            <div style="flex-basis: 100%;">
+              <div style="text-align: center;"">
+                <img src="/Application/storage/uploads/images/logo.png" style="height: 150px;margin: auto;" alt="logo">
               </div>
             </div>
-          </td>
-        </tr>
-        <tr class="white">
-          <td>
-            <table style="min-width: 30%;text-align: left;font-size: 13px;">
-              <tr class="white">
-                <td><b>Create date</b></td>
-                <td>{{created_time}}</td>
-              </tr>
-              <tr class="white">
-                <td><b>Issued by</b></td>
-                <td>{{full_name}}</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr class="white">
-          <td colspan="3">
-            <div style="text-align: center;">
-              <b style="text-transform: uppercase;font-size: 140%;">DELIVERY NOTE</b>
+            <div style="text-align: right;flex-basis: 100%">
+              <div style="font-size: 120%;"><?=$company[0]->company_legal_name?></div>
+              <pre style="font-family: inherit;"><?=$company[0]->company_address?></pre>
+              <div><?=$company[0]->email?></div>
+              <div><?=$company[0]->phone_number?></div>
+              <div>TIN: <?=$company[0]->TIN_number?></div>
+              <div>VRN: <?=$company[0]->VRN_number?></div>
             </div>
-            
-            <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
-              <tr style="border-bottom: 1px solid #222;" class="white">
-                <th>S/N</th>
-                <th>Item name</th>
-                <th>Description</th>
-                <th>Quantity</th>
-              </tr>
-              <tr id="items_list" class="white">
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr style="margin-top: 6em;" class="white">
-          <td style="text-align: left;"><br>
-            <span style="text-align: center;display: inline-block;">
-              <span>___________________</span><br>
-              <span>Issuer's signature</span>
-            </span>
-          </td>
-          <td style="text-align: right;"><br>
-            <span style="text-align: center;display: inline-block;">
-              <span>___________________</span><br>
-              <span>Client's signature</span>
-            </span>&nbsp;
-          </td>
-        </tr>
-        <style>
-          th,td{
-            padding: 10px;
-          }
-          th{
-            white-space: nowrap;
-          }
-        </style>
-      </table>
-      <div style="position: absolute;top: 0;right: .5em;">
-        <a onclick="jsprint(this.parentNode.previousElementSibling.outerHTML)" class="fa fa-print"></a>
-      </div>
+          </div>
+        </td>
+      </tr>
+      <tr class="white">
+        <td>
+          <table style="min-width: 30%;text-align: left;font-size: 13px;">
+          <tr class="white">
+              <td><b>Delivery number.</b></td>
+              <td>{{invoice_no}}</td>
+            </tr>
+            <tr class="white">
+              <td><b>Create date</b></td>
+              <td>{{created_time}}</td>
+            </tr>
+            <tr class="white">
+              <td><b>Issued by</b></td>
+              <td>{{full_name}}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="white">
+        <td colspan="3">
+          <div style="text-align: center;">
+            <b style="text-transform: uppercase;font-size: 140%;">DELIVERY NOTE</b>
+          </div>
+          
+          <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid #222;" class="white">
+              <th>S/N</th>
+              <th>Item name</th>
+              <th>Description</th>
+              <th>Quantity</th>
+            </tr>
+            <tr id="items_list" class="white">
+            </tr>
+          </table>
+      <div id="centered_div">
+        <p>“POWERD BY cmis.banny.co.tz” <br>
+             Website: <a href="http://www.banny.co.tz">www.banny.co.tz</a>, E-mail: <a href="mailto:director@banny.co.tz">director@banny.co.tz</a> / <a href="mailto:info@banny.co.tz">info@banny.co.tz</a>
+        </p>
+      </div> 
+        </td>
+      </tr>
+      <tr style="margin-top: 6em;" class="white">
+        <td style="text-align: left;"><br>
+          <span style="text-align: center;display: inline-block;">
+            <span>___________________</span><br>
+            <span>Issuer's signature</span>
+          </span>
+        </td>
+        <td style="text-align: right;"><br>
+          <span style="text-align: center;display: inline-block;">
+            <span>___________________</span><br>
+            <span>Client's signature</span>
+          </span>&nbsp;
+        </td>
+      </tr>
       <style>
-        td,th{
-          vertical-align: top;
-          padding: 8px;
+        th,td{
+          padding: 10px;
         }
+        th{
+          white-space: nowrap;
+        }
+        #centered_div {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        text-align: center;
+                        font-size: 12px;
+                        font-family: inherit;
+                        white-space: wrap;
+                      }
       </style>
-  </div>
-  </div>
-  
+    </table>
+    <div style="position: absolute;top: 0;right: .5em;">
+      <a onclick="jsprint(this.parentNode.previousElementSibling.outerHTML)" class="fa fa-print"></a>
+    </div>
+    <style>
+      td,th{
+        vertical-align: top;
+        padding: 8px;
+      }
+    </style>
+</div>
+</div>

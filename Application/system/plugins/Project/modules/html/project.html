@@ -1,18 +1,71 @@
+<?php
+function getAlphabetSerial($index) {
+    $serial = '';
+    while ($index >= 0) {
+        $serial = chr($index % 26 + 97) . $serial; // 97 is ASCII for 'a'
+        $index = floor($index / 26) - 1;
+    }
+    return $serial;
+}
+
+?>
+
+<style>
+   .sub-activity-row {
+      display: none;
+      background-color: aliceblue;
+    }
+    .activity-row {
+      cursor: pointer;
+      font-weight: bold;
+    }
+</style>
+
 <div class="d-flex justify-content-between align-items-center">
     <h3 class="pt-1"><?=$project['project_name']?></h3>
+    <?php
+    $bg_color ='success';
+    $color='dark';
+    $project_percent =0;
+    $project_id = $project['project_id'];
+    $project_percent = isset($percent[$project_id]) ? $percent[$project_id] : 0;
+    if($project_percent >= 70){
+        $bg_color ='success';
+    }else if($project_percent >= '40'){
+        $bg_color ='secondary';
+    }else{
+        $bg_color ='warning';
+    }
+    if($project_percent == null){
+        $project_percent = 0;
+    }
+
+    ?>
     <div>
-        <button type="button" onclick="request_resource()" class="btn rounded-pill btn-outline-secondary">
-            <i class="fa fa-plus-circle me-1"></i>Request resource
+        <button type="button"  class="btn rounded-pill btn-outline-<?=$bg_color?> bg-<?=$bg_color?> text-<?=$color?>">
+            <?=number_format($project_percent,0)?>%
         </button>
-        <a href="/<?=$base_url?>" class="btn rounded-pill btn-outline-secondary">
-            <i class="fas fa-angle-double-left me-1"></i>Projects
-        </a>
+
+            <?php if($user_role != 'technicians'){
+                if(user::init()->user_can('add_activities')){?>
+                <button type="button" onclick="create_activity()" class="btn rounded-pill btn-outline-secondary ">
+                    <i class="fa fa-plus-circle me-1"></i>Activity
+                </button>
+            <?php } }
+            if(user::init()->user_can('add_resources')){ ?>
+            <button type="button" onclick="request_resource()" class="btn rounded-pill btn-outline-secondary">
+                <i class="fa fa-plus-circle me-1"></i>Resource
+            </button>
+            <?php } ?>
+            <a href="/<?=$base_url?>" class="btn rounded-pill btn-outline-secondary">
+                <i class="fas fa-angle-double-left me-1"></i>Projects
+            </a>
     </div>
 </div>
 <br>
 
 <div class="card bg-white">
-    <?php if(user::init()->user_can('view_project_budget')){?>
+    <!-- <?php if(user::init()->user_can('view_project_budget')){?>
     <div class="d-flex justify-content-between align-items-center p-2">
         <div class="col-md-4">
             <strong>Project budget</strong><br>
@@ -27,7 +80,7 @@
             <?=$project['project_budget']?>
         </div>
     </div><hr>
-    <?php }?>
+    <?php }?> -->
     <div class="d-flex justify-content-between align-items-center p-2">
         <div class="col-md-6">
             <div>
@@ -66,10 +119,152 @@
     <div>
         <div class="tab-view px-2">
             <input type="radio" name="itab" id="class_tab12" checked>
-            <label for="class_tab12">Resources</label>
+            <label for="class_tab12">Activities</label>
             <input type="radio" name="itab" id="class_tab22">
-            <label for="class_tab22">Activities</label>
+            <label for="class_tab22">Resources</label>
+            <!-- <input type="radio" name="itab" id="class_tab32">
+            <label for="class_tab32">Products</label> -->
             <div class="tab-panes text-start">
+                
+                <div class="row">
+    
+                <table id="activitiesTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Activity </th>
+                            <th>Assigned To</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Target</th>
+                            <th>Progress (%)</th>
+                            <th>Created on</th>
+                        <?php if($user_role != 'technicians'){?>
+                             <th>Action</th>
+                        <?php } ?>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <?php foreach($activities as $sn=>$st){?>
+                        <tr data-json='<?=json_encode($st)?>' class="activity-row <?= isset($sub_activities[$st['activity_id']]) ? 'text-primary':'' ?>                            " data-id="<?=$st['activity_id']?>">
+                            <td><?=++$sn?></td>
+                            <td>
+                                <?=$st['activity_name']?>
+                            </td>
+                            <td>
+                                <?php
+                                if(isset($activities_assignees[$st['activity_id']])){
+
+                                    foreach($activities_assignees[$st['activity_id']] as $uAssign){
+                                        echo $uAssign['full_name'].'<br> ';
+                                    }
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?=$st['activity_description']?>
+                            </td>
+                            <td>
+                                <?=$st['activity_status']?><br>
+                            </td>
+                            <td><?=$st['activity_percentage']?></td>
+                            <td>
+                                <?php
+                                if(isset($sub_activities[$st['activity_id']])){
+                                    $completed= array_sum(array_map(
+                                        fn($item) => $item['activity_status'] === 'completed' ? $item['activity_percentage'] : (isset($complete_tasks[$item['activity_id']])? $complete_tasks[$item['activity_id']]: 0),
+                                        $sub_activities[$st['activity_id']]
+                                    ));
+                                    $activity_percentage = $completed;
+                                    echo $activity_percentage;
+                                }else{
+                                    echo $st['activity_status'] !='completed' ? 0 : $st['activity_percentage'];
+                                } ?>
+
+                            </td>
+                            <td>
+                                <?=$st['create_date']?><br>
+                            </td>
+                            <?php if($user_role != 'technicians'){?>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <?php include __DIR__.'/svg.html'?>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                        <?php if($st['activity_status'] != 'completed'){
+                                            if(user::init()->user_can('add_subactivites')){?> 
+                                            <a onclick="create_subactivity(this)" id="<?=$st['activity_id']?>" activity_project ="<?=$st['activity_project']?>"  activity_parent ="<?=$st['activity_id']?>" class="dropdown-item"><span class="me-1" data-icon="&#xf196;"></span>Add Sub Activity</a><?php } }
+                                            if(user::init()->user_can('edit_activities')){?>
+                                            <a onclick="update_activity(this)" id="<?=$st['activity_id']?>" activity_project ="<?=$st['activity_project']?>" sub_title ="Edit Activity" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Edit Activity</a>
+                                            
+                                            <a onclick="update_status(this)" id="<?=$st['activity_id']?>" activity_project ="<?=$st['activity_project']?>"sub_title="Change Activity Status" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>Change status</a>
+                                            <?php } if(user::init()->user_can('delete_activities')){?>
+                                        <a onclick="delete_activity(this)" class="dropdown-item" id="<?=$st['activity_id']?>" activity_project ="<?=$st['activity_project']?>"><span class="me-1" data-icon="&#xf014;" style="color:red"></span> Delete</a>
+                                        <?php } ?>
+                                        </div>
+                                    </div>
+                            </td>
+                            <?php } ?>
+                        </tr>
+                        <?php
+                        if(isset($sub_activities[$st['activity_id']])){
+                            $serial = 0;
+                            foreach($sub_activities[$st['activity_id']] as $sub){
+                            ?>
+                            <tr class="sub-activity-row" data-parent-id="<?=$st['activity_id']?>">
+                                <td>Sub#(<?= htmlspecialchars(getAlphabetSerial($serial++))?>) : </td>
+                            <td>
+                                <?=$sub['activity_name']?>
+                            </td>
+                            <td>
+                               <?php 
+                               if(isset($activities_assignees[$sub['activity_id']])){
+                                foreach($activities_assignees[$sub['activity_id']] as $usAssign){
+                                    echo $usAssign['full_name'].'<br> ';
+                                }
+                            }?>
+                            </td>
+                            <td>
+                                <?=$sub['activity_description']?>
+                            </td>
+                            <td>
+                                <?=$sub['activity_status']?><br>
+                            </td>
+                            <td><?=$sub['activity_percentage']?></td>
+                            <th>
+                                <?=isset($complete_tasks[$sub['activity_id']])? $complete_tasks[$sub['activity_id']]: 0?><br>
+                            </th>
+                            <td>
+                                <?=$sub['create_date']?><br>
+                            </td>
+                            <?php if($user_role != 'technicians'){?>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 btn-sm dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <?php include __DIR__.'/svg.html'?>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <?php if(user::init()->user_can('edit_subactivities')){?>
+                                        <a onclick="update_activity(this)" id="<?=$sub['activity_id']?>" activity_project ="<?=$sub['activity_project']?>" sub_title="Editing Sub-activity" activity_parent ="<?=$sub['activity_parent']?>" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Edit Sub Activity</a>
+                                        
+                                        <a onclick="update_status(this)" id="<?=$sub['activity_id']?>" activity_project ="<?=$sub['activity_project']?>"sub_title="Change Sub-activity Status" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>Change status</a>
+                                        <?php } if(user::init()->user_can('delete_subactivities')){?>
+                                    <a onclick="delete_activity(this)" class="dropdown-item" id="<?=$sub['activity_id']?>" activity_project ="<?=$sub['activity_project']?>"><span class="me-1" data-icon="&#xf014;" style="color: red;"></span> Delete</a>
+                                    <?php } ?>
+                                    </div>
+                                </div>
+                        </td>
+                        <?php }
+                        
+                        echo "</tr>";
+                        }
+                    }
+
+                       }?>
+                    </tbody>
+                </table>
+                </div>
                 <div class="row">
                     <table class="table table-hover paginate" data-items-per-page="10">
                         <thead>
@@ -78,6 +273,7 @@
                                 <th>Resource type</th>
                                 <th> Quantity</th>
                                 <th>Description</th>
+                                <th>Activity</th>
                                 <th>Requested by</th>
                                 <th>Approved by</th>
                                 <th>&nbsp;</th>
@@ -97,6 +293,9 @@
                                     <?=$st['request_description']?>
                                 </td>
                                 <td>
+                                    <?=$st['activity_name']?>
+                                </td>
+                                <td>
                                     <?=$st['requester_name']?><br>
                                     <em><small><?=system::format_time($st['request_date'])?></small></em>
                                 </td>
@@ -110,15 +309,20 @@
                                     <i class="px-1" style="font-size: 22px;" data-icon="&#xf141;"></i>
                                     </button>
                                     <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
-                                        <?php if($st['resource_type'] != 'money'){?>
+                                        <?php 
+                                        if(user::init()->user_can('view_resources')){
+                                        if($st['resource_type'] != 'money' && $st['resource_status'] == 'approved'){?>
                                         <a onclick="view_status()" class="dropdown-item"><span class="me-1 fa fa-eye"></span>View</a>
-                                        <?php }?>
+                                        <?php }}?>
                                         <?php if(user::init()->user_can('approve_project_resource') && !$st['resource_approver']){?>
                                         <a onclick="approve_resource()" class="dropdown-item"><span class="me-1" data-icon="&#xf560;"></span>Approve</a>
                                         <?php }?>
-                                        <?php if($user['user_id'] == $st['resource_requester'] && $st['resource_status'] == 'requested'){?>
-                                        <a onclick="delete_activity()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                        <?php }?>&nbsp;
+                                        <?php 
+                                        if(user::init()->user_can('delete_resources')){
+                                        if($user['user_id'] == $st['resource_requester'] && $st['resource_status'] == 'requested'){?>
+                                        <a onclick="delete_resource(this)" id="<?=$st['resource_id']?>" class="dropdown-item"><span class="me-1" data-icon="&#xf014;" style="color: red;"></span> Delete</a>
+                                        <?php }
+                                    }?>&nbsp;
                                     </div>
                                 </div>
                                 </td>
@@ -126,64 +330,6 @@
                             <?php }?>
                         </tbody>
                     </table>
-                </div>
-                <div class="row">
-                <!-- <?php //foreach($activities as $item){?>
-                    <div><?php var_dump($activities)?></div>
-                <?php //} ?> -->
-                <table class="table table-hover paginate" data-items-per-page="10">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Activity </th>
-                            <th> Created by</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Created on</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        <?php foreach($activities as $sn=>$st){?>
-                        <tr data-json='<?=json_encode($st)?>'>
-                            <td><?=++$sn?></td>
-                            <td>
-                                <?=$st['activity_name']?>
-                            </td>
-                            <td>
-                                <?=$st['activity_creator']?>
-                            </td>
-                            <td>
-                                <?=$st['activity_description']?>
-                            </td>
-                            <td>
-                                <?=$st['activity_status']?><br>
-                            </td>
-                            <td>
-                                <?=$st['create_date']?><br>
-                            </td>
-                            <td>
-                            <!-- <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="px-1" style="font-size: 22px;" data-icon="&#xf141;"></i>
-                                </button>
-                                <div class="dropdown-menu" data-json='<?=json_encode($st)?>'>
-                                    <?php if($st['resource_type'] != 'money'){?>
-                                    <a onclick="view_status()" class="dropdown-item"><span class="me-1 fa fa-eye"></span>View</a>
-                                    <?php }?>
-                                    <?php if(user::init()->user_can('approve_project_resource') && !$st['resource_approver']){?>
-                                    <a onclick="approve_resource()" class="dropdown-item"><span class="me-1" data-icon="&#xf560;"></span>Approve</a>
-                                    <?php }?>
-                                    <?php if($user['user_id'] == $st['resource_requester'] && $st['resource_status'] == 'requested'){?>
-                                    <a onclick="delete_activity()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
-                                    <?php }?>&nbsp;
-                                </div>
-                            </div> -->
-                            </td>
-                        </tr>
-                        <?php }?>
-                    </tbody>
-                </table>
                 </div>
             </div>
         </div>
@@ -195,6 +341,289 @@
     <?php include __DIR__.'/register_project.html';?>
     <?php include __DIR__.'/request_resource.html';?>
 </template>
+
+<template id="create_template">
+    <?php include __DIR__.'/create_activity.html';?>
+</template>
+
+<template id="update_template">
+    <?php include __DIR__.'/change_activity_status.html';?>
+</template>
+
+<script>
+    const create_activity = (name)=>{
+        let fx = document.querySelector('#create_template').content.cloneNode(true).children[0];
+        const title = 'Create Activity'; 
+        fx.querySelector('.header-class').textContent = title; 
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+            focusConfirm: false, 
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.mySwalSmallForm')
+                });
+
+                $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+    
+            }
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+    const create_subactivity = (element)=>{
+        let fx = document.querySelector('#create_template').content.cloneNode(true).children[0];
+        const activity_id = element.id;
+        const activity_project =element.getAttribute('activity_project');
+        const activity_parent =element.getAttribute('activity_parent');
+        const title = 'Create Sub-activity'; 
+        fx.querySelector('.header-class').textContent = title; 
+
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+            focusConfirm: false, 
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.mySwalSmallForm')
+                });
+
+                $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+    
+            }
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('activity_project', activity_project);
+            fdx.append('activity_parent', activity_parent);
+            ajax(
+                window.location.href,
+                response=>{
+                    
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+
+    const update_status = (element)=>{
+        let fx = document.querySelector('#update_template').content.cloneNode(true).children[0];
+        const activity_id = element.id;
+        const activity_project =element.getAttribute('activity_project');
+        const title = element.getAttribute('sub_title');
+        fx.querySelector('.update-class').textContent = title; 
+        
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('activity_id', activity_id);
+            fdx.append('activity_project', activity_project);
+
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+  
+
+    const update_activity =(element)=>{
+        let fx = document.querySelector('#create_template').content.cloneNode(true).children[0];
+        const activity_id = element.id;
+        const activity_project =element.getAttribute('activity_project');
+        const title = element.getAttribute('sub_title'); 
+        fx.querySelector('.header-class').textContent = title;
+        const fetchUrl = `${window.location.href}?fetch_activity=1&activity_id=${activity_id}`;
+
+        
+        ajax(
+        fetchUrl,
+        (response) => {
+            console.log(activity_id);
+            
+            if (response.startsWith('{')) {
+                let data = JSON.parse(response);                
+
+                // Populate the form fields with the data from the server
+                fx.querySelector('[name="activity_name"]').value = data.activity_name || ''; 
+                fx.querySelector('[name="activity_description"]').value = data.activity_description || ''; 
+                fx.querySelector('[name="activity_duration"]').value = data.activity_duration || ''; 
+                fx.querySelector('[name="budget"]').value = data.budget || ''; 
+                fx.querySelector('[name="activity_percentage"]').value = data.activity_percentage || 0; 
+
+
+
+                // Preselect assignees
+                const assignees = data.user_assigned || [];
+                const select2 = fx.querySelector('[name="project_activity_assignees[]"]');
+                $(select2).val(assignees).trigger('change'); // Assuming data contains an array of assignee IDs
+
+                // Open the SweetAlert modal
+                Swal.fire({
+                    html: fx,
+                    customClass: 'mySwalSmallForm',
+                    showConfirmButton: false,
+                    focusConfirm: false,
+                    didOpen: () => {
+                        // Initialize select2 dropdown (if any)
+                        $('.select2').select2({
+                            dropdownParent: $('.mySwalSmallForm')
+                        });
+
+                        $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+                    }
+                });
+            } else {
+                console.log(response);
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Unable to fetch activity data'
+                });
+            }
+        },
+        (error) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error
+            });
+        }
+    );
+        
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+            showConfirmButton: false,
+            focusConfirm: false, 
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.mySwalSmallForm')
+                });
+
+                $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+    
+            }
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('activity_id', activity_id);
+            fdx.append('activity_project', activity_project);
+
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+</script>
 <style>
     .mySwalForm{
         min-width: 80%;
@@ -256,7 +685,35 @@
         Swal.fire({
             html: fx,
             customClass: 'mySwalSmallForm',
-            showConfirmButton: false
+            showConfirmButton: false,
+            focusConfirm: false, 
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.mySwalSmallForm'),
+                });
+
+        // Attach the Select2 change event listener
+        $('#resource_type').on('change.select2', function () {
+            const selectedType = $(this).val();
+            console.log('Select2 value changed:', selectedType);
+
+            // Hide all fields first
+            $('.user_field').css('display','none');
+            $('.tools_field').css('display','none');
+            $('.deliverables_field').css('display','none');
+
+            // Show the relevant field based on the selected type
+            
+            if (selectedType === 'staff') {
+                $('.user_field').show();
+            } else if (selectedType === 'tools') {
+                $('.tools_field').show();
+            } else if (selectedType === 'products') {
+                $('.deliverables_field').show();
+            }
+            $('.select2-search__field').css('width', '200%');
+        });
+    }
         });
         document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
             evt.preventDefault();
@@ -318,7 +775,6 @@
                         ajax(
                             window.location.href,
                             response=>{
-                                console.log(response);
                                 Swal.fire({
                                     html: response,
                                     icon: 'info'
@@ -351,7 +807,6 @@
     const view_status = ()=>{
         let jsx = JSON.parse(window.event.target.parentNode.getAttribute('data-json'));
         let resx = JSON.parse(jsx[jsx.resource_type]), prods = '', cnt;
-        console.log(jsx);
         [...resx].forEach(res=>{
             cnt = res.total ? `(${res.total})` : '';
             prods += `<li>${res.name} ${cnt}</li>`;
@@ -361,4 +816,148 @@
             html: `<ol class="text-start">${prods}</ol>`
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize DataTable
+        const table = new DataTable('#activitiesTable', {
+        paging: true,
+        info: false    
+        });
+
+        // Add event listener for activity rows
+        document.querySelectorAll('.activity-row').forEach(activityRow => {
+        activityRow.addEventListener('click', function () {
+            const activityId = this.getAttribute('data-id');
+
+            // Toggle sub-activity rows for this activity
+            document.querySelectorAll(`.sub-activity-row[data-parent-id="${activityId}"]`).forEach(subRow => {
+            if (subRow.style.display === 'none' || subRow.style.display === '') {
+                subRow.style.display = 'table-row';
+            } else {
+                subRow.style.display = 'none';
+            }
+            });
+        });
+        });
+    });
+
+   $(document).ready(function(){
+     $('.select2').select2();
+   });
+  
+   const delete_activity = (element)=>{
+    const actity_id= element.id;
+      Swal.fire({
+          title: `Deleting an Activity?`,
+          showCancelButton: true,
+          confirmButtonText:'Sure, delete',
+          confirmButtonColor:'#d33',
+          cancelButtonColor:'#3085d6',
+
+          html:"Remember: You can not undo this action!"
+      })
+      .then(response=>{
+        if(response.isConfirmed){
+            let userdata = new FormData();
+            userdata.append('action','DELETE');
+            userdata.append('activity_id', actity_id);
+            userdata.append('ajax_request',1);
+            ajax(
+            window.location.href, 
+            response=>{
+                let jsx = JSON.parse(response);
+                if(jsx){
+                    Swal.fire({
+                        title: jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(e=>{
+                        window.location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Malformed response returned',
+                        icon: 'error',
+                        html:response
+                    });
+                }
+            },
+            error=>{
+                console.log(error);
+            },
+            userdata
+            );
+        }
+        else{
+            Swal.fire({
+            title: "Cancel Deletion",
+            icon:"error"
+            })
+        }
+        });
+  }
+
+
+  const delete_resource = (element)=>{
+    const resource_id= element.id;
+      Swal.fire({
+          title: `Deleting a resource?`,
+          showCancelButton: true,
+          confirmButtonText:'Sure, delete',
+          confirmButtonColor:'#d33',
+          cancelButtonColor:'#3085d6',
+
+          html:"Remember: You can not undo this action!"
+      })
+      .then(response=>{
+        if(response.isConfirmed){
+            let userdata = new FormData();
+            userdata.append('action','DELETE');
+            userdata.append('resource_id', resource_id);
+            userdata.append('ajax_request',1);
+
+            let urx = window.location.href.split('/');
+            urx.pop();
+            urx.pop();
+            url = urx.join('/') + '/resources';
+            ajax(
+            url, 
+            response=>{
+                let jsx = JSON.parse(response);
+                if(jsx){
+                    Swal.fire({
+                        title: jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(e=>{
+                        window.location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Malformed response returned',
+                        icon: 'error',
+                        html:response
+                    });
+                }
+            },
+            error=>{
+                console.log(error);
+            },
+            userdata
+            );
+        }
+        else{
+            Swal.fire({
+            title: "Cancel Deletion",
+            icon:"error"
+            })
+        }
+        });
+  }
+ 
+
+
+
 </script>

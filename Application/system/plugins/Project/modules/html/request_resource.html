@@ -3,7 +3,7 @@
     <div class="row">
         <div class="mb-3 col-md-6">
             <label class="form-label">Resource type </label>
-            <select class="form-control" name="resource_type" onchange="update_resources()">
+            <select class="form-control" name="resource_type">
                 <option value="">Choose...</option>
                 <option value="staff">Staff</option>
                 <option value="tools">Tools</option>
@@ -16,11 +16,59 @@
             <input type="number" class="form-control" name="resource_quantity" placeholder="...quantity">
         </div>
         <div class="mb-3">
-            <label class="form-label">Project</label>
-            <select class="form-control" name="resource_project">
+            <label class="form-label">Activity</label>
+            <select class="form-control select2 " name="resource_activity">
+                <option value="">Choose .....</option>
+                <?php foreach ($activities as $activity){ 
+                 if (isset($sub_activities[$activity['activity_id']])){ ?>
+                    <optgroup label="# <?= htmlspecialchars($activity['activity_name']) ?>">
+                        <?php foreach ($sub_activities[$activity['activity_id']] as $subactivity){ ?>
+                            <option value="<?= $subactivity['activity_id'] ?>">
+                                <?= htmlspecialchars($subactivity['activity_name']) ?>
+                            </option>
+                        <?php } ?>
+                    </optgroup>
+                <?php 
+                    } else{ ?>
+                    <option  value="<?= $activity['activity_id'] ?>">
+                        <b>
+                        # <?= htmlspecialchars($activity['activity_name']) ?>
+                        </b>
+                    </option>
+                <?php 
+                    }
+                } ?>
+            </select>
+        
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-3 user_field"  style="display: none;">
+            <label class="form-label">Who to Assign</label>
+            <select class="form-control col-sm-9 select2 user_field " name="resource[]" multiple>
                 <option value="">Choose...</option>
-                <?php foreach($projects as $pr){?>
-                <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
+                <?php foreach($users as $user){?>
+                <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
+                <?php }?>
+            </select>
+        </div>
+
+        <div class="mb-3 tools_field"  style="display: none;">
+            <label class="form-label">List of Tools</label>
+            <select class="form-control select2 tools_field " name="resource[]" multiple>
+                <option value="">Choose...</option>
+                <?php foreach($tools as $tool){?>
+                <option value="<?=$tool['tool_id']?>"><?=$tool['tool_name']?></option>
+                <?php }?>
+            </select>
+        </div>
+
+        <div class="mb-3 deliverables_field" style="display: none;">
+            <label class="form-label">Deliverables</label>
+            <select class="form-control select2 deliverables_field " name="resource[]" multiple>
+                <option value="">Choose...</option>
+                <?php foreach($products as $product){?>
+                <option value="<?=$product['product_id']?>"><?=$product['product_name']?></option>
                 <?php }?>
             </select>
         </div>

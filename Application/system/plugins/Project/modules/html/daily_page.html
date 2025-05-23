@@ -1,0 +1,648 @@
+<style>
+    /* Ensure the footer only appears on the last page */
+    @media print {
+        .custom-footer {
+                display: block;
+                margin-top: 50px;
+                text-align: center;
+                font-size: 14px;
+                border-top: 1px solid #ccc;
+                padding: 10px;
+        }
+    }
+</style>
+<?php
+function getAlphabetSerial($index) {
+    $serial = '';
+    while ($index >= 0) {
+        $serial = chr($index % 26 + 97) . $serial; // 97 is ASCII for 'a'
+        $index = floor($index / 26) - 1;
+    }
+    return $serial;
+}
+
+?>
+
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1">Project Daily Report</h3>
+    <div>
+        <a href="/<?=$base_url?>" class="btn rounded-pill btn-outline-secondary">
+            <i class="fas fa-angle-double-left me-1"></i>Back
+        </a>
+    </div>
+</div>
+<br>
+<div class="card">
+<div id="printableDiv">
+<div class="d-flex justify-content-between align-items-center p-2">
+        <div class="col-md-12 text-center">
+            <strong><?=$project['project_name']?></strong>
+        </div>
+   
+</div>
+<br>
+
+<div class="card bg-white shadow-none">
+    <div class="d-flex justify-content-between align-items-center p-2">
+        <div class="col-md-6">
+            <div>
+                <strong>Start date: </strong>
+                <?=system::format_time($project['project_start'], 3)?>
+            </div>
+            <div>
+                <strong>End date: </strong>
+                <?=system::format_time($project['project_end'], 3)?>
+            </div>
+            <div>
+                <strong>Project duration: </strong>
+                <?=(strtotime($project['project_end'])-strtotime($project['project_start']))/(3600*24)?> days
+            </div>
+        </div>
+        <div class="col-md-6">
+            <strong>Project description</strong><br>
+            <?=$project['project_desc']?>
+        </div>
+    </div><hr>
+    <div class="d-flex justify-content-between align-items-center p-2">
+        <div class="col-md-6">
+            <strong>Project manager</strong><br>
+            <img src="<?=user::init()->get_user_avatar($project['project_manager'])?>" height="40" style="vertical-align: top;">
+            <span style="display: inline-block;">
+                <strong><?=$project['manager']?></strong><br>
+                <em><?=$project['branch_name']?></em>
+            </span>
+        </div>
+        <div class="col-md-6">
+            <strong>Project client</strong><br>
+            <em><?=$project['customer_name']?></em><br>
+        </div>
+    </div>
+   
+        <hr>
+
+             <div class="table-responsive"> 
+                    <table id="taskTable" data-items-per-page="10">
+                        <thead>
+                            <tr>
+                                <th colspan="7" class="text-center">Project Activities Tracker</th>
+                            </tr>
+                            <tr>
+                            <th>#</th>
+                            <th>Tasks </th>
+                            <!--<th>Budget</th>-->
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Target</th>
+                            <th>Reached</th>
+                            <th>Status</th>
+                            <th>Action</th>   
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            <?php foreach($activities as $sn=>$st){?>
+                                <tr data-json='<?=json_encode($st)?>' class="activity-row" data-id="<?=$st['activity_id']?>" 
+                                    <?php if(isset($sub_activities[$st['activity_id']])){
+                                        echo 'style="background-color:burlywood"';
+                                    }?>>
+                                    <td><?=++$sn?></td>
+                                    <td>
+                                        <?=$st['activity_name']?>
+                                    </td>
+                                    <!--<td>
+                                        <?=$st['budget']?>
+                                    </td>-->
+                                    <td>
+                                        <?=$st['activity_description']?>
+                                    </td>
+                                    
+                                    <td>
+                                        <?=$st['create_date']?><br>
+                                    </td>
+                                    <td><?=$st['activity_percentage']?></td>
+                                    <td><?php
+                                        
+                                        if(isset($sub_activities[$st['activity_id']])){
+                                            $completed= array_sum(array_map(
+                                                fn($item) => $item['activity_status'] === 'completed' ? $item['activity_percentage'] : (isset($percent[$item['activity_id']])? $percent[$item['activity_id']]: 0),
+                                                $sub_activities[$st['activity_id']]
+                                            ));
+                                            $activity_percentage = $completed;
+                                            echo $activity_percentage;
+                                        }else{
+                                            echo $st['activity_status'] !='completed' ? 0 : $st['activity_percentage'];
+                                        } ?></td>
+                                        <td><?=$st['activity_status']?></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" disabled>
+                                           <span class="me-2" data-icon="&#xf05e;"></span>
+                                            </button>
+                                            
+                                            </div>
+                                        
+                                </td>
+                                </tr>
+                                <?php
+                                if(isset($sub_activities[$st['activity_id']])){
+                                    $serial = 0;
+                                    foreach($sub_activities[$st['activity_id']] as $sub){
+                                    ?>
+                                    <tr class="sub-activity-row" data-parent-id="<?=$st['activity_id']?>" style="background-color:rgb(202, 217, 217) !important;">
+                                        <td>Sub# (<?= htmlspecialchars(getAlphabetSerial($serial++))?>) : </td>
+                                    <td>
+                                        <?=$sub['activity_name']?>
+                                    </td>
+                                    <!--<td>
+                                        <?=$sub['budget']?>
+                                    </td>-->
+                                    <td>
+                                        <?=$sub['activity_description']?>
+                                    </td>
+                                   
+                                    <td>
+                                        <?= date('M d, Y', strtotime($sub['create_date'])) ?>
+                                    </td>
+                                    <td>
+                                        <?=$sub['activity_percentage']?><br>
+                                    </td>
+                                    <td>
+                                        <?=isset($percent[$sub['activity_id']])? $percent[$sub['activity_id']]: 0?><br>
+                                    </td>
+                                    <td><?=$sub['activity_status']?></td>
+
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 btn-sm dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <?php include __DIR__.'/svg.html'?>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <?php 
+                                                if(user::init()->user_can('add_daily_activities')){?>
+                                                <a onclick="create_sub_tasks(this)" id="<?=$sub['activity_id']?>" activity_project ="<?=$sub['activity_project']?>" sub_title="Adding Daily Task" activity_parent ="<?=$sub['activity_parent']?>" class="dropdown-item"><span class="me-1" data-icon="&#xf0ae;"></span>Record Daily Task</a>
+                                                <?php }
+                                                if(user::init()->user_can('view_daily_tasks')){?>
+                                                
+                                                <a onclick="view_daily_tasks(this)" id="<?=$sub['activity_id']?>" activity_project ="<?=$sub['activity_project']?>" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View Daily Tasks</a>
+                                                <?php } 
+                                                if(user::init()->user_can('edit_subactivities')){?>
+                                                <a onclick="update_status(this)" id="<?=$sub['activity_id']?>" activity_project ="<?=$sub['activity_project']?>"sub_title="Change Sub-activity Status" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span>Change status</a>
+                                                <?php } ?>
+
+                                                
+                                            </div>
+                                        </div>
+                                </td>
+        
+                                    </tr>
+                               <?php       
+                                }
+                            }
+        
+                               }?>
+                        </tbody>
+                    </table>
+                
+        </div>
+        </div>
+    </div>
+    </div>
+    <template id="create_template">
+        <?php include __DIR__.'/create_tasks.html';?>
+    </template>
+    <template id="edit_template">
+        <?php include __DIR__.'/create_tasks.html';?>
+    </template>
+
+    <template id="view_template">
+        <?php include __DIR__.'/view_tasks.html';?>
+    </template>
+
+    <template id="update_template">
+        <?php include __DIR__.'/change_activity_status.html';?>
+    </template>
+
+    <template id="update_task_temp">
+        <?php include __DIR__.'/change_task_status.html';?>
+    </template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"></script>
+<script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Initialize DataTable
+        const table = new DataTable('#taskTable', {
+        paging: true,
+        info: false    
+        });
+    }); 
+
+    const create_sub_tasks= (element)=>{
+        let fx = document.querySelector('#create_template').content.cloneNode(true).children[0];
+        const activity_id = element.id;
+        const activity_parent =element.getAttribute('activity_parent');
+        const title = element.getAttribute('sub_title');
+        fx.querySelector('.header-class').textContent = title; 
+
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+            focusConfirm: false, 
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.mySwalSmallForm')
+                });
+
+                $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+    
+            }
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('activity_id', activity_id);
+            fdx.append('activity_parent', activity_parent);
+            fdx.append('daily', 1);
+
+            ajax(
+                window.location.href,
+                response=>{
+                    
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+
+    const update_status = (element)=>{
+        let fx = document.querySelector('#update_template').content.cloneNode(true).children[0];
+        const activity_id = element.id;
+        const title = element.getAttribute('sub_title');
+        const activity_project =element.getAttribute('activity_project');
+        fx.querySelector('.update-class').textContent = title; 
+        
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('activity_id', activity_id);
+            fdx.append('activity_project', activity_project);
+
+
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+  
+    const view_daily_tasks = (element) => {
+    let fx = document.querySelector('#view_template').content.cloneNode(true).children[0];
+    const activity_id = element.id;
+    const title = element.getAttribute('sub_title');
+    fx.querySelector('.header-class').textContent = title; 
+
+
+   // Define the URL and data to be sent via POST
+    const fetchUrl = `${window.location.href}?fetch_tasks=1&activity_id=${activity_id}`;;
+
+// Fetch project data using POST
+    ajax(
+        fetchUrl,
+        (response) => {
+            
+            if (response.startsWith('[')) {
+                let data = JSON.parse(response);                
+
+                // Open the SweetAlert modal
+                Swal.fire({
+                    html: fx,
+                    customClass: 'mySwalSmallForm',
+                    showConfirmButton: false,
+                    focusConfirm: false,
+                    didOpen: () => {
+                        // Initialize select2 dropdowns
+                        $('.select2').select2({
+                            dropdownParent: $('.mySwalSmallForm')
+                        });
+
+                        $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+
+                        // Initialize DataTable
+
+                        let tableBody = document.querySelector('.table tbody');
+                        
+                        tableBody.innerHTML = '';
+                        data.forEach((item, index) => {
+                            const showDeleteButton = item.status !== 'accepted';
+
+                            // Determine if the view button should be shown
+                            const showViewButton = '<?php echo $user_role; ?>' !== 'technicians';
+                            const canEditDaily = '<?php echo user::init()->user_can("edit_daily_activities")?>';
+                            const canDeleteDaily = '<?php echo user::init()->user_can("delete_daily_activities")?>';
+
+
+                            // Build the dropdown menu dynamically based on conditions
+                            let dropdownMenu = `<div class="dropdown-menu">`;
+
+                            if (showViewButton) {
+                                if(canEditDaily){
+                                dropdownMenu += `<a onclick="update_task(this)" class="dropdown-item" id="${item.id}" activity_id="${item.project_activity_id}"><span class="me-1" data-icon="&#xf285;"></span>Change status</a>`;
+                                }
+                            }
+
+                            if (showDeleteButton) {
+                                if(canEditDaily){
+                                dropdownMenu += `<a onclick="edit_tasks(this)" class="dropdown-item" id="${item.id}" activity_id ="${item.project_activity_id}"><span class="me-1" data-icon="&#xf044;"></span>Edit</a>`;
+                                }
+                                if(canDeleteDaily){
+                                dropdownMenu += `<a onclick="delete_tasks(this)" class="dropdown-item" id="${item.id}"><span class="me-1" data-icon="&#xf014;" style="color:red"></span>Delete</a>`;
+                                }
+                            }
+
+                            dropdownMenu += `</div>`;
+
+                            let row = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${item.description}</td>
+                                <td>${item.task_percentage}</td>
+                                <td>${item.status}</td>
+                                <td>${item.full_name}</td>
+                                <td> <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="px-1" style="font-size: 22px;" data-icon="&#xf141;"></i>
+                                    </button>
+                                       ${dropdownMenu}
+                                    </div>
+                                    </td>
+
+                            </tr>`;
+                            tableBody.insertAdjacentHTML('beforeend', row);
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Unable to fetch Daily Tasks data'
+                });
+            }
+        },
+        (error) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error
+            });
+        }
+    );
+    
+}
+const update_task =(element)=>{
+    let fx = document.querySelector('#update_task_temp').content.cloneNode(true).children[0];
+        const task_id = element.id;
+        const title = element.getAttribute('sub_title');
+        const activity_id =element.getAttribute('activity_id');
+        fx.querySelector('.update-class').textContent = title; 
+        
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('task_id',task_id);
+            fdx.append('activity_id', activity_id);
+            fdx.append('daily', 1);
+
+            ajax(
+                window.location.href,
+                response=>{
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+}
+
+const delete_tasks = (element)=>{
+    const task_id = element.id;
+      Swal.fire({
+          title: `Deleting a Daily Task?`,
+          showCancelButton: true,
+          confirmButtonText:'Sure, delete',
+          confirmButtonColor:'#d33',
+          cancelButtonColor:'#3085d6',
+
+          html:"Remember: You can not undo this action!"
+      })
+      .then(response=>{
+        if(response.isConfirmed){
+            let userdata = new FormData();
+            userdata.append('action','DELETE');
+            userdata.append('task_id', task_id);
+            userdata.append('ajax_request',1);
+            ajax(
+            window.location.href, 
+            response=>{
+                let jsx = JSON.parse(response);
+                if(jsx){
+                    Swal.fire({
+                        title: jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(e=>{
+                        window.location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Malformed response returned',
+                        icon: 'error',
+                        html:response
+                    });
+                }
+            },
+            error=>{
+                console.log(error);
+            },
+            userdata
+            );
+        }
+        else{
+            Swal.fire({
+            title: "Cancel Deletion",
+            icon:"error"
+            })
+        }
+        });
+  }
+
+
+
+const edit_tasks = (element) => {
+    let fx = document.querySelector('#edit_template').content.cloneNode(true).children[0];
+    const task_id = element.id;
+    const title = "Editing Daily tasks"; 
+    const activity_id =element.getAttribute('activity_id');
+    fx.querySelector('.header-class').textContent = title; 
+    const fetchUrl = `${window.location.href}?pull_task=1&task_id=${task_id}`;
+
+    // Fetch project data
+    ajax(
+        fetchUrl,
+        (response) => {
+            if (response.startsWith('{')) {
+                let data = JSON.parse(response);
+                
+                // Populate the form fields if they exist
+                const taskName = fx.querySelector('[name="task_percentage"]');
+                if (taskName) taskName.value = data.task_percentage || 0;
+
+                const Description = fx.querySelector('[name="description"]');
+                if (Description) Description.value = data.description || '';
+
+              
+                // Open the SweetAlert modal
+                Swal.fire({
+                    html: fx,
+                    customClass: 'mySwalSmallForm',
+                    showConfirmButton: false,
+                    focusConfirm: false,
+                    didOpen: () => {
+                        // Initialize select2 dropdowns
+                        $('.select2').select2({
+                            dropdownParent: $('.mySwalSmallForm')
+                        });
+
+                        $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+
+                        document.querySelector('.mySwalSmallForm form').addEventListener('submit', (evt) => {
+                        evt.preventDefault();
+                        evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                        let fdx = new FormData(evt.target);
+                        
+                        fdx.append('ajax_request', 1);
+                        fdx.append('task_id', task_id);
+                        fdx.append('activity_id', activity_id);
+                        fdx.append('daily', 1);
+
+
+                        ajax(
+                            window.location.href,
+                            (response) => {
+                                if (response.startsWith('{')) {
+                                    let jsx = JSON.parse(response);
+                                    Swal.fire({
+                                        icon: jsx.status,
+                                        title: jsx.message
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'info',
+                                        html: response
+                                    });
+                                }
+                            },
+                            (error) => {
+                                Swal.fire(error);
+                            },
+                            fdx
+                        );
+                    });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Unable to fetch Daily task data'
+                });
+            }
+        },
+        (error) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error
+            });
+        }
+    );
+
+    
+};
+
+
+</script>

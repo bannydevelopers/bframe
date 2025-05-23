@@ -1,18 +1,38 @@
 <form method="post">
-    <h3 class="py-3">Create activity</h3>
+    <h3 class="py-3 header-class"></h3>
     <div class="row">
         <div class="mb-3">
             <label class="form-label">Title</label>
             <input type="text" class="form-control" name="activity_name" placeholder="...name">
         </div>
+        <input type="hidden" name="activity_project" value="<?=$project['project_id']?>">
         <div class="mb-3">
-            <label class="form-label">Project</label>
-            <select class="form-control" name="activity_project">
+            <label class="form-label">Assigned To</label>
+            <select class="form-control select2" name="project_activity_assignees[]" multiple>
                 <option value="">Choose...</option>
-                <?php foreach($projects as $pr){?>
-                <option value="<?=$pr['project_id']?>"><?=$pr['project_name']?></option>
+                <?php foreach($users as $user){?>
+                <option value="<?=$user['user_id']?>"><?=$user['full_name']?></option>
                 <?php }?>
             </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-3">
+            <label class="form-label">Duration in Day(s)</label>
+            <input type="number" name="activity_duration" id="duration" min="0" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-3">
+            <label class="form-label">Budget</label>
+            <input type="number" class="form-control" name="budget" min="0" placeholder="activity budget" required>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3">
+            <label class="form-label">Percentage</label>
+            <input type="number" step="0.1" class="form-control" name="activity_percentage" min="0" placeholder="activity Percent (%)" required>
         </div>
     </div>
     <div class="row">

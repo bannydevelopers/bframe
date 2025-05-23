@@ -7,8 +7,10 @@
               <div style="text-align: left;flex-basis: 100%;">
                 <div style="text-transform: capitalize;">{{supplier_name}}</div>
                 <pre style="font-family: inherit;">{{supplier_physical_address}}</pre>
-                <div>E-mail: {{supplier_email}}</div>
-                <div>Phone: {{supplier_phone_number}}</div>
+                <!--<div>E-mail: {{supplier_email}}</div>
+                <div>Phone: {{supplier_phone_number}}</div>-->
+                <p>TIN: 111-082-243 </p>
+                <p>VRN: 40-007857 </p>
               </div>
               <div style="flex-basis: 100%;">
                 <div style="text-align: center;"">
@@ -22,6 +24,7 @@
                 <div><?=$company[0]->phone_number?></div>
                 <div>TIN: <?=$company[0]->TIN_number?></div>
                 <div>VRN: <?=$company[0]->VRN_number?></div>
+                
               </div>
             </div>
           </td>
@@ -30,16 +33,16 @@
           <td>
             <table style="min-width: 30%;text-align: left;font-size: 13px;">
               <tr class="white">
-                <td><b>LPO number</b></td>
+                <td><b>LPO number :</b></td>
                 <td>{{lpo_no}}</td>
               </tr>
               <tr class="white">
-                <td><b>Proforma number</b></td>
-                <td>{{proforma_no}}</td>
+                <td><b>Proforma number :</b></td>
+                <td>0</td>
               </tr>
               <tr class="white">
-                <td><b>Create date</b></td>
-                <td>{{create_time}}</td>
+                <td><b>Create date :</b></td>
+                <td>{{created_date}}</td>
               </tr>
             </table>
           </td>
@@ -66,6 +69,18 @@
                 <th style="text-align: right;">Total</th> 
                 <th style="text-align: right;">{{total}}</th>
               </tr>
+              <tr class="white VAT-tr">
+                <td colspan="4">&nbsp;</td>
+                <th style="text-align: right;">VAT (18%)</th>
+                <th style="text-align: right;"><span>{{VAT}}</span></th>
+              </tr>
+              <tr class="VAT-tr">
+                <td colspan="4">&nbsp;</td>
+                <th style="text-align: right;">GRAND TOTAL</th>
+                <th style="text-align: right;padding: 0;">
+                  <span style="border-top: 1px solid #222;padding:10px">{{grand_total}}</span>
+                </th>
+              </tr>
             </table>
           </td>
         </tr>
@@ -73,20 +88,22 @@
           <td style="text-align: left;">
             <span style="text-align: center;display: inline-block;">
               <span>___________________</span><br>
-              <span>Signature</span>
+              <span>Prepared By
+              </span>
             </span>
           </td>
-          <td style="text-align: right;">
-            <!--span style="text-align: center;display: inline-block;">
+          <td style="text-align: left;">
+            <span style="text-align: center;display: inline-block;">
               <span>___________________</span><br>
-              <span>Client's signature</span>
-            </span-->&nbsp;
+              <span>Approved By
+              </span>
+            </span>
           </td>
         </tr>
         <tr>
           <td style="text-align: justify;">
             <strong>TERMS AND CONDITIONS</strong><br>
-            <?=$company[0]->LPO_terms?>
+            <p>Your invoice should be submitted together with the original of the LPO.<br>The purchase order number should be quoted on all communications relevant to this order.</p>
           </td>
         </tr>
         <style>
@@ -98,15 +115,22 @@
           }
         </style>
       </table>
+
       <div style="position: absolute;top: 0;right: .5em;">
         <a onclick="jsprint(this.parentNode.previousElementSibling.outerHTML)" class="fa fa-print"></a>
       </div>
       <style>
-        td,th{
-          vertical-align: top;
-          padding: 8px;
-        }
-      </style>
+  th, td {
+    padding: 10px;
+  }
+  th {
+    white-space: nowrap;
+  }
+  td, th {
+    vertical-align: top;
+    padding: 8px;
+  }
+</style>
   </div>
   </div>
   

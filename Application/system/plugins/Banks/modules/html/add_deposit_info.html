@@ -1,49 +1,86 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">    
     <div class="card-body">
+
         <div class="mb-3">
             <label for="deposit_source" class="form-label">Deposit source</label>
             <select id="deposit_source" class="form-select" onchange="switch_source()">
                 <option value="tax">Tax invoice</option>
-                <option value="other">Other deposits</option>
+                <!--<option value="other">Other deposits</option>--->
             </select>
         </div>
+
         <div class="mb-3">
             <label for="per_invoice_no" class="form-label">Tax invoice</label>
-            <select name="per_invoice_no" id="per_invoice_no" class="form-select">
+            <select name="per_invoice_no" id="per_invoice_no" class="form-select" onchange="toggleManualInvoice()">
                 <option value="">Choose...</option>
                 <?php foreach($ti as $t){?>
-                <option value="<?=$t['invoice_id']?>">#<?=6891 + intval($t['invoice_id'])?> - <?=$t['customer_name']?></option>
+                    <option value="<?=$t['invoice_id']?>">#<?=6891 + intval($t['invoice_id'])?> - <?=$t['customer_name']?></option>
                 <?php }?>
+                <option value="manual">-- Enter manually --</option>
             </select>
         </div>
+
+        <!-- Hidden manual input field -->
+        <div class="mb-3" id="manual_invoice_field" style="display: none;">
+            <label for="manual_invoice_no" class="form-label">Enter Invoice Number</label>
+            <input type="number" class="form-control" id="manual_invoice_no" name="manual_invoice_no" placeholder="Invoice number only">
+        </div>
+
         <div class="mb-3 hidden">
             <label for="received_from" class="form-label">Received from</label>
             <input type="text" class="form-control" id="received_from" name="received_from">
         </div>
+
         <div class="mb-3">
             <label for="date" class="form-label">Date received</label>
-            <input type="date" class="form-control" id="date" name="date" value="<?=date('Y-m-d')?>" placeholder="Debt date..." required />
+            <input type="date" class="form-control" id="date" name="date" value="<?=date('Y-m-d')?>" required />
         </div>
+
         <div class="mb-3">
             <label for="amount" class="form-label">Amount</label>
             <input type="number" class="form-control" id="amount" name="amount" min="1" required />
         </div>
+
         <div class="mb-3">
-          <label for="bank" class="form-label">Bank</label>
-          <select name="bank" id="bank" class="form-select" onchange="check_selection('bank')">
-            <option value="">Choose...</option>
-            <?php foreach($banks as $bank){?>
-            <option value="<?=$bank['bank_id']?>"><?=$bank['bank_name']?></option>
-            <?php }?>
-            <option value="add">Add bank</option>
-          </select>
+            <label for="bank" class="form-label">Bank</label>
+            <select name="bank" id="bank" class="form-select" onchange="check_selection('bank')">
+                <option value="">Choose...</option>
+                <?php foreach($banks as $bank){?>
+                    <option value="<?=$bank['bank_id']?>"><?=$bank['bank_name']?></option>
+                <?php }?>
+                <option value="add">Add bank</option>
+            </select>
         </div>
-        <div class="mb-3">
-            <label for="cheque_no" class="form-label">Cheque no</label>
-            <input type="text" class="form-control" id="cheque_no" name="cheque_no" placeholder="Cheque no..." />
+
+        <div class="mb-3 col-md-6">
+            <label for="payment_method" class="form-label">Mode of payment</label>
+           <select name="payment_method" id="payment_method" class="form-select" onchange="toggleChequeField()">
+                <option value="Cheque">By Cheque</option>
+                <option value="Transfer">By Transfer</option>
+                <option value="M pesa">M-Pesa</option>
+                <option value="Tigo pesa">Tigo Pesa</option>
+                <option value="Airtel money">Airtel money</option>
+                <option value="T Pesa">T Pesa</option>
+                <option value="Halo Pesa">Halo Pesa</option>
+            </select>
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label for="cheque_no" class="form-label">Cheque No:</label>
+            <input type="text" class="form-control" id="cheque_no" name="cheque_no" placeholder="Cheque Number..." />
         </div>
     </div>
+
     <div class="text-end">
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
 </form>
+
+<!-- JavaScript
+<script>
+function toggleManualInvoice() {
+    const selected = document.getElementById("per_invoice_no").value;
+    const manualInput = document.getElementById("manual_invoice_field");
+    manualInput.style.display = (selected === "manual") ? "block" : "none";
+}
+</script>-->

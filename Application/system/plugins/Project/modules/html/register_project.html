@@ -1,5 +1,6 @@
+<?php if(isset($ti)) { ?>
 <form method="post">
-    <h3>Register project</h3>
+    <h3 class="header-class"></h3>
     <div class="row">
         <div class="mb-3">
             <label class="form-label">Project name</label>
@@ -7,7 +8,7 @@
         </div>
         <div class="mb-3 col-md-6" >
             <label class="form-label">Invoice</label>
-            <select class="form-control" name="project_invoice" required>
+            <select class="form-control select2" name="project_invoice" required>
                 <option value="">Choose...</option>
                 <?php foreach($ti as $cl){?>
                 <option value="<?=$cl['invoice_id']?>">
@@ -18,7 +19,7 @@
         </div>
         <div class="mb-3 col-md-6">
             <label class="form-label">Project manager</label>
-            <select  class="form-control" name="project_manager" required>
+            <select  class="form-control select2" name="project_manager" required>
                 <option value="">Choose...</option>
                 <?php foreach($managers as $mn){?>
                 <option value="<?=$mn['user_id']?>"><?=$mn['full_name']?></option>
@@ -47,7 +48,7 @@
         </div>
     </div>
     <div class="text-end mt-3">
-        <button type="reset" class="btn rounded-pill btn-secondary btn-sm">Reset form</button>
         <button type="submit" class="btn rounded-pill btn-primary btn-sm">Save</button>
     </div>
 </form>
+<?php } ?>

@@ -14,5 +14,19 @@
     "delete_activities",
     "view_project_budget",
     "approve_project_resource",
-    "delete_project_resource"
+    "delete_project_resource",
+    "add_subactivities",
+    "edit_subactivities",
+    "view_subactivities",
+    "delete_subactivities",
+    "view_product_sheet",
+    "add_daily_activities",
+    "edit_daily_activities",
+    "view_daily_activities",
+    "delete_daily_activities",
+    "approve_daily_activities",
+    "add_comment",
+    "edit_comment",
+    "view_comment",
+    "delete_comment"
 ]

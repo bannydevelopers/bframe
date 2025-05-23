@@ -1,0 +1,669 @@
+<style>
+    /* Ensure the footer only appears on the last page */
+    @media print {
+        .custom-footer {
+                display: block;
+                margin-top: 50px;
+                text-align: center;
+                font-size: 14px;
+                border-top: 1px solid #ccc;
+                padding: 10px;
+        }
+    }
+</style>
+<?php
+function getAlphabetSerial($index) {
+    $serial = '';
+    while ($index >= 0) {
+        $serial = chr($index % 26 + 97) . $serial; // 97 is ASCII for 'a'
+        $index = floor($index / 26) - 1;
+    }
+    return $serial;
+}
+
+$bg_color ='success';
+$color='dark';
+$project_percent =0;
+$project_id = $project['project_id'];
+$project_percent = isset($percent[$project_id]) ? $percent[$project_id] : 0;
+if($project_percent >= 70){
+    $bg_color ='success';
+}else if($project_percent >= '40'){
+    $bg_color ='secondary';
+}else{
+    $bg_color ='warning';
+}
+if($project_percent == null){
+    $project_percent = 0;
+}
+
+?>
+
+<div class="d-flex justify-content-between align-items-center">
+    <h3 class="pt-1" id="top">Project Report</h3>
+    <div>
+        <a href="/<?=$base_url?>" class="btn rounded-pill btn-outline-secondary">
+            <i class="fas fa-angle-double-left me-1"></i>Back
+        </a>
+        <button type="button" id="printBtn" class="btn rounded-pill btn-outline-secondary">
+            <i class="fa fa-print me-1"></i>Print
+        </button>
+    </div>
+</div>
+<br>
+<div id="printableDiv">
+<div class="d-flex justify-content-between align-items-center p-2">
+          <!--<pre style="font-family: inherit;"><?=$project['customer_phone_number']?></pre>-->
+        
+       <!--<div class="col-md-4 text-right">
+            <img src="/Application/storage/uploads/images/logo.png" style="height: 150px;margin: auto;" alt="logo">
+        </div>-->
+        
+    <?php
+    $bg_color ='success';
+    $color='dark';
+    $project_percent =0;
+    $project_id = $project['project_id'];
+    $project_percent = isset($percent[$project_id]) ? $percent[$project_id] : 0;
+    if($project_percent >= 70){
+        $bg_color ='success';
+    }else if($project_percent >= '40'){
+        $bg_color ='secondary';
+    }else{
+        $bg_color ='warning';
+    }
+    if($project_percent == null){
+        $project_percent = 0;
+    }
+
+    ?>
+   
+</div>
+<br>
+<div class="card bg-white shadow-none">
+
+    <div class="row">
+  <!-- Left side: Project info -->
+  <div class="col-md-8">
+    <strong><?=$project['project_name']?></strong>
+    <div style="text-transform: capitalize;"><?=$project['customer_name']?></div>
+    <br>
+    <div class="col-md-6">
+      <strong>Project description</strong><br>
+      <?=$project['project_desc']?>
+    </div>
+  </div>
+
+  <!-- Right side: Company info -->
+  <div class="col-md-4 text-right">
+    <div style="font-size: 120%;"><?=$company->company_legal_name?></div>
+    <pre style="font-family: inherit;"><?=$company->company_address?></pre>
+    <!--<div><?=$company->email?></div>
+    <div><?=$company->phone_number?></div>
+    <div>TIN: <?=$company->TIN_number?></div>
+    <div>VRN: <?=$company->VRN_number?></div>-->
+    <div class="col-md-6">
+        <img src="<?=user::init()->get_user_avatar($project['project_manager'])?>" height="40" style="vertical-align: top;">
+            <span style="display: inline-block;">
+                <strong>Project manager</strong><br>
+                <pre><?=$project['manager']?></pre><br>
+                <!--<em><?=$project['branch_name']?></em>-->
+            </span>
+        </div>
+  </div>
+</div>
+
+          
+    <div class="d-flex justify-content-between align-items-center p-2">
+        <div class="col-md-6">
+            <div>
+                <strong>Start date: </strong>
+                <?=system::format_time($project['project_start'], 3)?>
+            </div>
+            <div>
+                <strong>End date: </strong>
+                <?=system::format_time($project['project_end'], 3)?>
+            </div>
+            <div>
+                <strong>Project duration: </strong>
+                <?=(strtotime($project['project_end'])-strtotime($project['project_start']))/(3600*24)?> days
+            </div>
+        </div>
+        
+    </div><hr>
+    <!-- <div class="d-flex justify-content-between align-items-center p-2">
+       <div class="col-md-6">
+            <strong>Project manager</strong><br>
+            <img src="<?=user::init()->get_user_avatar($project['project_manager'])?>" height="40" style="vertical-align: top;">
+            <span style="display: inline-block;">
+                <strong><?=$project['manager']?></strong><br>
+                <em><?=$project['branch_name']?></em>
+            </span>
+        </div>
+        <div class="col-md-6">
+            <strong>Project client</strong><br>
+            <em><?=$project['customer_name']?></em><br>
+            <em><?=$project['customer_phone_number']?></em>
+        </div>
+    </div>
+    <hr>-->
+    
+    <div class="row">
+       <div class="col-sm-6">
+        <table class="table table-hover " data-items-per-page="10">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-center">Progress Summary</th>
+                </tr>
+                <tr>
+                <th>Percentage Completed</th>
+                <th><button type="button"  class="btn rounded-pill btn-outline-<?=$bg_color?> bg-<?=$bg_color?> text-<?=$color?>">
+                    <?=number_format($project_percent,0)?>%
+                </button> </th>
+                </tr>
+            </thead>
+            <tbody>
+    
+            </tbody>
+        </table>
+       </div>
+    </div>
+        <hr>
+
+       
+        <hr>
+
+              <div class="table-resposive">
+                    <table class="table table-hover" data-items-per-page="10">
+                        <thead>
+                            <tr>
+                                <th colspan="7" class="text-center">Project Activities Performed</th>
+                            </tr>
+                            <tr>
+                                <th>#</th>
+                            <th>Activity </th>
+                            <th> Assigned To</th>
+                            <!--<th>Budget</th>-->
+                            <th>Description</th>
+                            <th>Status</th>
+                            <!--<th>Created on</th>-->  
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            <?php foreach($activities as $sn=>$st){?>
+                                <tr data-json='<?=json_encode($st)?>' class="activity-row" data-id="<?=$st['activity_id']?>" 
+                                    <?php if(isset($sub_activities[$st['activity_id']])){
+                                        echo 'style="background-color:burlywood"';
+                                    }?>>
+                                    <td><?=++$sn?></td>
+                                    <td>
+                                        <?=$st['activity_name']?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        if(isset($activities_assignees[$st['activity_id']])){
+        
+                                            foreach($activities_assignees[$st['activity_id']] as $uAssign){
+                                                echo $uAssign['full_name'].'<br>';
+                                            }
+                                        }
+                                        ?>
+                                    </td>
+                                    <!--<td>
+                                        <?=$st['budget']?>
+                                    </td>--->
+                                    <td>
+                                        <?=$st['activity_description']?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        if(isset($sub_activities[$st['activity_id']])){
+                                            $completed= array_sum(array_map(
+                                                fn($item) => $item['activity_status'] === 'completed' ? $item['activity_percentage'] : (isset($complete_tasks[$item['activity_id']])? $complete_tasks[$item['activity_id']]: 0),
+                                                $sub_activities[$st['activity_id']]
+                                            ));
+                                            $activity_percentage = $completed;
+                                            echo $activity_percentage;
+                                        }else{
+                                            echo $st['activity_status'] !='completed' ? 0 : $st['activity_percentage'];
+                                        } ?>
+                                        &nbsp;&nbsp;
+                                        <?=$st['activity_status']?><br>
+                                    </td>
+                                    <!--<td>
+                                        <?=$st['create_date']?><br>
+                                    </td>-->
+                                </tr>
+                                <?php
+                                if(isset($sub_activities[$st['activity_id']])){
+                                    $serial = 0;
+                                    foreach($sub_activities[$st['activity_id']] as $sub){
+                                    ?>
+                                    <tr class="sub-activity-row" data-parent-id="<?=$st['activity_id']?>" style="background-color:rgb(202, 217, 217) !important;">
+                                        <td>Sub# (<?= htmlspecialchars(getAlphabetSerial($serial++))?>) : </td>
+                                    <td>
+                                        <?=$sub['activity_name']?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        if(isset($activities_assignees[$sub['activity_id']])){
+                                            foreach($activities_assignees[$sub['activity_id']] as $usAssign){
+                                                echo $usAssign['full_name'].'<br> ';
+                                            }
+                                        }
+                                            ?>
+                                    </td>
+                                    <!--<td>
+                                        <?=$sub['budget']?>
+                                    </td>-->
+                                    <td>
+                                        <?=$sub['activity_description']?>
+                                    </td>
+                                    <td>
+                                        <?=isset($complete_tasks[$sub['activity_id']])? $complete_tasks[$sub['activity_id']]: 0?>&nbsp;&nbsp;
+                                        <?=$sub['activity_status']?><br>
+                                    </td>
+                                    <!--<td>
+                                        <?=$sub['create_date']?><br>
+                                    </td>-->
+        
+                                    </tr>
+                               <?php       
+                                }
+                            }
+        
+                               }?>
+                        </tbody>
+                    </table>
+                  
+              </div>  
+        </div>
+    </div>
+    <?php 
+    if(user::init()->user_can('view_comment')){?>
+    <div class="comments">
+        <div class="card">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="pt-1">Clients Comments</h3>
+                <div>
+                    <?php if(user::init()->user_can('add_comment')){?>
+                        <button type="button" onclick="comments(this)" project_id ="<?=$project['project_id']?>" class="btn rounded-pill btn-outline-primary" sub_title ="Add New Comment">
+                            <span data-icon="&#xf1d9;"></span> New Comment
+                        </button>
+                        <?php } ?>
+                    
+                </div>
+               
+            </div>
+
+            <div class="table-responsive">
+                <div class="row">
+                <?php
+                if($comments){
+                    foreach($comments as $comment){?>
+                    <div class="card col-sm-3 shadow p-2 m-3 row" style="background-color: aliceblue;">
+                        <div class="card-body">
+                            <small class="text-center me-1 alert"><?=date('d M, Y - h:i:m',strtotime($comment['created_at']))?></small>
+                            <p><?=$comment['project_comment']?></p>
+                            <div class="justify-content-center align-items-end mb-1">
+                                <small>From: <b> <?=$comment['full_name']?></b></small>
+                            </div>
+                            <div class="d-flex justify-content-evenly align-items-end">
+                                <?php if(user::init()->user_can('add_comment')){
+                                    ?>
+                                    <small>
+                                        <button type="button" onclick="reply_comment(this)" project_id ="<?=$project['project_id']?>"  id="<?=$comment['id']?>"class="btn btn-sm rounded-pill btn-outline-success" sub_title ="Leave a Comment">
+                                            <span data-icon="&#xf044;"></span> Reply 
+                                        </button>
+                                    </small>
+                                <?php }
+                                if(user::init()->user_can('edit_comment')){
+                                    ?>
+                                    <small>
+                                        <button type="button" onclick="edit_comment(this)" project_id ="<?=$project['project_id']?>"  id="<?=$comment['id']?>"class="btn btn-sm rounded-pill btn-outline-primary" sub_title ="Edit a Comment">
+                                            <span data-icon="&#xf044;"></span> Edit
+                                        </button>
+                                    </small>
+                                <?php } if(user::init()->user_can('delete_comment')){?>
+                                    <small>
+                                        <button type="button" onclick="delete_comment(this)" project_id ="<?=$project['project_id']?>" id="<?=$comment['id']?>" class="btn btn-sm rounded-pill btn-outline-danger" >
+                                            <span data-icon="&#xf014;"></span> Delete
+                                        </button>
+                                    </small>
+                                <?php }?>
+                            </div>
+                                
+
+                               <?php if(isset($replies[$comment['id']])){
+                                    echo "<hr>";
+                                     foreach($replies[$comment['id']] as $reply){?>
+                                        <div class="card col-sm-12 mb-1 shadow" style="background-color:azure">
+                                            <div class="card-body">
+                                                <small class="text-center me-1 alert"><?=date('d M, Y - h:i:m',strtotime($reply['created_at']))?></small>
+                                                <p><?=$reply['project_comment']?></p>
+                                                <div class="justify-content-center align-items-end mb-1">
+                                                    <small>From: <b> <?=$reply['full_name']?></b></small>
+                                                </div>
+                                                <div class="d-flex justify-content-evenly align-items-end">
+                                                    <?php 
+                                                    if(user::init()->user_can('edit_comment')){
+                                                        ?>
+                                                        <small>
+                                                            <button type="button" onclick="edit_comment(this)" project_id ="<?=$project['project_id']?>"  id="<?=$reply['id']?>"class="btn btn-sm rounded-pill btn-outline-primary" sub_title ="Edit Reply">
+                                                                <span data-icon="&#xf044;"></span> Edit
+                                                            </button>
+                                                        </small>
+                                                    <?php } if(user::init()->user_can('delete_comment')){?>
+                                                        <small>
+                                                            <button type="button" onclick="delete_comment(this)" project_id ="<?=$project['project_id']?>" id="<?=$reply['id']?>" class="btn btn-sm rounded-pill btn-outline-danger" >
+                                                                <span data-icon="&#xf014;"></span> Delete
+                                                            </button>
+                                                        </small>
+                                                    <?php }?>
+                                                </div>
+                                                </div>
+                                                </div>
+                                                <?php
+                                                }
+                                            }
+                                ?>
+                        </div>
+                    </div>
+
+                    <?php }
+                } ?>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    <?php  } ?>
+    <template id="create_template">
+        <?php include __DIR__.'/add_comment.html';?>
+    </template>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#printBtn").on("click",function(){
+            const customFooter = `
+                    <div class="custom-footer">
+                        <p>POWERED BY cmis.banny.co.tz <br>
+                            Website: <a href="http://www.banny.co.tz">www.banny.co.tz</a>, E-mail: <a href="mailto:director@banny.co.tz">director@banny.co.tz</a> / <a href="mailto:info@banny.co.tz">info@banny.co.tz</a>
+                        </p>
+                    </div>
+                `;
+                const printContent = $('#printableDiv').clone();
+                printContent.append(customFooter);
+            
+            printContent.printThis({
+                debug: false,             
+                importCSS: true,           
+                importStyle: true,  
+            });
+        })
+    });
+
+    const comments= (element)=>{
+        let fx = document.querySelector('#create_template').content.cloneNode(true).children[0];
+        const project_id =element.getAttribute('project_id');
+        const title = element.getAttribute('sub_title');
+        fx.querySelector('.header-class').textContent = title; 
+
+        Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+            focusConfirm: false, 
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.mySwalSmallForm')
+                });
+
+                $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+    
+            }
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('project_id', project_id);
+            fdx.append('is_comment', 1);
+
+            ajax(
+                window.location.href,
+                response=>{
+                    
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+    }
+    const delete_comment = (element)=>{
+    const comment_id= element.id;
+      Swal.fire({
+          title: `Deleting a Comment?`,
+          showCancelButton: true,
+          confirmButtonText:'Sure, delete',
+          confirmButtonColor:'#d33',
+          cancelButtonColor:'#3085d6',
+
+          html:"Remember: You can not undo this action!"
+      })
+      .then(response=>{
+        if(response.isConfirmed){
+            let userdata = new FormData();
+            userdata.append('action','DELETE');
+            userdata.append('comment_id', comment_id);
+            userdata.append('ajax_request',1);
+            ajax(
+            window.location.href, 
+            response=>{
+                let jsx = JSON.parse(response);
+                if(jsx){
+                    Swal.fire({
+                        title: jsx.message,
+                        icon: jsx.status
+                    })
+                    .then(e=>{
+                        window.location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: 'Malformed response returned',
+                        icon: 'error',
+                        html:response
+                    });
+                }
+            },
+            error=>{
+                console.log(error);
+            },
+            userdata
+            );
+        }
+        else{
+            Swal.fire({
+            title: "Cancel Deletion",
+            icon:"error"
+            })
+        }
+        });
+  }
+
+
+
+const edit_comment = (element) => {
+    let fx = document.querySelector('#create_template').content.cloneNode(true).children[0];
+    const comment_id = element.id;
+    const project_id =element.getAttribute('project_id');
+    
+    const title = element.getAttribute('sub_title');
+    fx.querySelector('.header-class').textContent = title;
+    const fetchUrl = `${window.location.href}?fetch_comment=1&comment_id=${comment_id}`;
+
+    // Fetch project data
+    ajax(
+        fetchUrl,
+        (response) => {
+            if (response.startsWith('{')) {
+                let data = JSON.parse(response);
+                
+                // Populate the form fields if they exist
+                const projectName = fx.querySelector('[name="project_comment"]');
+                if (projectName) projectName.value = data.project_comment || '';
+                // Open the SweetAlert modal
+                Swal.fire({
+                    html: fx,
+                    customClass: 'mySwalSmallForm',
+                    showConfirmButton: false,
+                    focusConfirm: false,
+                    didOpen: () => {
+                        // Initialize select2 dropdowns
+                        $('.select2').select2({
+                            dropdownParent: $('.mySwalSmallForm')
+                        });
+
+                        $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+
+                        document.querySelector('.mySwalSmallForm form').addEventListener('submit', (evt) => {
+                        evt.preventDefault();
+                        evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+                        let fdx = new FormData(evt.target);
+                        
+                        fdx.append('ajax_request', 1);
+                        fdx.append('project_id', project_id);
+                        fdx.append('is_comment', 1);
+                        fdx.append('comment_id', comment_id);
+
+
+                        ajax(
+                            window.location.href,
+                            (response) => {
+                                if (response.startsWith('{')) {
+                                    let jsx = JSON.parse(response);
+                                    Swal.fire({
+                                        icon: jsx.status,
+                                        title: jsx.message
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'info',
+                                        html: response
+                                    });
+                                }
+                            },
+                            (error) => {
+                                Swal.fire(error);
+                            },
+                            fdx
+                        );
+                    });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Unable to fetch comment'
+                });
+            }
+        },
+        (error) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error
+            });
+        }
+    );
+
+    
+};
+
+
+const reply_comment = (element) => {
+    let fx = document.querySelector('#create_template').content.cloneNode(true).children[0];
+    const comment_id = element.id;
+    const project_id =element.getAttribute('project_id');
+    
+    const title = element.getAttribute('sub_title');
+    fx.querySelector('.header-class').textContent = title;
+    Swal.fire({
+            html: fx,
+            customClass: 'mySwalSmallForm',
+            showConfirmButton: false,
+            focusConfirm: false, 
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.mySwalSmallForm')
+                });
+
+                $('.select2').prop('disabled', false).attr('aria-readonly', 'false');
+    
+            }
+        });
+        document.querySelector('.mySwalSmallForm form').addEventListener('submit', evt=>{
+            evt.preventDefault();
+            evt.target.querySelector('[type=submit]').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            let fdx = new FormData(evt.target);
+            fdx.append('ajax_request', 1);
+            fdx.append('project_id', project_id);
+            fdx.append('is_a_reply',1);
+            fdx.append('comment_id',comment_id);
+            fdx.append('is_comment', 1);
+
+            ajax(
+                window.location.href,
+                response=>{
+                    
+                    if(response.startsWith('{')){
+                        let jsx = JSON.parse(response);
+                        Swal.fire({
+                            icon: jsx.status,
+                            title:jsx.message
+                        })
+                        .then(any=>{
+                            window.location.reload();
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'info',
+                            html: response
+                        });
+                    }
+                },
+                error=>{
+                    Swal.fire(error);
+                },
+                fdx
+            );
+        });
+};
+
+</script>

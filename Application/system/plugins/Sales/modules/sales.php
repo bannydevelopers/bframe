@@ -73,9 +73,11 @@ if(isset($_POST['delete_sales'])){
 }
 if($is_headquarters) {
     $whr = 1;
+    $where = 1;
 }
 else{
-    $whr = ['owner_branch'=>$me['work_location']];
+    $whr = ['branch_id'=>$me['work_location']];
+    $where = ['owner_branch'=>$me['work_location']];
 }
 $sales = $db->select('sales')
                 ->join('branches', 'branch_id=owner_branch')
@@ -85,7 +87,7 @@ $sales = $db->select('sales')
                 ->fetchAll();
 
 $product = $db->select('product', 'product_id, product_name, product_price')
-                ->where($whr)
+                ->where($where)
                 ->and('product_id IN (SELECT product FROM stock)')
                 ->order_by('product_id', 'desc')
                 ->fetchAll();

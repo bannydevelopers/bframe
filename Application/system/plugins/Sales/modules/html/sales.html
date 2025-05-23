@@ -81,7 +81,7 @@
                 <div class="mb-2"><span style="color:#696cff;">Sales date: </span>{{sales_date}}</div>
                 <div class="mb-2"><span style="color:#696cff;">Sales number: </span>{{sales_number}}</div>
                 <div class="mb-2"><span style="color:#696cff;">Product sold: </span>{{product_name}}</div>
-                <div class="mb-2"><span style="color:#696cff;">Unit: </span>{{unit}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Unit: </span>{{product_unit_plural}}</div>
                 <div class="mb-2"><span style="color:#696cff;">Quantity: </span>{{quantity}}</div>
                 <div class="mb-2"><span style="color:#696cff;">Unit amount </span>{{unit_amount}}</div>
                 <div class="mb-2"><span style="color:#696cff;">Total amount: </span>{{total_amount}}</div>
@@ -181,7 +181,14 @@
         let elem = window.event.target.parentNode.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        //console.log(jsx);
+        //COMPUTE TOTAL AMOUNT
+        jsx.total_amount = parseFloat(jsx.quantity) * parseFloat(jsx.unit_amount);
+
+        // Create sales number (year + sales_id)
+        const saleYear = new Date(jsx.sales_date).getFullYear();
+        jsx.sales_number = `#${saleYear}${jsx.sales_id}`;
+
+        // console.log(jsx);
         //console.log(elem.getAttribute('data-json'));
         //htz = htz.replace(/\{\{img\}\}/, img.src); // we expect only one image, no need for greed match
         htz = htz.replace(/\{\{(.+?)\}\}/g,  (match, tag) => jsx[tag.trim()]);

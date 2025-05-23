@@ -31,6 +31,7 @@ class Project{
         if(str_replace('-', '_', $args[0]) == __CLASS__) {
             $me = human_resources::get_staff();
             if($me){
+                $user_role = Project::getUserRole($me);
                 $moduleconfig = json_decode(file_get_contents(__DIR__.'/config.json'));
                 $registry = storage::init();
                 $myURL = "{$registry->request[0]}/{$registry->request[1]}/{$registry->request[2]}";
@@ -51,5 +52,18 @@ class Project{
     public static function load_page($request){
         $registry = storage::init();
         return;
+    }
+    public static function getUserRole($user){
+        $config = storage::get_data('system_config')->db_configs;
+        $db = db::get_connection($config);
+        $user_account = $db->select('user_accounts')->where(['user_id'=>$user['user_reference']])->fetch();
+        $role =!empty($user_account) ?  $db->select('roles')
+                 ->where(['role_id'=>$user_account['system_role']])
+                 ->limit(1)
+                 ->fetch():[];
+        if(!empty($role)) {
+            return strtolower($role['role_name']);
+        }
+        else return null;
     }
 }

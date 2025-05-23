@@ -1,143 +1,172 @@
 <div id="branch_0">
   <div style="padding: 1.2em;">
-    <table style="width: 100%;font-family: Verdana, Geneva, Tahoma, sans-serif;line-height: 1.4;font-size: 13px;color: #060c67;">
-      <tr class="white">
-        <td colspan="3">
-          <div style="display: flex;">
-            <div style="text-align: left;flex-basis: 100%;">
-              <div style="text-transform: capitalize;">{{customer_name}}</div>
-              <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
-              <div class="TIN-tr">TIN: {{tin_number}}</div>
-              <div class="VRN-tr">VRN: {{vrn_number}}</div>
-            </div>
-            <div style="flex-basis: 100%;">
-              <div style="text-align: center;"">
-                <img src="/Application/storage/uploads/images/logo.png" style="height: 150px;margin: auto;" alt="logo">
+    <div style="margin: 0; padding: 0;">  <!-- Added this div to reduce spacing -->
+      <table style="width: 100%;font-family: Verdana, Geneva, Tahoma, sans-serif;line-height: 1.4;font-size: 13px;color: #060c67;">
+        <tr class="white">
+          <td colspan="3">
+            <div style="display: flex;">
+              <div style="text-align: left;flex-basis: 100%;">
+                <div style="text-transform: capitalize;">{{customer_name}}</div>
+                <pre style="font-family: inherit;">{{customer_physical_adress}}</pre>
+                <!--<div>TIN: {{tin_number}}</div>
+                <div>VRN: {{vrn_number}}</div>-->
+              </div>
+              <div style="flex-basis: 100%;">
+                <div style="text-align: center;">
+                  <img src="/Application/storage/uploads/images/logo.png" style="height: 100px;margin: auto;" alt="logo">
+                </div>
+              </div>
+              <div style="text-align: right;flex-basis: 100%">
+                <div style="font-size: 120%;"><?=$company[0]->company_legal_name?></div>
+                <pre style="font-family: inherit;"><?=$company[0]->company_address?></pre>
+                <!--<div><?=$company[0]->email?></div>-->
+                <div><?=$company[0]->phone_number?></div>
+                <div>TIN: <?=$company[0]->TIN_number?></div>
+                <div>VRN: <?=$company[0]->VRN_number?></div>
               </div>
             </div>
-            <div style="text-align: right;flex-basis: 100%">
-              <div style="font-size: 120%;"><?=$company[0]->company_legal_name?></div>
-              <pre style="font-family: inherit;"><?=$company[0]->company_address?></pre>
-              <div><?=$company[0]->email?></div>
-              <div><?=$company[0]->phone_number?></div>
-              <div>TIN: <?=$company[0]->TIN_number?></div>
-              <div>VRN: <?=$company[0]->VRN_number?></div>
+          </td>
+        </tr>
+        <tr class="white">
+          <td>
+            <div style="text-align: left; flex-basis: 100%">
+  <div style="display: table; border-spacing: 0 2px; margin-top: auto;">
+    
+    <div style="display: table-row;">
+      <div style="display: table-cell;">Invoice number.: </div>
+      <div style="display: table-cell;">{{invoice_no}}</div>
+    </div>
+
+    <div style="display: table-row;">
+      <div style="display: table-cell;">
+        <div style="margin-top: 2px;">Order No.: </div>
+      </div>
+      <div style="display: table-cell;">
+        <div style="margin-top: 2px;">{{order_number}}</div>
+      </div>
+    </div>
+
+    <div style="display: table-row;">
+      <div style="display: table-cell;">
+        <div style="margin-top: 2px;">Create date: </div>
+      </div>
+      <div style="display: table-cell;">
+        <div style="margin-top: 2px;">{{created}}</div>
+      </div>
+    </div>
+
+    <div style="display: table-row;">
+      <div style="display: table-cell;">
+        <div style="margin-top: 2px;">Due date:  </div>
+      </div>
+      <div style="display: table-cell;">
+        <div style="margin-top: 2px;">{{due_date}}</div>
+      </div>
+    </div>
+
+    <div style="display: table-row;">
+      <div style="display: table-cell; min-width: 180px;">
+        <div style="margin-top: 2px;">Sales representative: </div>
+      </div>
+      <div style="display: table-cell;">
+        <div style="margin-top: 2px;">{{full_name}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+          </td>
+        </tr>
+        <tr class="white">
+          <td colspan="3">
+            <div style="text-align: center;">
+              <b style="text-transform: uppercase;font-size: 140%;">{{invoice_type}} INVOICE</b>
             </div>
-          </div>
-        </td>
-      </tr>
-      <tr class="white">
-        <td>
-          <table style="min-width: 30%;text-align: left;font-size: 13px;">
-            <tr class="white">
-              <td><b>Invoice number.</b></td>
-              <td>{{invoice_no}}</td>
-            </tr>
-            <tr class="white order_date-tr">
-                <td><b class="order_no">Order NO:</b></td>
-                <td>{{order_number}}</td>
+            
+            <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 12px;border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #222;" class="white">
+                <th>S/N</th>
+                <th>Item name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit price</th>
+                <th style="text-align: right;">Total amount</th>
               </tr>
-            <tr class="white">
-              <td><b>Create date</b></td>
-              <td>{{created}}</td>
-            </tr>
-            <tr class="white due_date-tr">
-              <td><b>Due date</b></td>
-              <td>{{due_date}}</td>
-            </tr>
-            <tr class="white">
-              <td><b>Sales represantantive</b></td>
-              <td>{{full_name}}</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr class="white">
-        <td colspan="3">
-          <div style="text-align: center;">
-            <b style="text-transform: uppercase;font-size: 140%;">{{invoice_type}} INVOICE</b>
-          </div>
-          
-          <table style="width: 100%;text-align: left;margin-top: 1em;font-size: 13px;border-collapse: collapse;">
-            <tr style="border-bottom: 1px solid #222;" class="white">
-              <th>S/N</th>
-              <th>Item name</th>
-              <th>Description</th>
-              <th>Quantity</th>
-              <th>Unit price</th>
-              <th style="text-align: right;">Total amount</th>
-            </tr>
-            <tr id="items_list" class="white">
-            </tr>
-            <tr style="border-top: 1px solid #222;" class="white">
-              <td colspan="4">&nbsp;</td>
-              <th style="text-align: right;">Total</th> 
-              <th style="text-align: right;">{{total}}</th>
-            </tr>
-            <tr class="white VAT-tr">
-              <td colspan="4">&nbsp;</td>
-              <th style="text-align: right;">VAT (18%)</th>
-              <th style="text-align: right;"><span>{{VAT}}</span></th>
-            </tr> 
-            <tr class="VAT-tr">
-              <td colspan="4">&nbsp;</td>
-              <th style="text-align: right;">Total including VAT</th>
-              <th style="text-align: right;padding: 0;">
-                <span style="border-top: 1px solid #222;padding:10px">{{grand_total}}</span>
-              </th>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr style="margin-top: 6em;" class="white">
-        <td style="text-align: left;">
-          <span style="text-align: center;display: inline-block;">
-            <span>___________________</span><br>
-            <span>Seller's signature</span>
-          </span>
-        </td>
-        <td style="text-align: right;">
-          <!--span style="text-align: center;display: inline-block;">
-            <span>___________________</span><br>
-            <span>Client's signature</span>
-          </span-->&nbsp;
-        </td>
-      </tr-->
-      <tr style="margin-top: 6em;" class="white">
-        <td colspan="3" style="text-align: left;font-size: 13px;">
-          <div style="display: flex;">
-            <div>&nbsp;
-              <b>Payment terms</b><br>
-              <div style="font-family: inherit;"><?=$company[0]->payment_terms?></div>
-            </div>
-            <div style="margin: 0 2em;">
-              <b>Primary payment account</b><br>
-              <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->primary_payment_account?></pre>
-            </div>
-            <div>
-              <b>Auxilliary payment account</b><br>
-              <pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->aux_payment_account?></pre>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <style>
-        th,td{
-          padding: 10px;
-        }
-        th{
-          white-space: nowrap;
-        }
-      </style>
-    </table>
+              <tr id="items_list" class="white">
+              </tr>
+              <tr style="border-top: 1px solid #222;" class="white">
+                <td colspan="4">&nbsp;</td>
+                <th style="text-align: right;">Total</th> 
+                <th style="text-align: right;">{{total}}</th>
+              </tr>
+              <tr class="white VAT-tr">
+                <td colspan="4">&nbsp;</td>
+                <th style="text-align: right;">VAT (18%)</th>
+                <th style="text-align: right;"><span>{{VAT}}</span></th>
+              </tr> 
+              <tr class="VAT-tr">
+                <td colspan="4">&nbsp;</td>
+                <th style="text-align: right;">GRAND TOTAL</th>
+                <th style="text-align: right;padding: 0;">
+                  <span style="border-top: 1px solid #222;padding:10px">{{grand_total}}</span>
+                </th>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr style="margin-top: 6em;" class="white">
+          <td style="text-align: left;">
+            <span style="text-align: center;display: inline-block;">
+              <span>___________________</span><br>
+              <span>Seller's signature</span>
+            </span>
+          </td>
+          <td style="text-align: right;">
+            <!--span style="text-align: center;display: inline-block;">
+              <span>___________________</span><br>
+              <span>Client's signature</span>
+            </span-->&nbsp;
+          </td>
+        </tr>
+        <tr style="break-before: always; margin-top: 6em;" class="white">
+          <td colspan="3" style="text-align: left;font-size: 10px;">
+              <div style="display: flex;">
+                  <div>&nbsp;
+                    <b>Payment terms</b><br>
+                    <p>The PI valid for 30 days including the issue date<br>
+                      70% to be paid first before start of<br>project for procurement process(mobilization)<br>30% to be paid after commissioning.
+                        <br>Delivery period is 1 to 2 months within<br>working days after confirmation</p>      
+                  </div>
+                  <div style="margin: 0 2em;">
+                      <b>Primary payment account</b><br>
+                      <!--<pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->primary_payment_account?></pre> -->
+                      <p>Account name: BANNY COMPANY (TZ) LTD<br>Bank name: NCBA<br>Account number: 118 688 100 015<br>Branch: Clock tower branch</p>      
+                  </div>
+                  <div>
+                      <b>Auxilliary payment account</b><br>
+                      <!--<pre style="font-family: inherit;white-space: wrap;"><?=$company[0]->aux_payment_account?></pre> -->
+                      <p>Account name: BANNY COMPANY LTD<br>Bank name: CRDB<br>Account number: 0150560102100<br>Branch: TRA Samora</p>      
+                  </div>
+              </div>
+              <div class="footer" style=" width: 100%; text-align: center; font-size: 10px; font-family: inherit; white-space: nowrap;">
+                <p>“POWERED BY cmis.banny.co.tz” <br>
+                  Website: <a href="http://www.banny.co.tz">www.banny.co.tz</a>, E-mail: <a href="mailto:director@banny.co.tz">director@banny.co.tz</a> / <a href="mailto:info@banny.co.tz">info@banny.co.tz</a>
+                </p>
+              </div>
+          </td>
+        </tr>
+        <style>
+          th,td{
+            padding: 10px;
+          }
+          th{
+            white-space: nowrap;
+          }
+        </style>
+      </table>
+    </div> <!-- close added div -->
     <div style="position: absolute;top: 0;right: .5em;">
       <a onclick="jsprint(this.parentNode.previousElementSibling.outerHTML)" class="fa fa-print"></a>
     </div>
-    <style>
-      td,th{
-        vertical-align: top;
-        padding: 8px;
-      }
-    </style>
-</div>
+  </div>  
 </div>

@@ -23,6 +23,7 @@
                             <th>Date</th>
                             <th>Amount</th>
                             <th>Bank name</th>
+                            <th>Payment mode</th>
                             <th>Cheque no</th>
                             <th>Actions</th>
                         </tr>
@@ -36,10 +37,20 @@
                                     &nbsp;<strong><?=$st['customer_name']?$st['customer_name']:$st['received_from']?></strong>
                                 </span>
                             </td>
-                            <td><?=6891+intval($st['per_invoice_no'])?></td>
+                            <!--<td><?=$st['mode_of_payment']?></td>-->
+                            <td>
+    <?php 
+        if (!empty($st['manual_invoice_no'])) {
+            echo htmlspecialchars($st['manual_invoice_no']); // shows manual invoice as entered
+        } else {
+            echo 6891 + intval($st['per_invoice_no']); // fallback to auto-number
+        }
+    ?>
+</td>
                             <td><?=$st['date']?></td>
                             <td><?=$st['amount']?></td>
                             <td><?=$st['bank_name']?></td>
+                            <td><?=$st['payment_method']?></td>
                             <td><?=$st['cheque_no']?></td>
                             <td>
                             <div class="dropdown">
@@ -50,7 +61,9 @@
                                 <div class="dropdown-menu">
                                 <a onclick="view_deposit()" class="dropdown-item"><span class="me-1" data-icon="&#xf06e;"></span>View</a>
                                 <a onclick="edit_deposit()" class="dropdown-item"><span class="me-1" data-icon="&#xf044;"></span> Edit</a>
+                                   <?php if(user::init()->user_can('delete_deposit_info')){?>
                                 <a onclick="delete_deposit()" class="dropdown-item"><span class="me-1" data-icon="&#xf2ed;"></span> Delete</a>
+                                <?php }?>
                                 </div>
                             </div>
                             </td>
@@ -73,8 +86,9 @@
                 <div class="mb-2"><span style="color:#696cff;">Per invoice no: </span>{{per_invoice_no}}</div>
                 <div class="mb-2"><span style="color:#696cff;">Date: </span>{{date}}</div>
                 <div class="mb-2"><span style="color:#696cff;">Amount: </span>{{amount}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Payment mode: </span>{{payment_method}}</div>
                 <div class="mb-2"><span style="color:#696cff;">bank name: </span>{{bank}}</div>
-                <div class="mb-2"><span style="color:#696cff;">Cheque no: </span>{{cheque_no}}</div>
+                <div class="mb-2"><span style="color:#696cff;">Cheque number: </span>{{cheque_no}}</div>
             </div>
         <!-- </div> -->
     </div>
@@ -161,6 +175,18 @@
             );
         }
     }
+    function toggleManualInvoice() {
+    const selected = document.getElementById("per_invoice_no").value;
+    const manualInput = document.getElementById("manual_invoice_field");
+    const receivedFromInput = document.getElementById("received_from").parentNode;
+
+    // Show/hide manual invoice field
+    manualInput.style.display = (selected === "manual") ? "block" : "none";
+
+    // Also show/hide 'Received from' field
+    receivedFromInput.classList.toggle("hidden", selected !== "manual");
+}
+
     const view_deposit = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode,
             htz = document.querySelector('template').content.children[0].cloneNode(true).outerHTML;
@@ -226,10 +252,20 @@
             );
         }
     };
+     function toggleChequeField() {
+        let elem = window.event.target;
+        let chk = document.querySelector('[name=cheque_no]');
+        if(elem.value == 'cheque'){
+            chk.parentNode.style.visibility = 'visible';
+        }
+        else{
+            chk.parentNode.style.visibility = 'hidden';
+        }
+    }
     const delete_deposit = ()=>{
         let elem = window.event.target.parentNode.parentNode.parentNode.parentNode;
         let jsx = JSON.parse(elem.getAttribute('data-json'));
-        let name = jsx.full_name,
+        let name = "this deposit";
             uid = jsx.user_id;
         Swal.fire({
             title: `Delete ${name}?`,

@@ -37,7 +37,7 @@
                         <?php foreach($invoices as $kx=>$st){?>
                         <tr>
                             <td><?=++$kx?></td>
-                            <td><?=6891+intval($st['lpo_id'])?></td>
+                            <td><?=200+intval($st['lpo_id'])?></td>
                             <td><?=system::format_time($st['created_date'])?></td>
                             <td><?=$st['supplier_name']?></td>
                             <td><?=$st['full_name']?></td>
@@ -114,7 +114,7 @@
         });
         frm.querySelector('.text-end').style.display = 'none';
         frm.querySelector('h3').style.display = 'none';
-        let ref = 6891+parseInt(jsx.lpo_id);
+        let ref = 200+parseInt(jsx.lpo_id);
         Swal.fire({
             title: `Items of purchase with number ${ref}`,
             html: frm,
@@ -196,11 +196,18 @@
                 <td style="text-align:right">${itotal}</td>
                 </tr>`;
         }
+         //console.log(tmp[sn]);
+         json.VAT = (json.total * 0.18);
+        json.grand_total = (json.total + json.VAT).toLocaleString('en-US');
+        json.VAT = json.VAT.toLocaleString('en-US');
+        
+        json.create_time = json.create_time.slice(0, 10);
         json.total = json.total.toLocaleString('en-US');
-        json.lpo_no = 6891+parseInt(json.lpo_id);
+        json.lpo_no = 200+parseInt(json.lpo_id);
         console.log(json);
         //let tpl = document.getElementById('purchase-tpl').content.cloneNode(true);
         tplx.querySelector('#items_list').outerHTML = tmp;
+        
 
         json.create_time = json.create_time.slice(0, 10);
         //json.due_date = json.due_date.slice(0, 10);
@@ -220,7 +227,7 @@
     const delete_purchase = (purchase_ref)=>{
         let elem = window.event.target,
             jsx = JSON.parse(elem.parentNode.getAttribute('data-json')),
-            ref = 6891+parseInt(jsx.purchase_id);
+            ref = 200+parseInt(jsx.purchase_id);
 
         Swal.fire({
             icon: 'question',
@@ -422,7 +429,7 @@
     const approve_purchase = ()=>{
         let elem = window.event.target;
         let jsx = JSON.parse(elem.parentNode.getAttribute('data-json'));
-        jsx.purchase_no = jsx.lpo_id + 6891;
+        jsx.purchase_no = jsx.lpo_id + 200;
         Swal.fire({
             icon:'question',
             html: `Surely approve purchase with number ${jsx.purchase_no}?`

@@ -78,12 +78,12 @@
                                     <div class="card-body">
                                         <div>
                                             <span>Created: </span>
-                                            <em><?=system::format_time($item['created_time'], 3)?></em>
+                                            <em><?=system::format_time($item['record_date'], 3)?></em>
                                         </div>
-                                        <div>
+                                        <!--<div>
                                             <span>Due: </span>
                                             <em><?=system::format_time($item['due_date'], 2)?></em>
-                                        </div>
+                                        </div>-->
                                         <div>
                                             <span>Staus: </span>
                                             <em><?=str_replace('_', ' ', $item['payment_status'])?></em>
@@ -189,13 +189,14 @@
 
         let tmp = '', sn = 0;
         let reli = json.invoice_items;
+        
         for(x in reli) {
             let item_total = parseInt(reli[x].qty) * parseInt(reli[x].price),
                 itotal = item_total.toLocaleString('en-US'),
                 price = reli[x].price.toLocaleString('en-US'),
                 xyz = '';
-            if(reli[x].unit == 'People') {
-                reli[x].unit = 'LUMPSUM';
+
+            if(reli[x].unit_prural == 'LUPSUM' || reli[x].unit_single == 'LUPSUM') {
                 xyz = '';
             }
             else xyz = reli[x].qty;
@@ -224,10 +225,14 @@
         json.due_date = json.due_date.slice(0, 10);
 
         // workaround
-        if(json.invoice_type == 'tax'){
-            tplx.querySelector('.order_no').innerText = 'LPO number';
-            json.order_no = json.local_purchase_order;
-        }
+        // Hide due date and change order number label for tax invoices
+    if (json.invoice_type == 'tax') {
+        tplx.querySelector('.order_no').innerText = 'LPO number';
+        json.order_no = json.local_purchase_order;
+        let dueDate = tplx.querySelector('.due_date');
+        tplx.querySelector('.created_date').innerText = json.record_date; //Change createddate to recorded date
+        tplx.querySelector('.due_date').style.display = 'none'; // Hide due date row
+    }
         if(json.skip_list){
             json.skip_list = JSON.parse(json.skip_list);
             [...json.skip_list].forEach(sl=>{
@@ -486,4 +491,14 @@
             alert(ev.target.value);
         });
     });
+    const displayFooterOnLastPage = () => {
+    // Assuming you have some way to determine if the current page is the last one
+
+    // Check if this is the last page
+    var isLastPage = true; // Change this condition based on your application's logic
+
+    if (isLastPage) {
+        document.getElementById('footer').style.display = 'block';
+    }
+};
 </script>
